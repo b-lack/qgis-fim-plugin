@@ -123,3 +123,5 @@ Backup[ ]of[ ]*.numbers/
 # Tests
 .pytest_cache/
 .ruff_cache/
+
+plugin_upload.py
