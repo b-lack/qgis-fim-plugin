@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/lfb_regeneration_wildlife_impact" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>
