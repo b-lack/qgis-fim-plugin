@@ -119,3 +119,7 @@ CVS
 Backup[ ]of[ ]*.pages/
 Backup[ ]of[ ]*.key/
 Backup[ ]of[ ]*.numbers/
+
+# Tests
+.pytest_cache/
+.ruff_cache/
