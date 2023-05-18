@@ -23,15 +23,20 @@
 """
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction
+from qgis.PyQt.QtWidgets import (QAction, QDialog, QMessageBox, QFileDialog, QComboBox, QTextEdit)
 from qgis.core import QgsProject, QgsMessageLog
-
+# from qgis.PyQt.QtWidgets import (QDialog, QMessageBox, QFileDialog, QComboBox, QTextEdit)
 
 
 # Initialize Qt resources from file resources.py
 from .resources import *
 # Import the code for the dialog
-from .lfb_regeneration_wildlife_impact_dialog import LfbRegenerationWildlifeImpactDialog
+from .gui.lfb_regeneration_wildlife_impact_dialog import LfbRegenerationWildlifeImpactDialog
+
+from .gui.gnssWidget import GnssPluginWidget
+
+from .state.currentState import CurrentState
+
 import os.path
 
 class LfbRegenerationWildlifeImpact:
@@ -184,6 +189,14 @@ class LfbRegenerationWildlifeImpact:
                 action)
             self.iface.removeToolBarIcon(action)
 
+    def observerFn(self, value):
+        QgsMessageLog.logMessage('observer trigger', "LFB")
+
+    def openQuestionDialog(self):
+        # msg = self.tr('Infotext').format(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'help', 'docs'))
+        msg = self.tr('Infotext')
+        QMessageBox.information(self.dlg, "LFB Info", msg, QMessageBox.Ok)
+
     def run(self):
         """Run method that performs all the real work"""
 
@@ -193,11 +206,26 @@ class LfbRegenerationWildlifeImpact:
             self.first_start = False
             self.dlg = LfbRegenerationWildlifeImpactDialog()
 
-        
+        state = CurrentState()
+        state.attach(self.observerFn)
+        state.change_state('add')
+
+        #gnss = GnssPluginWidget()
+        #self.iface.addWidget(gnss)
+
+
+        #self.echotext_widget = GnssPluginWidget(self.dlg)
+        #self.dlg.gridLayout_4.addWidget(self.echotext_widget)
+
+        #self.dlg.tabWidget.setCurrentIndex(0)
+        #self.dlg.tabWidget.setTabEnabled(1, False)
 
         # Reset the dialog form
-        self.dlg.lfbResetFormButton.clicked.connect(self.dlg.reset)
-        
+        # self.dlg.lfbResetFormButton.clicked.connect(self.dlg.reset)
+        #self.dlg.lfbResetFormButton.clicked.connect(state.change_state('sd'))
+
+        self.dlg.lfbQuestionBtn.clicked.connect(self.openQuestionDialog)
+        # self.buttonInfo.clicked.connect(self.onInfo)
 
         # show the dialog
         self.dlg.show()

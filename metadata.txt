@@ -26,7 +26,7 @@ hasProcessingProvider=no
 tags=python
 
 homepage=https://github.com/b-lack/lfb-regeneration_wildlife_impact_monitoring
-category=Vector
+
 icon=icon.png
 # experimental flag
 experimental=True
