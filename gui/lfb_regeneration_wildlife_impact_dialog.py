@@ -24,12 +24,14 @@
 
 import os
 
-from qgis.PyQt import uic
-from qgis.PyQt import QtWidgets
+from qgis.core import QgsMessageLog, QgsProject, QgsVectorLayer, QgsMapLayer
+from qgis.PyQt import QtWidgets, uic
+from qgis.PyQt.QtCore import QCoreApplication, QSettings, QTranslator
+from qgis.PyQt.QtWidgets import QDialog
 
-from qgis.core import QgsProject, QgsMessageLog
+from PyQt5.uic import loadUi
 
-from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
+
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
@@ -37,9 +39,12 @@ FORM_CLASS, _ = uic.loadUiType(os.path.join(
 
 
 class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
-    def __init__(self, parent=None):
+    def __init__(self, interface):
         """Constructor."""
-        super(LfbRegenerationWildlifeImpactDialog, self).__init__(parent)
+
+        # super(LfbRegenerationWildlifeImpactDialog, self).__init__(parent)
+        QDialog.__init__(self, interface.mainWindow())
+
         # Set up the user interface from Designer through FORM_CLASS.
         # After self.setupUi() you can access any designer object by doing
         # self.<objectname>, and you can use autoconnect slots - see
@@ -47,6 +52,44 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
 
-    def reset(self):
-        self.lineEdit.setText('')
-        self.lfbLabel1.setText(QCoreApplication.translate("TextLabels","lfbLabel1"))
+        # QGIS interface
+        self.iface = interface
+
+        # Connect up the buttons.
+        self.lfbQuestionBtn.clicked.connect(self.openQuestionDialog)
+
+        self.tabWidget.hide()
+        
+        # ONLY ONCE
+        self.checkIfPrivateLayerExists()
+
+        ui = loadUi("setupLayer.ui", self)
+
+
+    # Move to seperate helper class
+    def checkIfPrivateLayerExists(self):
+        """Check if private layer exists"""
+        QgsMessageLog.logMessage('checkIfPrivateLayerExists', "LFB")
+
+        names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+
+        path_absolute = QgsProject.instance().readPath("./")
+        #QgsMessageLog.logMessage('' + unicode(path_absolute), "LFB")
+
+ # https://anitagraser.com/pyqgis-101-introduction-to-qgis-python-programming-for-non-programmers/pyqgis101-creating-editing-a-new-vector-layer/
+        # add Vector Layer
+        vl = QgsVectorLayer("Point", "temp", "memory")
+        vl.setFlags(QgsMapLayer.Private)
+        QgsProject.instance().addMapLayer(vl)
+
+        #self.iface.addVectorLayer('/Users/b-mac/sites/lfb/raw/by_python/natural_earth_vector.gpkg|layername=foo', '', 'ogr')
+
+        QgsMessageLog.logMessage('layer', "LFB")
+
+
+
+    def openQuestionDialog(self):
+        msg = self.tr('Infotext')
+
+        QtWidgets.QMessageBox.information(
+            self, "LFB Info", msg, QtWidgets.QMessageBox.Ok)

@@ -192,40 +192,21 @@ class LfbRegenerationWildlifeImpact:
     def observerFn(self, value):
         QgsMessageLog.logMessage('observer trigger', "LFB")
 
-    def openQuestionDialog(self):
-        # msg = self.tr('Infotext').format(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'help', 'docs'))
-        msg = self.tr('Infotext')
-        QMessageBox.information(self.dlg, "LFB Info", msg, QMessageBox.Ok)
 
     def run(self):
         """Run method that performs all the real work"""
+
+        # State Management of Form
+        state = CurrentState()
 
         # Create the dialog with elements (after translation) and keep reference
         # Only create GUI ONCE in callback, so that it will only load when the plugin is started
         if self.first_start == True:
             self.first_start = False
-            self.dlg = LfbRegenerationWildlifeImpactDialog()
+            self.dlg = LfbRegenerationWildlifeImpactDialog(self.iface)
 
-        state = CurrentState()
         state.attach(self.observerFn)
         state.change_state('add')
-
-        #gnss = GnssPluginWidget()
-        #self.iface.addWidget(gnss)
-
-
-        #self.echotext_widget = GnssPluginWidget(self.dlg)
-        #self.dlg.gridLayout_4.addWidget(self.echotext_widget)
-
-        #self.dlg.tabWidget.setCurrentIndex(0)
-        #self.dlg.tabWidget.setTabEnabled(1, False)
-
-        # Reset the dialog form
-        # self.dlg.lfbResetFormButton.clicked.connect(self.dlg.reset)
-        #self.dlg.lfbResetFormButton.clicked.connect(state.change_state('sd'))
-
-        self.dlg.lfbQuestionBtn.clicked.connect(self.openQuestionDialog)
-        # self.buttonInfo.clicked.connect(self.onInfo)
 
         # show the dialog
         self.dlg.show()
