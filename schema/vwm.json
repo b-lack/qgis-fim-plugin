@@ -1,0 +1,43 @@
+{
+    "type": "object",
+    "properties": {
+        "name": {
+            "title": "Name",
+            "type": "string",
+            "description": "The name of the user",
+            "minLength": 1,
+            "maxLength": 100,
+            "helperText": "Enter your name"
+        },
+        "coordinates": {
+            "title": "Coordinates",
+            "type": "object",
+            "properties": {
+                "latitude": {
+                    "title": "Latitude",
+                    "type": "number",
+                    "description": "The latitude of the user",
+                    "minimum": -90,
+                    "maximum": 90,
+                    "helperText": "Enter your latitude"
+                },
+                "longitude": {
+                    "title": "Longitude",
+                    "type": "number",
+                    "description": "The longitude of the user",
+                    "minimum": -180,
+                    "maximum": 180,
+                    "helperText": "Enter your longitude"
+                }
+            },
+            "required": [
+                "latitude",
+                "longitude"
+            ]
+        }
+    },
+    "required": [
+        "name",
+        "coordinates"
+    ]
+}

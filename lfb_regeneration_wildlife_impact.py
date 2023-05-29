@@ -38,6 +38,8 @@ from .gui.gnssWidget import GnssPluginWidget
 from .state.currentState import CurrentState
 
 import os.path
+import sys
+
 
 class LfbRegenerationWildlifeImpact:
     """QGIS Plugin Implementation."""
@@ -198,15 +200,13 @@ class LfbRegenerationWildlifeImpact:
 
         # State Management of Form
         state = CurrentState()
+        state.attach(self.observerFn)
 
         # Create the dialog with elements (after translation) and keep reference
         # Only create GUI ONCE in callback, so that it will only load when the plugin is started
         if self.first_start == True:
             self.first_start = False
-            self.dlg = LfbRegenerationWildlifeImpactDialog(self.iface)
-
-        state.attach(self.observerFn)
-        state.change_state('add')
+            self.dlg = LfbRegenerationWildlifeImpactDialog(self.iface, state)
 
         # show the dialog
         self.dlg.show()
