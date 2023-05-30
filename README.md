@@ -4,7 +4,7 @@
 
 ## Development Installation
 
-
+For the installation from the repository ``pb_tool`` must be installed. For this follow the instructions in [pb_tool.cfg](pb_tool.cfg).
 
 ```bash
 $ pb_tool deploy
@@ -16,8 +16,6 @@ Profile Folder: Select ``Settings`` -> ``User Profiles`` -> ``Open Active Profil
 ## Activate Plugin
 
 QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``Installed``
-
-
 
 Check: ``Lfb Regeneration and Wildlife Impact Monitoring``
 
