@@ -2,13 +2,25 @@
 
 
 
-## Installation
+## Development Installation
 
-- In QGIS, select ``Plugins`` > ``Manage and Install Plugins...``
 
-or
 
-- Download and unzip to your QGIS plugins directory
+```bash
+$ pb_tool deploy
+```
+The plugin will be copied to your QGIS profile folder.
+
+Profile Folder: Select ``Settings`` -> ``User Profiles`` -> ``Open Active Profile Folder`` -> ``Python`` -> ``Plugin``
+
+## Activate Plugin
+
+QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``Installed``
+
+
+
+Check: ``Lfb Regeneration and Wildlife Impact Monitoring``
+
 
 ## Tests
 
