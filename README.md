@@ -41,6 +41,16 @@ QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``Installed``
 Make sure that ``Lfb Regeneration and Wildlife Impact Monitoring`` is selected.
 
 
+## Release
+
+qgis-plugin-ci package -u https://github.com/b-lack/lfb-regeneration_wildlife_impact_monitoring 0.0.4 --alternative-repo-url
+
+## Generate Changelog
+
+```bash
+$ git log --pretty="- %s" > CHANGELOG.md
+```
+
 ## Tests
 
 ![test workflow](https://github.com/b-lack/lfb-regeneration_wildlife_impact_monitoring/actions/workflows/run-all-tests.yml/badge.svg)

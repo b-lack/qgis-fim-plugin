@@ -1,4 +1,4 @@
-plugin_path: plugin
+plugin_path: lfb_regeneration_wildlife_impact
 github_organization_slug: gruenecho
 project_slug: lfb-regeneration_wildlife_impact_monitoring
 transifex_coordinator: geoninja
@@ -9,4 +9,4 @@ create_date: 2023-05-30
 
 repository_url: https://github.com/b-lack/lfb-regeneration_wildlife_impact_monitoring/
 
-lrelease_path: /home/gerrit/Sites/lfb/cd
+lrelease_path: /home/gerrit/Sites/lfb/releases

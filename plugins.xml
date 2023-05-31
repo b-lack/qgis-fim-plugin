@@ -1,0 +1,21 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<plugins>
+    <pyqgis_plugin name="Lfb Regeneration and Wildlife Impact Monitoring" version="0.0.4">
+        <description><![CDATA[Lfb Regeneration and Wildlife Impact Monitoring]]></description>
+        <version>0.0.4</version>
+        <qgis_minimum_version>3.0</qgis_minimum_version>
+        <homepage>https://github.com/b-lack/lfb-regeneration_wildlife_impact_monitoring</homepage>
+        <file_name>lfb_regeneration_wildlife_impact.0.0.4.zip</file_name>
+        <icon>assets/icon.png</icon>
+        <author_name>Grünecho</author_name>
+        <download_url>https://github.com/b-lack/lfb-regeneration_wildlife_impact_monitoringlfb_regeneration_wildlife_impact.0.0.4.zip</download_url>
+        <uploaded_by>Grünecho</uploaded_by>
+        <create_date>2023-05-30</create_date>
+        <update_date>2023-05-31</update_date>
+        <experimental>True</experimental>
+        <deprecated>False</deprecated>
+        <tracker>https://github.com/b-lack/lfb-regeneration_wildlife_impact_monitoring/issues</tracker>
+        <repository>https://github.com/b-lack/lfb-regeneration_wildlife_impact_monitoring</repository>
+        <tags>python, monitoring</tags>
+    </pyqgis_plugin>
+</plugins>

@@ -20,7 +20,7 @@ repository=https://github.com/b-lack/lfb-regeneration_wildlife_impact_monitoring
 
 hasProcessingProvider=no
 # Uncomment the following line and add your changelog:
-# changelog=
+changelog=../CHANGELOG.md
 
 # Tags are comma separated with spaces allowed
 tags=python, monitoring
