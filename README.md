@@ -17,6 +17,8 @@ Search for `LFB` and select `LFB Verjüngungszustands- und Wildeinfluss Monitori
 
 Confirm by clicking `Install Plugin`
 
+Done: 
+
 ## Development Installation
 
 For the installation from the repository ``pb_tool`` must be installed. For this follow the instructions in [pb_tool.cfg](pb_tool.cfg).
