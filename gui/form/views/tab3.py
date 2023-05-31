@@ -24,7 +24,7 @@
 
 import os
 
-import json
+#import json
 
 from qgis.core import QgsMessageLog, QgsProject, QgsVectorLayer, QgsJsonUtils, QgsField, QgsFields, QgsVectorFileWriter, QgsCoordinateTransformContext
 from qgis.PyQt import QtWidgets, uic
@@ -34,14 +34,14 @@ from qgis.PyQt.QtWidgets import QDialog
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore
 
-from jsonschema import Draft7Validator
+from ..textfield import TextField
 
 
-UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'saveBar.ui'))
+UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'tab_default2.ui'))
 
 
-class SaveBar(QtWidgets.QWidget, UI_CLASS):
-    inputChanged = QtCore.pyqtSignal(str)
+class Tab3(QtWidgets.QWidget, UI_CLASS):
+    inputChanged = QtCore.pyqtSignal(object)
 
     def __init__(self, interface, json, schema):
         """Constructor."""
@@ -50,34 +50,23 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
 
         self.setupUi(self)
 
-
         self.json = json
-        self.schema = schema
-
-        self.validate(self.json) 
 
         self.show()
 
-        self.isValidating = True
-        self.isValid = False
 
-        self.lfbSaveBtn.setDisabled(True)
+        self.latitude = TextField(interface, self.json['stichprobenpunkt'], schema['properties']['stichprobenpunkt'], 'unbestockt')
+        self.lfbTabLayout.addWidget(self.latitude)
+        self.latitude.inputChanged.connect(self.emitText)
 
-    def validate(self, jsonToTest):
+        self.longitude = TextField(interface, self.json['stichprobenpunkt'], schema['properties']['stichprobenpunkt'], 'nichtWald')
+        self.lfbTabLayout.addWidget(self.longitude)
+        self.longitude.inputChanged.connect(self.emitText)
 
-        self.lfbSaveBtn.setDisabled(True)
+    def setJson(self, newJson):
+        self.json = newJson
+        self.latitude.setJson(self.json['stichprobenpunkt'])
+        self.longitude.setJson(self.json['stichprobenpunkt'])
 
-        QgsMessageLog.logMessage("validate:" + str(jsonToTest), "LFB")
-
-        v = Draft7Validator(self.schema)
-        errors = sorted(v.iter_errors(jsonToTest), key=lambda e: e.path)
-
-        if len(errors) == 0:
-            self.isValid = True
-            self.lfbErrorStateLabel.setText('')
-            self.lfbSaveBtn.setDisabled(False)
-        else:
-            self.isValid = False
-            self.lfbErrorStateLabel.setText(str(len(errors)) + ' errors')
-
-        return self.isValid
+    def emitText(self):
+        self.inputChanged.emit(self.json)

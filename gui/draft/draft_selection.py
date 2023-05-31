@@ -27,12 +27,13 @@ import json
 import datetime
 
 from qgis.core import QgsFeature, QgsFeatureRequest, QgsPointXY, QgsGeometry, QgsMessageLog, QgsProject, QgsVectorLayer, QgsJsonUtils, QgsField, QgsFields, QgsVectorFileWriter, QgsCoordinateTransformContext
-from qgis.PyQt import QtWidgets, uic
+from qgis.PyQt import QtWidgets, uic, QtGui
 from qgis.PyQt.QtCore import QDateTime, QVariant, QCoreApplication, QSettings, QTranslator
 from qgis.PyQt.QtWidgets import QDialog
 
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore
+
 
 from .draft_item import DraftItem
 
@@ -64,8 +65,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         self.iface = interface
 
         self.fields = QgsFields()
-        self.fields.append(QgsField("id", QVariant.String))
-        self.fields.append(QgsField("name", QVariant.String))
+        
         self.fields.append(QgsField("created", QVariant.DateTime))
         self.fields.append(QgsField("modified", QVariant.DateTime))
         self.fields.append(QgsField("properties", QVariant.String))
@@ -158,8 +158,6 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         
         self.vl.startEditing()
 
-        
-
         geometry = QgsJsonUtils.stringToFeatureList(json.dumps(elementToAdd), self.fields)
         self.vl.addFeatures(geometry)
         
@@ -172,27 +170,28 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
     def listWidgetClicked(self, item):
 
-        for feat in self.vl.getFeatures():
+        featureList = self.vl.getFeatures()
+        for feat in featureList:
 
             if(feat.id() == item):
                 json_object = json.loads(feat['properties'])
                 self.draftSelected.emit(json_object)
                 break
-        
-        #json_object = json.loads(item['properties'])
-        #self.draftSelected.emit(json_object)
 
     def readDrafts(self):
         # self.listWidget.clear()
-        for i in reversed(range(self.lfbDraftList.count())): 
+        for i in reversed(range(self.lfbDraftList.count())):
             self.lfbDraftList.itemAt(i).widget().setParent(None)
 
-        features = self.vl.getFeatures()
+        featureList = self.vl.getFeatures()
         
-        for feature in features:
+        sorted_featureList = sorted(featureList, key=lambda x: x['modified'], reverse=True)
+        
+        for feature in sorted_featureList:
             item = DraftItem(self.iface, feature)
             item.featureSelected.connect(self.listWidgetClicked)
             self.lfbDraftList.addWidget(item)
+
 
     def saveFeature(self, jsonObj):
 
@@ -221,7 +220,9 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
             #for attr, value in jsonObj.items():
             #    feature.setAttribute(attr, value)
-            feature.setAttribute('created', QDateTime.currentDateTime())
+            currentDateTime = QDateTime.currentDateTime()
+            feature.setAttribute('created', currentDateTime)
+            feature.setAttribute('modified', currentDateTime)
                 
             self.vl.startEditing()
 

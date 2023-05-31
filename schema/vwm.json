@@ -1,14 +1,23 @@
 {
     "type": "object",
     "properties": {
-        "name": {
-            "title": "Name",
+        "aufnahmetrupp": {
+            "title": "Aufnahmetruppkürzel",
             "type": "string",
             "description": "The name of the user",
             "minLength": 1,
             "maxLength": 100,
             "helperText": "Enter your name"
         },
+        "GNSSDevice": {
+            "title": "GNSS-Gerät - Bezeichnung des Gerätes",
+            "type": "string",
+            "description": "GNSS-Gerät - Bezeichnung des Gerätes",
+            "minLength": 1,
+            "maxLength": 100,
+            "helperText": "Enter your name"
+        },
+
         "coordinates": {
             "title": "Coordinates",
             "type": "object",
@@ -34,10 +43,33 @@
                 "latitude",
                 "longitude"
             ]
+        },
+        "stichprobenpunkt": {
+            "type": "object",
+            "properties": {
+                "unbestockt": {
+                    "title": "unbestockt",
+                    "type": "string",
+                    "description": "unbestockt des",
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "helperText": "Enter your name"
+                },
+                "nichtWald": {
+                    "title": "nichtWald",
+                    "type": "string",
+                    "description": "nichtWald des",
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "helperText": "Enter your name"
+                }
+            }
         }
     },
     "required": [
-        "name",
-        "coordinates"
+        "aufnahmetrupp",
+        "GNSSDevice",
+        "coordinates",
+        "stichprobenpunkt"
     ]
 }

@@ -6,18 +6,22 @@
 
 For the installation from the repository ``pb_tool`` must be installed. For this follow the instructions in [pb_tool.cfg](pb_tool.cfg).
 
+After making sure you have installed pb_tool, you can deploy the cloned plugin to your QGIS plugins folder:
+
 ```bash
 $ pb_tool deploy
 ```
-The plugin will be copied to your QGIS profile folder.
+The plugin will be copied to your QGIS plugins folder.
 
-Profile Folder: Select ``Settings`` -> ``User Profiles`` -> ``Open Active Profile Folder`` -> ``Python`` -> ``Plugin``
+QGIS: ``Settings`` -> ``User Profiles`` -> ``Open Active Profile Folder`` -> ``python`` -> ``plugins``
 
-## Activate Plugin
+At this point you should restart QGIS.
+
+### Activate Plugin
 
 QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``Installed``
 
-Check: ``Lfb Regeneration and Wildlife Impact Monitoring``
+Make sure that ``Lfb Regeneration and Wildlife Impact Monitoring`` is selected.
 
 
 ## Tests
@@ -27,5 +31,5 @@ Check: ``Lfb Regeneration and Wildlife Impact Monitoring``
 Run pytest in the root directory of the project.
 
 ```bash
-pytest
+$ pytest
 ```

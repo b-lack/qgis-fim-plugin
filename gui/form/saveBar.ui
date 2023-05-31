@@ -37,7 +37,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="lfbSaveBtn">
        <property name="text">
         <string>Speichern</string>
        </property>

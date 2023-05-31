@@ -32,11 +32,13 @@ from qgis.PyQt.QtWidgets import QDialog
 from PyQt5.uic import loadUi
 
 import json
+import copy
 
 from .form.textfield import TextField
-from .form.views.tab1 import Tab1
 
-from ..state.currentState import CurrentState
+from .form.views.tab1 import Tab1
+from .form.views.tab2 import Tab2
+from .form.views.tab3 import Tab3
 
 from .draft.draft_selection import DraftSelection
 from .setup.folder_selection import FolderSelection
@@ -69,18 +71,28 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.iface = interface
 
         self.json = {
-            "name": None,
+            "aufnahmetrupp": None,
+            "GNSSDevice": None,
             "coordinates": {
                 "latitude": None,
                 "longitude": None,
             },
+            "stichprobenpunkt": {
+                "unbestockt": None,
+                "nichtWald": None
+            }
         }
         self.defaultJson = {
-            "name": None,
+            "aufnahmetrupp": None,
+            "GNSSDevice": None,
             "coordinates": {
                 "latitude": None,
                 "longitude": None,
             },
+            "stichprobenpunkt": {
+                "unbestockt": None,
+                "nichtWald": None
+            }
         }
 
         self.state = state
@@ -108,6 +120,14 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.tab1.inputChanged.connect(self.inputChanged)
         self.lfbTab1Layout.addWidget(self.tab1)
 
+        self.tab2 = Tab2(self.iface, self.json, self.schema)
+        self.tab2.inputChanged.connect(self.inputChanged)
+        self.lfbTab2Layout.addWidget(self.tab2)
+
+        self.tab3 = Tab3(self.iface, self.json, self.schema)
+        self.tab3.inputChanged.connect(self.inputChanged)
+        self.lfbTab3Layout.addWidget(self.tab3)
+
         self.saveBar = SaveBar(self.iface, self.json, self.schema)
         self.verticalLayout_4.addWidget(self.saveBar)
 
@@ -115,13 +135,14 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.setPosition(1)
 
     def resetForm(self):
-        self.tab1.tab1SetJson(self.json)
+        self.tab1.setJson(self.json)
+        self.tab2.setJson(self.json)
+        self.tab3.setJson(self.json)
+        QgsMessageLog.logMessage(str(self.defaultJson), "LFB")
 
     def newEntry(self):
-        self.json = self.defaultJson.copy()
+        self.json = copy.deepcopy(self.defaultJson)
         self.changeState()
-        self.resetForm()
-        
         self.setPosition(2)
 
     def inputChanged(self, save):
@@ -131,11 +152,9 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
             self.draft.saveFeature(self.json)
 
     def openHome(self):
-        self.json = self.defaultJson.copy()
+        self.json = copy.deepcopy(self.defaultJson)
         self.changeState()
-        #self.json = None
-        self.resetForm()
-        
+        QgsMessageLog.logMessage(str(self.defaultJson), "LFB")
         self.setPosition(1)
 
     def setPosition(self, position):
@@ -188,6 +207,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
     def changeState(self):
         self.state.change_state(self.json)
         self.saveBar.validate(self.state.state)
+        self.resetForm()
 
     def openState(self):
         msgBox = QtWidgets.QMessageBox()

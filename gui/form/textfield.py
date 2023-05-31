@@ -78,6 +78,8 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             self.lfbTextField.setText(str(self.json[self.key]))
         else:
             self.lfbTextField.setText("")
+
+        
         
     def isfloat(self, num):
         try:
@@ -124,5 +126,4 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             for error in errors:
                 self.lfbTextFieldError.setText(error.message)
 
-        QgsMessageLog.logMessage("inputChanged.emit:", "LFB")
         self.inputChanged.emit(str(self.json[self.key]))

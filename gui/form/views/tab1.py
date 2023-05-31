@@ -37,7 +37,7 @@ from PyQt5 import QtCore
 from ...form.textfield import TextField
 
 
-UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'tab1.ui'))
+UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'tab_default.ui'))
 
 
 class Tab1(QtWidgets.QWidget, UI_CLASS):
@@ -54,29 +54,19 @@ class Tab1(QtWidgets.QWidget, UI_CLASS):
 
         self.show()
 
-        
+        self.trupp = TextField(interface, self.json, schema, 'aufnahmetrupp')
+        self.lfbTabLayout.addWidget(self.trupp)
+        self.trupp.inputChanged.connect(self.emitText)
 
-        self.nameTextfield = TextField(interface, self.json, schema, 'name')
-        self.lfbCoordinatesLayout.addWidget(self.nameTextfield)
-        self.nameTextfield.inputChanged.connect(self.emitText)
+        self.gnss = TextField(interface, self.json, schema, 'GNSSDevice')
+        self.lfbTabLayout.addWidget(self.gnss)
+        self.gnss.inputChanged.connect(self.emitText)
 
-        if('coordinates' not in self.json):
-            self.json['coordinates'] = {}
+    def setJson(self, newJson):
 
-
-        self.latitude = TextField(interface, self.json['coordinates'], schema['properties']['coordinates'], 'latitude')
-        self.lfbCoordinatesLayout.addWidget(self.latitude)
-        self.latitude.inputChanged.connect(self.emitText)
-
-        self.longitude = TextField(interface, self.json['coordinates'], schema['properties']['coordinates'], 'longitude')
-        self.lfbCoordinatesLayout.addWidget(self.longitude)
-        self.longitude.inputChanged.connect(self.emitText)
-
-    def tab1SetJson(self, newJson):
         self.json = newJson
-        self.nameTextfield.setJson(self.json)
-        self.latitude.setJson(self.json['coordinates'])
-        self.longitude.setJson(self.json['coordinates'])
+        self.trupp.setJson(self.json)
+        self.gnss.setJson(self.json)
 
     def emitText(self):
         self.inputChanged.emit(self.json)
