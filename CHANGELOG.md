@@ -1,38 +1,15 @@
-- add changelog
-- add installation description
-- new release
-- Merge pull request #14 from b-lack/dev
-- move plugin.xml
-- Merge pull request #13 from b-lack/dev
-- Merge pull request #12 from b-lack/main
-- Merge pull request #11 from b-lack/dev
-- move plugin.xml to root
-- Merge pull request #10 from b-lack/dev
-- add new release
-- new release v0.0.2
-- fix plugin.xml typo
-- fix plugin.xml typo
-- clear repo
-- change plugin.xml
-- new release
-- new release
-- add dev branch
-- update dev isntall instructions
-- dev installation process description
-- initialized Plugin
-- last macOS
-- add licence
-- ch basic layout
-- Update run-all-tests.yml
-- add badge to readme
-- Update run-all-tests.yml
-- delete upload.py
-- get new workflow Merge branch 'main' of https://github.com/b-lack/qgis-4-DAU into main
-- remove upload repo
-- Update run-all-tests.yml
-- added github workflow Merge branch 'main' of https://github.com/b-lack/qgis-5-DAU into main
-- add tests
-- Create run-all-tests.yml
-- add "__pycache__" to gitignore
-- initial commit
-- Initial commit
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+
+## v0.0.3 - 2023-05-31
+
+
+
+[Unreleased]: https://github.com/b-lack/lfb-regeneration_wildlife_impact_monitoring/compare/v0.0.3...HEAD

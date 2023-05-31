@@ -43,7 +43,9 @@ Make sure that ``Lfb Regeneration and Wildlife Impact Monitoring`` is selected.
 
 ## Release
 
-qgis-plugin-ci package -u https://github.com/b-lack/lfb-regeneration_wildlife_impact_monitoring 0.0.4 --alternative-repo-url
+qgis-plugin-ci package -u https://github.com/b-lack/lfb-regeneration_wildlife_impact_monitoring -r -c --alternative-repo-url https://github.com/b-lack/lfb-regeneration_wildlife_impact_monitoring/releases/download/v0.0.3/lfb_regeneration_wildlife_impact.zip 0.0.4 
+
+qgis-plugin-ci release --github-token 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 -r  0.0.4
 
 ## Generate Changelog
 
