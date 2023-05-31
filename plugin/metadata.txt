@@ -6,7 +6,7 @@
 name=Lfb Regeneration and Wildlife Impact Monitoring
 qgisMinimumVersion=3.0
 description=Lfb Regeneration and Wildlife Impact Monitoring
-version=0.1
+version=0.0.3
 author=Grünecho
 email=support@grunecho.de
 
@@ -23,11 +23,11 @@ hasProcessingProvider=no
 # changelog=
 
 # Tags are comma separated with spaces allowed
-tags=python
+tags=python, monitoring
 
 homepage=https://github.com/b-lack/lfb-regeneration_wildlife_impact_monitoring
 
-icon=icon.png
+icon=assets/icon.png
 # experimental flag
 experimental=True
 

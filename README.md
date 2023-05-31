@@ -1,6 +1,21 @@
 # LFB Verjüngungszustands- und Wildeinfluss Monitoring
 
+## Installation from Repository
 
+QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``Settings``
+
+In the **Plugin Repositories** section click `+Add`.
+
+- Name: `LFB - VWM`
+- URL: `https://raw.githubusercontent.com/b-lack/lfb-regeneration_wildlife_impact_monitoring/main/plugin.xml`
+
+Confirm by clicking `OK`
+
+QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``ALL``
+
+Search for `LFB` and select `LFB Verjüngungszustands- und Wildeinfluss Monitoring`
+
+Confirm by clicking `Install Plugin`
 
 ## Development Installation
 
