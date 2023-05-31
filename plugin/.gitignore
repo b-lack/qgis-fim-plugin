@@ -126,3 +126,4 @@ Backup[ ]of[ ]*.numbers/
 .ruff_cache/
 
 plugin_upload.py
+zip_build

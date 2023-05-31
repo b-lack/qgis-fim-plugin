@@ -1,6 +1,6 @@
 plugin_path: plugin
 github_organization_slug: gruenecho
-project_slug: plugin
+project_slug: lfb-regeneration_wildlife_impact_monitoring
 transifex_coordinator: geoninja
 transifex_organization: pytransifex
 translation_languages:
