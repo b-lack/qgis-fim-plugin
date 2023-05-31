@@ -7,7 +7,7 @@ qgs = QgsApplication([], True)
 qgs.initQgis()
 
 #from .gui.lfb_regeneration_wildlife_impact_dialog import LfbRegenerationWildlifeImpactDialog
-from lfb_regeneration_wildlife_impact import LfbRegenerationWildlifeImpact
+from __lfb_regeneration_wildlife_impact import LfbRegenerationWildlifeImpact
 main_window = LfbRegenerationWildlifeImpact()
 main_window.show()
 qgs.exec_()

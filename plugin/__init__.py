@@ -32,5 +32,5 @@ def classFactory(iface):  # pylint: disable=invalid-name
     :type iface: QgsInterface
     """
     #
-    from .__lfb_regeneration_wildlife_impact import LfbRegenerationWildlifeImpact
+    from .lfb_regeneration_wildlife_impact import LfbRegenerationWildlifeImpact
     return LfbRegenerationWildlifeImpact(iface)
