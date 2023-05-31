@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?xml-stylesheet type="text/xsl" href="plugins.xsl" ?>
 <plugins>
- <pyqgis_plugin version="0.0.1" name="LFB Verjüngungszustands- und Wildeinfluss Monitoring">
+ <pyqgis_plugin version="0.0.2" name="LFB Verjüngungszustands- und Wildeinfluss Monitoring">
   <qgis_minimum_version>3.6.0</qgis_minimum_version>
   <description>LFB Verjüngungszustands- und Wildeinfluss Monitoring.</description>
   <homepage><![CDATA[https://github.com/b-lack/lfb-regeneration_wildlife_impact_monitoring]]></homepage>
   <file_name>lfb_regeneration_wildlife_impact.zip</file_name>
   <author_name>Gerrit Balindt, Torsten Wiebke</author_name>
-  <download_url><![CDATA[https://github.com/b-lack/lfb-regeneration_wildlife_impact_monitoring/releases/download/untagged-4a463f19b1c5b4ee1043/lfb_regeneration_wildlife_impact.zip]]></download_url>
+  <download_url><![CDATA[https://github.com/b-lack/lfb-regeneration_wildlife_impact_monitoring/releases/download/v0.0.2/lfb_regeneration_wildlife_impact.zip]]></download_url>
  </pyqgis_plugin>
 </plugins>
