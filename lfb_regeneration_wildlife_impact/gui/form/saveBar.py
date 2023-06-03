@@ -54,30 +54,71 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.json = json
         self.schema = schema
 
-        self.validate(self.json) 
-
-        self.show()
-
         self.isValidating = True
         self.isValid = False
 
         self.lfbSaveBtn.setDisabled(True)
 
+        self.lfbProgressBar.setValue(100)
+
+        self.maxErrors = 0
+        self.currentErrors = 0
+
+        self.validate(self.json) 
+
+        self.show()
+
+    def checkMinimumSet(self, jsonToTest, errorLen):
+        
+        if errorLen == 0:
+            self.lfbProgressBar.setStyleSheet("QProgressBar::chunk "
+                  "{"
+                    "background-color: green;"
+                  "}")
+            self.lfbProcessInfo.setText("Daten können jetzt gespeicher werden.")
+            return True
+        elif jsonToTest['coordinates']['latitude'] != None and jsonToTest['coordinates']['longitude'] != None and jsonToTest['general']['aufnahmetrupp'] != None and jsonToTest['general']['GNSSDevice'] != None:
+            self.lfbProgressBar.setStyleSheet("QProgressBar::chunk "
+                  "{"
+                    "background-color: orange;"
+                  "}")
+            self.lfbProcessInfo.setText("Deine Daten werden automatisch als Entwurf gespeichert.")
+            return True
+        else:
+            self.lfbProgressBar.setStyleSheet("QProgressBar::chunk "
+                  "{"
+                    "background-color: red;"
+                  "}")
+            self.lfbProcessInfo.setText("Es fehlen noch Eingaben von Pflichfeldern.")
+            return False
+            
+        
+            
+
     def validate(self, jsonToTest):
 
         self.lfbSaveBtn.setDisabled(True)
 
-        QgsMessageLog.logMessage("validate:" + str(jsonToTest), "LFB")
-
         v = Draft7Validator(self.schema)
         errors = sorted(v.iter_errors(jsonToTest), key=lambda e: e.path)
 
+        if self.maxErrors < len(errors):
+            self.maxErrors = len(errors)
+
+        self.currentErrors = len(errors)
+
+        self.lfbProgressBar.setValue(int(100 - self.currentErrors * 100 / self.maxErrors))
+
         if len(errors) == 0:
-            self.isValid = True
+            #self.isValid = True
             self.lfbErrorStateLabel.setText('')
             self.lfbSaveBtn.setDisabled(False)
         else:
-            self.isValid = False
+            #self.isValid = False
             self.lfbErrorStateLabel.setText(str(len(errors)) + ' errors')
+            
+            
+        
+        self.checkMinimumSet(jsonToTest, len(errors))
 
-        return self.isValid
+        return len(errors) == 0

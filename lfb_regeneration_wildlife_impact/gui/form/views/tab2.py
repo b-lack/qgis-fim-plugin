@@ -35,7 +35,7 @@ from PyQt5.uic import loadUi
 from PyQt5 import QtCore
 
 from ..textfield import TextField
-
+from ..dropdown import DropDown
 
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'tab_default2.ui'))
 
@@ -54,23 +54,24 @@ class Tab2(QtWidgets.QWidget, UI_CLASS):
 
         self.show()
 
+        self.access = DropDown(interface, self.json, schema, 'accessibility')
+        self.lfbTabLayout.addWidget(self.access)
+        self.access.inputChanged.connect(self.emitText)
 
-        if('coordinates' not in self.json):
-            self.json['coordinates'] = {}
 
-
-        self.latitude = TextField(interface, self.json['coordinates'], schema['properties']['coordinates'], 'latitude')
+        self.latitude = TextField(interface, self.json, schema, 'latitude')
         self.lfbTabLayout.addWidget(self.latitude)
         self.latitude.inputChanged.connect(self.emitText)
 
-        self.longitude = TextField(interface, self.json['coordinates'], schema['properties']['coordinates'], 'longitude')
+        self.longitude = TextField(interface, self.json, schema, 'longitude')
         self.lfbTabLayout.addWidget(self.longitude)
         self.longitude.inputChanged.connect(self.emitText)
 
     def setJson(self, newJson):
         self.json = newJson
-        self.latitude.setJson(self.json['coordinates'])
-        self.longitude.setJson(self.json['coordinates'])
+        self.access.setJson(self.json)
+        self.latitude.setJson(self.json)
+        self.longitude.setJson(self.json)
 
     def emitText(self):
         self.inputChanged.emit(self.json)

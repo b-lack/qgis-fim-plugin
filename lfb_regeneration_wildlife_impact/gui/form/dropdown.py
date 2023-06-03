@@ -37,10 +37,10 @@ from PyQt5 import QtCore
 from jsonschema import Draft7Validator
 
 
-UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'textfield.ui'))
+UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'dropdown.ui'))
 
 
-class TextField(QtWidgets.QWidget, UI_CLASS):
+class DropDown(QtWidgets.QWidget, UI_CLASS):
     inputChanged = QtCore.pyqtSignal(str)
 
     def __init__(self, interface, json, schema, key):
@@ -59,24 +59,30 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
         self.key = key
         self.defaultValue = self.json[self.key]
 
+        
+
         self.lfbTextFieldLabel.setText(QCoreApplication.translate("FormFields", self.schema['properties'][self.key]['title']))
         self.lfbTextFieldHelp.setText(self.schema['properties'][self.key]['helperText'])
-        self.lfbTextField.textChanged.connect(self.setInputText)
-        self.lfbTextField.undoAvailable = True
+        self.lfbComboBox.currentIndexChanged.connect(self.setInputText)
+        self.lfbComboBox.addItems(self.schema['properties'][self.key]['enumLabels'])
+
 
         self.validate() 
 
         self.show()
 
     def setJson(self, newJson):
+        
         self.json = newJson
-        
-        if self.json is not None and self.json[self.key] is not None:
-            self.lfbTextField.setText(str(self.json[self.key]))
-        else:
-            self.lfbTextField.setText("")
 
+        if self.json is not None and self.json[self.key] is not None:
+            index = self.schema['properties'][self.key]['enum'].index(self.json[self.key])
+            if index != -1:
+                self.lfbComboBox.setCurrentIndex(index)
+        else:
+            self.lfbComboBox.setCurrentIndex(0)
         
+
         
     def isfloat(self, num):
         try:
@@ -84,28 +90,19 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             return True
         except ValueError:
             return False
-    def setInputText(self, text):
-        valueStr = self.lfbTextField.text()
+    def setInputText(self, value):
+        
+        
 
-        if valueStr is "":
-            value = None
+        value = self.schema['properties'][self.key]['enum'][value]
 
-        elif self.schema['properties'][self.key]['type'] == "number" and self.isfloat(valueStr):
-            value = float(valueStr)
-            
-        elif self.schema['properties'][self.key]['type'] == "integer" and valueStr.isnumeric():
-            value = int(valueStr)
-        else:
-            value = valueStr
 
         self.internJson[self.key] = value
-
+        
 
         self.validate()
 
     def validate(self):
-        #jsonCpy = self.json.copy()
-        #jsonCpy['name'] = self.lfbTextField.text()
 
         # https://python-jsonschema.readthedocs.io/en/stable/validate/
         v = Draft7Validator(self.schema['properties'][self.key])
@@ -117,7 +114,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             self.lfbTextFieldError.hide()
             self.lfbTextFieldSuccess.hide()
 
-        elif len(errors) == 0:
+        if len(errors) == 0:
             self.lfbTextFieldError.hide()
             self.lfbTextFieldSuccess.show()
             #self.emitText()
@@ -125,6 +122,9 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             self.lfbTextFieldError.show()
             self.lfbTextFieldSuccess.hide()
             for error in errors:
-                self.lfbTextFieldError.setText(error.message)
+                if "is not type":
+                    self.lfbTextFieldError.setText(QCoreApplication.translate("errorMessages", 'Eine Auswahl ist pflicht.'))
+                else:
+                    self.lfbTextFieldError.setText(QCoreApplication.translate("errorMessages", error.message))
 
         self.inputChanged.emit(str(self.json[self.key]))

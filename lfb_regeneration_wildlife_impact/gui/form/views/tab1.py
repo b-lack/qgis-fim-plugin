@@ -65,8 +65,13 @@ class Tab1(QtWidgets.QWidget, UI_CLASS):
     def setJson(self, newJson):
 
         self.json = newJson
+
         self.trupp.setJson(self.json)
         self.gnss.setJson(self.json)
 
     def emitText(self):
         self.inputChanged.emit(self.json)
+
+    def validateTab(self):
+        
+        return True

@@ -1,29 +1,50 @@
 {
     "type": "object",
     "properties": {
-        "aufnahmetrupp": {
-            "title": "Aufnahmetruppkürzel",
-            "type": "string",
-            "description": "The name of the user",
-            "minLength": 1,
-            "maxLength": 100,
-            "helperText": "Enter your name"
+        "general": {
+            "title": "General",
+            "type": "object",
+            "properties": {
+                "aufnahmetrupp": {
+                    "title": "Aufnahmetruppkürzel",
+                    "type": "string",
+                    "description": "The name of the user",
+                    "minLength": 3,
+                    "maxLength": 100,
+                    "helperText": "Ein Kürzel aus mindestens 3 Zeichen. Idealerweise besteht aus den ersten drei Buchstaben des Nachnamens des Truppführers."
+                },
+                "GNSSDevice": {
+                    "title": "GNSS-Gerät*",
+                    "type": "string",
+                    "description": "Möglichst eindeutige Bezeichnung des Gerätes.",
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "helperText": "Möglichst eindeutige Bezeichnung des Gerätes."
+                }
+            }
         },
-        "GNSSDevice": {
-            "title": "GNSS-Gerät - Bezeichnung des Gerätes",
-            "type": "string",
-            "description": "GNSS-Gerät - Bezeichnung des Gerätes",
-            "minLength": 1,
-            "maxLength": 100,
-            "helperText": "Enter your name"
-        },
-
         "coordinates": {
             "title": "Coordinates",
             "type": "object",
             "properties": {
+                "accessibility": {
+                    "title": "Zugänglichkeit",
+                    "type": "integer",
+                    "description": "",
+                    "helperText": "Zugänglichkeit des Stichprobenpunktes",
+                    "enum": [
+                        null,
+                        1,
+                        2
+                    ],
+                    "enumLabels": [
+                        "Angabe fehlt",
+                        "begehbar",
+                        "Betretungsverbot"
+                    ]
+                },
                 "latitude": {
-                    "title": "Latitude",
+                    "title": "Latitude*",
                     "type": "number",
                     "description": "The latitude of the user",
                     "minimum": -90,
@@ -31,7 +52,7 @@
                     "helperText": "Enter your latitude"
                 },
                 "longitude": {
-                    "title": "Longitude",
+                    "title": "Longitude*",
                     "type": "number",
                     "description": "The longitude of the user",
                     "minimum": -180,
@@ -40,6 +61,7 @@
                 }
             },
             "required": [
+                "accessibility",
                 "latitude",
                 "longitude"
             ]
@@ -49,11 +71,17 @@
             "properties": {
                 "unbestockt": {
                     "title": "unbestockt",
-                    "type": "string",
+                    "type": "integer",
                     "description": "unbestockt des",
-                    "minLength": 1,
-                    "maxLength": 100,
-                    "helperText": "Enter your name"
+                    "helperText": "Enter your name",
+                    "enum": [
+                        2,
+                        3
+                    ],
+                    "enumLabels": [
+                        "Magnet",
+                        "Nagel"
+                    ]
                 },
                 "nichtWald": {
                     "title": "nichtWald",
@@ -67,8 +95,7 @@
         }
     },
     "required": [
-        "aufnahmetrupp",
-        "GNSSDevice",
+        "general",
         "coordinates",
         "stichprobenpunkt"
     ]

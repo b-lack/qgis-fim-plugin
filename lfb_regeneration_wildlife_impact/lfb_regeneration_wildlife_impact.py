@@ -69,7 +69,6 @@ class LfbRegenerationWildlifeImpact:
             self.translator.load(locale_path)
             QCoreApplication.installTranslator(self.translator)
 
-        QgsMessageLog.logMessage(QCoreApplication.translate("QPushButton","Hello world!"), "LFB")
 
         # Declare instance attributes
         self.actions = []
@@ -191,8 +190,8 @@ class LfbRegenerationWildlifeImpact:
                 action)
             self.iface.removeToolBarIcon(action)
 
-    def observerFn(self, value):
-        QgsMessageLog.logMessage('observer trigger', "LFB")
+    #def observerFn(self, value):
+    #    QgsMessageLog.logMessage('observer trigger', "LFB")
 
 
     def run(self):
@@ -200,7 +199,7 @@ class LfbRegenerationWildlifeImpact:
 
         # State Management of Form
         state = CurrentState()
-        state.attach(self.observerFn)
+        #state.attach(self.observerFn)
 
 
         # Create the dialog with elements (after translation) and keep reference

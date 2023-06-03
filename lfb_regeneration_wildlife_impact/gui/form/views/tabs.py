@@ -24,7 +24,7 @@
 
 import os
 
-import json
+#import json
 
 from qgis.core import QgsMessageLog, QgsProject, QgsVectorLayer, QgsJsonUtils, QgsField, QgsFields, QgsVectorFileWriter, QgsCoordinateTransformContext
 from qgis.PyQt import QtWidgets, uic
@@ -34,41 +34,53 @@ from qgis.PyQt.QtWidgets import QDialog
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore
 
+from ...form.textfield import TextField
+from ..dropdown import DropDown
+
+UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'tab_default.ui'))
 
 
-UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'draft_item.ui'))
+class Tabs(QtWidgets.QWidget, UI_CLASS):
+    inputChanged = QtCore.pyqtSignal(object)
 
-
-class DraftItem(QtWidgets.QWidget, UI_CLASS):
-    featureSelected = QtCore.pyqtSignal(int)
-    removeFeature = QtCore.pyqtSignal(int)
-
-    def __init__(self, interface, feature):
+    def __init__(self, interface, json, schema):
         """Constructor."""
 
         QDialog.__init__(self, interface.mainWindow())
 
         self.setupUi(self)
 
-        self.feature = feature
-        self.properties = json.loads(feature['properties'])
-
-        self.lfbDraftIconBtn.clicked.connect(self.on_lfbDraftIconBtn_clicked)
-        self.lfbDraftIconRemoveBtn.clicked.connect(self.on_lfbDraftIconRemoveBtn_clicked)
-
-        self.lfbDraftModifiedByBtn.setText(feature['modified'].toString() if feature['modified'] is not None else '-')
-        self.lfbDraftModifiedBtn.setText(feature['created'].toString() if feature['created'] is not None else '-')
-
-        
-        self.lfbDraftAufnahmetruppLabel.setText(self.properties['general']['aufnahmetrupp'] if self.properties['general']['aufnahmetrupp'] is not None else '-')
-
+        self.json = json
 
         self.show()
 
-    def on_lfbDraftIconBtn_clicked(self):
-        self.featureSelected.emit(self.feature.id())
-    
-    def on_lfbDraftIconRemoveBtn_clicked(self):
-        self.removeFeature.emit(self.feature.id())
+        self.fieldArray = []
+
+        for attr, value in schema['properties'].items():
+
+            QgsMessageLog.logMessage(str(value), "LFB")
+            QgsMessageLog.logMessage(str('enum' in value), "LFB")
+
+            if 'enum' in value:
+                field = DropDown(interface, self.json, schema, attr)
+            else:
+                field = TextField(interface, self.json, schema, attr)
+
+            self.lfbTabLayout.addWidget(field)
+            field.inputChanged.connect(self.emitText)
+            
+            self.fieldArray.append(field)
+
+    def setJson(self, newJson):
+
+        self.json = newJson
+
+        for field in self.fieldArray :
+            field.setJson(self.json)
+
+    def emitText(self):
+        self.inputChanged.emit(self.json)
+
+    def validateTab(self):
         
- 
+        return True

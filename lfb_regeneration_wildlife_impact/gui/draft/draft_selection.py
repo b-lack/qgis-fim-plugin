@@ -90,7 +90,6 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         for i in names:
             if(i.id().startswith(self.LAYER_PREFIX)):
-                QgsMessageLog.logMessage('' + i.id(), "LFB")
                 self.vl = i
                 self.draftLayerExists = True
                 break
@@ -190,8 +189,17 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         for feature in sorted_featureList:
             item = DraftItem(self.iface, feature)
             item.featureSelected.connect(self.listWidgetClicked)
+            item.removeFeature.connect(self.removeFeature)
             self.lfbDraftList.addWidget(item)
 
+    def removeFeature(self, featureId):
+        QgsMessageLog.logMessage('removeFeature' + str(featureId), "LFB")
+        self.vl.startEditing()
+        self.vl.deleteFeature(featureId)
+        self.vl.commitChanges()
+        self.vl.endEditCommand()
+        QgsProject.instance().write()
+        self.readDrafts()
 
     def saveFeature(self, jsonObj):
 

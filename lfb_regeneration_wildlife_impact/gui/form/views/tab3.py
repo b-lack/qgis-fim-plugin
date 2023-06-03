@@ -35,6 +35,7 @@ from PyQt5.uic import loadUi
 from PyQt5 import QtCore
 
 from ..textfield import TextField
+from ..dropdown import DropDown
 
 
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'tab_default2.ui'))
@@ -55,18 +56,18 @@ class Tab3(QtWidgets.QWidget, UI_CLASS):
         self.show()
 
 
-        self.latitude = TextField(interface, self.json['stichprobenpunkt'], schema['properties']['stichprobenpunkt'], 'unbestockt')
+        self.latitude = DropDown(interface, self.json, schema, 'unbestockt')
         self.lfbTabLayout.addWidget(self.latitude)
         self.latitude.inputChanged.connect(self.emitText)
 
-        self.longitude = TextField(interface, self.json['stichprobenpunkt'], schema['properties']['stichprobenpunkt'], 'nichtWald')
+        self.longitude = TextField(interface, self.json, schema, 'nichtWald')
         self.lfbTabLayout.addWidget(self.longitude)
         self.longitude.inputChanged.connect(self.emitText)
 
     def setJson(self, newJson):
         self.json = newJson
-        self.latitude.setJson(self.json['stichprobenpunkt'])
-        self.longitude.setJson(self.json['stichprobenpunkt'])
+        self.latitude.setJson(self.json)
+        self.longitude.setJson(self.json)
 
     def emitText(self):
         self.inputChanged.emit(self.json)

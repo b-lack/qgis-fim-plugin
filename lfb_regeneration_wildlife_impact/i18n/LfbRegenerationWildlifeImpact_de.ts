@@ -5,16 +5,29 @@
         <source>Hello world!</source>
         <translation>HAllo Welt</translation>
     </message>
+</context>
+<context>
+    <name>FormFields</name>
     <message>
-        <source>Hello world!</source>
-        <translation>HAllo Welt</translation>
+        <source>Aufnahmetruppkürzel</source>
+        <translation>Aufnahmetruppkürzel*</translation>
+    </message>
+    
+    <message>
+        <source>GNSS-Gerät - Bezeichnung des Gerätes</source>
+        <translation>GNSS-Gerät - Bezeichnung des Gerätes*</translation>
     </message>
 </context>
 <context>
-    <name>TextLabels</name>
+    <name>errorMessages</name>
     <message>
-        <source>lfbLabel1</source>
-        <translation>Das nen Label</translation>
+        <source>typeError</source>
+        <translation>Falsches Format</translation>
+    </message>
+    
+    <message>
+        <source>GNSS-Gerät - Bezeichnung des Gerätes</source>
+        <translation>GNSS-Gerät - Bezeichnung des Gerätes*</translation>
     </message>
 </context>
 </TS>
