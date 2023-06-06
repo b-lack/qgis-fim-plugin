@@ -125,7 +125,6 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.setPosition(1)
 
     def resetForm(self, setFields = True):
-
         for tab in self.tabsArray:
             tab['setJson'](self.json[tab['attr']], setFields)
         
@@ -134,6 +133,8 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.json = copy.deepcopy(self.defaultJson)
         self.changeState()
         self.setPosition(2)
+        self.resetForm(True)
+        self.draft.resetCurrentDraft(None)
 
     def inputChanged(self, save):
         self.changeState()
@@ -190,11 +191,12 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.draft.draftSelected.connect(self.draftSelected)
         self.verticalLayout_4.addWidget(self.draft)
 
-    def draftSelected(self, id):
-        self.json = id
+    def draftSelected(self, newJson, id):
+        self.json = newJson
         self.resetForm(True)
         self.changeState()
         self.setPosition(2)
+        self.draft.resetCurrentDraft(id)
 
     def changeState(self):
         self.state.change_state(self.json)

@@ -134,7 +134,6 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         self.json = newJson
 
         self.setTableData(self.json[self.key])
-        QgsMessageLog.logMessage('data: ' + str( self.json[self.key] ))
 
     def setInputText(self, value):
         

@@ -82,6 +82,8 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
         self.show()
 
     def setJson(self, newJson, setFields = True):
+        QgsMessageLog.logMessage('SET: ' + str(setFields), "LFB")
+        
         self.json = newJson
 
 
@@ -94,6 +96,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             self.lfbTextField.setText("")
 
         
+
         
     def isfloat(self, num):
         try:

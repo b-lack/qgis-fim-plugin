@@ -155,7 +155,7 @@ background-color: #333;</string>
    <item row="1" column="0">
     <widget class="QPushButton" name="lfbNewEntry">
      <property name="text">
-      <string>Add</string>
+      <string>Neuer Eintrag</string>
      </property>
     </widget>
    </item>

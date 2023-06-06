@@ -24,8 +24,7 @@
 
 import os
 
-#import json
-
+from qgis.core import QgsMessageLog
 from qgis.PyQt import QtWidgets, uic
 from qgis.PyQt.QtWidgets import QDialog
 
@@ -76,7 +75,7 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
             self.fieldArray.append(field)
 
     def setJson(self, newJson, setFields = True):
-
+        
         self.json = newJson
 
         for field in self.fieldArray :

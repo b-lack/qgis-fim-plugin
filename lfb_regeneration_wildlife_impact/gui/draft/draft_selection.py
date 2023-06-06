@@ -44,7 +44,7 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'draft_sele
 
 class DraftSelection(QtWidgets.QWidget, UI_CLASS):
     # https://forum.qt.io/topic/133959/example-of-calling-a-function-to-parent/6
-    draftSelected = QtCore.pyqtSignal(object)
+    draftSelected = QtCore.pyqtSignal(object, int)
 
     def __init__(self, interface):
         """Constructor."""
@@ -82,6 +82,9 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         self.show()
 
+    def resetCurrentDraft(self, featureId):
+        self.currentFeatureId = featureId
+
     def setupDraftLayer(self):
         """Check if private layer exists"""
         
@@ -104,7 +107,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         # https://anitagraser.com/pyqgis-101-introduction-to-qgis-python-programming-for-non-programmers/pyqgis101-creating-editing-a-new-vector-layer/
         self.vl = QgsVectorLayer("Point", self.LAYER_PREFIX, "memory")
-        self.vl.setFlags(QgsMapLayer.Private)
+        #self.vl.setFlags(QgsMapLayer.Private)
         pr = self.vl.dataProvider()
 
         # add fields
@@ -133,7 +136,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             if(feat.id() == item):
                 json_object = json.loads(feat['properties'])
                 self.currentFeatureId = feat.id()
-                self.draftSelected.emit(json_object)
+                self.draftSelected.emit(json_object, self.currentFeatureId)
                 break
 
     def readDrafts(self):
@@ -178,6 +181,8 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                     self.vl.startEditing()
                     tFeature.setAttribute('modified', currentDateTime)
                     feature = tFeature
+                    geometry = QgsGeometry.fromPointXY(QgsPointXY(x, y))
+                    feature.setGeometry(geometry)
         else:
             feature = QgsFeature()
 
