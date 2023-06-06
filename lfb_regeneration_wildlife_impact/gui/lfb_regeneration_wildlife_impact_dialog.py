@@ -27,7 +27,7 @@ import os
 from qgis.core import QgsFeature, QgsMessageLog, QgsProject, QgsVectorLayer, QgsMapLayer
 from qgis.PyQt import QtWidgets, uic
 from qgis.PyQt.QtCore import QCoreApplication, QSettings, QTranslator
-from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.QtWidgets import QDialog, QWidget
 
 from PyQt5.uic import loadUi
 
@@ -37,9 +37,6 @@ import copy
 from .form.textfield import TextField
 
 from .form.views.tabs import Tabs
-#from .form.views.tab1 import Tab1
-#from .form.views.tab2 import Tab2
-#from .form.views.tab3 import Tab3
 
 from .draft.draft_selection import DraftSelection
 from .setup.folder_selection import FolderSelection
@@ -70,24 +67,18 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
 
+        dirname = os.path.dirname(__file__)
+
         # QGIS interface
         self.iface = interface
 
-        self.defaultJson = {
-            "general": {
-                "aufnahmetrupp": None,
-                "GNSSDevice": None
-            },
-            "coordinates": {
-                "accessibility": None,
-                "latitude": None,
-                "longitude": None,
-            },
-            "stichprobenpunkt": {
-                "unbestockt": None,
-                "nichtWald": None
-            }
-        }
+        self.tabsArray = []
+
+        filename = os.path.realpath(os.path.join(dirname, '..', 'schema', 'default.json'))
+
+        with open(filename) as f:
+            self.defaultJson = json.load(f)
+
         self.json = copy.deepcopy(self.defaultJson)
 
         self.state = state
@@ -101,7 +92,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.addFolderSelection()
         self.addDraft()
 
-        dirname = os.path.dirname(__file__)
+        
         filename = os.path.realpath(os.path.join(dirname, '..', 'schema', 'vwm.json'))
 
         with open(filename) as f:
@@ -110,32 +101,33 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.lfbNewEntry.clicked.connect(self.newEntry)
 
-
-        self.tab1 = Tabs(self.iface, self.json['general'], self.schema['properties']['general'])
-        self.tab1.inputChanged.connect(self.inputChanged)
-        self.lfbTab1Layout.addWidget(self.tab1)
-        self.tabWidget.setTabEnabled(0, True)
-
-        self.tab2 = Tabs(self.iface, self.json['coordinates'], self.schema['properties']['coordinates'])
-        self.tab2.inputChanged.connect(self.inputChanged)
-        self.lfbTab2Layout.addWidget(self.tab2)
-        self.tabWidget.setTabEnabled(1, False)
-
-        self.tab3 = Tabs(self.iface, self.json['stichprobenpunkt'], self.schema['properties']['stichprobenpunkt'])
-        self.tab3.inputChanged.connect(self.inputChanged)
-        self.lfbTab3Layout.addWidget(self.tab3)
-        self.tabWidget.setTabEnabled(2, False)
+        tabNr = 1
+        for attr, value in self.schema['properties'].items():
+            tab = Tabs(self.iface, self.json[attr], self.schema['properties'][attr])
+            tab.inputChanged.connect(self.inputChanged)
+            #self.lfbTabWidget.addWidget(tab)
+            #newTab = QWidget(myTabWidget)
+            
+            self.tabsArray.append(
+                {
+                    'tabNr': tabNr,
+                    'setJson': tab.setJson,
+                    'attr': attr
+                }
+            )
+            self.lfbTabWidget.addTab(tab, value['title'])
+            tabNr += 1
 
         self.saveBar = SaveBar(self.iface, self.json, self.schema)
         self.verticalLayout_4.addWidget(self.saveBar)
 
-        self.resetForm()
+        self.resetForm(False)
         self.setPosition(1)
 
-    def resetForm(self):
-        self.tab1.setJson(self.json['general'])
-        self.tab2.setJson(self.json['coordinates'])
-        self.tab3.setJson(self.json['stichprobenpunkt'])
+    def resetForm(self, setFields = True):
+
+        for tab in self.tabsArray:
+            tab['setJson'](self.json[tab['attr']], setFields)
         
 
     def newEntry(self):
@@ -148,7 +140,6 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         #if self.saveBar.validate(self.json) == True:
         if self.validateTabs(True):
-            
             self.draft.saveFeature(self.json)
         # if self.json['coordinates']['latitude'] != None and self.json['coordinates']['longitude'] != None and self.json['aufnahmetrupp'] != None and self.json['GNSSDevice'] != None:
             
@@ -164,21 +155,21 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         if self.userPosition == 2:
             self.lfbNewEntry.hide()
-            self.tabWidget.show()
+            self.lfbTabWidget.show()
             self.saveBar.show()
             self.draft.hide()
             self.folderSelection.hide()
             self.lfbHomeBtn.setEnabled(True)
         elif self.userPosition == 3:
             self.lfbNewEntry.hide()
-            self.tabWidget.show()
+            self.lfbTabWidget.show()
             self.saveBar.show()
             self.draft.hide()
             self.folderSelection.hide()
             self.lfbHomeBtn.setEnabled(True)
         else: 
             self.lfbNewEntry.show()
-            self.tabWidget.hide()
+            self.lfbTabWidget.hide()
             self.saveBar.hide()
             self.draft.show()
             self.folderSelection.show()
@@ -201,14 +192,14 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
     def draftSelected(self, id):
         self.json = id
-        self.resetForm()
+        self.resetForm(True)
         self.changeState()
         self.setPosition(2)
 
     def changeState(self):
         self.state.change_state(self.json)
         self.saveBar.validate(self.state.state)
-        self.resetForm()
+        self.resetForm(False)
         self.validateTabs()
 
     def openState(self):
@@ -223,22 +214,24 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
             self, "LFB Info", msg, QtWidgets.QMessageBox.Ok)
         
     def validateTabs(self, minimumToDraft = False):
+
+        
         v = Draft7Validator(self.schema['properties']['general'])
         gErrors = sorted(v.iter_errors(self.state.state['general']), key=lambda e: e.path)
 
         if len(gErrors) == 0:
-            self.tabWidget.setTabEnabled(1, True)
+            self.lfbTabWidget.setTabEnabled(1, True)
         else:
-            self.tabWidget.setTabEnabled(1, False)
+            self.lfbTabWidget.setTabEnabled(1, False)
 
 
         v = Draft7Validator(self.schema['properties']['coordinates'])
         cErrors = sorted(v.iter_errors(self.state.state['coordinates']), key=lambda e: e.path)
 
         if len(cErrors) == 0:
-            self.tabWidget.setTabEnabled(2, True)
+            self.lfbTabWidget.setTabEnabled(2, True)
         else:
-            self.tabWidget.setTabEnabled(2, False)
+            self.lfbTabWidget.setTabEnabled(2, False)
 
         if minimumToDraft == True:
             return len(gErrors) == 0 and len(cErrors) == 0

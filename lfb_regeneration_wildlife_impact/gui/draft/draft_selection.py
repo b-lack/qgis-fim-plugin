@@ -26,7 +26,7 @@ import os
 import json
 import datetime
 
-from qgis.core import QgsFeature, QgsFeatureRequest, QgsPointXY, QgsGeometry, QgsMessageLog, QgsProject, QgsVectorLayer, QgsJsonUtils, QgsField, QgsFields, QgsVectorFileWriter, QgsCoordinateTransformContext
+from qgis.core import QgsFeature, QgsFeatureRequest, QgsPointXY, QgsGeometry, QgsMessageLog, QgsProject, QgsVectorLayer, QgsJsonUtils, QgsMapLayer, QgsField, QgsFields, QgsVectorFileWriter, QgsCoordinateTransformContext
 from qgis.PyQt import QtWidgets, uic, QtGui
 from qgis.PyQt.QtCore import QDateTime, QVariant, QCoreApplication, QSettings, QTranslator
 from qgis.PyQt.QtWidgets import QDialog
@@ -52,6 +52,8 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         # super(LfbRegenerationWildlifeImpactDialog, self).__init__(parent)
         QDialog.__init__(self, interface.mainWindow())
 
+        
+
         # Set up the user interface from Designer through FORM_CLASS.
         # After self.setupUi() you can access any designer object by doing
         # self.<objectname>, and you can use autoconnect slots - see
@@ -71,7 +73,6 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         self.fields.append(QgsField("properties", QVariant.String))
 
         self.setupDraftLayer()
-        #self.addFromGeoJson()
 
         self.currentFeatureId = None
 
@@ -93,19 +94,17 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                 self.vl = i
                 self.draftLayerExists = True
                 break
-            # QgsProject.instance().removeMapLayer( i.id() )
 
         if(self.draftLayerExists):
             QgsMessageLog.logMessage('Layer exists', "LFB")
             return
 
 
-        path_absolute = QgsProject.instance().readPath("./")
-        #QgsMessageLog.logMessage('' + unicode(path_absolute), "LFB")
+        #path_absolute = QgsProject.instance().readPath("./")
 
         # https://anitagraser.com/pyqgis-101-introduction-to-qgis-python-programming-for-non-programmers/pyqgis101-creating-editing-a-new-vector-layer/
-        # add Vector Layer
         self.vl = QgsVectorLayer("Point", self.LAYER_PREFIX, "memory")
+        self.vl.setFlags(QgsMapLayer.Private)
         pr = self.vl.dataProvider()
 
         # add fields
@@ -113,16 +112,11 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         self.vl.updateFields() # tell the vector layer to fetch changes from the provider
 
         QgsProject.instance().addMapLayer(self.vl)
-
-        #self.iface.addVectorLayer('/Users/b-mac/sites/lfb/raw/by_python/natural_earth_vector.gpkg|layername=foo', '', 'ogr')
-
+    
         
     def setDraftPath(self, path):
         pathToBeSet = os.path.join(path, self.LAYER_PREFIX + '.gpkg')
         writer = QgsVectorFileWriter.writeAsVectorFormatV3(self.vl, pathToBeSet, QgsCoordinateTransformContext(), QgsVectorFileWriter.SaveVectorOptions())
-
-        #QgsProject.instance().removeMapLayers( [self.vl.id()] )
-        #QgsProject.instance().addMapLayer(self.vl)
 
         if writer[0] == QgsVectorFileWriter.NoError:
             self.vl.setDataSource(pathToBeSet, self.vl.name(), 'ogr')
@@ -130,50 +124,15 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         else:
             print("error")
 
-    def addFromGeoJson(self, properties):
-        if(self.draftLayerExists == False):
-            QgsMessageLog.logMessage('!draftLayerExists', "LFB")
-            return
-            
-
-        properties['id'] = 'asd'
-
-        elementToAdd = {
-            "type": "FeatureCollection",
-            "features": [
-                {
-                "type": "Feature",
-                "properties": properties,
-                "geometry": {
-                    "coordinates": [
-                    14.223838264540632,
-                    47.229791670453636
-                    ],
-                    "type": "Point"
-                }
-                }
-            ]
-        }
-        
-        self.vl.startEditing()
-
-        geometry = QgsJsonUtils.stringToFeatureList(json.dumps(elementToAdd), self.fields)
-        self.vl.addFeatures(geometry)
-        
-        self.vl.commitChanges()
-        self.vl.endEditCommand()
-        QgsProject.instance().write()
-
-        self.vl.updateExtents()
-
-
+    
     def listWidgetClicked(self, item):
-
+        QgsMessageLog.logMessage('selected ID: ' + str(item) , "LFB")
         featureList = self.vl.getFeatures()
         for feat in featureList:
-
+            
             if(feat.id() == item):
                 json_object = json.loads(feat['properties'])
+                self.currentFeatureId = feat.id()
                 self.draftSelected.emit(json_object)
                 break
 
@@ -193,7 +152,6 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             self.lfbDraftList.addWidget(item)
 
     def removeFeature(self, featureId):
-        QgsMessageLog.logMessage('removeFeature' + str(featureId), "LFB")
         self.vl.startEditing()
         self.vl.deleteFeature(featureId)
         self.vl.commitChanges()
@@ -206,17 +164,20 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         if jsonObj is None:
             return
         
-        x = 14.223838264540632
-        y = 47.229791670453636
+        x = jsonObj['coordinates']['latitude'] #14.223838264540632
+        y = jsonObj['coordinates']['longitude']
 
-        QgsMessageLog.logMessage('feature ID' + str(jsonObj), "LFB")
+        currentDateTime = QDateTime.currentDateTime()
 
         if self.currentFeatureId is not None:
-            for feature in self.vl.getFeatures():
+            for tFeature in self.vl.getFeatures():
 
-                if feature.id() == self.currentFeatureId:
+                QgsMessageLog.logMessage('ID: ' + str(tFeature.id()) + ' - ' + str(self.currentFeatureId), "LFB")
+
+                if tFeature.id() == self.currentFeatureId:
                     self.vl.startEditing()
-                    feature.setAttribute('modified', QDateTime.currentDateTime())
+                    tFeature.setAttribute('modified', currentDateTime)
+                    feature = tFeature
         else:
             feature = QgsFeature()
 
@@ -228,14 +189,16 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
             #for attr, value in jsonObj.items():
             #    feature.setAttribute(attr, value)
-            currentDateTime = QDateTime.currentDateTime()
+            
             feature.setAttribute('created', currentDateTime)
             feature.setAttribute('modified', currentDateTime)
                 
             self.vl.startEditing()
 
             self.vl.addFeature(feature)
-            
+        
+        QgsMessageLog.logMessage('ID: ' + str(self.currentFeatureId), "LFB")
+        
         # SET META DATA
         feature.setAttribute('properties', json.dumps(jsonObj))
 
@@ -245,7 +208,12 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         self.vl.endEditCommand()
         QgsProject.instance().write()
         self.vl.updateExtents()
-        self.currentFeatureId = feature.id()
+
+        for feature in self.vl.getFeatures():
+            if feature['modified'] == currentDateTime:
+                self.currentFeatureId = feature.id()
+
+        
 
         self.readDrafts()
 

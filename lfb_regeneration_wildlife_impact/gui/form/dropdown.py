@@ -61,22 +61,25 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
 
         
 
-        self.lfbTextFieldLabel.setText(QCoreApplication.translate("FormFields", self.schema['properties'][self.key]['title']))
-        self.lfbTextFieldHelp.setText(self.schema['properties'][self.key]['helperText'])
+        self.lfbTextFieldLabel.setText(QCoreApplication.translate("FormFields", self.schema['title']))
+        self.lfbTextFieldHelp.setText(self.schema['helperText'])
         self.lfbComboBox.currentIndexChanged.connect(self.setInputText)
-        self.lfbComboBox.addItems(self.schema['properties'][self.key]['enumLabels'])
+        self.lfbComboBox.addItems(self.schema['enumLabels'])
 
 
         self.validate() 
 
         self.show()
 
-    def setJson(self, newJson):
+    def setJson(self, newJson, setFields = True):
         
         self.json = newJson
 
+        if setFields == False:
+            return
+
         if self.json is not None and self.json[self.key] is not None:
-            index = self.schema['properties'][self.key]['enum'].index(self.json[self.key])
+            index = self.schema['enum'].index(self.json[self.key])
             if index != -1:
                 self.lfbComboBox.setCurrentIndex(index)
         else:
@@ -94,7 +97,7 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         
         
 
-        value = self.schema['properties'][self.key]['enum'][value]
+        value = self.schema['enum'][value]
 
 
         self.internJson[self.key] = value
@@ -105,7 +108,7 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
     def validate(self):
 
         # https://python-jsonschema.readthedocs.io/en/stable/validate/
-        v = Draft7Validator(self.schema['properties'][self.key])
+        v = Draft7Validator(self.schema)
         errors = sorted(v.iter_errors(self.internJson[self.key]), key=lambda e: e.path)
 
         self.json[self.key] = self.internJson[self.key]

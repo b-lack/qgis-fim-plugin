@@ -26,16 +26,14 @@ import os
 
 #import json
 
-from qgis.core import QgsMessageLog, QgsProject, QgsVectorLayer, QgsJsonUtils, QgsField, QgsFields, QgsVectorFileWriter, QgsCoordinateTransformContext
 from qgis.PyQt import QtWidgets, uic
-from qgis.PyQt.QtCore import QCoreApplication, QSettings, QTranslator
 from qgis.PyQt.QtWidgets import QDialog
 
-from PyQt5.uic import loadUi
 from PyQt5 import QtCore
 
 from ...form.textfield import TextField
 from ..dropdown import DropDown
+from ..array_field import ArrayField
 
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'tab_default.ui'))
 
@@ -56,31 +54,33 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
 
         self.fieldArray = []
 
-        for attr, value in schema['properties'].items():
+        if 'properties' in schema:
+            items = schema['properties'].items()
+        else:
+            items = schema['items'].items()
 
-            QgsMessageLog.logMessage(str(value), "LFB")
-            QgsMessageLog.logMessage(str('enum' in value), "LFB")
+        for attr, value in items:
+            
+            valueType = value['type']
 
-            if 'enum' in value:
-                field = DropDown(interface, self.json, schema, attr)
+            if valueType == 'array':
+                field = ArrayField(interface, self.json, value, attr)
+            elif 'enum' in value:
+                field = DropDown(interface, self.json, value, attr)
             else:
-                field = TextField(interface, self.json, schema, attr)
+                field = TextField(interface, self.json, value, attr)
 
             self.lfbTabLayout.addWidget(field)
             field.inputChanged.connect(self.emitText)
             
             self.fieldArray.append(field)
 
-    def setJson(self, newJson):
+    def setJson(self, newJson, setFields = True):
 
         self.json = newJson
 
         for field in self.fieldArray :
-            field.setJson(self.json)
+            field.setJson(self.json, setFields)
 
     def emitText(self):
         self.inputChanged.emit(self.json)
-
-    def validateTab(self):
-        
-        return True

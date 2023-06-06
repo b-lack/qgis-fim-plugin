@@ -160,7 +160,7 @@ background-color: #333;</string>
     </widget>
    </item>
    <item row="4" column="0">
-    <widget class="QTabWidget" name="tabWidget">
+    <widget class="QTabWidget" name="lfbTabWidget">
      <property name="font">
       <font>
        <pointsize>15</pointsize>
@@ -170,7 +170,7 @@ background-color: #333;</string>
       <string notr="true">margin:0;padding:0;</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>-1</number>
      </property>
      <property name="elideMode">
       <enum>Qt::ElideRight</enum>
@@ -178,79 +178,6 @@ background-color: #333;</string>
      <property name="movable">
       <bool>true</bool>
      </property>
-     <widget class="QWidget" name="tab">
-      <attribute name="title">
-       <string>Identifikation</string>
-      </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <layout class="QGridLayout" name="lfbTab1Layout">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-        </layout>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab_2">
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <attribute name="title">
-       <string>Aufsuchen</string>
-      </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <layout class="QVBoxLayout" name="lfbTab2Layout"/>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab_3">
-      <attribute name="title">
-       <string>Stichprobenpunkt</string>
-      </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <layout class="QGridLayout" name="lfbTab3Layout"/>
-       </item>
-      </layout>
-     </widget>
     </widget>
    </item>
   </layout>

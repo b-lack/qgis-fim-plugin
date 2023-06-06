@@ -62,6 +62,7 @@ class DraftItem(QtWidgets.QWidget, UI_CLASS):
         
         self.lfbDraftAufnahmetruppLabel.setText(self.properties['general']['aufnahmetrupp'] if self.properties['general']['aufnahmetrupp'] is not None else '-')
 
+        self.lfbDraftAufnahmetruppLabel.setText(str(self.feature.id()))
 
         self.show()
 

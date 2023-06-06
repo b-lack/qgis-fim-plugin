@@ -67,13 +67,44 @@
             ]
         },
         "stichprobenpunkt": {
+            "title": "Stichprobenpunkt",
+            "description": "Der Punkt, an dem die Stichprobe aufgenommen wurde.",
             "type": "object",
             "properties": {
                 "unbestockt": {
-                    "title": "unbestockt",
-                    "type": "integer",
+                    "title": "unbestockt / nicht begehbar",
+                    "type": ["integer", "null"],
                     "description": "unbestockt des",
-                    "helperText": "Enter your name",
+                    "helperText": "Stichprobe liegt auf dauerhaft unbestockter Fläche oder ist nicht begehbar.",
+                    "enum": [
+                        null,
+                        1,
+                        2,
+                        3,
+                        5,
+                        6,
+                        7,
+                        8
+                    ],
+                    "enumLabels": [
+                        "",
+                        "liegt auf der Straße",
+                        "liegt < 15 von Straße entfernt",
+                        "auf Haupt oder Zubringerweg",
+                        "auf Trasse oder dauerhaft unbestockter Fläche",
+                        "in dauerhaft abgesperrtem Areal",
+                        "von GNSS gespeicherte Position",
+                        "Punkt nicht begehbar",
+                        "temp. Störung (z.B. Sturmwurf) an Punkt"
+                    ]
+                },
+                "nichtWald": {
+                    "title": "nichtWald",
+                    "type": ["integer", "null"],
+                    "description": "nichtWald des",
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "helperText": "Stichprobenpunkt liegt eindeutig nicht im Wald und wäre auch nach Verlegung nicht im Wald.",
                     "enum": [
                         2,
                         3
@@ -82,16 +113,84 @@
                         "Magnet",
                         "Nagel"
                     ]
-                },
-                "nichtWald": {
-                    "title": "nichtWald",
-                    "type": "string",
-                    "description": "nichtWald des",
-                    "minLength": 1,
-                    "maxLength": 100,
-                    "helperText": "Enter your name"
                 }
             }
+        },
+        "baumplot1":{
+            "type": "object",
+            "title": "Baumplot 1",
+            "description": "Der erste Baumplot",
+            "properties": {
+                "baumplot1":{
+                    "type": "array",
+                    "title": "Baumplot 1",
+                    "description": "Baumplot 1",
+                    "helperText": "Baumplot 1",
+                    "additionalItems": false,
+                    "items": {
+                        "title": "Baumplot 1",
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties":{
+                            "los_id": {
+                                "title": "Los-ID Baum",
+                                "type": "integer",
+                                "description": "Los-ID",
+                                "minimum": 1,
+                                "maximum": 999999,
+                                "helperText": "Los-ID"
+                            },
+                            "azimuth": {
+                                "title": "Azimut in Gon",
+                                "type": "integer",
+                                "description": "Azimuth",
+                                "minimum": 0,
+                                "maximum": 400,
+                                "helperText": "Azimuth",
+                                "unit": "Gon",
+                                "default": 0
+                            },
+                            "distance": {
+                                "title": "Distanz Baum <-> Stichprobenpunkt",
+                                "type": "integer",
+                                "description": "Distanz",
+                                "minimum": 0,
+                                "maximum": 9999,
+                                "helperText": "Distanz",
+                                "unit": "Zentimeter"
+                            },
+                            "dbh": {
+                                "title": "DBH in Millimeter",
+                                "type": "integer",
+                                "description": "DBH",
+                                "minimum": 10,
+                                "maximum": 9999,
+                                "helperText": "DBH",
+                                "unit": "Millimeter"
+                            },
+                            "height": {
+                                "title": "Höhe in Dezimeter",
+                                "type": "integer",
+                                "description": "Höhe",
+                                "minimum": 1,
+                                "maximum": 250,
+                                "helperText": "Höhe",
+                                "unit": "Dezimeter"
+                            }
+                        }
+                    },
+                    "required": [
+                        "los_id",
+                        "azimuth",
+                        "distance",
+                        "dbh",
+                        "height"
+                    ]
+                }
+            },
+            "required": [
+                "baumplot1"
+            ]
         }
     },
     "required": [

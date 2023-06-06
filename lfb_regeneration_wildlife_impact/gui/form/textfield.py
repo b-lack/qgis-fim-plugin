@@ -36,6 +36,8 @@ from PyQt5 import QtCore
 
 from jsonschema import Draft7Validator
 
+from PyQt5.QtGui import QDoubleValidator
+
 
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'textfield.ui'))
 
@@ -59,17 +61,32 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
         self.key = key
         self.defaultValue = self.json[self.key]
 
-        self.lfbTextFieldLabel.setText(QCoreApplication.translate("FormFields", self.schema['properties'][self.key]['title']))
-        self.lfbTextFieldHelp.setText(self.schema['properties'][self.key]['helperText'])
+        self.lfbTextFieldLabel.setText(QCoreApplication.translate("FormFields", self.schema['title']))
+        self.lfbTextFieldHelp.setText(self.schema['helperText'])
         self.lfbTextField.textChanged.connect(self.setInputText)
         self.lfbTextField.undoAvailable = True
+
+        if "unit" in self.schema:
+            self.lfbTextFieldUnit.setText(self.schema['unit'])
+
+        if self.schema['type'] == "number" or self.schema['type'] == "integer":
+            #self.lfbTextField.setValidator(QDoubleValidator())
+            self.lfbTextField.setAlignment(QtCore.Qt.AlignRight)
+
+        #if self.schema['properties'][self.key]['type'] == "number":
+        #    dv = QDoubleValidator(self.schema['properties'][self.key]['minimum'], self.schema['properties'][self.key]['maximum'], 7); # [0, 5] with 7 decimals of precision
+        #    self.lfbTextField.setValidator(dv)
 
         self.validate() 
 
         self.show()
 
-    def setJson(self, newJson):
+    def setJson(self, newJson, setFields = True):
         self.json = newJson
+
+
+        if setFields == False:
+            return
         
         if self.json is not None and self.json[self.key] is not None:
             self.lfbTextField.setText(str(self.json[self.key]))
@@ -90,10 +107,10 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
         if valueStr is "":
             value = None
 
-        elif self.schema['properties'][self.key]['type'] == "number" and self.isfloat(valueStr):
+        elif self.schema['type'] == "number" and self.isfloat(valueStr):
             value = float(valueStr)
             
-        elif self.schema['properties'][self.key]['type'] == "integer" and valueStr.isnumeric():
+        elif self.schema['type'] == "integer" and valueStr.isnumeric():
             value = int(valueStr)
         else:
             value = valueStr
@@ -108,7 +125,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
         #jsonCpy['name'] = self.lfbTextField.text()
 
         # https://python-jsonschema.readthedocs.io/en/stable/validate/
-        v = Draft7Validator(self.schema['properties'][self.key])
+        v = Draft7Validator(self.schema)
         errors = sorted(v.iter_errors(self.internJson[self.key]), key=lambda e: e.path)
 
         self.json[self.key] = self.internJson[self.key]
@@ -116,14 +133,17 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
         if self.json[self.key] is None:
             self.lfbTextFieldError.hide()
             self.lfbTextFieldSuccess.hide()
+            self.lfbTextFieldHelp.show()
 
         elif len(errors) == 0:
             self.lfbTextFieldError.hide()
             self.lfbTextFieldSuccess.show()
+            self.lfbTextFieldHelp.hide()
             #self.emitText()
         else:
             self.lfbTextFieldError.show()
             self.lfbTextFieldSuccess.hide()
+            self.lfbTextFieldHelp.hide()
             for error in errors:
                 self.lfbTextFieldError.setText(error.message)
 

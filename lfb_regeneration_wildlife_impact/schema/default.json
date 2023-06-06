@@ -1,0 +1,20 @@
+{
+    "$schema": "vwm.json",
+    "general": {
+        "aufnahmetrupp": null,
+        "GNSSDevice": null
+    },
+    "coordinates": {
+        "accessibility": null,
+        "latitude": null,
+        "longitude": null
+    },
+    "stichprobenpunkt": {
+        "unbestockt": null,
+        "nichtWald": null
+    },
+    "baumplot1":{
+        "baumplot1": [],
+        "landmarkenplot1": []
+    }
+}
