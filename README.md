@@ -7,7 +7,7 @@ QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``Settings``
 In the **Plugin Repositories** section click `+Add`.
 
 - Name: `LFB - VWM`
-- URL: `https://raw.githubusercontent.com/b-lack/lfb-regeneration_wildlife_impact_monitoring/main/plugin.xml`
+- URL: `https://raw.githubusercontent.com/b-lack/lfb-regeneration_wildlife_impact_monitoring/main/plugins.xml`
 
 Confirm by clicking `OK`
 
