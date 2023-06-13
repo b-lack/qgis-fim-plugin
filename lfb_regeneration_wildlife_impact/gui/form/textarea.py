@@ -39,10 +39,10 @@ from jsonschema import Draft7Validator
 from PyQt5.QtGui import QDoubleValidator
 
 
-UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'textfield.ui'))
+UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'textarea.ui'))
 
 
-class TextField(QtWidgets.QWidget, UI_CLASS):
+class TextArea(QtWidgets.QWidget, UI_CLASS):
     inputChanged = QtCore.pyqtSignal(str)
     lfbInfoBox = QtCore.pyqtSignal(object)
 
@@ -106,13 +106,13 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
 
     def setDefaultValue(self):
 
-        self.lfbTextField.setText("")
+        self.lfbTextField.setPlainText("")
 
         if "default" not in self.schema and self.json[self.key] is None:
             return
         
         self.json[self.key] = self.schema['default']
-        self.lfbTextField.setText(str(self.json[self.key]))
+        self.lfbTextField.setPlainText(str(self.json[self.key]))
 
     def triggerInfoBox(self):
         self.lfbInfoBox.emit(self.schema)
@@ -129,7 +129,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             self.json[self.key] = None
         
         if self.json is not None and self.json[self.key] is not None:
-            self.lfbTextField.setText(str(self.json[self.key]))
+            self.lfbTextField.setPlainText(str(self.json[self.key]))
         else:
             self.setDefaultValue()
 
@@ -141,8 +141,8 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
         except ValueError:
             return False
         
-    def setInputText(self, text):
-        valueStr = self.lfbTextField.text()
+    def setInputText(self):
+        valueStr = self.lfbTextField.toPlainText()
 
         if valueStr is "":
             value = None

@@ -142,9 +142,6 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
 
     def validate(self):
 
-        QgsMessageLog.logMessage('data' + str(self.defaultValue), "LFB")
-        QgsMessageLog.logMessage('schema' + str(self.schema), "LFB")
-
         # https://python-jsonschema.readthedocs.io/en/stable/validate/
         v = Draft7Validator(self.schema)
         errors = sorted(v.iter_errors([self.defaultValue]), key=lambda e: e.path)
@@ -154,7 +151,7 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         if len(errors) == 0:
             self.lfbAddBtn.setEnabled(True)
         else:
-            QgsMessageLog.logMessage('errors' + str(errors[0]), "LFB")
+            #QgsMessageLog.logMessage('errors' + str(errors[0]), "LFB")
             self.lfbAddBtn.setEnabled(False)
 
         self.inputChanged.emit(self.json)

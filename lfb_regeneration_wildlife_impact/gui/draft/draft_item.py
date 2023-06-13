@@ -26,14 +26,14 @@ import os
 
 import json
 
-from qgis.core import QgsMessageLog, QgsProject, QgsVectorLayer, QgsJsonUtils, QgsField, QgsFields, QgsVectorFileWriter, QgsCoordinateTransformContext
+from qgis.core import QgsMessageLog
 from qgis.PyQt import QtWidgets, uic
-from qgis.PyQt.QtCore import QCoreApplication, QSettings, QTranslator
 from qgis.PyQt.QtWidgets import QDialog
 
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore
 
+from ...utils.helper import Utils
 
 
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'draft_item.ui'))
@@ -43,7 +43,7 @@ class DraftItem(QtWidgets.QWidget, UI_CLASS):
     featureSelected = QtCore.pyqtSignal(int)
     removeFeature = QtCore.pyqtSignal(int)
 
-    def __init__(self, interface, feature):
+    def __init__(self, interface, feature, schema):
         """Constructor."""
 
         QDialog.__init__(self, interface.mainWindow())
@@ -62,7 +62,9 @@ class DraftItem(QtWidgets.QWidget, UI_CLASS):
         
         self.lfbDraftAufnahmetruppLabel.setText(self.properties['general']['aufnahmetrupp'] if self.properties['general']['aufnahmetrupp'] is not None else '-')
 
-        self.lfbDraftAufnahmetruppLabel.setText(str(self.feature.id()))
+        #self.lfbDraftAufnahmetruppLabel.setText(str(self.feature.id()))
+
+        self.lfbDraftWorkflowLabel.setText(Utils.enumLabel(self.properties['workflow']['workflow'], schema['properties']['workflow']['properties']['workflow']) if self.properties['workflow']['workflow'] is not None else '-')
 
         self.show()
 

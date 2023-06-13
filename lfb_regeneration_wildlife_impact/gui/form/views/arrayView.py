@@ -37,6 +37,7 @@ from PyQt5 import QtCore
 from ...form.textfield import TextField
 from ..dropdown import DropDown
 from ..array_field import ArrayField
+from ..boolean import Boolean
 
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'array_default.ui'))
 
@@ -65,9 +66,13 @@ class ArrayView(QtWidgets.QWidget, UI_CLASS):
 
         for attr, value in items:
 
+            valueType = value['type']
+
             if 'enum' in value:
                 field = DropDown(interface, self.json, value, attr)
-
+            elif valueType == 'boolean':
+                field = Boolean(interface, self.json, value, attr)
+                #field.lfbInfoBox.connect(self.infoBoxClicked)
             else:
                 field = TextField(interface, self.json, value, attr)
 

@@ -24,26 +24,24 @@
 
 import os
 
-from qgis.core import QgsFeature, QgsMessageLog, QgsProject, QgsVectorLayer, QgsMapLayer
+from PyQt5 import QtGui, QtCore
+from qgis.core import QgsMessageLog
 from qgis.PyQt import QtWidgets, uic
-from qgis.PyQt.QtCore import QCoreApplication, QSettings, QTranslator
-from qgis.PyQt.QtWidgets import QDialog, QWidget
-
-from PyQt5.uic import loadUi
+from qgis.PyQt.QtWidgets import QDialog
 
 import json
 import copy
 
-from .form.textfield import TextField
 
 from .form.views.tabs import Tabs
 
 from .draft.draft_selection import DraftSelection
 from .setup.folder_selection import FolderSelection
+from .db_connection.db_widget import DBWidget
 
 from .form.saveBar import SaveBar
 
-from jsonschema import Draft7Validator
+from jsonschema import Draft7Validator, RefResolver
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
@@ -83,21 +81,30 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.state = state
 
+        qss = os.path.realpath(os.path.join(dirname, '..', 'styles', 'global.qss'))
+        QgsMessageLog.logMessage(qss, 'LFB')
+        
+        with open(qss,"r") as fh:
+            self.setStyleSheet(fh.read())
+            
+            #self.setStyleSheet("QLineEdit { background-color: yellow }")
+
+
         # Connect up the buttons.
         self.lfbHomeBtn.clicked.connect(self.openHome)
-        self.lfbQuestionBtn.clicked.connect(self.openQuestionDialog)
 
         self.lfbDevBtn.clicked.connect(self.openState)
         
-        self.addFolderSelection()
-        self.addDraft()
-
-        
+ 
         filename = os.path.realpath(os.path.join(dirname, '..', 'schema', 'vwm.json'))
 
         with open(filename) as f:
             self.schema = json.load(f)
+            #self.deReference(self.schema, filename)
         
+        self.addFolderSelection()
+        self.addDraft()
+        #self.addDbConnection()
 
         self.lfbNewEntry.clicked.connect(self.newEntry)
 
@@ -115,19 +122,34 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
                     'attr': attr
                 }
             )
-            self.lfbTabWidget.addTab(tab, value['title'])
+            self.lfbTabWidget.addTab(tab, ' ') # value['title']
+
+            #self.lfbTabWidget.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
             tabNr += 1
+        
+        self.lfbTabWidget.tabBar().setCursor(QtCore.Qt.PointingHandCursor)
+
+        #self.lfbTabWidget.setProperty("class", "my-label-style")
 
         self.saveBar = SaveBar(self.iface, self.json, self.schema)
-        self.verticalLayout_4.addWidget(self.saveBar)
+        self.lfbMain.addWidget(self.saveBar)
 
         self.resetForm(False)
         self.setPosition(1)
 
+    def deReference(self, schema, filename):
+
+        dir = os.path.dirname(os.path.realpath(__file__))
+        resolver = RefResolver(referrer=schema, base_uri='file://' + dir + '/')
+        #jsonschema.validate(data, schema, resolver=resolver)
+        
+        #dereferenced = RefResolver(base_uri=filename, referrer=schema)
+        #QgsMessageLog.logMessage(str(dereferenced), 'LFB')
+
     def resetForm(self, setFields = True):
         for tab in self.tabsArray:
             tab['setJson'](self.json[tab['attr']], setFields)
-        
+
 
     def newEntry(self):
         self.json = copy.deepcopy(self.defaultJson)
@@ -149,6 +171,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.json = copy.deepcopy(self.defaultJson)
         self.changeState()
         self.setPosition(1)
+        self.lfbTabWidget.setCurrentIndex(0)
 
     def setPosition(self, position):
 
@@ -161,6 +184,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
             self.draft.hide()
             self.folderSelection.hide()
             self.lfbHomeBtn.setEnabled(True)
+            self.lfbHomeBtn.show()
         elif self.userPosition == 3:
             self.lfbNewEntry.hide()
             self.lfbTabWidget.show()
@@ -168,28 +192,35 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
             self.draft.hide()
             self.folderSelection.hide()
             self.lfbHomeBtn.setEnabled(True)
-        else: 
+            self.lfbHomeBtn.show()
+        else:
+            #self.
             self.lfbNewEntry.show()
             self.lfbTabWidget.hide()
             self.saveBar.hide()
             self.draft.show()
             self.folderSelection.show()
             self.lfbHomeBtn.setEnabled(False)
+            self.lfbHomeBtn.hide()
 
     def addFolderSelection(self):
         self.folderSelection = FolderSelection(self.iface)
         self.folderSelection.folderSelected.connect(self.folderSelected)
-        self.verticalLayout_4.addWidget(self.folderSelection)
+        self.lfbMain.addWidget(self.folderSelection)
         
 
     def folderSelected(self, folderPath):
         self.draftPath = folderPath
         self.draft.setDraftPath(folderPath)
 
+    def addDbConnection(self):
+        dbWidget = DBWidget(self.iface)
+        self.lfbMain.addWidget(dbWidget)
+
     def addDraft(self):
-        self.draft = DraftSelection(self.iface)
+        self.draft = DraftSelection(self.iface, self.schema)
         self.draft.draftSelected.connect(self.draftSelected)
-        self.verticalLayout_4.addWidget(self.draft)
+        self.lfbMain.addWidget(self.draft)
 
     def draftSelected(self, newJson, id):
         self.json = newJson
@@ -208,12 +239,6 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         msgBox = QtWidgets.QMessageBox()
         msgBox.setText(json.dumps(self.state.state, indent=2))
         msgBox.exec()
-
-    def openQuestionDialog(self):
-        msg = self.tr('Infotext')
-
-        QtWidgets.QMessageBox.information(
-            self, "LFB Info", msg, QtWidgets.QMessageBox.Ok)
         
     def validateTabs(self, minimumToDraft = False):
 
@@ -232,8 +257,20 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         if len(cErrors) == 0:
             self.lfbTabWidget.setTabEnabled(2, True)
+            self.lfbTabWidget.setTabEnabled(3, True)
+            self.lfbTabWidget.setTabEnabled(4, True)
+            self.lfbTabWidget.setTabEnabled(5, True)
+            self.lfbTabWidget.setTabEnabled(6, True)
+            self.lfbTabWidget.setTabEnabled(7, True)
+            self.lfbTabWidget.setTabEnabled(8, True)
         else:
             self.lfbTabWidget.setTabEnabled(2, False)
+            self.lfbTabWidget.setTabEnabled(3, False)
+            self.lfbTabWidget.setTabEnabled(4, False)
+            self.lfbTabWidget.setTabEnabled(5, False)
+            self.lfbTabWidget.setTabEnabled(6, False)
+            self.lfbTabWidget.setTabEnabled(7, False)
+            self.lfbTabWidget.setTabEnabled(8, False)
 
         if minimumToDraft == True:
             return len(gErrors) == 0 and len(cErrors) == 0

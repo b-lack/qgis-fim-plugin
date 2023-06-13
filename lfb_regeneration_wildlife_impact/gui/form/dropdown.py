@@ -36,12 +36,15 @@ from PyQt5 import QtCore
 
 from jsonschema import Draft7Validator
 
+from ...utils.helper import Utils
+
 
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'dropdown.ui'))
 
 
 class DropDown(QtWidgets.QWidget, UI_CLASS):
     inputChanged = QtCore.pyqtSignal(str)
+    lfbInfoBox = QtCore.pyqtSignal(object)
 
     def __init__(self, interface, json, schema, key):
         """Constructor."""
@@ -66,10 +69,38 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         self.lfbComboBox.currentIndexChanged.connect(self.setInputText)
         self.lfbComboBox.addItems(self.schema['enumLabels'])
 
+        self.lfbTextFieldDescriptionBtn.clicked.connect(self.triggerInfoBox)
+
+        
+        if "QTType" in self.schema and self.schema['QTType'] == "tree":
+            #self.lfbReplaceWidget.show()
+            self.lfbComboBox.hide()
+            
+            self.tree = QtWidgets.QTreeWidget()
+            self.tree.setStyleSheet("QTreeWidget { font-size: 20pt; }")
+            self.tree.itemClicked.connect(self.onItemClicked)
+            self.lfbReplaceWidget.layout().addWidget(self.tree)
+
+            self.createTreeWidget(self.schema)
+
+        if "default" in self.schema and self.json[self.key] is None:
+            self.setDefaultValue()
 
         self.validate() 
 
         self.show()
+        
+    def setDefaultValue(self):
+        if "default" not in self.schema:
+            return
+        
+        self.internJson[self.key] = self.schema['default']
+        self.validate()
+
+        self.lfbComboBox.setCurrentIndex(self.schema['enum'].index(self.json[self.key]))
+        
+    def triggerInfoBox(self):
+        self.lfbInfoBox.emit(self.schema)
 
     def setJson(self, newJson, setFields = True):
         
@@ -78,13 +109,23 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         if setFields == False:
             return
 
+        if self.key not in self.json:
+            self.json[self.key] = None
+
         if self.json is not None and self.json[self.key] is not None:
-            index = self.schema['enum'].index(self.json[self.key])
+            vType = type(self.json[self.key])
+            
+            index = self.schema['enum'].index(int(self.json[self.key]))
+
             if index != -1:
                 self.lfbComboBox.setCurrentIndex(index)
         else:
-            self.lfbComboBox.setCurrentIndex(0)
-        
+            self.setDefaultValue()
+
+            # self.lfbComboBox.setCurrentIndex(0)
+
+        if "QTType" in self.schema and self.schema['QTType'] == "tree":
+            self.createTreeWidget(self.schema)
 
         
     def isfloat(self, num):
@@ -93,15 +134,12 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
             return True
         except ValueError:
             return False
+        
     def setInputText(self, value):
         
-        
-
         value = self.schema['enum'][value]
 
-
         self.internJson[self.key] = value
-        
 
         self.validate()
 
@@ -116,14 +154,21 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         if self.json[self.key] is None:
             self.lfbTextFieldError.hide()
             self.lfbTextFieldSuccess.hide()
+            self.lfbTextFieldHelp.show()
 
         if len(errors) == 0:
             self.lfbTextFieldError.hide()
             self.lfbTextFieldSuccess.show()
+            self.lfbTextFieldHelp.hide()
             #self.emitText()
+            if "QTType" in self.schema and self.schema['QTType'] == "tree":
+
+                self.lfbTextFieldLabel.setText(Utils.enumLabel(self.json[self.key], self.schema))
+                self.lfbTextFieldLabel.setText(QCoreApplication.translate("FormFields", Utils.enumLabel(self.json[self.key], self.schema)))
         else:
             self.lfbTextFieldError.show()
             self.lfbTextFieldSuccess.hide()
+            self.lfbTextFieldHelp.hide()
             for error in errors:
                 if "is not type":
                     self.lfbTextFieldError.setText(QCoreApplication.translate("errorMessages", 'Eine Auswahl ist pflicht.'))
@@ -131,3 +176,62 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
                     self.lfbTextFieldError.setText(QCoreApplication.translate("errorMessages", error.message))
 
         self.inputChanged.emit(str(self.json[self.key]))
+
+    def setTreeItems(self, tree, items):
+
+        for attr, item in items.items():
+
+            child = QtWidgets.QTreeWidgetItem(tree)
+
+            
+            child.setText(0, item['name'])
+            child.setData(0, 1, attr)
+
+            child.setSelected(attr == str(self.json[self.key]))
+
+            if 'children' in item:
+                self.setTreeItems(child, item['children'])
+
+    def onItemClicked(self, item, column):
+
+        if str(item.data(column, 1)) == 'None':
+            self.internJson[self.key] = None
+        else:
+            self.internJson[self.key] = int(item.data(column, 1))
+
+        self.validate()
+
+    def createTreeWidget(self, data):
+        
+        self.tree.clear()
+
+        self.tree.setHeaderLabels([self.schema['title']])
+
+        items = {}
+
+        for idx, item in enumerate(data['enum']):
+            if item is None or item < 100 :
+                items[str(item)] = {
+                    'name': data['enumLabels'][idx],
+                    'children': {}
+                }
+
+        for idx, item in enumerate(data['enum']):
+            if item is not None and item > 100 :
+                if item < 10000:
+                    index = int(str(item)[0])
+                else:
+                    index = int(str(item)[0] + str(item)[1])
+
+                if str(index) in items :
+                    items[str(index)]['children'][str(item)] = {
+                        'name': data['enumLabels'][idx],
+                        'children': {}
+                    }
+                else:
+                    items[str(item)] = {
+                        'name': data['enumLabels'][idx],
+                        'children': {}
+                    }
+
+        self.setTreeItems(self.tree, items)

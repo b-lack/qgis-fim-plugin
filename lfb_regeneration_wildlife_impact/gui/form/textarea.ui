@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1500</width>
-    <height>383</height>
+    <width>797</width>
+    <height>375</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Form</string>
@@ -26,34 +32,21 @@
    <property name="bottomMargin">
     <number>20</number>
    </property>
-   <item row="5" column="1">
-    <widget class="QLabel" name="lfbTextFieldError">
-     <property name="styleSheet">
-      <string notr="true">color: red;</string>
+   <item row="1" column="3">
+    <widget class="QLabel" name="lfbTextFieldUnit">
+     <property name="font">
+      <font>
+       <family>Ubuntu</family>
+       <pointsize>20</pointsize>
+      </font>
      </property>
      <property name="text">
-      <string>ErrorLabel</string>
+      <string/>
      </property>
     </widget>
    </item>
-   <item row="6" column="1">
-    <widget class="QLabel" name="lfbTextFieldSuccess">
-     <property name="styleSheet">
-      <string notr="true">color: green;</string>
-     </property>
-     <property name="text">
-      <string>SuccessLabel</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
+   <item row="0" column="2">
     <widget class="QLabel" name="lfbTextFieldLabel">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="font">
       <font>
        <pointsize>11</pointsize>
@@ -66,8 +59,27 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
+   <item row="5" column="2">
+    <widget class="QLabel" name="lfbTextFieldSuccess">
+     <property name="styleSheet">
+      <string notr="true">color: green;</string>
+     </property>
+     <property name="text">
+      <string>SuccessLabel</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2">
     <widget class="QLabel" name="lfbTextFieldHelp">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="text">
       <string>Text content in QLabel can wrap lines along word boundaries with the wordWrap property. By default, word wrap is disabled. To enable it use setWordWrap():
 
@@ -78,7 +90,20 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="4" column="2">
+    <widget class="QLabel" name="lfbTextFieldError">
+     <property name="styleSheet">
+      <string notr="true">color: red;</string>
+     </property>
+     <property name="text">
+      <string>ErrorLabel</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
     <widget class="QToolButton" name="lfbTextFieldDescriptionBtn">
      <property name="font">
       <font>
@@ -97,35 +122,25 @@
      <property name="text">
       <string>i</string>
      </property>
+     <property name="autoRaise">
+      <bool>false</bool>
+     </property>
     </widget>
    </item>
-   <item row="2" column="1">
-    <widget class="QComboBox" name="lfbComboBox">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
+   <item row="1" column="2">
+    <widget class="QPlainTextEdit" name="lfbTextField">
      <property name="font">
       <font>
        <pointsize>20</pointsize>
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">QComboBox {
+      <string notr="true">QPlainTextEdit {
 	border: 2px solid gray;
 	border-radius: 10px;
-	padding: 10px;
 }</string>
      </property>
-     <property name="currentText">
-      <string/>
-     </property>
     </widget>
-   </item>
-   <item row="3" column="1" colspan="2">
-    <layout class="QGridLayout" name="lfbReplaceWidget"/>
    </item>
   </layout>
  </widget>

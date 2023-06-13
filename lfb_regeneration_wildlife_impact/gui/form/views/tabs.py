@@ -31,8 +31,10 @@ from qgis.PyQt.QtWidgets import QDialog
 from PyQt5 import QtCore
 
 from ...form.textfield import TextField
+from ..textarea import TextArea
 from ..dropdown import DropDown
 from ..array_field import ArrayField
+from ..boolean import Boolean
 
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'tab_default.ui'))
 
@@ -51,7 +53,19 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
 
         self.show()
 
+        self.infoTitle = ""
+
         self.fieldArray = []
+
+        if 'title' in schema:
+            self.lfbObjectHeadeline.setText(schema['title'])
+        else:
+            self.lfbObjectHeadeline.hide()
+
+        if 'description' in schema:
+            self.lfbObjectDescription.setText(schema['description'])
+        else:
+            self.lfbObjectDescription.hide()
 
         if 'properties' in schema:
             items = schema['properties'].items()
@@ -64,15 +78,39 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
 
             if valueType == 'array':
                 field = ArrayField(interface, self.json, value, attr)
+            elif valueType == 'boolean':
+                field = Boolean(interface, self.json, value, attr)
+                field.lfbInfoBox.connect(self.infoBoxClicked)
             elif 'enum' in value:
                 field = DropDown(interface, self.json, value, attr)
+                field.lfbInfoBox.connect(self.infoBoxClicked)
+            elif 'maxLength' in value and value['maxLength'] >= 1000:
+                field = TextArea(interface, self.json, value, attr)
+                field.lfbInfoBox.connect(self.infoBoxClicked)
             else:
                 field = TextField(interface, self.json, value, attr)
-
+                field.lfbInfoBox.connect(self.infoBoxClicked)
+                
             self.lfbTabLayout.addWidget(field)
             field.inputChanged.connect(self.emitText)
-            
+
             self.fieldArray.append(field)
+
+        self.lfbInfoBox.hide()
+
+    def infoBoxClicked(self, info):
+
+        if self.infoTitle == info['title']:
+            if self.lfbInfoBox.isVisible():
+                self.lfbInfoBox.hide()
+            else:
+                self.lfbInfoBox.show()
+        else:
+            self.lfbInfoBox.setText(info['description'])
+            self.lfbInfoBox.show()
+
+        self.infoTitle = info['title']
+
 
     def setJson(self, newJson, setFields = True):
         

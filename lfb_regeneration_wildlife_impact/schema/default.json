@@ -7,7 +7,11 @@
     "coordinates": {
         "accessibility": null,
         "latitude": null,
-        "longitude": null
+        "longitude": null,
+        "elev": null,
+        "hdop": null,
+        "vdop": null,
+        "satCount": null
     },
     "stichprobenpunkt": {
         "unbestockt": null,
@@ -15,6 +19,39 @@
     },
     "baumplot1":{
         "baumplot1": [],
-        "landmarkenplot1": []
+        "transectLocation": 0
+    },
+    "landmarken1": {
+        "landmarken1": []
+    },
+    "baumplot2":{
+        "baumplot2": []
+    },
+    "landmarken2": {
+        "landmarken2": []
+    },
+    "transect": {
+        "protectiveMeasure": 0
+    },
+    "transectRejuvenation": {
+        "transectRejuvenation": []
+    },
+    "transectInfo": {
+    },
+    "standDescription": {
+        "standDescription": null,
+        "crownClosure": null
+    },
+    "t_bestockung": {
+        "t_bestockung": []
+    },
+    "t_bodenvegetation": {
+        "t_bodenvegetation": []
+    },
+    "stoerung": {
+    },
+    "workflow": {
+        "workflow": null
     }
+
 }

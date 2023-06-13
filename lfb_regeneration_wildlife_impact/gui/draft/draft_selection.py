@@ -26,9 +26,11 @@ import os
 import json
 import datetime
 
-from qgis.core import QgsFeature, QgsFeatureRequest, QgsPointXY, QgsGeometry, QgsMessageLog, QgsProject, QgsVectorLayer, QgsJsonUtils, QgsMapLayer, QgsField, QgsFields, QgsVectorFileWriter, QgsCoordinateTransformContext
+from qgis.core import QgsFeature, QgsFeatureRequest, QgsPointXY, QgsGeometry, QgsMessageLog, QgsProject, QgsVectorLayer, QgsSymbol, QgsRendererRange, QgsGraduatedSymbolRenderer, QgsMarkerSymbol, QgsJsonUtils, QgsMapLayer, QgsField, QgsFields, QgsVectorFileWriter, QgsCoordinateTransformContext
 from qgis.PyQt import QtWidgets, uic, QtGui
 from qgis.PyQt.QtCore import QDateTime, QVariant, QCoreApplication, QSettings, QTranslator
+from PyQt5.QtGui import QColor
+
 from qgis.PyQt.QtWidgets import QDialog
 
 from PyQt5.uic import loadUi
@@ -46,7 +48,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
     # https://forum.qt.io/topic/133959/example-of-calling-a-function-to-parent/6
     draftSelected = QtCore.pyqtSignal(object, int)
 
-    def __init__(self, interface):
+    def __init__(self, interface, schema):
         """Constructor."""
 
         # super(LfbRegenerationWildlifeImpactDialog, self).__init__(parent)
@@ -61,6 +63,8 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
 
+        self.schema = schema
+
         self.LAYER_PREFIX = "lfb_draft_layer"
 
         # QGIS interface
@@ -70,7 +74,9 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         
         self.fields.append(QgsField("created", QVariant.DateTime))
         self.fields.append(QgsField("modified", QVariant.DateTime))
+        self.fields.append(QgsField("workflow", QVariant.Int))
         self.fields.append(QgsField("properties", QVariant.String))
+        self.fields.append(QgsField("unterlosnr", QVariant.String))
 
         self.setupDraftLayer()
 
@@ -108,6 +114,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         # https://anitagraser.com/pyqgis-101-introduction-to-qgis-python-programming-for-non-programmers/pyqgis101-creating-editing-a-new-vector-layer/
         self.vl = QgsVectorLayer("Point", self.LAYER_PREFIX, "memory")
         #self.vl.setFlags(QgsMapLayer.Private)
+        self.setupSymbols()
         pr = self.vl.dataProvider()
 
         # add fields
@@ -129,7 +136,6 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
     
     def listWidgetClicked(self, item):
-        QgsMessageLog.logMessage('selected ID: ' + str(item) , "LFB")
         featureList = self.vl.getFeatures()
         for feat in featureList:
             
@@ -138,6 +144,32 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                 self.currentFeatureId = feat.id()
                 self.draftSelected.emit(json_object, self.currentFeatureId)
                 break
+            
+    def setupSymbols(self):
+        """Setup symbols for the layer"""
+
+        values = (
+            ('Von FU heruntergeladen - offline bei FU', 4, 4, '#decc44'),
+            ('Sps', 1, 5, '#e62323'),
+            ('bearbeitet oder hochgeladen', 5, 6, '#729b6f'),
+            ('kontrolle', 7, 8, '#f3a6b2'),
+            ('wiederholungsaufnahme', 11, 12, '#b80808'),
+            ('not set', 13, 100, '#1228d1')
+        )
+        # create a category for each item in values
+        ranges = []
+        for label, lower, upper, color in values:
+            symbol = QgsSymbol.defaultSymbol(self.vl.geometryType())
+            symbol.setColor(QColor(color))
+            rng = QgsRendererRange(lower, upper, symbol, label)
+            ranges.append(rng)
+
+        # create the renderer and assign it to a layer
+        expression = 'workflow' # field name
+        renderer = QgsGraduatedSymbolRenderer(expression, ranges)
+        self.vl.setRenderer(renderer)
+
+        #self..mapCanvas().refresh() 
 
     def readDrafts(self):
         # self.listWidget.clear()
@@ -149,7 +181,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         sorted_featureList = sorted(featureList, key=lambda x: x['modified'], reverse=True)
         
         for feature in sorted_featureList:
-            item = DraftItem(self.iface, feature)
+            item = DraftItem(self.iface, feature, self.schema)
             item.featureSelected.connect(self.listWidgetClicked)
             item.removeFeature.connect(self.removeFeature)
             self.lfbDraftList.addWidget(item)
@@ -172,13 +204,13 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         currentDateTime = QDateTime.currentDateTime()
 
+        self.vl.startEditing()
+
         if self.currentFeatureId is not None:
             for tFeature in self.vl.getFeatures():
 
-                QgsMessageLog.logMessage('ID: ' + str(tFeature.id()) + ' - ' + str(self.currentFeatureId), "LFB")
-
                 if tFeature.id() == self.currentFeatureId:
-                    self.vl.startEditing()
+                    
                     tFeature.setAttribute('modified', currentDateTime)
                     feature = tFeature
                     geometry = QgsGeometry.fromPointXY(QgsPointXY(x, y))
@@ -198,13 +230,10 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             feature.setAttribute('created', currentDateTime)
             feature.setAttribute('modified', currentDateTime)
                 
-            self.vl.startEditing()
-
             self.vl.addFeature(feature)
-        
-        QgsMessageLog.logMessage('ID: ' + str(self.currentFeatureId), "LFB")
-        
+                
         # SET META DATA
+        feature.setAttribute('workflow', jsonObj['workflow']['workflow'])
         feature.setAttribute('properties', json.dumps(jsonObj))
 
         self.vl.updateFeature(feature)
