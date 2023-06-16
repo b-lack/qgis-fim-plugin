@@ -37,6 +37,8 @@ from .gui.gnssWidget import GnssPluginWidget
 
 from .state.currentState import CurrentState
 
+#from .install_deps import installer_func, plustwo
+
 import os.path
 import sys
 
@@ -77,6 +79,36 @@ class LfbRegenerationWildlifeImpact:
         # Check if plugin was started the first time in current QGIS session
         # Must be set in initGui() to survive plugin reloads
         self.first_start = None
+
+        self.installer_func()
+
+    def installer_func(self):
+        import pathlib
+
+        plugin_dir = os.path.dirname(os.path.realpath(__file__))
+
+        try:
+            import pip
+        except ImportError:
+            exec(
+                open(str(pathlib.Path(plugin_dir, 'scripts', 'get_pip.py'))).read()
+            )
+            import pip
+            # just in case the included version is old
+            pip.main(['install', '--upgrade', 'pip'])
+
+        sys.path.append(plugin_dir)
+
+        sc = os.path.join(plugin_dir,'requirements.txt')
+        with open(os.path.join(plugin_dir,'requirements.txt'), "r") as requirements:
+            for dep in requirements.readlines():
+                dep = dep.strip().split("==")[0]
+                try:
+                    __import__(dep)
+                except ImportError as e:
+                    print("{} not available, installing".format(dep))
+                    pip.main(['install', dep])
+
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
