@@ -144,12 +144,10 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
     def setInputText(self, text):
         valueStr = self.lfbTextField.text()
 
-        if valueStr is "":
+        if valueStr == "":
             value = None
-
         elif self.shouldBeNumber() and self.isfloat(valueStr):
             value = float(valueStr)
-            
         elif self.shouldBeInteger() and valueStr.isnumeric():
             value = int(valueStr)
         else:
@@ -170,21 +168,23 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
 
         self.json[self.key] = self.internJson[self.key]
 
-        if self.json[self.key] is None:
+        #if self.json[self.key] is None:
+        #    self.lfbTextFieldError.hide()
+        #    self.lfbTextFieldSuccess.hide()
+
+        if len(errors) == 0:
             self.lfbTextFieldError.hide()
             self.lfbTextFieldSuccess.hide()
-            #self.lfbTextFieldHelp.show()
-
-        elif len(errors) == 0:
-            self.lfbTextFieldError.hide()
-            self.lfbTextFieldSuccess.show()
-            #self.lfbTextFieldHelp.hide()
-            #self.emitText()
+            self.lfbTextFieldHelp.show()
+            self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid green;\n	border-radius: 10px;\n	padding: 10px;\n}")
         else:
             self.lfbTextFieldError.show()
             self.lfbTextFieldSuccess.hide()
-            #self.lfbTextFieldHelp.hide()
+            self.lfbTextFieldHelp.hide()
+            self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid red;\n	border-radius: 10px;\n	padding: 10px;\n}")
+
             for error in errors:
                 self.lfbTextFieldError.setText(error.message)
+
 
         self.inputChanged.emit(str(self.json[self.key]))

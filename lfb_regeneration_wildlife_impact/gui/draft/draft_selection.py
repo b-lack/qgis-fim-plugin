@@ -26,12 +26,12 @@ import os
 import json
 import datetime
 
-from qgis.core import QgsFeature, QgsFeatureRequest, QgsPointXY, QgsGeometry, QgsMessageLog, QgsProject, QgsVectorLayer, QgsSymbol, QgsRendererRange, QgsGraduatedSymbolRenderer, QgsMarkerSymbol, QgsJsonUtils, QgsMapLayer, QgsField, QgsFields, QgsVectorFileWriter, QgsCoordinateTransformContext
+from qgis.core import QgsFeature, QgsExpressionContextUtils, QgsPointXY, QgsGeometry, QgsMessageLog, QgsProject, QgsVectorLayer, QgsSymbol, QgsRendererRange, QgsGraduatedSymbolRenderer, QgsMarkerSymbol, QgsJsonUtils, QgsMapLayer, QgsField, QgsFields, QgsVectorFileWriter, QgsCoordinateTransformContext
 from qgis.PyQt import QtWidgets, uic, QtGui
 from qgis.PyQt.QtCore import QDateTime, QVariant, QCoreApplication, QSettings, QTranslator
 from PyQt5.QtGui import QColor
 
-from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.QtWidgets import QDialog, QTableWidgetItem
 
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore
@@ -47,6 +47,7 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'draft_sele
 class DraftSelection(QtWidgets.QWidget, UI_CLASS):
     # https://forum.qt.io/topic/133959/example-of-calling-a-function-to-parent/6
     draftSelected = QtCore.pyqtSignal(object, int)
+    folderSelected = QtCore.pyqtSignal(str)
 
     def __init__(self, interface, schema):
         """Constructor."""
@@ -65,28 +66,49 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         self.schema = schema
 
-        self.LAYER_PREFIX = "lfb_draft_layer"
+        self.LAYER_PREFIX = "LFB-Regeneration-Wildlife-Impact-Monitoring"
+        self.LAYER_VERSION = "0.0.1"
 
         # QGIS interface
         self.iface = interface
 
         self.fields = QgsFields()
-        
+        #self.fields.append(QgsField("fid", QVariant.DateTime))
         self.fields.append(QgsField("created", QVariant.DateTime))
         self.fields.append(QgsField("modified", QVariant.DateTime))
         self.fields.append(QgsField("workflow", QVariant.Int))
         self.fields.append(QgsField("properties", QVariant.String))
         self.fields.append(QgsField("unterlosnr", QVariant.String))
 
-        self.setupDraftLayer()
+        #self.setupDraftLayer()
 
         self.currentFeatureId = None
 
 
-        # Read Drafts
-        self.readDrafts()
-
         self.show()
+
+    def addLists(self):
+        columnCount = 2
+
+        tableHeaders = ['Name', 'Unterlos']
+        self.lfbDraftTableView.setColumnCount(columnCount)
+        self.lfbDraftTableView.setHorizontalHeaderLabels(tableHeaders)
+        self.lfbDraftTableView.horizontalHeader().setStretchLastSection(True)
+
+        self.addListRows()
+
+    def addListRows(self):
+        properties = self.readLayer()
+
+        self.lfbDraftTableView.clear()
+        self.lfbDraftTableView.setRowCount(len(properties))
+
+        for rowNr, id in enumerate(properties):
+            idx = 0
+            
+            for columnNr, column in id.items():
+                self.lfbDraftTableView.setItem(rowNr, idx, QTableWidgetItem(str(id[columnNr])))
+                idx += 1
 
     def resetCurrentDraft(self, featureId):
         self.currentFeatureId = featureId
@@ -94,25 +116,28 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
     def setupDraftLayer(self):
         """Check if private layer exists"""
         
-        self.draftLayerExists = False
 
         names = [layer for layer in QgsProject.instance().mapLayers().values()]
 
         for i in names:
-            if(i.id().startswith(self.LAYER_PREFIX)):
+            if QgsExpressionContextUtils.layerScope(i).variable('LFB-NAME') == self.LAYER_PREFIX :
+                
                 self.vl = i
-                self.draftLayerExists = True
-                break
 
-        if(self.draftLayerExists):
-            QgsMessageLog.logMessage('Layer exists', "LFB")
-            return
+                folder = os.path.dirname(self.vl.dataProvider().dataSourceUri())
+                self.folderSelected.emit(str(folder))
 
+                QgsMessageLog.logMessage(str(folder), "LFB")
+                QgsMessageLog.logMessage(QgsExpressionContextUtils.layerScope(i).variable('LFB-VERSION'), "LFB")
 
-        #path_absolute = QgsProject.instance().readPath("./")
+                self.readDrafts()
+                return
 
         # https://anitagraser.com/pyqgis-101-introduction-to-qgis-python-programming-for-non-programmers/pyqgis101-creating-editing-a-new-vector-layer/
         self.vl = QgsVectorLayer("Point", self.LAYER_PREFIX, "memory")
+        QgsExpressionContextUtils.setLayerVariable(self.vl, 'LFB-NAME', self.LAYER_PREFIX)
+        QgsExpressionContextUtils.setLayerVariable(self.vl, 'LFB-VERSION', self.LAYER_VERSION)
+
         #self.vl.setFlags(QgsMapLayer.Private)
         self.setupSymbols()
         pr = self.vl.dataProvider()
@@ -122,6 +147,8 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         self.vl.updateFields() # tell the vector layer to fetch changes from the provider
 
         QgsProject.instance().addMapLayer(self.vl)
+
+        #self.addLists()
     
         
     def setDraftPath(self, path):
@@ -171,6 +198,18 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         #self..mapCanvas().refresh() 
 
+    def readLayer(self):
+        """Read the layer and return the features"""
+        featureList = self.vl.getFeatures()
+        sorted_featureList = sorted(featureList, key=lambda x: x['modified'], reverse=True)
+
+        properties = []
+
+        for feature in sorted_featureList:
+            properties.append(json.loads(feature['properties']))
+
+        return properties
+
     def readDrafts(self):
         # self.listWidget.clear()
         for i in reversed(range(self.lfbDraftList.count())):
@@ -199,7 +238,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         if jsonObj is None:
             return
         
-        x = jsonObj['coordinates']['latitude'] #14.223838264540632
+        x = jsonObj['coordinates']['latitude']
         y = jsonObj['coordinates']['longitude']
 
         currentDateTime = QDateTime.currentDateTime()
@@ -207,6 +246,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         self.vl.startEditing()
 
         if self.currentFeatureId is not None:
+
             for tFeature in self.vl.getFeatures():
 
                 if tFeature.id() == self.currentFeatureId:
@@ -216,12 +256,13 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                     geometry = QgsGeometry.fromPointXY(QgsPointXY(x, y))
                     feature.setGeometry(geometry)
         else:
+
             feature = QgsFeature()
 
             # inform the feature of its fields
-            feature.setFields(self.fields)
+            feature.setFields(self.vl.fields())
+
             geometry = QgsGeometry.fromPointXY(QgsPointXY(x, y))
-            
             feature.setGeometry(geometry)
 
             #for attr, value in jsonObj.items():
@@ -229,12 +270,15 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             
             feature.setAttribute('created', currentDateTime)
             feature.setAttribute('modified', currentDateTime)
-                
+            feature.setAttribute('workflow', jsonObj['general']['workflow'])
+            feature.setAttribute('properties', json.dumps(jsonObj))
+            feature.setAttribute('unterlosnr', 'sss')
+            
             self.vl.addFeature(feature)
                 
         # SET META DATA
-        feature.setAttribute('workflow', jsonObj['workflow']['workflow'])
-        feature.setAttribute('properties', json.dumps(jsonObj))
+        #feature.setAttribute('workflow', jsonObj['general']['workflow'])
+        #feature.setAttribute('properties', json.dumps(jsonObj))
 
         self.vl.updateFeature(feature)
 
@@ -247,9 +291,10 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             if feature['modified'] == currentDateTime:
                 self.currentFeatureId = feature.id()
 
-        
+        #QgsMessageLog.logMessage(json.dumps(jsonObj), 'LFB')
 
         self.readDrafts()
+        #self.addListRows()
 
 
         

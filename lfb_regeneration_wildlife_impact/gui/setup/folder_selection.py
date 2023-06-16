@@ -35,7 +35,7 @@ from PyQt5.uic import loadUi
 from PyQt5 import QtCore
 from qgis.PyQt.QtCore import QVariant
 
-
+import subprocess
 
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
@@ -60,6 +60,12 @@ class FolderSelection(QtWidgets.QWidget, UI_CLASS):
         self.lfbFolderSelection.fileChanged.connect(self.selectFolder)
 
         self.show()
+
+    def setFolder(self, path):
+        self.path = path
+        self.lfbFolderSelection.setFilePath(self.path)
+        self.lfbTempAlert.hide()
+        QgsProject.instance().write()
 
     def selectFolder(self):
         path = self.lfbFolderSelection.filePath()

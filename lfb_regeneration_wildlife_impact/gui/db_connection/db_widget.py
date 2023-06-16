@@ -82,13 +82,10 @@ class DBWidget(QtWidgets.QWidget, UI_CLASS):
         sqlFile = fd.read()
         fd.close()
 
-        QgsMessageLog.logMessage(str(sqlFile), 'LFB')
         connR.executescript(sqlFile)
 
         cursor = self.curR.execute("""SELECT * FROM io_test""")
 
-        for item in cursor:
-            QgsMessageLog.logMessage(str(item), 'LFB')
 
         self.curR.execute("""INSERT INTO io_test(json, dbh) VALUES (?, 34)""", (json.dumps({'test': 'test'}),))
         self.curR.execute("""INSERT INTO io_test(json, dbh) VALUES (?, 12)""", (json.dumps({'test': 'test2'}),))

@@ -57,10 +57,10 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
 
         self.fieldArray = []
 
-        if 'title' in schema:
-            self.lfbObjectHeadeline.setText(schema['title'])
-        else:
-            self.lfbObjectHeadeline.hide()
+        #if 'title' in schema:
+        #    self.lfbObjectHeadeline.setText(schema['title'])
+        #else:
+        #    self.lfbObjectHeadeline.hide()
 
         if 'description' in schema:
             self.lfbObjectDescription.setText(schema['description'])

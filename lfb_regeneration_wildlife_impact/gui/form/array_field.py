@@ -79,7 +79,6 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         tableHeaders = []
 
         for attr, value in self.schema['items']['properties'].items():
-            
             tableHeaders.append(value['title'])
         
         self.setTableHeaders(tableHeaders)

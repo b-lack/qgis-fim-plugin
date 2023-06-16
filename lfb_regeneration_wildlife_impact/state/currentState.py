@@ -7,8 +7,6 @@ class CurrentState(object):
     def __init__(self):
         self._state = None
         self._observers = []
-        print('CurrentState object created')
-        QgsMessageLog.logMessage('state init', "LFB")
 
     @property
     def observerCount(self):

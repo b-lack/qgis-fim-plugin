@@ -1,0 +1,10 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="icons">
+        <file alias="red_rect.png">assets/icons/red_rect.png</file>
+        <file alias="green_rect.png">assets/icons/green_rect.png</file>
+    </qresource>
+    <qresource prefix="plugins/lfb_regeneration_wildlife_impact">
+        <file alias="icon.png">assets/icon.png</file>
+    </qresource>
+</RCC>

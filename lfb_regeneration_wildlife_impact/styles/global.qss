@@ -1,21 +1,11 @@
-QTabBar::tab {
-    background-color: #dddddd;
-    width: 30px;
-    height: 30px;
-    margin: 10px;
-    border: 2px solid #aaaaaa;
-    border-radius: 7px;
+QComboBox {
+	border: 3px solid gray;
+	border-radius: 10px;
+	padding: 10px;
 }
-QTabBar::tab:enabled{
-    background-color: #00ff00;
-    opacity:.2;
-}
-QTabBar::tab:selected{
-    width: 36px;
-    height: 36px;
-    margin: 7px;
-    border: 2px solid #000000;
-}
-QTabWidget::tab-bar {
-    alignment: center;
+QLineEdit {
+	border: 3px solid grey;
+	border-radius: 10px;
+	padding:10px;
+    font-size: 20pt;
 }

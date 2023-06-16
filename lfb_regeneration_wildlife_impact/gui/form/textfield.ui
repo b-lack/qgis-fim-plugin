@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>797</width>
-    <height>439</height>
+    <width>1046</width>
+    <height>657</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -32,30 +32,6 @@
    <property name="bottomMargin">
     <number>20</number>
    </property>
-   <item row="1" column="0">
-    <widget class="QToolButton" name="lfbTextFieldDescriptionBtn">
-     <property name="font">
-      <font>
-       <pointsize>11</pointsize>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QToolButton{
-	border: 2px solid gray;
-	border-radius: 10px;
-	width: 20px;
-	height: 20px;
-	margin-right: 10px;
-}</string>
-     </property>
-     <property name="text">
-      <string>i</string>
-     </property>
-     <property name="autoRaise">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="2">
     <widget class="QLabel" name="lfbTextFieldUnit">
      <property name="font">
@@ -66,32 +42,6 @@
      </property>
      <property name="text">
       <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
-    <widget class="QLabel" name="lfbTextFieldSuccess">
-     <property name="styleSheet">
-      <string notr="true">color: green;</string>
-     </property>
-     <property name="text">
-      <string>SuccessLabel</string>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QLabel" name="lfbTextFieldError">
-     <property name="styleSheet">
-      <string notr="true">color: red;</string>
-     </property>
-     <property name="text">
-      <string>ErrorLabel</string>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -113,10 +63,37 @@
      </property>
     </widget>
    </item>
+   <item row="1" column="0">
+    <widget class="QToolButton" name="lfbTextFieldDescriptionBtn">
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QToolButton{
+	border: 2px solid gray;
+	border-radius: 10px;
+	width: 20px;
+	height: 20px;
+	margin-right: 10px;
+}</string>
+     </property>
+     <property name="text">
+      <string>i</string>
+     </property>
+     <property name="autoRaise">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
    <item row="1" column="1">
     <widget class="QLineEdit" name="lfbTextField">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
        <horstretch>10</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -128,9 +105,10 @@
      </property>
      <property name="styleSheet">
       <string notr="true">QLineEdit {
-	border: 2px solid gray;
+	border: 3px solid grey;
 	border-radius: 10px;
 	padding:10px;
+    font-size: 20pt;
 }</string>
      </property>
      <property name="text">
@@ -138,6 +116,22 @@
      </property>
      <property name="placeholderText">
       <string comment="fgfgfgfg" extracomment="sdfsdf"/>
+     </property>
+     <property name="clearButtonEnabled">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QLabel" name="lfbTextFieldSuccess">
+     <property name="styleSheet">
+      <string notr="true">color: green;</string>
+     </property>
+     <property name="text">
+      <string>SuccessLabel</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -152,6 +146,19 @@
      </property>
      <property name="text">
       <string>TextLabel</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QLabel" name="lfbTextFieldError">
+     <property name="styleSheet">
+      <string notr="true">color: red;</string>
+     </property>
+     <property name="text">
+      <string>ErrorLabel</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

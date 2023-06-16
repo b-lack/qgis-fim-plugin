@@ -151,16 +151,17 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
 
         self.json[self.key] = self.internJson[self.key]
 
-        if self.json[self.key] is None:
-            self.lfbTextFieldError.hide()
-            self.lfbTextFieldSuccess.hide()
-            self.lfbTextFieldHelp.show()
+        #if self.json[self.key] is None:
+        #    self.lfbTextFieldError.hide()
+        #    self.lfbTextFieldSuccess.hide()
+        #    self.lfbTextFieldHelp.show()
 
         if len(errors) == 0:
             self.lfbTextFieldError.hide()
-            self.lfbTextFieldSuccess.show()
+            self.lfbTextFieldSuccess.hide()
             self.lfbTextFieldHelp.hide()
-            #self.emitText()
+            self.lfbComboBox.setStyleSheet("QComboBox {\n	border: 2px solid green;\n	border-radius: 10px;\n	padding: 10px;\n}")
+
             if "QTType" in self.schema and self.schema['QTType'] == "tree":
 
                 self.lfbTextFieldLabel.setText(Utils.enumLabel(self.json[self.key], self.schema))
@@ -169,6 +170,8 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
             self.lfbTextFieldError.show()
             self.lfbTextFieldSuccess.hide()
             self.lfbTextFieldHelp.hide()
+            self.lfbComboBox.setStyleSheet("QComboBox {\n	border: 2px solid red;\n	border-radius: 10px;\n	padding: 10px;\n}")
+
             for error in errors:
                 if "is not type":
                     self.lfbTextFieldError.setText(QCoreApplication.translate("errorMessages", 'Eine Auswahl ist pflicht.'))

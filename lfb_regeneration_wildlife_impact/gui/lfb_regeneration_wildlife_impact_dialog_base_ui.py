@@ -14,23 +14,20 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_LfbRegenerationWildlifeImpactDialogBase(object):
     def setupUi(self, LfbRegenerationWildlifeImpactDialogBase):
         LfbRegenerationWildlifeImpactDialogBase.setObjectName("LfbRegenerationWildlifeImpactDialogBase")
-        LfbRegenerationWildlifeImpactDialogBase.resize(940, 695)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.MinimumExpanding)
+        LfbRegenerationWildlifeImpactDialogBase.resize(1034, 760)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(1)
-        sizePolicy.setVerticalStretch(1)
+        sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(LfbRegenerationWildlifeImpactDialogBase.sizePolicy().hasHeightForWidth())
         LfbRegenerationWildlifeImpactDialogBase.setSizePolicy(sizePolicy)
         LfbRegenerationWildlifeImpactDialogBase.setMinimumSize(QtCore.QSize(400, 100))
         self.gridLayout = QtWidgets.QGridLayout(LfbRegenerationWildlifeImpactDialogBase)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setObjectName("gridLayout")
-        self.lfbMain = QtWidgets.QVBoxLayout()
-        self.lfbMain.setObjectName("lfbMain")
-        self.gridLayout.addLayout(self.lfbMain, 5, 0, 1, 1)
         self.lfbMenuBar_2 = QtWidgets.QWidget(LfbRegenerationWildlifeImpactDialogBase)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setVerticalStretch(1)
         sizePolicy.setHeightForWidth(self.lfbMenuBar_2.sizePolicy().hasHeightForWidth())
         self.lfbMenuBar_2.setSizePolicy(sizePolicy)
         self.lfbMenuBar_2.setStyleSheet("background-color: rgb(0, 0, 0)")
@@ -46,6 +43,15 @@ class Ui_LfbRegenerationWildlifeImpactDialogBase(object):
         self.lfbHomeBtn.setStyleSheet("color: #ffffff;")
         self.lfbHomeBtn.setObjectName("lfbHomeBtn")
         self.lfbMenuBar.addWidget(self.lfbHomeBtn)
+        self.lfbTitle = QtWidgets.QLabel(self.lfbMenuBar_2)
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lfbTitle.setFont(font)
+        self.lfbTitle.setStyleSheet("color:#fff;")
+        self.lfbTitle.setObjectName("lfbTitle")
+        self.lfbMenuBar.addWidget(self.lfbTitle)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.lfbMenuBar.addItem(spacerItem)
         self.lfbDevBtn = QtWidgets.QPushButton(self.lfbMenuBar_2)
@@ -55,21 +61,148 @@ class Ui_LfbRegenerationWildlifeImpactDialogBase(object):
         self.lfbDevBtn.setObjectName("lfbDevBtn")
         self.lfbMenuBar.addWidget(self.lfbDevBtn)
         self.gridLayout.addWidget(self.lfbMenuBar_2, 0, 0, 1, 1)
-        self.lfbNewEntry = QtWidgets.QPushButton(LfbRegenerationWildlifeImpactDialogBase)
+        self.lfbHomeScreen = QtWidgets.QScrollArea(LfbRegenerationWildlifeImpactDialogBase)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(2)
+        sizePolicy.setHeightForWidth(self.lfbHomeScreen.sizePolicy().hasHeightForWidth())
+        self.lfbHomeScreen.setSizePolicy(sizePolicy)
+        self.lfbHomeScreen.setWidgetResizable(True)
+        self.lfbHomeScreen.setObjectName("lfbHomeScreen")
+        self.scrollAreaWidgetContents = QtWidgets.QWidget()
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1032, 452))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.MinimumExpanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.scrollAreaWidgetContents.sizePolicy().hasHeightForWidth())
+        self.scrollAreaWidgetContents.setSizePolicy(sizePolicy)
+        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.lfbHeadline = QtWidgets.QWidget(self.scrollAreaWidgetContents)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lfbHeadline.sizePolicy().hasHeightForWidth())
+        self.lfbHeadline.setSizePolicy(sizePolicy)
+        self.lfbHeadline.setObjectName("lfbHeadline")
+        self._2 = QtWidgets.QVBoxLayout(self.lfbHeadline)
+        self._2.setContentsMargins(-1, 50, -1, 10)
+        self._2.setObjectName("_2")
+        self.label = QtWidgets.QLabel(self.lfbHeadline)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
+        self.label.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label.setFont(font)
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        self.label.setObjectName("label")
+        self._2.addWidget(self.label)
+        self.label_2 = QtWidgets.QLabel(self.lfbHeadline)
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label_2.setFont(font)
+        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_2.setWordWrap(True)
+        self.label_2.setObjectName("label_2")
+        self._2.addWidget(self.label_2)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setContentsMargins(0, 20, -1, -1)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem1)
+        self.lfbNewEntry = QtWidgets.QPushButton(self.lfbHeadline)
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lfbNewEntry.setFont(font)
+        self.lfbNewEntry.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.lfbNewEntry.setStyleSheet("QPushButton{\n"
+"    border-radius: 20px;\n"
+"    border: 2px solid #333;\n"
+"    color: #555;\n"
+"    margin: 10px 0px 0px;\n"
+"    padding: 10px;\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: yellow;\n"
+"}\n"
+"QPushButton:enabled{\n"
+"    border-radius: 20px;\n"
+"    border: 2px solid #fff;\n"
+"    background-color: green;\n"
+"    color: #fff;\n"
+"}")
         self.lfbNewEntry.setObjectName("lfbNewEntry")
-        self.gridLayout.addWidget(self.lfbNewEntry, 1, 0, 1, 1)
+        self.horizontalLayout.addWidget(self.lfbNewEntry)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem2)
+        self._2.addLayout(self.horizontalLayout)
+        self.verticalLayout.addWidget(self.lfbHeadline)
+        self.lfbHomeInputs = QtWidgets.QVBoxLayout()
+        self.lfbHomeInputs.setObjectName("lfbHomeInputs")
+        self.verticalLayout.addLayout(self.lfbHomeInputs)
+        self.lfbHomeScreen.setWidget(self.scrollAreaWidgetContents)
+        self.gridLayout.addWidget(self.lfbHomeScreen, 3, 0, 1, 1)
         self.lfbTabWidget = QtWidgets.QTabWidget(LfbRegenerationWildlifeImpactDialogBase)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.MinimumExpanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(1)
+        sizePolicy.setHeightForWidth(self.lfbTabWidget.sizePolicy().hasHeightForWidth())
+        self.lfbTabWidget.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setPointSize(15)
         self.lfbTabWidget.setFont(font)
         self.lfbTabWidget.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.lfbTabWidget.setStyleSheet("margin:0;padding:0;")
-        self.lfbTabWidget.setTabPosition(QtWidgets.QTabWidget.South)
+        self.lfbTabWidget.setStyleSheet("QTabBar{\n"
+"    alignment: center;\n"
+"    background-color: #444;\n"
+"    padding: 0px;\n"
+"    margin: 0px;\n"
+"    border: none;\n"
+"    qproperty-drawBase: 0;\n"
+"    border-top: 0px;\n"
+"}\n"
+"QTabBar::tab {\n"
+"    background-color: transparent;\n"
+"    width: 32px;\n"
+"    height: 32px;\n"
+"    margin: 10px;\n"
+"    border-radius: 10px;\n"
+"    padding: 0px;\n"
+"    text-align: center;\n"
+"}\n"
+"QTabBar::tab:enabled{\n"
+"    background-color: transparent;\n"
+"}\n"
+"QTabBar::tab:selected{\n"
+"    width: 32px;\n"
+"    height: 32px;\n"
+"    margin:  7px 7px 0px 7px;\n"
+"    padding: 0px 5px 15px 5px;\n"
+"    border-bottom-left-radius: 0px;\n"
+"    border-bottom-right-radius: 0px;\n"
+"    background-color: #eee;\n"
+"}\n"
+"QTabWidget::pane { border: 0; }")
+        self.lfbTabWidget.setTabPosition(QtWidgets.QTabWidget.North)
+        self.lfbTabWidget.setIconSize(QtCore.QSize(32, 32))
         self.lfbTabWidget.setElideMode(QtCore.Qt.ElideLeft)
         self.lfbTabWidget.setDocumentMode(True)
         self.lfbTabWidget.setMovable(False)
         self.lfbTabWidget.setObjectName("lfbTabWidget")
-        self.gridLayout.addWidget(self.lfbTabWidget, 4, 0, 1, 1)
+        self.gridLayout.addWidget(self.lfbTabWidget, 1, 0, 1, 1)
+        self.lfbMain = QtWidgets.QVBoxLayout()
+        self.lfbMain.setSizeConstraint(QtWidgets.QLayout.SetMinimumSize)
+        self.lfbMain.setSpacing(0)
+        self.lfbMain.setObjectName("lfbMain")
+        self.gridLayout.addLayout(self.lfbMain, 2, 0, 1, 1)
 
         self.retranslateUi(LfbRegenerationWildlifeImpactDialogBase)
         self.lfbTabWidget.setCurrentIndex(-1)
@@ -79,5 +212,8 @@ class Ui_LfbRegenerationWildlifeImpactDialogBase(object):
         _translate = QtCore.QCoreApplication.translate
         LfbRegenerationWildlifeImpactDialogBase.setWindowTitle(_translate("LfbRegenerationWildlifeImpactDialogBase", "Lfb Regeneration and Wildlife Impact Monitoring"))
         self.lfbHomeBtn.setText(_translate("LfbRegenerationWildlifeImpactDialogBase", "<"))
+        self.lfbTitle.setText(_translate("LfbRegenerationWildlifeImpactDialogBase", "TextLabel"))
         self.lfbDevBtn.setText(_translate("LfbRegenerationWildlifeImpactDialogBase", "DEV"))
-        self.lfbNewEntry.setText(_translate("LfbRegenerationWildlifeImpactDialogBase", "Neuer Eintrag"))
+        self.label.setText(_translate("LfbRegenerationWildlifeImpactDialogBase", "Verbiss und Wildtier Monitoring"))
+        self.label_2.setText(_translate("LfbRegenerationWildlifeImpactDialogBase", "Überwachung des Verjüngungszustandes durch die Aufnahme von Naturaldaten."))
+        self.lfbNewEntry.setText(_translate("LfbRegenerationWildlifeImpactDialogBase", "AUFNAHME STARTEN"))

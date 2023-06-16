@@ -61,6 +61,9 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
 
         self.lfbProgressBar.setValue(100)
 
+        self.lfbActionRow.setContentsMargins(0,0,0,0)
+        self.lfbProgressBar.setContentsMargins(0,0,0,0)
+
         self.maxErrors = 0
         self.currentErrors = 0
 
@@ -89,7 +92,7 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
                   "{"
                     "background-color: red;"
                   "}")
-            self.lfbProcessInfo.setText("Es fehlen noch Eingaben von Pflichfeldern.")
+            self.lfbProcessInfo.setText("Fülle mindestens die rot markierten Felder aus um die Daten als Entwurf zu speichern.")
             return False
             
         
@@ -97,28 +100,27 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
 
     def validate(self, jsonToTest):
 
-        self.lfbSaveBtn.setDisabled(True)
-
+        self.json = jsonToTest
+        
         v = Draft7Validator(self.schema)
-        errors = sorted(v.iter_errors(jsonToTest), key=lambda e: e.path)
+        self.errors = sorted(v.iter_errors(jsonToTest), key=lambda e: e.path)
 
-        if self.maxErrors < len(errors):
-            self.maxErrors = len(errors)
+        if self.maxErrors < len(self.errors):
+            self.maxErrors = len(self.errors)
 
-        self.currentErrors = len(errors)
+        self.currentErrors = len(self.errors)
 
         self.lfbProgressBar.setValue(int(100 - self.currentErrors * 100 / self.maxErrors))
 
-        if len(errors) == 0:
+        if len(self.errors) == 0:
             #self.isValid = True
             self.lfbErrorStateLabel.setText('')
             self.lfbSaveBtn.setDisabled(False)
         else:
+            self.lfbSaveBtn.setDisabled(True)
             #self.isValid = False
-            self.lfbErrorStateLabel.setText(str(len(errors)) + ' errors')
+            self.lfbErrorStateLabel.setText(str(len(self.errors)) + ' verbleibende Fehler.')
             
-            
-        
-        self.checkMinimumSet(jsonToTest, len(errors))
+        self.checkMinimumSet(jsonToTest, len(self.errors))
 
-        return len(errors) == 0
+        return len(self.errors) == 0

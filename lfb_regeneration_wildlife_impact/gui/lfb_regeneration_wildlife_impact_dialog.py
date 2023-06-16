@@ -43,6 +43,8 @@ from .form.saveBar import SaveBar
 
 from jsonschema import Draft7Validator, RefResolver
 
+import resources
+
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'lfb_regeneration_wildlife_impact_dialog_base.ui'))
@@ -71,6 +73,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.iface = interface
 
         self.tabsArray = []
+        self.currentTab = None
 
         filename = os.path.realpath(os.path.join(dirname, '..', 'schema', 'default.json'))
 
@@ -82,7 +85,6 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.state = state
 
         qss = os.path.realpath(os.path.join(dirname, '..', 'styles', 'global.qss'))
-        QgsMessageLog.logMessage(qss, 'LFB')
         
         with open(qss,"r") as fh:
             self.setStyleSheet(fh.read())
@@ -108,6 +110,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.lfbNewEntry.clicked.connect(self.newEntry)
 
+        self.lfbTabWidget.currentChanged.connect(self.tabChange)
         tabNr = 1
         for attr, value in self.schema['properties'].items():
             tab = Tabs(self.iface, self.json[attr], self.schema['properties'][attr])
@@ -122,7 +125,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
                     'attr': attr
                 }
             )
-            self.lfbTabWidget.addTab(tab, ' ') # value['title']
+            self.lfbTabWidget.addTab(tab, '') # value['title']
 
             #self.lfbTabWidget.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
             tabNr += 1
@@ -132,11 +135,21 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         #self.lfbTabWidget.setProperty("class", "my-label-style")
 
         self.saveBar = SaveBar(self.iface, self.json, self.schema)
+        self.saveBar.setContentsMargins(0,0,0,0)
         self.lfbMain.addWidget(self.saveBar)
 
         self.resetForm(False)
         self.setPosition(1)
 
+
+    def tabChange(self, index):
+        self.currentTab = index
+
+        if self.currentTab == None:
+            self.lfbTitle.setText('LFB Regeneration and Wildlife Impact Monitoring')
+        else:
+            self.lfbTitle.setText(self.schema['properties'][self.tabsArray[index]['attr']]['title'])
+        
     def deReference(self, schema, filename):
 
         dir = os.path.dirname(os.path.realpath(__file__))
@@ -144,7 +157,6 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         #jsonschema.validate(data, schema, resolver=resolver)
         
         #dereferenced = RefResolver(base_uri=filename, referrer=schema)
-        #QgsMessageLog.logMessage(str(dereferenced), 'LFB')
 
     def resetForm(self, setFields = True):
         for tab in self.tabsArray:
@@ -153,12 +165,15 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
     def newEntry(self):
         self.json = copy.deepcopy(self.defaultJson)
-        self.changeState()
+        self.changeState(False)
         self.setPosition(2)
         self.resetForm(True)
         self.draft.resetCurrentDraft(None)
+        self.lfbTabWidget.setCurrentIndex(0)
+        self.tabChange(0)
 
     def inputChanged(self, save):
+        
         self.changeState()
 
         #if self.saveBar.validate(self.json) == True:
@@ -169,59 +184,59 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
     def openHome(self):
         self.json = copy.deepcopy(self.defaultJson)
-        self.changeState()
+        self.changeState(False)
         self.setPosition(1)
         self.lfbTabWidget.setCurrentIndex(0)
+        self.tabChange(None)
+
 
     def setPosition(self, position):
 
         self.userPosition = position
 
         if self.userPosition == 2:
-            self.lfbNewEntry.hide()
+            self.lfbHeadline.hide()
             self.lfbTabWidget.show()
             self.saveBar.show()
             self.draft.hide()
             self.folderSelection.hide()
             self.lfbHomeBtn.setEnabled(True)
             self.lfbHomeBtn.show()
-        elif self.userPosition == 3:
-            self.lfbNewEntry.hide()
-            self.lfbTabWidget.show()
-            self.saveBar.show()
-            self.draft.hide()
-            self.folderSelection.hide()
-            self.lfbHomeBtn.setEnabled(True)
-            self.lfbHomeBtn.show()
+            self.lfbHomeScreen.hide()
         else:
-            #self.
-            self.lfbNewEntry.show()
+            self.lfbHeadline.show()
             self.lfbTabWidget.hide()
             self.saveBar.hide()
             self.draft.show()
             self.folderSelection.show()
             self.lfbHomeBtn.setEnabled(False)
             self.lfbHomeBtn.hide()
+            self.lfbHomeScreen.show()
 
     def addFolderSelection(self):
         self.folderSelection = FolderSelection(self.iface)
         self.folderSelection.folderSelected.connect(self.folderSelected)
-        self.lfbMain.addWidget(self.folderSelection)
-        
+        self.lfbHomeInputs.addWidget(self.folderSelection)
 
     def folderSelected(self, folderPath):
         self.draftPath = folderPath
         self.draft.setDraftPath(folderPath)
+        #self.folderSelection.hide()
+        
+        self.folderSelection.setFolder(folderPath)
 
     def addDbConnection(self):
         dbWidget = DBWidget(self.iface)
-        self.lfbMain.addWidget(dbWidget)
+        #self.lfbMain.addWidget(dbWidget)
 
     def addDraft(self):
         self.draft = DraftSelection(self.iface, self.schema)
         self.draft.draftSelected.connect(self.draftSelected)
-        self.lfbMain.addWidget(self.draft)
+        self.draft.folderSelected.connect(self.folderSelected)
+        self.lfbHomeInputs.addWidget(self.draft)
 
+        self.draft.setupDraftLayer()
+    
     def draftSelected(self, newJson, id):
         self.json = newJson
         self.resetForm(True)
@@ -229,50 +244,56 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.setPosition(2)
         self.draft.resetCurrentDraft(id)
 
-    def changeState(self):
+    def changeState(self, validate = True):        
         self.state.change_state(self.json)
         self.saveBar.validate(self.state.state)
+        
         self.resetForm(False)
-        self.validateTabs()
+
+        if validate:
+            self.validateTabs()
 
     def openState(self):
         msgBox = QtWidgets.QMessageBox()
-        msgBox.setText(json.dumps(self.state.state, indent=2))
+        msgBox.setText(json.dumps(self.state.state))
         msgBox.exec()
-        
+
     def validateTabs(self, minimumToDraft = False):
 
+        tabNr = 0
+        for attr, value in self.schema['properties'].items():
+            v = Draft7Validator(value)
+            errors = sorted(v.iter_errors(self.json[attr]), key=lambda e: e.path)
+
+            if len(errors) == 0:
+                self.lfbTabWidget.setTabEnabled(tabNr, True)
+                self.lfbTabWidget.setTabText(tabNr, '')
+
+                self.lfbTabWidget.setTabIcon(tabNr, QtGui.QIcon(':icons/green_rect.png'))
+            else:
+                #if tabNr != 0:
+                    #self.lfbTabWidget.setTabEnabled(tabNr, False)
+                self.lfbTabWidget.setTabIcon(tabNr, QtGui.QIcon(':icons/red_rect.png'))
+                self.lfbTabWidget.setTabText(tabNr, '')
+
+            if tabNr == 0:
+                gErrors = errors
+            elif tabNr == 1:
+                cErrors = errors
+            elif tabNr == 2:
+                tErrors = errors
+
+            tabNr += 1
+
+        enableAll = len(gErrors) == 0 and len(cErrors) == 0 and len(tErrors) == 0
+
+        for i in range(3, 14):
+            if enableAll:
+                self.lfbTabWidget.setTabEnabled(i, True)
+            else:
+                self.lfbTabWidget.setTabEnabled(i, False)
+
         
-        v = Draft7Validator(self.schema['properties']['general'])
-        gErrors = sorted(v.iter_errors(self.state.state['general']), key=lambda e: e.path)
+        return enableAll
 
-        if len(gErrors) == 0:
-            self.lfbTabWidget.setTabEnabled(1, True)
-        else:
-            self.lfbTabWidget.setTabEnabled(1, False)
-
-
-        v = Draft7Validator(self.schema['properties']['coordinates'])
-        cErrors = sorted(v.iter_errors(self.state.state['coordinates']), key=lambda e: e.path)
-
-        if len(cErrors) == 0:
-            self.lfbTabWidget.setTabEnabled(2, True)
-            self.lfbTabWidget.setTabEnabled(3, True)
-            self.lfbTabWidget.setTabEnabled(4, True)
-            self.lfbTabWidget.setTabEnabled(5, True)
-            self.lfbTabWidget.setTabEnabled(6, True)
-            self.lfbTabWidget.setTabEnabled(7, True)
-            self.lfbTabWidget.setTabEnabled(8, True)
-        else:
-            self.lfbTabWidget.setTabEnabled(2, False)
-            self.lfbTabWidget.setTabEnabled(3, False)
-            self.lfbTabWidget.setTabEnabled(4, False)
-            self.lfbTabWidget.setTabEnabled(5, False)
-            self.lfbTabWidget.setTabEnabled(6, False)
-            self.lfbTabWidget.setTabEnabled(7, False)
-            self.lfbTabWidget.setTabEnabled(8, False)
-
-        if minimumToDraft == True:
-            return len(gErrors) == 0 and len(cErrors) == 0
-        
 
