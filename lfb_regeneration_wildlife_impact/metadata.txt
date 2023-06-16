@@ -6,8 +6,8 @@
 name=Lfb Regeneration and Wildlife Impact Monitoring
 qgisMinimumVersion=3.0
 description=Lfb Regeneration and Wildlife Impact Monitoring
-version=0.0.3
-author=Grünecho
+version=0.0.9
+author=Torsten Wiebke (Concept), Gerrit Balindt (Development)
 email=support@grunecho.de
 
 about=Lfb Regeneration and Wildlife Impact Monitoring
