@@ -9,6 +9,8 @@ In the **Plugin Repositories** section click `+Add`.
 - Name: `LFB - VWM`
 - URL: `https://raw.githubusercontent.com/b-lack/lfb-regeneration_wildlife_impact_monitoring/main/plugins.xml`
 
+Check: "Allow experimental plugins"
+
 Confirm by clicking `OK`
 
 QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``ALL``
@@ -43,9 +45,9 @@ Make sure that ``Lfb Regeneration and Wildlife Impact Monitoring`` is selected.
 
 ## Release
 
-qgis-plugin-ci package -u https://github.com/b-lack/lfb-regeneration_wildlife_impact_monitoring -r -c --alternative-repo-url https://github.com/b-lack/lfb-regeneration_wildlife_impact_monitoring/releases/download/v0.0.3/lfb_regeneration_wildlife_impact.zip 0.0.4 
-
-qgis-plugin-ci release --github-token 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 -r --alternative-repo-url https://github.com/b-lack/lfb-regeneration_wildlife_impact_monitoring 0.0.5
+```bash
+$ git log --pretty="- %s" > CHANGELOG.md
+```
 
 ## Generate Changelog
 
@@ -62,3 +64,7 @@ Run pytest in the root directory of the project.
 ```bash
 $ pytest
 ```
+
+## 
+
+pg_dump --schema-only lfb > schema.sql
