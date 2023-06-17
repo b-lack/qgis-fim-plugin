@@ -38,7 +38,6 @@ from jsonschema import Draft7Validator
 
 
 
-
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'array_field.ui'))
 
 

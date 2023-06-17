@@ -23,6 +23,9 @@
  This script initializes the plugin, making it known to QGIS.
 """
 
+import pathlib
+import sys
+import os.path
 
 # noinspection PyPep8Naming
 def classFactory(iface):  # pylint: disable=invalid-name
@@ -32,5 +35,35 @@ def classFactory(iface):  # pylint: disable=invalid-name
     :type iface: QgsInterface
     """
     #
+
     from .lfb_regeneration_wildlife_impact import LfbRegenerationWildlifeImpact
     return LfbRegenerationWildlifeImpact(iface)
+
+
+
+
+def installer_func():
+
+    plugin_dir = os.path.dirname(os.path.realpath(__file__))
+
+    try:
+        import pip
+    except ImportError:
+        exec(
+            open(str(pathlib.Path(plugin_dir, 'scripts', 'get_pip.py'))).read()
+        )
+        import pip
+        # just in case the included version is old
+        pip.main(['install', '--upgrade', 'pip'])
+
+    sys.path.append(plugin_dir)
+
+    sc = os.path.join(plugin_dir,'requirements.txt')
+    with open(os.path.join(plugin_dir,'requirements.txt'), "r") as requirements:
+        for dep in requirements.readlines():
+            dep = dep.strip().split("==")[0]
+            try:
+                __import__(dep)
+            except ImportError as e:
+                print("{} not available, installing".format(dep))
+                pip.main(['install', dep])

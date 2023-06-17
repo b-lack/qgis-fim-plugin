@@ -21,13 +21,13 @@
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
-       <string>Entwurf</string>
+       <string>ToDo</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
         <widget class="QScrollArea" name="scrollArea">
          <property name="styleSheet">
-          <string notr="true">border:0px;</string>
+          <string notr="true"/>
          </property>
          <property name="widgetResizable">
           <bool>true</bool>
@@ -40,8 +40,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>827</width>
-            <height>653</height>
+            <width>825</width>
+            <height>651</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout">
@@ -50,7 +50,7 @@
              <item>
               <widget class="QLabel" name="label">
                <property name="text">
-                <string>TextLabel</string>
+                <string>Drücke &quot;Aufnahme starten&quot; um Daten hinzuzufügen.</string>
                </property>
               </widget>
              </item>
@@ -79,6 +79,51 @@
       <attribute name="title">
        <string>Abgeschlossen</string>
       </attribute>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QScrollArea" name="scrollArea_2">
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents_2">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>825</width>
+            <height>651</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <layout class="QVBoxLayout" name="lfbDoneList">
+             <item>
+              <widget class="QLabel" name="label_2">
+               <property name="text">
+                <string>Drücke &quot;Aufnahme starten&quot; um Daten hinzuzufügen.</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>

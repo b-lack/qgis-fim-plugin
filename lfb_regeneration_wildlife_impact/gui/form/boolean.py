@@ -67,8 +67,8 @@ class Boolean(QtWidgets.QWidget, UI_CLASS):
 
         self.lfbTextFieldDescriptionBtn.clicked.connect(self.triggerInfoBox)
 
-        if "default" in self.schema and self.json[self.key] is None:
-            self.setDefaultValue()
+        self.setDefaultValue()
+            
 
         self.validate() 
 
@@ -77,7 +77,7 @@ class Boolean(QtWidgets.QWidget, UI_CLASS):
     def setDefaultValue(self):
 
         if "default" not in self.schema and self.json[self.key] is None:
-            return
+            self.json[self.key] = False
         
         self.json[self.key] = self.schema['default']
         #self.lfbTextField.setText(str(self.json[self.key]))

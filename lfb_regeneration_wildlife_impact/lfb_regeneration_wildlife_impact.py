@@ -21,26 +21,40 @@
  *                                                                         *
  ***************************************************************************/
 """
+
+import os.path
+
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import (QAction, QDialog, QMessageBox, QFileDialog, QComboBox, QTextEdit)
-from qgis.core import QgsProject, QgsMessageLog
+from qgis.PyQt.QtWidgets import QAction
 # from qgis.PyQt.QtWidgets import (QDialog, QMessageBox, QFileDialog, QComboBox, QTextEdit)
 
 
 # Initialize Qt resources from file resources.py
 from .resources import *
-# Import the code for the dialog
-from .gui.lfb_regeneration_wildlife_impact_dialog import LfbRegenerationWildlifeImpactDialog
 
-from .gui.gnssWidget import GnssPluginWidget
+# Before continuing, we check if scipy and scipy.interpolate can be imported.
+# If not, we will not import the plugin files.
+ERROR = False
+try:
+    import jsonschema
+except ModuleNotFoundError:
+    # jsonschema isn't included in the standard qgis python
+    #   interpreter so the user has to add it manually
+    ERROR = 1
 
-from .state.currentState import CurrentState
+    
+if not ERROR:
+    # Main dialog window
+    from .gui.lfb_regeneration_wildlife_impact_dialog import LfbRegenerationWildlifeImpactDialog
+    # Further dialog windows and helpers
+    from .gui.gnssWidget import GnssPluginWidget
+    from .state.currentState import CurrentState
+
 
 #from .install_deps import installer_func, plustwo
 
-import os.path
-import sys
+
 
 
 class LfbRegenerationWildlifeImpact:
@@ -79,35 +93,6 @@ class LfbRegenerationWildlifeImpact:
         # Check if plugin was started the first time in current QGIS session
         # Must be set in initGui() to survive plugin reloads
         self.first_start = None
-
-        self.installer_func()
-
-    def installer_func(self):
-        import pathlib
-
-        plugin_dir = os.path.dirname(os.path.realpath(__file__))
-
-        try:
-            import pip
-        except ImportError:
-            exec(
-                open(str(pathlib.Path(plugin_dir, 'scripts', 'get_pip.py'))).read()
-            )
-            import pip
-            # just in case the included version is old
-            pip.main(['install', '--upgrade', 'pip'])
-
-        sys.path.append(plugin_dir)
-
-        sc = os.path.join(plugin_dir,'requirements.txt')
-        with open(os.path.join(plugin_dir,'requirements.txt'), "r") as requirements:
-            for dep in requirements.readlines():
-                dep = dep.strip().split("==")[0]
-                try:
-                    __import__(dep)
-                except ImportError as e:
-                    print("{} not available, installing".format(dep))
-                    pip.main(['install', dep])
 
 
     # noinspection PyMethodMayBeStatic

@@ -85,7 +85,7 @@ margin:0px;</string>
          </font>
         </property>
         <property name="text">
-         <string>sdfg sdfgs dfgfs fgs fgs dfg sdfg sdg sfdgs dfgs dfgsdg dfdfgsgs gsdfgsfdg sdfgs dfgs dgsdg dfg</string>
+         <string/>
         </property>
         <property name="wordWrap">
          <bool>true</bool>

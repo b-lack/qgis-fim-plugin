@@ -36,6 +36,7 @@ from PyQt5 import QtCore
 
 from jsonschema import Draft7Validator
 
+
 from PyQt5.QtGui import QDoubleValidator
 
 

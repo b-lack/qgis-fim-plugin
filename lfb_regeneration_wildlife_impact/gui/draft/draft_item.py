@@ -51,7 +51,7 @@ class DraftItem(QtWidgets.QWidget, UI_CLASS):
         self.setupUi(self)
 
         self.feature = feature
-        self.properties = json.loads(feature['properties'])
+        self.properties = json.loads(feature['form'])
 
         self.lfbDraftIconBtn.clicked.connect(self.on_lfbDraftIconBtn_clicked)
         self.lfbDraftIconRemoveBtn.clicked.connect(self.on_lfbDraftIconRemoveBtn_clicked)
@@ -59,12 +59,10 @@ class DraftItem(QtWidgets.QWidget, UI_CLASS):
         self.lfbDraftModifiedByBtn.setText(feature['modified'].toString() if feature['modified'] is not None else '-')
         self.lfbDraftModifiedBtn.setText(feature['created'].toString() if feature['created'] is not None else '-')
 
-        
-        self.lfbDraftAufnahmetruppLabel.setText(self.properties['general']['aufnahmetrupp'] if self.properties['general']['aufnahmetrupp'] is not None else '-')
-
-        #self.lfbDraftAufnahmetruppLabel.setText(str(self.feature.id()))
-
-        self.lfbDraftWorkflowLabel.setText(Utils.enumLabel(self.properties['workflow']['workflow'], schema['properties']['workflow']['properties']['workflow']) if self.properties['workflow']['workflow'] is not None else '-')
+        #if 'general' in self.properties:
+        #    self.lfbDraftAufnahmetruppLabel.setText(self.properties['general']['aufnahmetrupp'] if self.properties['general']['aufnahmetrupp'] is not None else '-')
+        #if 'workflow' in self.properties:
+        #    self.lfbDraftWorkflowLabel.setText(Utils.enumLabel(self.properties['workflow'], schema['properties']['workflow']) if self.properties['workflow'] is not None else '-')
 
         self.show()
 

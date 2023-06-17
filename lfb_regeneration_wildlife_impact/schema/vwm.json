@@ -14,14 +14,6 @@
                     "maxLength": 100,
                     "helperText": "Ein Kürzel aus mindestens 3 Zeichen. Idealerweise besteht aus den ersten drei Buchstaben des Nachnamens des Truppführers."
                 },
-                "GNSSDevice": {
-                    "title": "GNSS-Gerät*",
-                    "type": "string",
-                    "description": "Möglichst eindeutige Bezeichnung des Gerätes.",
-                    "minLength": 3,
-                    "maxLength": 100,
-                    "helperText": "Möglichst eindeutige Bezeichnung des Gerätes."
-                },
                 "workflow": {
                     "type": [
                         "integer",
@@ -83,6 +75,14 @@
             "title": "Coordinates",
             "type": "object",
             "properties": {
+                "GNSSDevice": {
+                    "title": "GNSS-Gerät*",
+                    "type": "string",
+                    "description": "Möglichst eindeutige Bezeichnung des Gerätes.",
+                    "minLength": 3,
+                    "maxLength": 100,
+                    "helperText": "Möglichst eindeutige Bezeichnung des Gerätes."
+                },
                 "accessibility": {
                     "title": "Zugänglichkeit*",
                     "type": [
@@ -209,7 +209,8 @@
                         5,
                         6,
                         7,
-                        8
+                        8,
+                        9
                     ],
                     "enumLabels": [
                         "",

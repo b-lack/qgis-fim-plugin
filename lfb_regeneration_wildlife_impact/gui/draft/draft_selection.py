@@ -25,6 +25,8 @@
 import os
 import json
 import datetime
+import uuid
+
 
 from qgis.core import QgsFeature, QgsExpressionContextUtils, QgsPointXY, QgsGeometry, QgsMessageLog, QgsProject, QgsVectorLayer, QgsSymbol, QgsRendererRange, QgsGraduatedSymbolRenderer, QgsMarkerSymbol, QgsJsonUtils, QgsMapLayer, QgsField, QgsFields, QgsVectorFileWriter, QgsCoordinateTransformContext
 from qgis.PyQt import QtWidgets, uic, QtGui
@@ -74,14 +76,16 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         self.fields = QgsFields()
         #self.fields.append(QgsField("fid", QVariant.DateTime))
+        self.fields.append(QgsField("id", QVariant.String))
+        self.fields.append(QgsField("status", QVariant.Bool))
+        
         self.fields.append(QgsField("created", QVariant.DateTime))
         self.fields.append(QgsField("modified", QVariant.DateTime))
         self.fields.append(QgsField("workflow", QVariant.Int))
-        self.fields.append(QgsField("properties", QVariant.String))
         self.fields.append(QgsField("unterlosnr", QVariant.String))
 
-        #self.setupDraftLayer()
-
+        self.fields.append(QgsField("form", QVariant.String))
+        
         self.currentFeatureId = None
 
 
@@ -127,10 +131,8 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                 folder = os.path.dirname(self.vl.dataProvider().dataSourceUri())
                 self.folderSelected.emit(str(folder))
 
-                QgsMessageLog.logMessage(str(folder), "LFB")
-                QgsMessageLog.logMessage(QgsExpressionContextUtils.layerScope(i).variable('LFB-VERSION'), "LFB")
-
-                self.readDrafts()
+                self.readDrafts(False)
+                self.readDone(True)
                 return
 
         # https://anitagraser.com/pyqgis-101-introduction-to-qgis-python-programming-for-non-programmers/pyqgis101-creating-editing-a-new-vector-layer/
@@ -147,8 +149,6 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         self.vl.updateFields() # tell the vector layer to fetch changes from the provider
 
         QgsProject.instance().addMapLayer(self.vl)
-
-        #self.addLists()
     
         
     def setDraftPath(self, path):
@@ -167,7 +167,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         for feat in featureList:
             
             if(feat.id() == item):
-                json_object = json.loads(feat['properties'])
+                json_object = json.loads(feat['form'])
                 self.currentFeatureId = feat.id()
                 self.draftSelected.emit(json_object, self.currentFeatureId)
                 break
@@ -181,7 +181,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             ('bearbeitet oder hochgeladen', 5, 6, '#729b6f'),
             ('kontrolle', 7, 8, '#f3a6b2'),
             ('wiederholungsaufnahme', 11, 12, '#b80808'),
-            ('not set', 13, 100, '#1228d1')
+            ('sonstige', 13, 100, '#1228d1')
         )
         # create a category for each item in values
         ranges = []
@@ -210,14 +210,16 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         return properties
 
-    def readDrafts(self):
-        # self.listWidget.clear()
+    def readDrafts(self, status = False):
+
         for i in reversed(range(self.lfbDraftList.count())):
             self.lfbDraftList.itemAt(i).widget().setParent(None)
 
         featureList = self.vl.getFeatures()
         
         sorted_featureList = sorted(featureList, key=lambda x: x['modified'], reverse=True)
+        filtered = filter(lambda c: c['status'] == status, sorted_featureList)
+        sorted_featureList = list(filtered)
         
         for feature in sorted_featureList:
             item = DraftItem(self.iface, feature, self.schema)
@@ -225,13 +227,42 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             item.removeFeature.connect(self.removeFeature)
             self.lfbDraftList.addWidget(item)
 
+    def readDone(self, status = False):
+
+        for i in reversed(range(self.lfbDoneList.count())):
+            self.lfbDoneList.itemAt(i).widget().setParent(None)
+
+        featureList = self.vl.getFeatures()
+        
+        sorted_featureList = sorted(featureList, key=lambda x: x['modified'], reverse=True)
+        filtered = filter(lambda c: c['status'] == status, sorted_featureList)
+        sorted_featureList = list(filtered)
+        
+        for feature in sorted_featureList:
+            item = DraftItem(self.iface, feature, self.schema)
+            item.featureSelected.connect(self.listWidgetClicked)
+            item.removeFeature.connect(self.removeFeature)
+            self.lfbDoneList.addWidget(item)
+
     def removeFeature(self, featureId):
         self.vl.startEditing()
         self.vl.deleteFeature(featureId)
         self.vl.commitChanges()
         self.vl.endEditCommand()
         QgsProject.instance().write()
-        self.readDrafts()
+        self.readDrafts(False)
+        self.readDone(True)
+
+    
+    def setStatus(self, newState):
+        if self.currentFeatureId is not None:
+            for tFeature in self.vl.getFeatures():
+                if tFeature.id() == self.currentFeatureId:
+                    self.vl.startEditing()
+                    tFeature.setAttribute('status', newState)
+                    self.vl.updateFeature(tFeature)
+                    self.vl.commitChanges()
+                    self.vl.endEditCommand()
 
     def saveFeature(self, jsonObj):
 
@@ -245,6 +276,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         self.vl.startEditing()
 
+        # check if feature exists
         if self.currentFeatureId is not None:
 
             for tFeature in self.vl.getFeatures():
@@ -268,17 +300,16 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             #for attr, value in jsonObj.items():
             #    feature.setAttribute(attr, value)
             
+            feature.setAttribute('id', str(uuid.uuid4()))
             feature.setAttribute('created', currentDateTime)
             feature.setAttribute('modified', currentDateTime)
-            feature.setAttribute('workflow', jsonObj['general']['workflow'])
-            feature.setAttribute('properties', json.dumps(jsonObj))
-            feature.setAttribute('unterlosnr', 'sss')
+            feature.setAttribute('status', 0)
             
             self.vl.addFeature(feature)
                 
         # SET META DATA
-        #feature.setAttribute('workflow', jsonObj['general']['workflow'])
-        #feature.setAttribute('properties', json.dumps(jsonObj))
+        feature.setAttribute('workflow', jsonObj['general']['workflow'])
+        feature.setAttribute('form', json.dumps(jsonObj))
 
         self.vl.updateFeature(feature)
 
@@ -291,9 +322,8 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             if feature['modified'] == currentDateTime:
                 self.currentFeatureId = feature.id()
 
-        #QgsMessageLog.logMessage(json.dumps(jsonObj), 'LFB')
-
-        self.readDrafts()
+        self.readDrafts(False)
+        self.readDone(True)
         #self.addListRows()
 
 

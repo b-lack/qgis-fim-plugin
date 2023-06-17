@@ -36,8 +36,6 @@ from PyQt5 import QtCore
 
 from jsonschema import Draft7Validator
 
-from PyQt5.QtGui import QDoubleValidator
-
 
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'textarea.ui'))
 

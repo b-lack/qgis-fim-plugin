@@ -52,6 +52,7 @@ class Ui_Form(object):
         font = QtGui.QFont()
         font.setPointSize(15)
         self.lfbProcessInfo.setFont(font)
+        self.lfbProcessInfo.setText("")
         self.lfbProcessInfo.setWordWrap(True)
         self.lfbProcessInfo.setObjectName("lfbProcessInfo")
         self.lfbsabeLayout.addWidget(self.lfbProcessInfo)
@@ -125,6 +126,5 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.lfbProcessInfo.setText(_translate("Form", "sdfg sdfgs dfgfs fgs fgs dfg sdfg sdg sfdgs dfgs dfgsdg dfdfgsgs gsdfgsfdg sdfgs dfgs dgsdg dfg"))
         self.lfbSaveBtn.setText(_translate("Form", "SPEICHERN"))
         self.lfbErrorStateLabel.setText(_translate("Form", "ErrorText"))

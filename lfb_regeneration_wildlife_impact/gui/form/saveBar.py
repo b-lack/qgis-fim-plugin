@@ -41,7 +41,7 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'saveBar.ui
 
 
 class SaveBar(QtWidgets.QWidget, UI_CLASS):
-    inputChanged = QtCore.pyqtSignal(str)
+    saveFeature = QtCore.pyqtSignal(object)
 
     def __init__(self, interface, json, schema):
         """Constructor."""
@@ -58,6 +58,7 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.isValid = False
 
         self.lfbSaveBtn.setDisabled(True)
+        self.lfbSaveBtn.clicked.connect(self.saveBtnClicked)
 
         self.lfbProgressBar.setValue(100)
 
@@ -71,8 +72,12 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
 
         self.show()
 
+    def saveBtnClicked(self):
+        self.saveFeature.emit(self.json)
+
     def checkMinimumSet(self, jsonToTest, errorLen):
-        
+        return True
+    
         if errorLen == 0:
             self.lfbProgressBar.setStyleSheet("QProgressBar::chunk "
                   "{"

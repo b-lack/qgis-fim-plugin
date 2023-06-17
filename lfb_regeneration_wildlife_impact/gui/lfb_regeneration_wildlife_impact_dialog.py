@@ -35,13 +35,14 @@ import copy
 
 from .form.views.tabs import Tabs
 
+from .draft.export_btn import ExportButton
 from .draft.draft_selection import DraftSelection
 from .setup.folder_selection import FolderSelection
 from .db_connection.db_widget import DBWidget
 
 from .form.saveBar import SaveBar
 
-from jsonschema import Draft7Validator, RefResolver
+from jsonschema import Draft7Validator
 
 import resources
 
@@ -102,10 +103,10 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         with open(filename) as f:
             self.schema = json.load(f)
-            #self.deReference(self.schema, filename)
         
         self.addFolderSelection()
         self.addDraft()
+        self.addExportButton()
         #self.addDbConnection()
 
         self.lfbNewEntry.clicked.connect(self.newEntry)
@@ -135,12 +136,18 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         #self.lfbTabWidget.setProperty("class", "my-label-style")
 
         self.saveBar = SaveBar(self.iface, self.json, self.schema)
+        self.saveBar.saveFeature.connect(self.saveFeature)
         self.saveBar.setContentsMargins(0,0,0,0)
         self.lfbMain.addWidget(self.saveBar)
 
         self.resetForm(False)
         self.setPosition(1)
 
+    def saveFeature(self, json):
+        self.draft.setStatus(True)
+        self.openHome()
+        self.draft.readDrafts()
+        self.draft.readDone(True)
 
     def tabChange(self, index):
         self.currentTab = index
@@ -149,18 +156,13 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
             self.lfbTitle.setText('LFB Regeneration and Wildlife Impact Monitoring')
         else:
             self.lfbTitle.setText(self.schema['properties'][self.tabsArray[index]['attr']]['title'])
-        
-    def deReference(self, schema, filename):
-
-        dir = os.path.dirname(os.path.realpath(__file__))
-        resolver = RefResolver(referrer=schema, base_uri='file://' + dir + '/')
-        #jsonschema.validate(data, schema, resolver=resolver)
-        
-        #dereferenced = RefResolver(base_uri=filename, referrer=schema)
 
     def resetForm(self, setFields = True):
         for tab in self.tabsArray:
-            tab['setJson'](self.json[tab['attr']], setFields)
+            if tab['attr'] in self.json:
+                tab['setJson'](self.json[tab['attr']], setFields)
+            else:
+                tab['setJson'](self.defaultJson[tab['attr']], setFields)
 
 
     def newEntry(self):
@@ -229,6 +231,15 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         dbWidget = DBWidget(self.iface)
         #self.lfbMain.addWidget(dbWidget)
 
+    def imported(self):
+        self.draft.readDrafts()
+        self.draft.readDone(True)
+
+    def addExportButton(self):
+        exportButton = ExportButton(self.iface, self.defaultJson, self.schema)
+        exportButton.imported.connect(self.imported)
+        self.lfbHomeInputs.addWidget(exportButton)
+
     def addDraft(self):
         self.draft = DraftSelection(self.iface, self.schema)
         self.draft.draftSelected.connect(self.draftSelected)
@@ -262,8 +273,13 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         tabNr = 0
         for attr, value in self.schema['properties'].items():
-            v = Draft7Validator(value)
-            errors = sorted(v.iter_errors(self.json[attr]), key=lambda e: e.path)
+
+            if attr in self.json:
+                v = Draft7Validator(value)
+
+                errors = sorted(v.iter_errors(self.json[attr]), key=lambda e: e.path)
+            else:
+                errors = ['missing']
 
             if len(errors) == 0:
                 self.lfbTabWidget.setTabEnabled(tabNr, True)
