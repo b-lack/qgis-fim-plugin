@@ -34,7 +34,16 @@
         "protectiveMeasure": 0
     },
     "transectRejuvenation": {
-        "transectRejuvenation": []
+        "transectRejuvenation": [],
+        "transectLength": null
+    },
+    "weiserpflanzen": {
+        "moos": {
+            "moos": null
+        },
+        "kraut": {
+            "kraut": null
+        }
     },
     "transectInfo": {
     },

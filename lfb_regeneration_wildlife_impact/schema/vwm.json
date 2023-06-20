@@ -196,7 +196,8 @@
                 "unbestockt": {
                     "title": "unbestockt / nicht begehbar",
                     "type": [
-                        "integer"
+                        "integer",
+                        "null"
                     ],
                     "description": "unbestockt des",
                     "helperText": "Stichprobe liegt auf dauerhaft unbestockter Fläche oder ist nicht begehbar.",
@@ -1183,16 +1184,6 @@
             "type": "object",
             "decription": "Bäume im Verjüngungstransekt - bis 50 Stck. dann Rückmessung",
             "properties": {
-                "transectLength": {
-                    "title": "Transektlänge",
-                    "type": "integer",
-                    "description": "Transektlänge",
-                    "default": 0,
-                    "minimum": 1,
-                    "maximum": 250,
-                    "helperText": "Transektlänge",
-                    "unit": "Dezimeter"
-                },
                 "transectRejuvenation": {
                     "type": "array",
                     "title": "Verjüngungstransekt",
@@ -1426,7 +1417,6 @@
                                 "title": "Höhenstufe ab",
                                 "type": "integer",
                                 "description": "Höhe",
-                                "default": 13,
                                 "minimum": 1,
                                 "maximum": 250,
                                 "helperText": "Höhe",
@@ -1496,12 +1486,59 @@
                             }
                         }
                     }
+                },
+                "transectLength": {
+                    "title": "Transektlänge",
+                    "type": "integer",
+                    "description": "Transektlänge",
+                    "default": 0,
+                    "minimum": 1,
+                    "maximum": 250,
+                    "helperText": "Transektlänge",
+                    "unit": "Dezimeter"
                 }
             },
             "required": [
                 "transectRejuvenation",
                 "transectLength"
             ]
+        },
+        "weiserpflanzen": {
+            "title": "Verjüngung",
+            "type": "object",
+            "decription": "Bäume im Verjüngungstransekt - bis 50 Stck. dann Rückmessung",
+            "properties": {
+                "moos": {
+                    "title": "Moos",
+                    "type": "object",
+                    "properties":{
+                        "moos": {
+                            "title": "Moos",
+                            "type": "integer",
+                            "description": "Moos des",
+                            "default": 0,
+                            "minimum": 0,
+                            "maximum": 100,
+                            "unit": "Prozent"
+                        }
+                    }
+                },
+                "kraut": {
+                    "title": "Kraut",
+                    "type": "object",
+                    "properties":{
+                        "brennessel": {
+                            "title": "Brennessel",
+                            "type": "integer",
+                            "description": "Brennessel des",
+                            "default": 0,
+                            "minimum": 0,
+                            "maximum": 100,
+                            "unit": "Prozent"
+                        }
+                    }
+                }
+            }
         },
         "transectInfo": {
             "title": "Transektinformationen",
@@ -1550,6 +1587,7 @@
                     "title": "Betriebsart",
                     "description": "Bestandesbeschreibung",
                     "helperText": "Bestandesbeschreibung",
+                    "default": 1,
                     "enum": [
                         null,
                         2,

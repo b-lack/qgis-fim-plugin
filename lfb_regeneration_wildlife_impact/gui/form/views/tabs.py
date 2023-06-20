@@ -35,6 +35,7 @@ from ..textarea import TextArea
 from ..dropdown import DropDown
 from ..array_field import ArrayField
 from ..boolean import Boolean
+from ..views.object_view import ObjectView
 
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'tab_default.ui'))
 
@@ -78,6 +79,8 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
 
             if valueType == 'array':
                 field = ArrayField(interface, self.json, value, attr)
+            if valueType == 'object':
+                field = ObjectView(interface, self.json, value, attr)
             elif valueType == 'boolean':
                 field = Boolean(interface, self.json, value, attr)
                 field.lfbInfoBox.connect(self.infoBoxClicked)

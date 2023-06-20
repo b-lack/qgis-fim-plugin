@@ -47,6 +47,7 @@ class ExportButton(QtWidgets.QWidget, UI_CLASS):
 
     exported = QtCore.pyqtSignal(bool)
     imported = QtCore.pyqtSignal(bool)
+    importSelected = QtCore.pyqtSignal(bool)
 
     def __init__(self, interface, defaultJson, schema):
         """Constructor."""
@@ -57,8 +58,11 @@ class ExportButton(QtWidgets.QWidget, UI_CLASS):
 
         self.lfbExportBtn.clicked.connect(self.exportBtnClicked)
         self.lfbImportBtn.clicked.connect(self.importBtnClicked)
+        self.lfbImportSelectedBtn.clicked.connect(self.importSelectedBtnClicked)
 
         self.show()
+
+        self.interface = interface
 
         self.defaultJson = defaultJson
 
@@ -77,6 +81,14 @@ class ExportButton(QtWidgets.QWidget, UI_CLASS):
         if error:
             self.lfbExportFeedback.setStyleSheet('color: red;')
 
+    def importSelectedBtnClicked(self):
+    
+        layer = self.interface.activeLayer()
+        selected_features = layer.selectedFeatures()
+        for i in selected_features:
+            attrs = i.attributeMap()
+            ## SAVE FEATURES
+            QgsMessageLog.logMessage(str(attrs['los_id']), 'LFB')
 
     def importBtnClicked(self):
         fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Select File')

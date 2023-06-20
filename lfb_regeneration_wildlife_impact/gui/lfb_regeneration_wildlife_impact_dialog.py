@@ -234,10 +234,14 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
     def imported(self):
         self.draft.readDrafts()
         self.draft.readDone(True)
+    
+    def importSelected(self, id):
+        self.draft.importSelected(id)
 
     def addExportButton(self):
         exportButton = ExportButton(self.iface, self.defaultJson, self.schema)
         exportButton.imported.connect(self.imported)
+        #exportButton.importSelected.connect(self.draft.importSelected)
         self.lfbHomeInputs.addWidget(exportButton)
 
     def addDraft(self):
