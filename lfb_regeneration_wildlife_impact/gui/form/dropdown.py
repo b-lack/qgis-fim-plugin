@@ -65,7 +65,10 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         
 
         self.lfbTextFieldLabel.setText(QCoreApplication.translate("FormFields", self.schema['title']))
-        self.lfbTextFieldHelp.setText(self.schema['helperText'])
+        
+        if "helperText" in self.schema:
+            self.lfbTextFieldHelp.setText(self.schema['helperText'])
+
         self.lfbComboBox.currentIndexChanged.connect(self.setInputText)
         self.lfbComboBox.addItems(self.schema['enumLabels'])
 

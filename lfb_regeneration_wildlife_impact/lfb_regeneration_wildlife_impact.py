@@ -42,6 +42,7 @@ except ModuleNotFoundError:
     # jsonschema isn't included in the standard qgis python
     #   interpreter so the user has to add it manually
     ERROR = 1
+    print("jsonschema not found. Please install it manually.")
 
     
 if not ERROR:
@@ -50,11 +51,6 @@ if not ERROR:
     # Further dialog windows and helpers
     from .gui.gnssWidget import GnssPluginWidget
     from .state.currentState import CurrentState
-
-
-#from .install_deps import installer_func, plustwo
-
-
 
 
 class LfbRegenerationWildlifeImpact:

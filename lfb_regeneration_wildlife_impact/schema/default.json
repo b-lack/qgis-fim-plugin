@@ -1,7 +1,7 @@
 {
     "$schema": "vwm.json",
     "general": {
-        "aufnahmetrupp": null,
+        "spaufsucheaufnahmetruppkuerzel": null,
         "GNSSDevice": null
     },
     "coordinates": {
@@ -30,11 +30,11 @@
     "landmarken2": {
         "landmarken2": []
     },
-    "transect": {
+    "transekt": {
         "protectiveMeasure": 0
     },
-    "transectRejuvenation": {
-        "transectRejuvenation": [],
+    "verjuengungstransekt": {
+        "verjuengungstransekten": [],
         "transectLength": null
     },
     "weiserpflanzen": {
@@ -45,10 +45,10 @@
             "kraut": null
         }
     },
-    "transectInfo": {
+    "transektinfo": {
     },
-    "standDescription": {
-        "standDescription": null,
+    "bestandsbeschreibung": {
+        "bestandsbeschreibung": null,
         "crownClosure": null
     },
     "t_bestockung": {

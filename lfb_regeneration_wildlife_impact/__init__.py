@@ -27,6 +27,8 @@ import pathlib
 import sys
 import os.path
 
+from qgis.core import QgsMessageLog
+
 # noinspection PyPep8Naming
 def classFactory(iface):  # pylint: disable=invalid-name
     """Load LfbRegenerationWildlifeImpact class from file LfbRegenerationWildlifeImpact.
@@ -35,6 +37,10 @@ def classFactory(iface):  # pylint: disable=invalid-name
     :type iface: QgsInterface
     """
     #
+
+    print("LFB Regeneration and Wildlife Impact Monitoring Plugin loaded")
+    installer_func()
+    
 
     from .lfb_regeneration_wildlife_impact import LfbRegenerationWildlifeImpact
     return LfbRegenerationWildlifeImpact(iface)
@@ -45,6 +51,8 @@ def classFactory(iface):  # pylint: disable=invalid-name
 def installer_func():
 
     plugin_dir = os.path.dirname(os.path.realpath(__file__))
+
+    QgsMessageLog.logMessage("Plugin dir: {}".format(plugin_dir), "LFG")
 
     try:
         import pip

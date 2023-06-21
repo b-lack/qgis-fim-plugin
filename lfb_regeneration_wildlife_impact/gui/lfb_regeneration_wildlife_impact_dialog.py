@@ -99,7 +99,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.lfbDevBtn.clicked.connect(self.openState)
         
  
-        filename = os.path.realpath(os.path.join(dirname, '..', 'schema', 'vwm.json'))
+        filename = os.path.realpath(os.path.join(dirname, '..', 'schema', 'schema_vwm.json'))
 
         with open(filename) as f:
             self.schema = json.load(f)
@@ -114,6 +114,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.lfbTabWidget.currentChanged.connect(self.tabChange)
         tabNr = 1
         for attr, value in self.schema['properties'].items():
+            QgsMessageLog.logMessage(attr, 'LFB')
             tab = Tabs(self.iface, self.json[attr], self.schema['properties'][attr])
             tab.inputChanged.connect(self.inputChanged)
             #self.lfbTabWidget.addWidget(tab)

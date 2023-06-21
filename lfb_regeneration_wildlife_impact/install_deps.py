@@ -2,10 +2,6 @@ import pathlib
 import sys
 import os.path
 
-def plustwo(n):
-    out = n + 2
-    return out
-
 def installer_func():
     plugin_dir = os.path.dirname(os.path.realpath(__file__))
 
