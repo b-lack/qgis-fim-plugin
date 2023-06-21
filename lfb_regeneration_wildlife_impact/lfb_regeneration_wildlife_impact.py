@@ -39,6 +39,12 @@ ERROR = False
 try:
     import jsonschema
 except ModuleNotFoundError:
+    import subprocess
+    import sys
+
+    def install(package):
+        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+    install("jsonschema")
     # jsonschema isn't included in the standard qgis python
     #   interpreter so the user has to add it manually
     ERROR = 1

@@ -38,10 +38,6 @@ def classFactory(iface):  # pylint: disable=invalid-name
     """
     #
 
-    print("LFB Regeneration and Wildlife Impact Monitoring Plugin loaded")
-    installer_func()
-    
-
     from .lfb_regeneration_wildlife_impact import LfbRegenerationWildlifeImpact
     return LfbRegenerationWildlifeImpact(iface)
 
