@@ -30,7 +30,6 @@ class Ui_Form(object):
         sizePolicy.setHeightForWidth(self.scrollArea.sizePolicy().hasHeightForWidth())
         self.scrollArea.setSizePolicy(sizePolicy)
         self.scrollArea.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        self.scrollArea.setTabletTracking(True)
         self.scrollArea.setLineWidth(0)
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
