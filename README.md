@@ -1,5 +1,21 @@
 # LFB Verjüngungszustands- und Wildeinfluss Monitoring
 
+
+## Requirements
+
+Go to ``Manage and Install Plugins...`` -> ``Python Console``
+
+In the console type
+
+```py
+import pip
+```
+and 
+
+```py
+pip.main(['install', 'jsonschema'])
+```
+
 ## Installation from Repository
 
 QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``Settings``
