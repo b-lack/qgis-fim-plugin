@@ -27,7 +27,8 @@ import os
 from PyQt5 import QtGui, QtCore
 from qgis.core import QgsMessageLog
 from qgis.PyQt import QtWidgets, uic
-from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.QtWidgets import QDialog, QScroller
+from PyQt5.QtCore import Qt
 
 import json
 import copy
@@ -97,7 +98,13 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.lfbHomeBtn.clicked.connect(self.openHome)
 
         self.lfbDevBtn.clicked.connect(self.openState)
-        
+
+        #self.lfbHomeScreen
+        #self.lfbHomeScreen.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        #self.lfbHomeScreen.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+        scroll = QScroller.scroller(self.lfbHomeScreen.viewport())
+        scroll.grabGesture(self.lfbHomeScreen.viewport(), QScroller.LeftMouseButtonGesture)
  
         filename = os.path.realpath(os.path.join(dirname, '..', 'schema', 'schema_vwm.json'))
 

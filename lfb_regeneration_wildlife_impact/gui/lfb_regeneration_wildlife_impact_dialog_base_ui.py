@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_LfbRegenerationWildlifeImpactDialogBase(object):
     def setupUi(self, LfbRegenerationWildlifeImpactDialogBase):
         LfbRegenerationWildlifeImpactDialogBase.setObjectName("LfbRegenerationWildlifeImpactDialogBase")
-        LfbRegenerationWildlifeImpactDialogBase.resize(1048, 384)
+        LfbRegenerationWildlifeImpactDialogBase.resize(1051, 678)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
@@ -67,11 +67,10 @@ class Ui_LfbRegenerationWildlifeImpactDialogBase(object):
         sizePolicy.setVerticalStretch(2)
         sizePolicy.setHeightForWidth(self.lfbHomeScreen.sizePolicy().hasHeightForWidth())
         self.lfbHomeScreen.setSizePolicy(sizePolicy)
-        self.lfbHomeScreen.setTabletTracking(True)
         self.lfbHomeScreen.setWidgetResizable(True)
         self.lfbHomeScreen.setObjectName("lfbHomeScreen")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1032, 280))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1049, 397))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)

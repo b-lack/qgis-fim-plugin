@@ -26,7 +26,7 @@ import os
 
 from qgis.core import QgsMessageLog
 from qgis.PyQt import QtWidgets, uic
-from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.QtWidgets import QDialog, QScroller
 
 from PyQt5 import QtCore
 
@@ -57,6 +57,10 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
         self.infoTitle = ""
 
         self.fieldArray = []
+
+        scroll = QScroller.scroller(self.lfbTabScroll.viewport())
+        scroll.grabGesture(self.lfbTabScroll.viewport(), QScroller.LeftMouseButtonGesture)
+        
 
         #if 'title' in schema:
         #    self.lfbObjectHeadeline.setText(schema['title'])

@@ -62,13 +62,13 @@ class Ui_Form(object):
         sizePolicy.setHeightForWidth(self.lfbTextField.sizePolicy().hasHeightForWidth())
         self.lfbTextField.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setPointSize(13)
         self.lfbTextField.setFont(font)
         self.lfbTextField.setStyleSheet("QLineEdit {\n"
 "    border: 3px solid grey;\n"
 "    border-radius: 10px;\n"
 "    padding:5px;\n"
-"    font-size: 15pt;\n"
+"    font-size: 13pt;\n"
 "}")
         self.lfbTextField.setText("")
         self.lfbTextField.setPlaceholderText("")
