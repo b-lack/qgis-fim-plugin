@@ -29,9 +29,10 @@ from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
 # from qgis.PyQt.QtWidgets import (QDialog, QMessageBox, QFileDialog, QComboBox, QTextEdit)
 
+from qgis.core import QgsMessageLog
 
 # Initialize Qt resources from file resources.py
-from .resources import *
+from . import resources
 
 # Before continuing, we check if scipy and scipy.interpolate can be imported.
 # If not, we will not import the plugin files.
@@ -42,9 +43,9 @@ except ModuleNotFoundError:
     import subprocess
     import sys
 
-    def install(package):
-        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-    install("jsonschema")
+    #def install(package):
+    #    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+    #install("jsonschema")
     # jsonschema isn't included in the standard qgis python
     #   interpreter so the user has to add it manually
     ERROR = 1
@@ -215,6 +216,10 @@ class LfbRegenerationWildlifeImpact:
 
     def run(self):
         """Run method that performs all the real work"""
+
+        if ERROR:
+            QgsMessageLog.logMessage('jsonschema not defined', "LFB")
+            return
 
         # State Management of Form
         state = CurrentState()

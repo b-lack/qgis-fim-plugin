@@ -16,6 +16,8 @@ and
 pip.main(['install', 'jsonschema'])
 ```
 
+Restart QGIS
+
 ## Installation from Repository
 
 QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``Settings``
@@ -28,6 +30,8 @@ In the **Plugin Repositories** section click `+Add`.
 Check: "Allow experimental plugins"
 
 Confirm by clicking `OK`
+
+Restart QGIS
 
 QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``ALL``
 

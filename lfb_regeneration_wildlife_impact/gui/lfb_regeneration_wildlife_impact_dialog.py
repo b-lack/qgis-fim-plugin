@@ -44,7 +44,7 @@ from .form.saveBar import SaveBar
 
 from jsonschema import Draft7Validator
 
-import resources
+from .. import resources
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
