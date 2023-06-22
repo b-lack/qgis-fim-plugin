@@ -1,0 +1,5 @@
+{
+    "$schema": "./testschema.json",
+    "street_address": "1600 Pennsylvania Avenue NW",
+    "country": "Canada"
+}

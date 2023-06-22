@@ -326,7 +326,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
             if enableAll:
                 self.lfbTabWidget.setTabEnabled(i, True)
             else:
-                self.lfbTabWidget.setTabEnabled(i, False)
+                self.lfbTabWidget.setTabEnabled(i, True) #False
 
         
         return enableAll

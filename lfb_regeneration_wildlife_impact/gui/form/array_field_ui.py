@@ -53,6 +53,7 @@ class Ui_Form(object):
         self.horizontalLayout_5.addItem(spacerItem1)
         self.verticalLayout_2.addLayout(self.horizontalLayout_5)
         self.lfbArrayOutput = QtWidgets.QTableWidget(self.lfbArrayGroup)
+        self.lfbArrayOutput.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.lfbArrayOutput.setObjectName("lfbArrayOutput")
         self.lfbArrayOutput.setColumnCount(0)
         self.lfbArrayOutput.setRowCount(0)
@@ -69,3 +70,4 @@ class Ui_Form(object):
         Form.setWindowTitle(_translate("Form", "Form"))
         self.lfbArrayGroup.setTitle(_translate("Form", "GroupBox"))
         self.lfbAddBtn.setText(_translate("Form", "Hinzufügen"))
+        self.lfbArrayOutput.setSortingEnabled(True)

@@ -5,13 +5,7 @@
         "workflow": null
     },
     "coordinates": {
-        "accessibility": null,
-        "latitude": null,
-        "longitude": null,
-        "elev": null,
-        "hdop": null,
-        "vdop": null,
-        "satCount": null
+        "spaufsuchenichtbegehbarursacheid": null
     },
     "stichprobenpunkt": {
         "unbestockt": null,

@@ -63,8 +63,10 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.lfbSaveBtn.clicked.connect(self.saveBtnClicked)
 
         self.lfbDevBtn.clicked.connect(self.openState)
-
         self.lfbHomeBtn.clicked.connect(self.openHome)
+        self.lfbSchemaBtn.clicked.connect(self.openSchema)
+
+        self.lfbErrorDialogBtn.clicked.connect(self.openErrorDialog)
 
         self.lfbProgressBar.setValue(100)
 
@@ -74,9 +76,16 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.maxErrors = 0
         self.currentErrors = 0
 
+        self.customErrors = []
+
         self.validate(self.json) 
 
         self.show()
+
+    def openSchema(self):
+        msgBox = QtWidgets.QMessageBox()
+        msgBox.setText(json.dumps(self.schema['properties']['coordinates']['required']))
+        msgBox.exec()
 
     def openState(self):
         self.devButton.emit(True)
@@ -86,6 +95,8 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
 
     def saveBtnClicked(self):
         self.saveFeature.emit(self.json)
+
+    
 
     def checkMinimumSet(self, jsonToTest, errorLen):
         return True
@@ -112,10 +123,22 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
             self.lfbProcessInfo.setText("Fülle mindestens die rot markierten Felder aus um die Daten als Entwurf zu speichern.")
             return False
             
-        
-            
+    
+    def getNamedError(self, error):
+        return True
+
+    def openErrorDialog(self):
+
+        for error in self.errors:
+            QgsMessageLog.logMessage(str(error.message) + ' ' + str(error.relative_schema_path), 'LFB')
+
+        msgBox = QtWidgets.QMessageBox()
+        msgBox.setText('llll')
+        msgBox.exec()
 
     def validate(self, jsonToTest):
+
+        self.customErrors = []
 
         self.json = jsonToTest
         
@@ -131,13 +154,36 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
 
         if len(self.errors) == 0:
             #self.isValid = True
-            self.lfbErrorStateLabel.setText('')
+            self.lfbErrorDialogBtn.setText('')
             self.lfbSaveBtn.setDisabled(False)
         else:
             self.lfbSaveBtn.setDisabled(True)
             #self.isValid = False
-            self.lfbErrorStateLabel.setText(str(len(self.errors)) + ' verbleibende Fehler.')
+            self.lfbErrorDialogBtn.setText(str(len(self.errors)) + ' verbleibende Fehler.')
             
         self.checkMinimumSet(jsonToTest, len(self.errors))
 
+        self.customErrors = self.customErrors + self.checkIsForest(jsonToTest)
+
         return len(self.errors) == 0
+
+
+    def checkIsForest(self, jsonToTest):
+        messages = []
+
+        QgsMessageLog.logMessage(str(jsonToTest['coordinates']['spaufsuchenichtbegehbarursacheid']), 'LFB')
+        QgsMessageLog.logMessage('ssss', 'LFB')
+        QgsMessageLog.logMessage(str(self.schema['if']), 'LFB')
+
+        if jsonToTest['coordinates']['spaufsuchenichtbegehbarursacheid'] is None or jsonToTest['coordinates']['spaufsuchenichtbegehbarursacheid'] == 2: # begehbar
+            messages += [
+                {
+                    'message': 'Der Waldtyp ist nicht gesetzt.',
+                    'path': ['general', 'waldtyp'],
+                    'level': 'error'
+                }
+            ]
+        else:
+            return messages
+        
+        return messages

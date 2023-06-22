@@ -110,7 +110,8 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
             return
 
         if self.key not in self.json:
-            self.json[self.key] = None
+            return
+            #self.json[self.key] = None
 
         if self.json is not None and self.json[self.key] is not None:
             vType = type(self.json[self.key])

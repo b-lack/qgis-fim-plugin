@@ -65,7 +65,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
 
         placeholderText = QCoreApplication.translate("FormFields", self.schema['title'])
 
-        #self.lfbTextFieldLabel.setText(QCoreApplication.translate("FormFields", self.schema['title']))
+        self.lfbTextFieldLabel.setText(QCoreApplication.translate("FormFields", self.schema['title']))
 
         self.lfbTextField.setPlaceholderText(placeholderText) 
         self.lfbTextField.setToolTip(placeholderText)
@@ -129,7 +129,8 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             return
         
         if self.key not in self.json:
-            self.json[self.key] = None
+            return
+        #    self.json[self.key] = None
         
         if self.json is not None and self.json[self.key] is not None:
             self.lfbTextField.setText(str(self.json[self.key]))
