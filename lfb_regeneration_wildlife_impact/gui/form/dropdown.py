@@ -24,11 +24,8 @@
 
 import os
 
-import json
-
-from qgis.core import QgsMessageLog, QgsProject, QgsVectorLayer, QgsJsonUtils, QgsField, QgsFields, QgsVectorFileWriter, QgsCoordinateTransformContext
 from qgis.PyQt import QtWidgets, uic
-from qgis.PyQt.QtCore import QCoreApplication, QSettings, QTranslator
+from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtWidgets import QDialog
 
 from PyQt5.uic import loadUi
@@ -80,7 +77,7 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
             self.lfbComboBox.hide()
             
             self.tree = QtWidgets.QTreeWidget()
-            self.tree.setStyleSheet("QTreeWidget { font-size: 20pt; }")
+            self.tree.setStyleSheet("QTreeWidget { font-size: 13pt; }")
             self.tree.itemClicked.connect(self.onItemClicked)
             self.lfbReplaceWidget.layout().addWidget(self.tree)
 

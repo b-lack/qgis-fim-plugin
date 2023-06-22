@@ -269,8 +269,10 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         if jsonObj is None:
             return
         
-        x = jsonObj['coordinates']['latitude']
-        y = jsonObj['coordinates']['longitude']
+        x = jsonObj['coordinates']['istgeom_x']
+        y = jsonObj['coordinates']['istgeom_y']
+
+        QgsMessageLog.logMessage(str(x) + ' ' + str(y), 'LFB')
 
         currentDateTime = QDateTime.currentDateTime()
 

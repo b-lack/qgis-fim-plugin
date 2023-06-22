@@ -65,7 +65,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
 
         placeholderText = QCoreApplication.translate("FormFields", self.schema['title'])
 
-        self.lfbTextFieldLabel.setText(QCoreApplication.translate("FormFields", self.schema['title']))
+        #self.lfbTextFieldLabel.setText(QCoreApplication.translate("FormFields", self.schema['title']))
 
         self.lfbTextField.setPlaceholderText(placeholderText) 
         self.lfbTextField.setToolTip(placeholderText)
@@ -78,7 +78,9 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
         self.lfbTextField.textChanged.connect(self.setInputText)
         self.lfbTextField.undoAvailable = True
 
-        self.lfbTextFieldDescriptionBtn.clicked.connect(self.triggerInfoBox)
+        if self.lfbTextFieldDescriptionBtn is not None and 'description' in self.schema:
+            self.lfbTextFieldDescriptionBtn.hide()
+            self.lfbTextFieldDescriptionBtn.clicked.connect(self.triggerInfoBox)
 
         if "unit" in self.schema:
             self.lfbTextFieldUnit.setText(self.schema['unit'])

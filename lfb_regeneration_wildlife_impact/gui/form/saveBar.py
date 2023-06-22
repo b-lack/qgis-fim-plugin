@@ -42,6 +42,8 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'saveBar.ui
 
 class SaveBar(QtWidgets.QWidget, UI_CLASS):
     saveFeature = QtCore.pyqtSignal(object)
+    toHome = QtCore.pyqtSignal(bool)
+    devButton = QtCore.pyqtSignal(bool)
 
     def __init__(self, interface, json, schema):
         """Constructor."""
@@ -60,6 +62,10 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.lfbSaveBtn.setDisabled(True)
         self.lfbSaveBtn.clicked.connect(self.saveBtnClicked)
 
+        self.lfbDevBtn.clicked.connect(self.openState)
+
+        self.lfbHomeBtn.clicked.connect(self.openHome)
+
         self.lfbProgressBar.setValue(100)
 
         self.lfbActionRow.setContentsMargins(0,0,0,0)
@@ -71,6 +77,12 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.validate(self.json) 
 
         self.show()
+
+    def openState(self):
+        self.devButton.emit(True)
+        
+    def openHome(self):
+        self.toHome.emit(True)
 
     def saveBtnClicked(self):
         self.saveFeature.emit(self.json)

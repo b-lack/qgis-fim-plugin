@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1051</width>
-    <height>678</height>
+    <width>835</width>
+    <height>770</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -38,102 +38,99 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item row="0" column="0">
-    <widget class="QWidget" name="lfbMenuBar_2" native="true">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <item row="2" column="0">
+    <widget class="QTabWidget" name="lfbTabWidget">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+      <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
        <horstretch>0</horstretch>
-       <verstretch>1</verstretch>
+       <verstretch>2</verstretch>
       </sizepolicy>
      </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(0, 0, 0)</string>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
      </property>
-     <layout class="QHBoxLayout" name="lfbMenuBar">
-      <property name="leftMargin">
-       <number>10</number>
-      </property>
-      <property name="topMargin">
-       <number>10</number>
-      </property>
-      <property name="rightMargin">
-       <number>10</number>
-      </property>
-      <property name="bottomMargin">
-       <number>10</number>
-      </property>
-      <item>
-       <widget class="QToolButton" name="lfbHomeBtn">
-        <property name="font">
-         <font>
-          <pointsize>20</pointsize>
-         </font>
-        </property>
-        <property name="cursor">
-         <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: #ffffff;</string>
-        </property>
-        <property name="text">
-         <string>&lt;</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lfbTitle">
-        <property name="font">
-         <font>
-          <pointsize>15</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color:#fff;</string>
-        </property>
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="lfbDevBtn">
-        <property name="cursor">
-         <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: #fff;
-background-color: #333;</string>
-        </property>
-        <property name="text">
-         <string>DEV</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <property name="font">
+      <font>
+       <pointsize>15</pointsize>
+      </font>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QTabBar{
+    alignment: center;
+    background-color: #444;
+    padding: 0px;
+    margin: 0px;
+    border: none;
+    qproperty-drawBase: 0;
+    border-top: 0px;
+}
+QTabBar::tab {
+    background-color: transparent;
+    width: 32px;
+    height: 32px;
+    margin: 10px 10px 0 10px;
+    border-radius: 10px;
+    padding: 0px;
+    text-align: center;
+}
+QTabBar::tab:enabled{
+    background-color: transparent;
+}
+QTabBar::tab:selected{
+    width: 32px;
+    height: 32px;
+    margin:  7px 7px 0px 7px;
+    padding: 0px 5px 10px 5px;
+	border: none;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    background-color: #eee;
+}
+QTabWidget::pane { border: 0; }</string>
+     </property>
+     <property name="tabPosition">
+      <enum>QTabWidget::North</enum>
+     </property>
+     <property name="currentIndex">
+      <number>-1</number>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="elideMode">
+      <enum>Qt::ElideLeft</enum>
+     </property>
+     <property name="documentMode">
+      <bool>true</bool>
+     </property>
+     <property name="movable">
+      <bool>false</bool>
+     </property>
     </widget>
    </item>
    <item row="3" column="0">
     <widget class="QScrollArea" name="lfbHomeScreen">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
        <horstretch>0</horstretch>
        <verstretch>2</verstretch>
       </sizepolicy>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">margin:0;
+padding:0;</string>
      </property>
      <property name="widgetResizable">
       <bool>true</bool>
@@ -143,8 +140,8 @@ background-color: #333;</string>
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>1049</width>
-        <height>397</height>
+        <width>833</width>
+        <height>382</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -154,6 +151,9 @@ background-color: #333;</string>
        </sizepolicy>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QWidget" name="lfbHeadline" native="true">
          <property name="sizePolicy">
@@ -218,6 +218,9 @@ background-color: #333;</string>
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout">
+            <property name="spacing">
+             <number>0</number>
+            </property>
             <property name="leftMargin">
              <number>0</number>
             </property>
@@ -291,91 +294,23 @@ QPushButton:enabled{
         </widget>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="lfbHomeInputs"/>
+        <layout class="QVBoxLayout" name="lfbHomeInputs">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+        </layout>
        </item>
       </layout>
      </widget>
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="QTabWidget" name="lfbTabWidget">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
-       <horstretch>0</horstretch>
-       <verstretch>1</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>15</pointsize>
-      </font>
-     </property>
-     <property name="layoutDirection">
-      <enum>Qt::LeftToRight</enum>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QTabBar{
-    alignment: center;
-    background-color: #444;
-    padding: 0px;
-    margin: 0px;
-    border: none;
-    qproperty-drawBase: 0;
-    border-top: 0px;
-}
-QTabBar::tab {
-    background-color: transparent;
-    width: 32px;
-    height: 32px;
-    margin: 10px;
-    border-radius: 10px;
-    padding: 0px;
-    text-align: center;
-}
-QTabBar::tab:enabled{
-    background-color: transparent;
-}
-QTabBar::tab:selected{
-    width: 32px;
-    height: 32px;
-    margin:  7px 7px 0px 7px;
-    padding: 0px 5px 15px 5px;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-    background-color: #eee;
-}
-QTabWidget::pane { border: 0; }</string>
-     </property>
-     <property name="tabPosition">
-      <enum>QTabWidget::North</enum>
-     </property>
-     <property name="currentIndex">
-      <number>-1</number>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>32</width>
-       <height>32</height>
-      </size>
-     </property>
-     <property name="elideMode">
-      <enum>Qt::ElideLeft</enum>
-     </property>
-     <property name="documentMode">
-      <bool>true</bool>
-     </property>
-     <property name="movable">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <layout class="QVBoxLayout" name="lfbMain">
+    <layout class="QVBoxLayout" name="lfbMain" stretch="">
      <property name="spacing">
       <number>0</number>
      </property>
-     <property name="sizeConstraint">
-      <enum>QLayout::SetMinimumSize</enum>
+     <property name="topMargin">
+      <number>0</number>
      </property>
     </layout>
    </item>

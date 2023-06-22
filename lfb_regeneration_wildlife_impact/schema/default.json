@@ -1,8 +1,8 @@
 {
-    "$schema": "vwm.json",
+    "$schema": "schema_vwm.json",
     "general": {
         "spaufsucheaufnahmetruppkuerzel": null,
-        "GNSSDevice": null
+        "workflow": null
     },
     "coordinates": {
         "accessibility": null,

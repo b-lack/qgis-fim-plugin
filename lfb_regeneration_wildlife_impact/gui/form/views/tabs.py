@@ -83,7 +83,7 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
 
             if valueType == 'array':
                 field = ArrayField(interface, self.json, value, attr)
-            if valueType == 'object':
+            elif valueType == 'object':
                 field = ObjectView(interface, self.json, value, attr)
             elif valueType == 'boolean':
                 field = Boolean(interface, self.json, value, attr)

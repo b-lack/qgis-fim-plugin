@@ -88,16 +88,13 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         qss = os.path.realpath(os.path.join(dirname, '..', 'styles', 'global.qss'))
         
-        with open(qss,"r") as fh:
-            self.setStyleSheet(fh.read())
+        #with open(qss,"r") as fh:
+            #self.setStyleSheet(fh.read())
             
             #self.setStyleSheet("QLineEdit { background-color: yellow }")
 
 
-        # Connect up the buttons.
-        self.lfbHomeBtn.clicked.connect(self.openHome)
-
-        self.lfbDevBtn.clicked.connect(self.openState)
+        #self.lfbDevBtn.clicked.connect(self.openState)
 
         #self.lfbHomeScreen
         #self.lfbHomeScreen.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -148,6 +145,9 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.saveBar.setContentsMargins(0,0,0,0)
         self.lfbMain.addWidget(self.saveBar)
 
+        self.saveBar.toHome.connect(self.openHome)
+        self.saveBar.devButton.connect(self.openState)
+
         self.resetForm(False)
         self.setPosition(1)
 
@@ -160,10 +160,10 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
     def tabChange(self, index):
         self.currentTab = index
 
-        if self.currentTab == None:
-            self.lfbTitle.setText('LFB Regeneration and Wildlife Impact Monitoring')
-        else:
-            self.lfbTitle.setText(self.schema['properties'][self.tabsArray[index]['attr']]['title'])
+        #if self.currentTab == None:
+        #    self.lfbTitle.setText('LFB Regeneration and Wildlife Impact Monitoring')
+        #else:
+        #    self.lfbTitle.setText(self.schema['properties'][self.tabsArray[index]['attr']]['title'])
 
     def resetForm(self, setFields = True):
         for tab in self.tabsArray:
@@ -210,8 +210,8 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
             self.saveBar.show()
             self.draft.hide()
             self.folderSelection.hide()
-            self.lfbHomeBtn.setEnabled(True)
-            self.lfbHomeBtn.show()
+            #self.lfbHomeBtn.setEnabled(True)
+            #self.lfbHomeBtn.show()
             self.lfbHomeScreen.hide()
         else:
             self.lfbHeadline.show()
@@ -219,8 +219,8 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
             self.saveBar.hide()
             self.draft.show()
             self.folderSelection.show()
-            self.lfbHomeBtn.setEnabled(False)
-            self.lfbHomeBtn.hide()
+            #self.lfbHomeBtn.setEnabled(False)
+            #self.lfbHomeBtn.hide()
             self.lfbHomeScreen.show()
 
     def addFolderSelection(self):
@@ -286,12 +286,19 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         tabNr = 0
         for attr, value in self.schema['properties'].items():
 
+            
+
             if attr in self.json:
                 v = Draft7Validator(value)
 
                 errors = sorted(v.iter_errors(self.json[attr]), key=lambda e: e.path)
             else:
                 errors = ['missing']
+
+            if tabNr == 0:
+                for error in errors:
+                    QgsMessageLog.logMessage(str(error.message), 'LFB')
+                
 
             if len(errors) == 0:
                 self.lfbTabWidget.setTabEnabled(tabNr, True)

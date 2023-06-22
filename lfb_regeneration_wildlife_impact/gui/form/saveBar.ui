@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>888</width>
-    <height>231</height>
+    <width>912</width>
+    <height>225</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -20,10 +20,8 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">
-	background-color: #222;
-	color: #fff;
-</string>
+   <string notr="true">background-color: #222;
+color: #fff;</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
@@ -38,13 +36,69 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item row="0" column="0">
-    <widget class="QWidget" name="lfbActionRow" native="true">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <item row="1" column="0">
+    <widget class="QProgressBar" name="lfbProgressBar">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>2</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>1</pointsize>
+      </font>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QProgressBar::chunk{
+	background-color: red;
+	
+}
+QProgressBar{
+	color:transparent;
+	border:none;
+	margin:0;
+	height:2px;
+	background-color: #222;
+	color: #fff;
+}</string>
+     </property>
+     <property name="value">
+      <number>24</number>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QWidget" name="lfbActionRow" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>150</height>
+      </size>
      </property>
      <property name="autoFillBackground">
       <bool>false</bool>
@@ -60,17 +114,38 @@ margin:0px;</string>
        <number>0</number>
       </property>
       <property name="leftMargin">
-       <number>9</number>
+       <number>0</number>
       </property>
       <property name="topMargin">
        <number>0</number>
       </property>
       <property name="rightMargin">
-       <number>9</number>
+       <number>0</number>
       </property>
       <property name="bottomMargin">
        <number>0</number>
       </property>
+      <item>
+       <widget class="QToolButton" name="lfbHomeBtn">
+        <property name="text">
+         <string>&lt;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="lfbDevBtn">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: #fff;
+background-color: #333;</string>
+        </property>
+        <property name="text">
+         <string>DEV</string>
+        </property>
+       </widget>
+      </item>
       <item>
        <widget class="QLabel" name="lfbProcessInfo">
         <property name="sizePolicy">
@@ -111,6 +186,56 @@ margin:0px;</string>
        </spacer>
       </item>
       <item>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="rightMargin">
+         <number>20</number>
+        </property>
+        <item>
+         <spacer name="verticalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>0</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="lfbErrorStateLabel">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: red;
+margin:5px 0 10px;
+padding:0;</string>
+          </property>
+          <property name="text">
+           <string>ErrorText</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>0</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <spacer name="verticalSpacer">
@@ -142,7 +267,7 @@ margin:0px;</string>
 	border-radius: 20px;
 	border: 2px solid #333;
 	color: #555;
-	margin: 10px 0px 0px;
+	margin: 5px;
 }
 QPushButton:enabled{
 	border-radius: 20px;
@@ -153,23 +278,6 @@ QPushButton:enabled{
           </property>
           <property name="text">
            <string>SPEICHERN</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="lfbErrorStateLabel">
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">color: red;
-margin:5px 0 10px;
-padding:0;</string>
-          </property>
-          <property name="text">
-           <string>ErrorText</string>
           </property>
          </widget>
         </item>
@@ -189,39 +297,6 @@ padding:0;</string>
        </layout>
       </item>
      </layout>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QProgressBar" name="lfbProgressBar">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>1</pointsize>
-      </font>
-     </property>
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QProgressBar::chunk{
-	background-color: red;
-	
-}
-QProgressBar{
-	color:transparent;
-	background-color: transparent;
-	border:none;
-margin:0;
-}</string>
-     </property>
-     <property name="value">
-      <number>24</number>
-     </property>
     </widget>
    </item>
   </layout>

@@ -7,10 +7,6 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
-                "name": {
-                    "title": "Name",
-                    "type": "string"
-                },
                 "spaufsucheaufnahmetruppkuerzel": {
                     "title": "Aufnahmetruppk\u00fcrzel",
                     "type": "string",
@@ -2511,10 +2507,6 @@
         "stichprobenpunkt"
     ],
     "$defs": {
-        "name": {
-            "title": "Name",
-            "type": "string"
-        },
         "baumart": {
             "title": "Baumart",
             "type": "integer",

@@ -32,20 +32,61 @@
    <property name="bottomMargin">
     <number>20</number>
    </property>
-   <item row="1" column="2">
-    <widget class="QLabel" name="lfbTextFieldUnit">
+   <item row="3" column="1">
+    <widget class="QLabel" name="lfbTextFieldSuccess">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="font">
       <font>
-       <family>Ubuntu</family>
-       <pointsize>20</pointsize>
+       <pointsize>13</pointsize>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">color: green;</string>
+     </property>
      <property name="text">
-      <string/>
+      <string>SuccessLabel</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
    <item row="2" column="1">
+    <widget class="QLabel" name="lfbTextFieldError">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>13</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: red;</string>
+     </property>
+     <property name="text">
+      <string>ErrorLabel</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
     <widget class="QLabel" name="lfbTextFieldHelp">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -53,44 +94,28 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>13</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Text content in QLabel can wrap lines along word boundaries with the wordWrap property. By default, word wrap is disabled. To enable it use setWordWrap():
 
 </string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
      <property name="wordWrap">
       <bool>true</bool>
      </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QToolButton" name="lfbTextFieldDescriptionBtn">
-     <property name="font">
-      <font>
-       <pointsize>11</pointsize>
-      </font>
-     </property>
-     <property name="cursor">
-      <cursorShape>PointingHandCursor</cursorShape>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QToolButton{
-	border: 2px solid gray;
-	border-radius: 10px;
-	width: 20px;
-	height: 20px;
-	margin-right: 10px;
-}</string>
-     </property>
-     <property name="text">
-      <string>i</string>
-     </property>
-     <property name="autoRaise">
-      <bool>false</bool>
+     <property name="margin">
+      <number>0</number>
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item row="0" column="1">
     <widget class="QLineEdit" name="lfbTextField">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -122,43 +147,43 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
-    <widget class="QLabel" name="lfbTextFieldSuccess">
-     <property name="styleSheet">
-      <string notr="true">color: green;</string>
-     </property>
-     <property name="text">
-      <string>SuccessLabel</string>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QLabel" name="lfbTextFieldLabel">
+   <item row="0" column="2">
+    <widget class="QLabel" name="lfbTextFieldUnit">
      <property name="font">
       <font>
-       <pointsize>11</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
+       <family>Ubuntu</family>
+       <pointsize>20</pointsize>
       </font>
      </property>
      <property name="text">
-      <string>TextLabel</string>
+      <string/>
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
-    <widget class="QLabel" name="lfbTextFieldError">
+   <item row="0" column="0">
+    <widget class="QToolButton" name="lfbTextFieldDescriptionBtn">
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
      <property name="styleSheet">
-      <string notr="true">color: red;</string>
+      <string notr="true">QToolButton{
+	border: 2px solid gray;
+	border-radius: 10px;
+	width: 20px;
+	height: 20px;
+	margin-right: 10px;
+}</string>
      </property>
      <property name="text">
-      <string>ErrorLabel</string>
+      <string>i</string>
      </property>
-     <property name="wordWrap">
-      <bool>true</bool>
+     <property name="autoRaise">
+      <bool>false</bool>
      </property>
     </widget>
    </item>
