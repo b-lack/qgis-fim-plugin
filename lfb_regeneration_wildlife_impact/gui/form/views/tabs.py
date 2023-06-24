@@ -41,9 +41,9 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'tab_defaul
 
 
 class Tabs(QtWidgets.QWidget, UI_CLASS):
-    inputChanged = QtCore.pyqtSignal(object)
+    inputChanged = QtCore.pyqtSignal(object, str)
 
-    def __init__(self, interface, json, schema):
+    def __init__(self, interface, json, schema, attr):
         """Constructor."""
 
         QDialog.__init__(self, interface.mainWindow())
@@ -51,6 +51,7 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
         self.setupUi(self)
 
         self.json = json
+        self.attr = attr
 
         self.show()
 
@@ -99,7 +100,7 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
                 field.lfbInfoBox.connect(self.infoBoxClicked)
                 
             self.lfbTabLayout.addWidget(field)
-            field.inputChanged.connect(self.emitText)
+            field.inputChanged.connect(self.onInputChanged)
 
             self.fieldArray.append(field)
 
@@ -121,10 +122,11 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
 
     def setJson(self, newJson, setFields = True):
         
-        self.json = newJson
+        #self.json = newJson
+        self.json.update(newJson)
 
         for field in self.fieldArray :
             field.setJson(self.json, setFields)
 
-    def emitText(self):
-        self.inputChanged.emit(self.json)
+    def onInputChanged(self):
+        self.inputChanged.emit(self.json, self.attr)

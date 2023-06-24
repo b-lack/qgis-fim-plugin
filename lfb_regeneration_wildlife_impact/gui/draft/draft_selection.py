@@ -285,13 +285,13 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         if jsonObj is None:
             return
         
-        if jsonObj['properties']['geometry']['coordinates'] is None:
-            return 
+        #if jsonObj['properties']['geometry']['coordinates'] is None:
+        #    return 
         
-        x = jsonObj['properties']['geometry']['coordinates'][0]
-        y = jsonObj['properties']['geometry']['coordinates'][1]
+        #x = jsonObj['properties']['geometry']['coordinates'][0]
+        #y = jsonObj['properties']['geometry']['coordinates'][1]
 
-        QgsMessageLog.logMessage(str(x) + ' ' + str(y), 'LFB')
+        #QgsMessageLog.logMessage(str(x) + ' ' + str(y), 'LFB')
 
         currentDateTime = QDateTime.currentDateTime()
 
@@ -306,17 +306,17 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                     
                     tFeature.setAttribute('modified', currentDateTime)
                     feature = tFeature
-                    geometry = QgsGeometry.fromPointXY(QgsPointXY(x, y))
-                    feature.setGeometry(geometry)
+                    #geometry = QgsGeometry.fromPointXY(QgsPointXY(x, y))
+                    #feature.setGeometry(geometry)
         else:
-
+            QgsMessageLog.logMessage('ERROR: layer should exist', 'LFB')
             feature = QgsFeature()
 
             # inform the feature of its fields
             feature.setFields(self.vl.fields())
 
-            geometry = QgsGeometry.fromPointXY(QgsPointXY(x, y))
-            feature.setGeometry(geometry)
+            #geometry = QgsGeometry.fromPointXY(QgsPointXY(x, y))
+            #feature.setGeometry(geometry)
 
             #for attr, value in jsonObj.items():
             #    feature.setAttribute(attr, value)

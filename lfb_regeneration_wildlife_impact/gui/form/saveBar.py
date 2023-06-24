@@ -65,6 +65,7 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.lfbDevBtn.clicked.connect(self.openState)
         self.lfbHomeBtn.clicked.connect(self.openHome)
         self.lfbSchemaBtn.clicked.connect(self.openSchema)
+        self.lfbSchemaBtn.hide()
 
         self.lfbErrorDialogBtn.clicked.connect(self.openErrorDialog)
 
@@ -128,6 +129,7 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         return True
 
     def openErrorDialog(self):
+        QgsMessageLog.logMessage(str(len(self.errors)), 'LFB')
 
         for error in self.errors:
             QgsMessageLog.logMessage(str(error.message) + ' ' + str(error.relative_schema_path), 'LFB')
@@ -138,6 +140,8 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         msgBox.exec()
 
     def validate(self, jsonToTest):
+
+        QgsMessageLog.logMessage('validate', 'LFB')
 
         self.customErrors = []
 

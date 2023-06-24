@@ -1,3 +1,6 @@
+import os
+import json
+
 from qgis.core import QgsProject, QgsExpressionContextUtils, QgsMapLayer
 from qgis.core import QgsMessageLog
 
@@ -8,6 +11,11 @@ class Utils(object):
         idx = b['enum'].index(a)
         return str(b['enumLabels'][idx])
     
+    def loadDefaultJson():
+        dirname = os.path.dirname(__file__)
+        filename = os.path.realpath(os.path.join(dirname, '..', 'schema', 'default.json'))
+        fd = open(filename, 'r')
+        return json.load(fd)
 
     def getLayerByName(lfbName, lfbVersion = None):
         names = [layer for layer in QgsProject.instance().mapLayers().values()]

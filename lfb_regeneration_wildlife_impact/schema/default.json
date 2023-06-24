@@ -1,61 +1,55 @@
 {
-    "$schema": "schema_vwm.json",
-    "general": {
-        "spaufsucheaufnahmetruppkuerzel": null,
-        "spaufsuchenichtbegehbarursacheid": null,
-        "workflow": 4
+    "$schema": "./schema_vwm.json",
+    "geometry": {
+        "coordinates": [
+            0,
+            0
+        ]
     },
-    "coordinates": {
-        
-    },
-    "stichprobenpunkt": {
-        "unbestockt": null,
-        "nichtWald": null
-    },
-    "baumplot1":{
-        "baumplot1": [],
-        "transectLocation": 0
-    },
-    "landmarken1": {
-        "landmarken1": []
-    },
-    "baumplot2":{
-        "baumplot2": []
-    },
-    "landmarken2": {
-        "landmarken2": []
-    },
-    "transekt": {
-        "protectiveMeasure": 0
-    },
-    "verjuengungstransekt": {
-        "verjuengungstransekten": [],
-        "transectLength": null
-    },
-    "weiserpflanzen": {
-        "moos": {
-            "moos": null
+    "type": "Point",
+    "properties": {
+        "general": {
+            "spaufsucheaufnahmetruppkuerzel": null,
+            "spaufsuchenichtbegehbarursacheid": null,
+            "workflow": 4
         },
-        "kraut": {
-            "kraut": null
-        }
-    },
-    "transektinfo": {
-    },
-    "bestandsbeschreibung": {
-        "bestandsbeschreibung": null,
-        "crownClosure": null
-    },
-    "t_bestockung": {
-        "t_bestockung": []
-    },
-    "t_bodenvegetation": {
-        "t_bodenvegetation": []
-    },
-    "stoerung": {
-    },
-    "workflow": {
-        "workflow": null
-    }
+        "coordinates": {
 
+        },
+        "stichprobenpunkt": {
+            "unbestockt": null,
+            "nichtWald": null
+        },
+        "baumplot1":{
+            "baumplot1": [],
+            "transectLocation": 0
+        },
+        "landmarken1": {
+            "landmarken1": []
+        },
+        "baumplot2":{
+            "baumplot2": []
+        },
+        "landmarken2": {
+            "landmarken2": []
+        },
+        "transekt": {
+            "protectiveMeasure": 0
+        },
+        "verjuengungstransekt": {
+            "verjuengungstransekten": [],
+            "transectLength": null
+        },
+        "weiserpflanzen": {},
+        "transektinfo": {},
+        "bestandsbeschreibung": {},
+        "t_bestockung": {
+            "t_bestockung": []
+        },
+        "t_bodenvegetation": {
+            "t_bodenvegetation": []
+        },
+        "stoerung": {
+        }
+    }
 }

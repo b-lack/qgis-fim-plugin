@@ -87,8 +87,11 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
 
             self.createTreeWidget(self.schema)
 
+        
+        
         if "default" in self.schema and self.json[self.key] is None:
             self.setDefaultValue()
+            
 
         self.validate() 
 
@@ -102,17 +105,33 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         if "default" not in self.schema:
             return
         
+        index = self.schema['enum'].index(self.schema['default'])
+
+        if self.key == 'bestandbetriebsartid':
+            QgsMessageLog.logMessage(self.key + " DEFAULT " + str(index), 'LFB')
+
+        if index == -1:
+            return
+        
+        
         self.internJson[self.key] = self.schema['default']
         self.validate()
 
-        self.lfbComboBox.setCurrentIndex(self.schema['enum'].index(self.json[self.key]))
+        self.lfbComboBox.setCurrentIndex(index)
+
+        
         
     def triggerInfoBox(self):
         self.lfbInfoBox.emit(self.schema)
 
     def setJson(self, newJson, setFields = True):
+
+        if self.key not in newJson:
+            self.json[self.key] = None
+        else:
+            self.json[self.key] = newJson[self.key]
+
         
-        self.json = newJson
 
         if setFields == False:
             return
@@ -120,6 +139,8 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         if self.key not in self.json:
             return
             #self.json[self.key] = None
+
+        
 
         if self.json is not None and self.json[self.key] is not None:
             vType = type(self.json[self.key])
@@ -151,6 +172,9 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         self.internJson[self.key] = value
 
         self.validate()
+
+        self.lfbTextFieldHelp.show()
+        self.lfbTextFieldHelp.setText(str(self.internJson[self.key]))
 
     def validate(self):
 

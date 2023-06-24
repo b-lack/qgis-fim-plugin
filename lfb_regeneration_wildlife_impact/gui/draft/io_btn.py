@@ -114,6 +114,8 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
 
         layer.startEditing()
 
+
+        defaultJson = Utils.loadDefaultJson()
         
 
         for i in selectedFeatures:
@@ -133,7 +135,7 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
             qgsFeature.setAttribute('modified', currentDateTime)
             qgsFeature.setAttribute('workflow', 4)
             qgsFeature.setAttribute('status', False)
-            qgsFeature.setAttribute('form', json.dumps({}))
+            qgsFeature.setAttribute('form', json.dumps(defaultJson['properties']))
             qgsFeature.setAttribute('geometry', {
                 'type': 'Point',
             })

@@ -79,13 +79,14 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         filename = os.path.realpath(os.path.join(dirname, '..', 'schema', 'default.json'))
 
         with open(filename) as f:
-            self.defaultJson = json.load(f)
+            schema = json.load(f)
+            self.defaultJson = schema['properties']
 
         self.json = copy.deepcopy(self.defaultJson)
 
         self.state = state
 
-        qss = os.path.realpath(os.path.join(dirname, '..', 'styles', 'global.qss'))
+        #qss = os.path.realpath(os.path.join(dirname, '..', 'styles', 'global.qss'))
         
         #with open(qss,"r") as fh:
             #self.setStyleSheet(fh.read())
@@ -118,7 +119,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.lfbTabWidget.currentChanged.connect(self.tabChange)
         tabNr = 1
         for attr, value in self.schema['properties'].items():
-            tab = Tabs(self.iface, self.json[attr], self.schema['properties'][attr])
+            tab = Tabs(self.iface, self.json[attr], self.schema['properties'][attr], attr)
             tab.inputChanged.connect(self.inputChanged)
             #self.lfbTabWidget.addWidget(tab)
             #newTab = QWidget(myTabWidget)
@@ -168,6 +169,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         #    self.lfbTitle.setText(self.schema['properties'][self.tabsArray[index]['attr']]['title'])
 
     def resetForm(self, setFields = True):
+
         for tab in self.tabsArray:
             if tab['attr'] in self.json:
                 tab['setJson'](self.json[tab['attr']], setFields)
@@ -176,6 +178,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
 
     def newEntry(self):
+        return
         self.json = copy.deepcopy(self.defaultJson)
         self.changeState(False)
         self.setPosition(2)
@@ -184,8 +187,12 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.lfbTabWidget.setCurrentIndex(0)
         self.tabChange(0)
 
-    def inputChanged(self, save):
-        
+    def inputChanged(self, save, attr):
+        if attr in self.json:
+            self.json[attr].update(save)
+        else:
+            self.json[attr] = save
+
         self.changeState()
 
         #if self.saveBar.validate(self.json) == True:
@@ -286,28 +293,18 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         tabNr = 0
         for attr, value in self.schema['properties'].items():
 
-            
-
             if attr in self.json:
                 v = Draft7Validator(value)
-
                 errors = sorted(v.iter_errors(self.json[attr]), key=lambda e: e.path)
             else:
-                errors = ['missing']
+                errors = [{'message': 'No data available'}]
 
-            #if tabNr == 0:
-            #    for error in errors:
-            #        QgsMessageLog.logMessage(str(error.message), 'LFB')
-                
 
             if len(errors) == 0:
-                self.lfbTabWidget.setTabEnabled(tabNr, True)
+                #self.lfbTabWidget.setTabEnabled(tabNr, True)
                 self.lfbTabWidget.setTabText(tabNr, '')
-
                 self.lfbTabWidget.setTabIcon(tabNr, QtGui.QIcon(':icons/green_rect.png'))
             else:
-                #if tabNr != 0:
-                    #self.lfbTabWidget.setTabEnabled(tabNr, False)
                 self.lfbTabWidget.setTabIcon(tabNr, QtGui.QIcon(':icons/red_rect.png'))
                 self.lfbTabWidget.setTabText(tabNr, '')
 
@@ -323,22 +320,46 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         enableAll = len(gErrors) == 0 and len(cErrors) == 0 and len(tErrors) == 0
 
 
+        #self.lfbTabWidget.setTabEnabled(0, True)
         for i in range(0, 16):
             self.lfbTabWidget.setTabEnabled(i, True)
 
-        if len(gErrors) > 0:
-            for i in range(1, 16):
-                self.lfbTabWidget.setTabEnabled(i, False)
-        elif len(cErrors) > 0:
-            for i in range(2, 16):
-                self.lfbTabWidget.setTabEnabled(i, False)
-        else:
-            for i in range(0, 16):
-                if enableAll:
-                    self.lfbTabWidget.setTabEnabled(i, True)
-                else:
-                    self.lfbTabWidget.setTabEnabled(i, False)
+        self.lfbNotAccessable(self.json, gErrors)
+        self.lfbCoordinates(self.json, cErrors)
+
+        
         
         return enableAll
 
+    def lfbNotAccessable(self, json, taberrors):
+        if json['general']['spaufsuchenichtbegehbarursacheid'] != 2 or len(taberrors) > 0:
 
+            for i in self.tabsArray:
+                if i['attr'] != 'general':
+                    if i['attr'] in json:
+                        del self.json[i['attr']]
+
+            for i in range(1, 16):
+                self.lfbTabWidget.setTabEnabled(i, False)
+            
+            
+            return False
+        else:
+            newValue = False
+            for i in self.tabsArray:
+                if i['attr'] not in self.json:
+                    newValue = True
+                    self.json[i['attr']] = self.defaultJson[i['attr']]
+                    i['setJson'](self.json[i['attr']], True)
+
+            if newValue:
+                self.resetForm(True)
+
+        return True
+    
+    def lfbCoordinates(self, json, taberrors):
+        if len(taberrors) > 0:
+            for i in range(2, 16):
+                self.lfbTabWidget.setTabEnabled(i, False)
+            return False
+        return True

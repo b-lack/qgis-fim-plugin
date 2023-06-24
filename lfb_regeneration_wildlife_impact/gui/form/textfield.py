@@ -199,5 +199,5 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             for error in errors:
                 self.lfbTextFieldError.setText(error.message)
 
-
+        
         self.inputChanged.emit(str(self.json[self.key]))
