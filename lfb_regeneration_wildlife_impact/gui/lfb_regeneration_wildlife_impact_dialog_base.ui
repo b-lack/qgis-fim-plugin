@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>835</width>
-    <height>770</height>
+    <width>921</width>
+    <height>645</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -66,7 +66,7 @@
      <property name="styleSheet">
       <string notr="true">QTabBar{
     alignment: center;
-    background-color: #444;
+    background-color: #222;
     padding: 0px;
     margin: 0px;
     border: none;
@@ -140,8 +140,8 @@ padding:0;</string>
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>833</width>
-        <height>382</height>
+        <width>919</width>
+        <height>319</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -185,7 +185,7 @@ padding:0;</string>
              </font>
             </property>
             <property name="text">
-             <string>Verbiss und Wildtier Monitoring</string>
+             <string>Verbiss und Wildtier Monitoring w</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -305,7 +305,7 @@ QPushButton:enabled{
     </widget>
    </item>
    <item row="1" column="0">
-    <layout class="QVBoxLayout" name="lfbMain" stretch="">
+    <layout class="QVBoxLayout" name="lfbMain">
      <property name="spacing">
       <number>0</number>
      </property>

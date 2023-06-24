@@ -41,7 +41,7 @@
             <x>0</x>
             <y>0</y>
             <width>825</width>
-            <height>651</height>
+            <height>643</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout">
@@ -90,8 +90,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>825</width>
-            <height>651</height>
+            <width>374</width>
+            <height>43</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -126,6 +126,9 @@
       </layout>
      </widget>
     </widget>
+   </item>
+   <item row="1" column="0">
+    <layout class="QGridLayout" name="lfbIoWidget"/>
    </item>
   </layout>
  </widget>

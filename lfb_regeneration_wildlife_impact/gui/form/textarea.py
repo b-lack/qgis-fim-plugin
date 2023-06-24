@@ -72,6 +72,12 @@ class TextArea(QtWidgets.QWidget, UI_CLASS):
         else:
             self.lfbTextFieldHelp.setText('')
 
+        QgsMessageLog.logMessage("Read only: " + self.schema['title'], "LFB")
+        if "readOnly" in self.schema:
+            QgsMessageLog.logMessage("Read only: " + self.schema['title'], "LFB")
+            self.lfbTextField.setReadOnly(self.schema['readOnly'])
+            self.lfbTextField.setStyleSheet("background-color: #e0e0e0;")
+
         self.lfbTextField.textChanged.connect(self.setInputText)
         self.lfbTextField.undoAvailable = True
 
@@ -171,7 +177,7 @@ class TextArea(QtWidgets.QWidget, UI_CLASS):
         if self.json[self.key] is None:
             self.lfbTextFieldError.hide()
             self.lfbTextFieldSuccess.hide()
-            #self.lfbTextFieldHelp.show()
+            self.lfbTextFieldHelp.show()
 
         elif len(errors) == 0:
             self.lfbTextFieldError.hide()

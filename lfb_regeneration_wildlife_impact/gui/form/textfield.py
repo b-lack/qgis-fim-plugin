@@ -82,6 +82,13 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             self.lfbTextFieldDescriptionBtn.hide()
             self.lfbTextFieldDescriptionBtn.clicked.connect(self.triggerInfoBox)
 
+        if key == 'workflow':
+            QgsMessageLog.logMessage("Read only: ", "LFB")
+
+        if "readOnly" in self.schema:
+            self.lfbTextField.setReadOnly(self.schema['readOnly'])
+            self.lfbTextField.setStyleSheet("background-color: #e0e0e0;")
+
         if "unit" in self.schema:
             self.lfbTextFieldUnit.setText(self.schema['unit'])
 
@@ -172,11 +179,13 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
 
         self.json[self.key] = self.internJson[self.key]
 
-        #if self.json[self.key] is None:
-        #    self.lfbTextFieldError.hide()
-        #    self.lfbTextFieldSuccess.hide()
+        if self.json[self.key] is None:
+            self.lfbTextFieldError.hide()
+            self.lfbTextFieldSuccess.hide()
+            self.lfbTextFieldHelp.show()
+            self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid red;\n	border-radius: 10px;\n	padding: 10px;\n}")
 
-        if len(errors) == 0:
+        elif len(errors) == 0:
             self.lfbTextFieldError.hide()
             self.lfbTextFieldSuccess.hide()
             self.lfbTextFieldHelp.show()

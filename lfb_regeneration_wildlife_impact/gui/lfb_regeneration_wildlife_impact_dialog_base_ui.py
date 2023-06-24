@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_LfbRegenerationWildlifeImpactDialogBase(object):
     def setupUi(self, LfbRegenerationWildlifeImpactDialogBase):
         LfbRegenerationWildlifeImpactDialogBase.setObjectName("LfbRegenerationWildlifeImpactDialogBase")
-        LfbRegenerationWildlifeImpactDialogBase.resize(835, 770)
+        LfbRegenerationWildlifeImpactDialogBase.resize(921, 645)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
@@ -38,7 +38,7 @@ class Ui_LfbRegenerationWildlifeImpactDialogBase(object):
         self.lfbTabWidget.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.lfbTabWidget.setStyleSheet("QTabBar{\n"
 "    alignment: center;\n"
-"    background-color: #444;\n"
+"    background-color: #222;\n"
 "    padding: 0px;\n"
 "    margin: 0px;\n"
 "    border: none;\n"
@@ -86,7 +86,7 @@ class Ui_LfbRegenerationWildlifeImpactDialogBase(object):
         self.lfbHomeScreen.setWidgetResizable(True)
         self.lfbHomeScreen.setObjectName("lfbHomeScreen")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 833, 382))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 919, 319))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -182,6 +182,6 @@ class Ui_LfbRegenerationWildlifeImpactDialogBase(object):
     def retranslateUi(self, LfbRegenerationWildlifeImpactDialogBase):
         _translate = QtCore.QCoreApplication.translate
         LfbRegenerationWildlifeImpactDialogBase.setWindowTitle(_translate("LfbRegenerationWildlifeImpactDialogBase", "Lfb Regeneration and Wildlife Impact Monitoring"))
-        self.label.setText(_translate("LfbRegenerationWildlifeImpactDialogBase", "Verbiss und Wildtier Monitoring"))
+        self.label.setText(_translate("LfbRegenerationWildlifeImpactDialogBase", "Verbiss und Wildtier Monitoring w"))
         self.label_2.setText(_translate("LfbRegenerationWildlifeImpactDialogBase", "Überwachung des Verjüngungszustandes durch die Aufnahme von Naturaldaten."))
         self.lfbNewEntry.setText(_translate("LfbRegenerationWildlifeImpactDialogBase", "AUFNAHME STARTEN"))

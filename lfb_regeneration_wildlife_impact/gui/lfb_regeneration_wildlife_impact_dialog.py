@@ -36,7 +36,6 @@ import copy
 
 from .form.views.tabs import Tabs
 
-from .draft.export_btn import ExportButton
 from .draft.draft_selection import DraftSelection
 from .setup.folder_selection import FolderSelection
 from .db_connection.db_widget import DBWidget
@@ -106,19 +105,19 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         filename = os.path.realpath(os.path.join(dirname, '..', 'schema', 'schema_vwm.json'))
 
         with open(filename) as f:
-            self.schema = json.load(f)
+            schema = json.load(f)
+            self.schema = schema['properties']['properties']
         
         self.addFolderSelection()
         self.addDraft()
-        self.addExportButton()
         #self.addDbConnection()
 
-        self.lfbNewEntry.clicked.connect(self.newEntry)
+        #self.lfbNewEntry.clicked.connect(self.newEntry)
+        self.lfbNewEntry.hide()
 
         self.lfbTabWidget.currentChanged.connect(self.tabChange)
         tabNr = 1
         for attr, value in self.schema['properties'].items():
-            QgsMessageLog.logMessage(attr, 'LFB')
             tab = Tabs(self.iface, self.json[attr], self.schema['properties'][attr])
             tab.inputChanged.connect(self.inputChanged)
             #self.lfbTabWidget.addWidget(tab)
@@ -150,6 +149,9 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.resetForm(False)
         self.setPosition(1)
+
+    def update(self):
+        self.draft.update()
 
     def saveFeature(self, json):
         self.draft.setStatus(True)
@@ -218,10 +220,13 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
             self.lfbTabWidget.hide()
             self.saveBar.hide()
             self.draft.show()
+            self.draft.update()
             self.folderSelection.show()
             #self.lfbHomeBtn.setEnabled(False)
             #self.lfbHomeBtn.hide()
             self.lfbHomeScreen.show()
+
+        
 
     def addFolderSelection(self):
         self.folderSelection = FolderSelection(self.iface)
@@ -239,18 +244,13 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         dbWidget = DBWidget(self.iface)
         #self.lfbMain.addWidget(dbWidget)
 
-    def imported(self):
-        self.draft.readDrafts()
-        self.draft.readDone(True)
+    #def imported(self):
+    #    self.draft.readDrafts()
+    #    self.draft.readDone(True)
     
     def importSelected(self, id):
         self.draft.importSelected(id)
 
-    def addExportButton(self):
-        exportButton = ExportButton(self.iface, self.defaultJson, self.schema)
-        exportButton.imported.connect(self.imported)
-        #exportButton.importSelected.connect(self.draft.importSelected)
-        self.lfbHomeInputs.addWidget(exportButton)
 
     def addDraft(self):
         self.draft = DraftSelection(self.iface, self.schema)
@@ -295,9 +295,9 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
             else:
                 errors = ['missing']
 
-            if tabNr == 0:
-                for error in errors:
-                    QgsMessageLog.logMessage(str(error.message), 'LFB')
+            #if tabNr == 0:
+            #    for error in errors:
+            #        QgsMessageLog.logMessage(str(error.message), 'LFB')
                 
 
             if len(errors) == 0:
@@ -322,12 +322,22 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         enableAll = len(gErrors) == 0 and len(cErrors) == 0 and len(tErrors) == 0
 
-        for i in range(3, 14):
-            if enableAll:
-                self.lfbTabWidget.setTabEnabled(i, True)
-            else:
-                self.lfbTabWidget.setTabEnabled(i, True) #False
 
+        for i in range(0, 16):
+            self.lfbTabWidget.setTabEnabled(i, True)
+
+        if len(gErrors) > 0:
+            for i in range(1, 16):
+                self.lfbTabWidget.setTabEnabled(i, False)
+        elif len(cErrors) > 0:
+            for i in range(2, 16):
+                self.lfbTabWidget.setTabEnabled(i, False)
+        else:
+            for i in range(0, 16):
+                if enableAll:
+                    self.lfbTabWidget.setTabEnabled(i, True)
+                else:
+                    self.lfbTabWidget.setTabEnabled(i, False)
         
         return enableAll
 

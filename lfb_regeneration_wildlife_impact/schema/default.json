@@ -2,10 +2,11 @@
     "$schema": "schema_vwm.json",
     "general": {
         "spaufsucheaufnahmetruppkuerzel": null,
-        "workflow": null
+        "spaufsuchenichtbegehbarursacheid": null,
+        "workflow": 4
     },
     "coordinates": {
-        "spaufsuchenichtbegehbarursacheid": null
+        
     },
     "stichprobenpunkt": {
         "unbestockt": null,

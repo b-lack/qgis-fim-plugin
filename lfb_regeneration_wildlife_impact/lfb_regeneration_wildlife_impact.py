@@ -231,6 +231,8 @@ class LfbRegenerationWildlifeImpact:
         if self.first_start == True:
             self.first_start = False
             self.dlg = LfbRegenerationWildlifeImpactDialog(self.iface, state)
+        else:
+            self.dlg.update()
 
         # show the dialog
         self.dlg.show()

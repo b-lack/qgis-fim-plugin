@@ -23,7 +23,7 @@
 """
 
 import os
-
+import uuid
 import json
 
 from qgis.core import QgsMessageLog, QgsProject, QgsWkbTypes, QgsVectorFileWriter, QgsFeature, QgsGeometry, QgsPointXY, QgsPoint
@@ -40,16 +40,16 @@ from osgeo import ogr
 from ...utils.helper import Utils
 
 
-UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'export_btn.ui'))
+UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'io_btn.ui'))
 
 
-class ExportButton(QtWidgets.QWidget, UI_CLASS):
+class IoBtn(QtWidgets.QWidget, UI_CLASS):
 
     exported = QtCore.pyqtSignal(bool)
     imported = QtCore.pyqtSignal(bool)
     importSelected = QtCore.pyqtSignal(bool)
 
-    def __init__(self, interface, defaultJson, schema):
+    def __init__(self, interface):
         """Constructor."""
 
         QDialog.__init__(self, interface.mainWindow())
@@ -60,11 +60,11 @@ class ExportButton(QtWidgets.QWidget, UI_CLASS):
         self.lfbImportBtn.clicked.connect(self.importBtnClicked)
         self.lfbImportSelectedBtn.clicked.connect(self.importSelectedBtnClicked)
 
-        self.show()
+        self.exportLength = 0
 
         self.interface = interface
 
-        self.defaultJson = defaultJson
+        #self.defaultJson = defaultJson
 
         self.lfbExportFeedback.setText('')
 
@@ -74,6 +74,26 @@ class ExportButton(QtWidgets.QWidget, UI_CLASS):
         self.exportOptions.overrideGeometryType = QgsWkbTypes.Point
         self.exportOptions.layerName = 'LFB-Regeneration-Wildlife-Impact-Monitoring'
 
+        self.show()
+
+    def update(self):
+        selectedFeatures  = Utils.getSelectedFeatures(self.interface, 'LFB-Regeneration-Wildlife-Impact-Monitoring')
+
+        if len(selectedFeatures) > 0:
+            self.lfbImportSelectedBtn.setEnabled(True)
+            self.lfbImportSelectedBtn.setText('IMPORTIERE ' + str(len(selectedFeatures)) + ' PUNKT(E)')
+        else:
+            self.lfbImportSelectedBtn.setText('IMPORTIERE AUSGEWÄHLTE PUNKTE')
+            self.lfbImportSelectedBtn.setEnabled(False)
+
+    def setExportLength(self, length):
+        self.exportLength = length
+
+        if self.exportLength > 0:
+            self.lfbExportBtn.setEnabled(True)
+        else:
+            self.lfbExportBtn.setEnabled(False)
+
     def setFeedback(self, feedback, error=False):
 
         self.lfbExportFeedback.setText(feedback)
@@ -82,13 +102,50 @@ class ExportButton(QtWidgets.QWidget, UI_CLASS):
             self.lfbExportFeedback.setStyleSheet('color: red;')
 
     def importSelectedBtnClicked(self):
-    
-        layer = self.interface.activeLayer()
-        selected_features = layer.selectedFeatures()
-        for i in selected_features:
+
+        
+
+        currentDateTime = QDateTime.currentDateTime()
+
+        selectedFeatures  = Utils.getSelectedFeatures(self.interface, 'LFB-Regeneration-Wildlife-Impact-Monitoring')
+
+        layer = Utils.getLayerByName('LFB-Regeneration-Wildlife-Impact-Monitoring')
+        fields = layer.fields()
+
+        layer.startEditing()
+
+        
+
+        for i in selectedFeatures:
+            geom = i.geometry()
+            coordinates = geom.asPoint()
+
             attrs = i.attributeMap()
+
             ## SAVE FEATURES
-            QgsMessageLog.logMessage(str(attrs['los_id']), 'LFB')
+            qgsFeature = QgsFeature()
+            qgsFeature.setFields(fields)
+            geometry = QgsGeometry.fromPointXY(QgsPointXY(coordinates))
+            qgsFeature.setGeometry(geometry)
+
+            qgsFeature.setAttribute('id', str(uuid.uuid4()))
+            qgsFeature.setAttribute('created', currentDateTime)
+            qgsFeature.setAttribute('modified', currentDateTime)
+            qgsFeature.setAttribute('workflow', 4)
+            qgsFeature.setAttribute('status', False)
+            qgsFeature.setAttribute('form', json.dumps({}))
+            qgsFeature.setAttribute('geometry', {
+                'type': 'Point',
+            })
+
+            QgsMessageLog.logMessage(str(coordinates[0]), 'LFB')
+
+            layer.addFeature(qgsFeature)
+
+        layer.commitChanges()
+        layer.endEditCommand()
+
+        self.imported.emit(True)
 
     def importBtnClicked(self):
         fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Select File')
@@ -144,10 +201,10 @@ class ExportButton(QtWidgets.QWidget, UI_CLASS):
                 if 'properties' in feature:
                     if 'form' in feature['properties']:
                         qgsFeature.setAttribute('form', json.dumps(feature['properties']['form']))
-                    else:
-                        qgsFeature.setAttribute('form', json.dumps(self.defaultJson))
-                else:
-                    qgsFeature.setAttribute('form', json.dumps(self.defaultJson))
+                    #else:
+                    #    qgsFeature.setAttribute('form', json.dumps(self.defaultJson))
+                #else:
+                #    qgsFeature.setAttribute('form', json.dumps(self.defaultJson))
 
                 layer.addFeature(qgsFeature)
                 newFeaturesCount += 1

@@ -115,7 +115,7 @@ QPushButton:hover{
 }
 QPushButton:enabled{
 	border-radius: 20px;
-	border: 2px solid #fff;
+	border: 2px solid #333;
 	background-color: green;
 	color: #fff;
 }</string>

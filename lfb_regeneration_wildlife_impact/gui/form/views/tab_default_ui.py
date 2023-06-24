@@ -23,6 +23,16 @@ class Ui_Form(object):
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(Form)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.toolButton_2 = QtWidgets.QToolButton(Form)
+        self.toolButton_2.setStyleSheet("margin: 10px;\n"
+"padding: 10px;\n"
+"border-radius: 22px;\n"
+"border: 2px solid grey;\n"
+"background-color: grey;\n"
+"width: 20px;\n"
+"height: 20px;")
+        self.toolButton_2.setObjectName("toolButton_2")
+        self.horizontalLayout_2.addWidget(self.toolButton_2)
         self.lfbTabScroll = QtWidgets.QScrollArea(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
@@ -31,25 +41,48 @@ class Ui_Form(object):
         self.lfbTabScroll.setSizePolicy(sizePolicy)
         self.lfbTabScroll.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.lfbTabScroll.setTabletTracking(True)
+        self.lfbTabScroll.setStyleSheet("border:none;")
         self.lfbTabScroll.setLineWidth(0)
+        self.lfbTabScroll.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.lfbTabScroll.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.lfbTabScroll.setWidgetResizable(True)
         self.lfbTabScroll.setObjectName("lfbTabScroll")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 438, 740))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 367, 742))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.lfbObjectDescription = QtWidgets.QLabel(self.scrollAreaWidgetContents)
+        self.widget = QtWidgets.QWidget(self.scrollAreaWidgetContents)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.widget.sizePolicy().hasHeightForWidth())
+        self.widget.setSizePolicy(sizePolicy)
+        self.widget.setStyleSheet("QWidget{\n"
+"    border: 2px solid grey;\n"
+"    border-radius: 10px;\n"
+"    padding: 10px;\n"
+"    background-color: rgba(0,0,0,0.1);\n"
+"}")
+        self.widget.setObjectName("widget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.lfbObjectDescription = QtWidgets.QLabel(self.widget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lfbObjectDescription.sizePolicy().hasHeightForWidth())
         self.lfbObjectDescription.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
-        font.setPointSize(13)
+        font.setPointSize(14)
         self.lfbObjectDescription.setFont(font)
+        self.lfbObjectDescription.setStyleSheet("border:none;\n"
+"background-color: transparent;")
+        self.lfbObjectDescription.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.lfbObjectDescription.setWordWrap(True)
         self.lfbObjectDescription.setObjectName("lfbObjectDescription")
-        self.verticalLayout.addWidget(self.lfbObjectDescription)
+        self.horizontalLayout.addWidget(self.lfbObjectDescription)
+        self.verticalLayout.addWidget(self.widget)
         self.lfbTabLayout = QtWidgets.QFormLayout()
         self.lfbTabLayout.setSizeConstraint(QtWidgets.QLayout.SetMinimumSize)
         self.lfbTabLayout.setContentsMargins(20, 20, 20, -1)
@@ -58,6 +91,16 @@ class Ui_Form(object):
         self.verticalLayout.addLayout(self.lfbTabLayout)
         self.lfbTabScroll.setWidget(self.scrollAreaWidgetContents)
         self.horizontalLayout_2.addWidget(self.lfbTabScroll)
+        self.toolButton = QtWidgets.QToolButton(Form)
+        self.toolButton.setStyleSheet("margin: 10px;\n"
+"padding: 10px;\n"
+"border-radius: 22px;\n"
+"border: 2px solid grey;\n"
+"background-color: grey;\n"
+"width: 20px;\n"
+"height: 20px;")
+        self.toolButton.setObjectName("toolButton")
+        self.horizontalLayout_2.addWidget(self.toolButton)
         self.lfbInfoBox = QtWidgets.QTextBrowser(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
@@ -75,7 +118,9 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
+        self.toolButton_2.setText(_translate("Form", "<-"))
         self.lfbObjectDescription.setText(_translate("Form", "TextLabel"))
+        self.toolButton.setText(_translate("Form", "->"))
         self.lfbInfoBox.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"

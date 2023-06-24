@@ -84,7 +84,7 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
 
     def openSchema(self):
         msgBox = QtWidgets.QMessageBox()
-        msgBox.setText(json.dumps(self.schema['properties']['coordinates']['required']))
+        msgBox.setText(json.dumps(self.schema))
         msgBox.exec()
 
     def openState(self):
@@ -132,6 +132,7 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         for error in self.errors:
             QgsMessageLog.logMessage(str(error.message) + ' ' + str(error.relative_schema_path), 'LFB')
 
+        return
         msgBox = QtWidgets.QMessageBox()
         msgBox.setText('llll')
         msgBox.exec()
@@ -163,7 +164,7 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
             
         self.checkMinimumSet(jsonToTest, len(self.errors))
 
-        self.customErrors = self.customErrors + self.checkIsForest(jsonToTest)
+        #self.customErrors = self.customErrors + self.checkIsForest(jsonToTest)
 
         return len(self.errors) == 0
 
@@ -171,11 +172,11 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
     def checkIsForest(self, jsonToTest):
         messages = []
 
-        QgsMessageLog.logMessage(str(jsonToTest['coordinates']['spaufsuchenichtbegehbarursacheid']), 'LFB')
-        QgsMessageLog.logMessage('ssss', 'LFB')
-        QgsMessageLog.logMessage(str(self.schema['if']), 'LFB')
+        #QgsMessageLog.logMessage(str(jsonToTest['coordinates']['spaufsuchenichtbegehbarursacheid']), 'LFB')
+        #QgsMessageLog.logMessage('ssss', 'LFB')
+        #QgsMessageLog.logMessage(str(self.schema['if']), 'LFB')
 
-        if jsonToTest['coordinates']['spaufsuchenichtbegehbarursacheid'] is None or jsonToTest['coordinates']['spaufsuchenichtbegehbarursacheid'] == 2: # begehbar
+        if jsonToTest['general']['spaufsuchenichtbegehbarursacheid'] is None or jsonToTest['general']['spaufsuchenichtbegehbarursacheid'] == 2: # begehbar
             messages += [
                 {
                     'message': 'Der Waldtyp ist nicht gesetzt.',

@@ -251,7 +251,7 @@ QPushButton:enabled{
 }</string>
           </property>
           <property name="text">
-           <string>SPEICHERN</string>
+           <string>FERTIG</string>
           </property>
          </widget>
         </item>

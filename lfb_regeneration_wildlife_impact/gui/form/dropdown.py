@@ -24,6 +24,7 @@
 
 import os
 
+from qgis.core import QgsMessageLog
 from qgis.PyQt import QtWidgets, uic
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtWidgets import QDialog
@@ -63,8 +64,11 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
 
         self.lfbTextFieldLabel.setText(QCoreApplication.translate("FormFields", self.schema['title']))
         
-        if "helperText" in self.schema:
-            self.lfbTextFieldHelp.setText(self.schema['helperText'])
+        if "description" in self.schema:
+            self.lfbTextFieldHelp.setText(self.schema['description'])
+
+        if "readOnly" in self.schema:
+            self.lfbComboBox.setEnabled(not self.schema['readOnly'])
 
         self.lfbComboBox.currentIndexChanged.connect(self.setInputText)
         self.lfbComboBox.addItems(self.schema['enumLabels'])
@@ -88,7 +92,11 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
 
         self.validate() 
 
-        self.show()
+        if "writeOnly" in self.schema:
+            if self.schema['writeOnly'] == True:
+                self.hide()
+            else:
+                self.show()
         
     def setDefaultValue(self):
         if "default" not in self.schema:
@@ -160,7 +168,7 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         if len(errors) == 0:
             self.lfbTextFieldError.hide()
             self.lfbTextFieldSuccess.hide()
-            self.lfbTextFieldHelp.hide()
+            self.lfbTextFieldHelp.show()
             self.lfbComboBox.setStyleSheet("QComboBox {\n	border: 2px solid green;\n	border-radius: 10px;\n	padding: 10px;\n}")
 
             if "QTType" in self.schema and self.schema['QTType'] == "tree":

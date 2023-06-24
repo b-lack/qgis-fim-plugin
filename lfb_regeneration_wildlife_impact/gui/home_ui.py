@@ -67,7 +67,7 @@ class Ui_Form(object):
 "}\n"
 "QPushButton:enabled{\n"
 "    border-radius: 20px;\n"
-"    border: 2px solid #fff;\n"
+"    border: 2px solid #333;\n"
 "    background-color: green;\n"
 "    color: #fff;\n"
 "}")

@@ -146,4 +146,4 @@ class Ui_Form(object):
         self.lfbDevBtn.setText(_translate("Form", "DEV"))
         self.lfbSchemaBtn.setText(_translate("Form", "SCHEMA"))
         self.lfbErrorDialogBtn.setText(_translate("Form", "Error Text"))
-        self.lfbSaveBtn.setText(_translate("Form", "SPEICHERN"))
+        self.lfbSaveBtn.setText(_translate("Form", "FERTIG"))

@@ -33,6 +33,22 @@
     <number>0</number>
    </property>
    <item>
+    <widget class="QToolButton" name="toolButton_2">
+     <property name="styleSheet">
+      <string notr="true">margin: 10px;
+padding: 10px;
+border-radius: 22px;
+border: 2px solid grey;
+background-color: grey;
+width: 20px;
+height: 20px;</string>
+     </property>
+     <property name="text">
+      <string>&lt;-</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QScrollArea" name="lfbTabScroll">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
@@ -49,8 +65,17 @@
      <property name="tabletTracking">
       <bool>true</bool>
      </property>
+     <property name="styleSheet">
+      <string notr="true">border:none;</string>
+     </property>
      <property name="lineWidth">
       <number>0</number>
+     </property>
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAsNeeded</enum>
      </property>
      <property name="widgetResizable">
       <bool>true</bool>
@@ -60,27 +85,57 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>438</width>
-        <height>740</height>
+        <width>367</width>
+        <height>742</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QLabel" name="lfbObjectDescription">
+        <widget class="QWidget" name="widget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="font">
-          <font>
-           <pointsize>13</pointsize>
-          </font>
+         <property name="styleSheet">
+          <string notr="true">QWidget{
+	border: 2px solid grey;
+	border-radius: 10px;
+	padding: 10px;
+	background-color: rgba(0,0,0,0.1);
+}</string>
          </property>
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="lfbObjectDescription">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>14</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border:none;
+background-color: transparent;</string>
+            </property>
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
        <item>
@@ -107,6 +162,22 @@
        </item>
       </layout>
      </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QToolButton" name="toolButton">
+     <property name="styleSheet">
+      <string notr="true">margin: 10px;
+padding: 10px;
+border-radius: 22px;
+border: 2px solid grey;
+background-color: grey;
+width: 20px;
+height: 20px;</string>
+     </property>
+     <property name="text">
+      <string>-&gt;</string>
+     </property>
     </widget>
    </item>
    <item>

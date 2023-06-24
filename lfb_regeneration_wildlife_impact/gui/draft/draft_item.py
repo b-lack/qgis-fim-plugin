@@ -26,7 +26,7 @@ import os
 
 import json
 
-from qgis.core import QgsMessageLog
+from qgis.core import QgsMessageLog, QgsPointXY
 from qgis.PyQt import QtWidgets, uic
 from qgis.PyQt.QtWidgets import QDialog
 
@@ -50,11 +50,13 @@ class DraftItem(QtWidgets.QWidget, UI_CLASS):
 
         self.setupUi(self)
 
+        self.interface = interface
         self.feature = feature
         self.properties = json.loads(feature['form'])
 
         self.lfbDraftIconBtn.clicked.connect(self.on_lfbDraftIconBtn_clicked)
         self.lfbDraftIconRemoveBtn.clicked.connect(self.on_lfbDraftIconRemoveBtn_clicked)
+        self.lfbFocusBtn.clicked.connect(self.focusFeature)
 
         self.lfbDraftModifiedByBtn.setText(feature['modified'].toString() if feature['modified'] is not None else '-')
         self.lfbDraftModifiedBtn.setText(feature['created'].toString() if feature['created'] is not None else '-')
@@ -65,6 +67,13 @@ class DraftItem(QtWidgets.QWidget, UI_CLASS):
         #    self.lfbDraftWorkflowLabel.setText(Utils.enumLabel(self.properties['workflow'], schema['properties']['workflow']) if self.properties['workflow'] is not None else '-')
 
         self.show()
+
+    def focusFeature(self):
+
+        geom = self.feature.geometry()
+        coordinates = geom.asPoint()
+
+        self.interface.mapCanvas().setCenter(coordinates)
 
     def on_lfbDraftIconBtn_clicked(self):
         self.featureSelected.emit(self.feature.id())

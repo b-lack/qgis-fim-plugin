@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/gerrit/Sites/lfb/lfb-regeneration_wildlife_impact_monitoring/lfb_regeneration_wildlife_impact/gui/draft/export_btn.ui'
+# Form implementation generated from reading ui file '/home/gerrit/Sites/lfb/lfb-regeneration_wildlife_impact_monitoring/lfb_regeneration_wildlife_impact/gui/draft/io_btn.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -14,12 +14,31 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(943, 575)
+        Form.resize(952, 236)
         self.gridLayout = QtWidgets.QGridLayout(Form)
         self.gridLayout.setObjectName("gridLayout")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.lfbImportBtn = QtWidgets.QPushButton(Form)
+        font = QtGui.QFont()
+        font.setPointSize(13)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lfbImportBtn.setFont(font)
+        self.lfbImportBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.lfbImportBtn.setStyleSheet("QPushButton{\n"
+"    border-radius: 1px;\n"
+"    border: 2px solid #333;\n"
+"    color: #555;\n"
+"    margin: 0 5px;\n"
+"    padding: 5px;\n"
+"}\n"
+"QPushButton:enabled{\n"
+"    border-radius: 20px;\n"
+"    border: 2px solid #333;\n"
+"    background-color: green;\n"
+"    color: #fff;\n"
+"}")
         self.lfbImportBtn.setObjectName("lfbImportBtn")
         self.verticalLayout_2.addWidget(self.lfbImportBtn)
         self.gridLayout.addLayout(self.verticalLayout_2, 0, 1, 1, 1)
@@ -30,6 +49,25 @@ class Ui_Form(object):
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
         self.lfbExportBtn = QtWidgets.QPushButton(Form)
+        font = QtGui.QFont()
+        font.setPointSize(13)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lfbExportBtn.setFont(font)
+        self.lfbExportBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.lfbExportBtn.setStyleSheet("QPushButton{\n"
+"    border-radius: 10px;\n"
+"    border: 2px solid #333;\n"
+"    color: #555;\n"
+"    margin: 0 5px;\n"
+"    padding: 5px;\n"
+"}\n"
+"QPushButton:enabled{\n"
+"    border-radius: 20px;\n"
+"    border: 2px solid #333;\n"
+"    background-color: green;\n"
+"    color: #fff;\n"
+"}")
         self.lfbExportBtn.setObjectName("lfbExportBtn")
         self.verticalLayout.addWidget(self.lfbExportBtn)
         self.horizontalLayout.addLayout(self.verticalLayout)
@@ -39,6 +77,25 @@ class Ui_Form(object):
         self.lfbExportFeedback.setObjectName("lfbExportFeedback")
         self.gridLayout.addWidget(self.lfbExportFeedback, 1, 1, 1, 3)
         self.lfbImportSelectedBtn = QtWidgets.QPushButton(Form)
+        font = QtGui.QFont()
+        font.setPointSize(13)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lfbImportSelectedBtn.setFont(font)
+        self.lfbImportSelectedBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.lfbImportSelectedBtn.setStyleSheet("QPushButton{\n"
+"    border-radius: 10px;\n"
+"    border: 2px solid #333;\n"
+"    color: #555;\n"
+"    margin: 0 5px;\n"
+"    padding: 5px;\n"
+"}\n"
+"QPushButton:enabled{\n"
+"    border-radius: 20px;\n"
+"    border: 2px solid #333;\n"
+"    background-color: green;\n"
+"    color: #fff;\n"
+"}")
         self.lfbImportSelectedBtn.setObjectName("lfbImportSelectedBtn")
         self.gridLayout.addWidget(self.lfbImportSelectedBtn, 0, 0, 1, 1)
 
@@ -48,6 +105,6 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.lfbImportBtn.setText(_translate("Form", "IMPORT .geojson"))
-        self.lfbExportBtn.setText(_translate("Form", "EXPORT IN ORDNER"))
-        self.lfbImportSelectedBtn.setText(_translate("Form", "Import selected"))
+        self.lfbImportBtn.setText(_translate("Form", "IMPORT .GEOJSON"))
+        self.lfbExportBtn.setText(_translate("Form", "EXPORT AS .GEOJSON"))
+        self.lfbImportSelectedBtn.setText(_translate("Form", "IMPORTIERE AUSGEWÄHLTE PUNKTE"))

@@ -34,17 +34,24 @@
         <cursorShape>PointingHandCursor</cursorShape>
        </property>
        <property name="text">
-        <string>Datenaufnahme fortführen</string>
+        <string>ändern</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="lfbDraftIconRemoveBtn">
-       <property name="cursor">
-        <cursorShape>PointingHandCursor</cursorShape>
+      <widget class="QPushButton" name="lfbFocusBtn">
+       <property name="text">
+        <string>Fokus</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="lfbDraftIconRemoveBtn">
+       <property name="styleSheet">
+        <string notr="true">background-color: red;</string>
        </property>
        <property name="text">
-        <string>Löschen</string>
+        <string>D</string>
        </property>
       </widget>
      </item>

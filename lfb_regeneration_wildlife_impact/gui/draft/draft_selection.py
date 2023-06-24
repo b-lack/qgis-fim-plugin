@@ -38,7 +38,7 @@ from qgis.PyQt.QtWidgets import QDialog, QTableWidgetItem
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore
 
-
+from .io_btn import IoBtn
 from .draft_item import DraftItem
 
 
@@ -78,6 +78,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         #self.fields.append(QgsField("fid", QVariant.DateTime))
         self.fields.append(QgsField("id", QVariant.String))
         self.fields.append(QgsField("status", QVariant.Bool))
+        self.fields.append(QgsField("geometry", QVariant.Map))
         
         self.fields.append(QgsField("created", QVariant.DateTime))
         self.fields.append(QgsField("modified", QVariant.DateTime))
@@ -88,8 +89,22 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         
         self.currentFeatureId = None
 
+        self.addIoButton()
 
         self.show()
+
+    def update(self):
+        self.ioBtn.update()
+
+    def imported(self, path):
+        self.readDrafts()
+        self.readDone(True)
+
+    def addIoButton(self):
+        self.ioBtn = IoBtn(self.iface)
+        self.ioBtn.imported.connect(self.imported)
+        #exportButton.importSelected.connect(self.draft.importSelected)
+        self.lfbIoWidget.addWidget(self.ioBtn)
 
     def addLists(self):
         columnCount = 2
@@ -227,6 +242,8 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             item.removeFeature.connect(self.removeFeature)
             self.lfbDraftList.addWidget(item)
 
+        self.ioBtn.setExportLength(len(sorted_featureList))
+
     def readDone(self, status = False):
 
         for i in reversed(range(self.lfbDoneList.count())):
@@ -252,7 +269,6 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         QgsProject.instance().write()
         self.readDrafts(False)
         self.readDone(True)
-
     
     def setStatus(self, newState):
         if self.currentFeatureId is not None:
@@ -269,8 +285,11 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         if jsonObj is None:
             return
         
-        x = jsonObj['coordinates']['istgeom_x']
-        y = jsonObj['coordinates']['istgeom_y']
+        if jsonObj['properties']['geometry']['coordinates'] is None:
+            return 
+        
+        x = jsonObj['properties']['geometry']['coordinates'][0]
+        y = jsonObj['properties']['geometry']['coordinates'][1]
 
         QgsMessageLog.logMessage(str(x) + ' ' + str(y), 'LFB')
 
