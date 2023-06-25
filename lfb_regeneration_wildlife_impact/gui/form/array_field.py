@@ -29,7 +29,9 @@ import json
 from qgis.core import QgsMessageLog, QgsProject, QgsVectorLayer, QgsJsonUtils, QgsField, QgsFields, QgsVectorFileWriter, QgsCoordinateTransformContext
 from qgis.PyQt import QtWidgets, uic
 from qgis.PyQt.QtCore import QCoreApplication, QSettings, QTranslator
-from qgis.PyQt.QtWidgets import QDialog, QTableWidgetItem
+from qgis.PyQt.QtWidgets import QDialog, QTableWidgetItem, QPushButton
+
+from PyQt5.QtGui import QCursor
 
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore
@@ -75,21 +77,26 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         self.lfbAddBtn.clicked.connect(self.addRow)
         self.lfbAddBtn.setEnabled(False)
 
-        tableHeaders = []
+        self.tableHeaders = [
+            'Aktion'
+        ]
 
         for attr, value in self.schema['items']['properties'].items():
-            tableHeaders.append(value['title'])
+            self.tableHeaders.append(value['title'])
         
-        self.setTableHeaders(tableHeaders)
-
         self.validate() 
 
+        self.setTableHeaders(self.tableHeaders)
         self.setTableData(self.json[self.key])
 
         self.show()
 
+    def refreshTable(self):
+        self.setTableHeaders(self.tableHeaders)
+        self.setTableData(self.json[self.key])
 
     def setTableHeaders(self, headers):
+
         self.lfbArrayOutput.setColumnCount(len(headers))
         self.lfbArrayOutput.setHorizontalHeaderLabels(headers)
         self.lfbArrayOutput.horizontalHeader().setStretchLastSection(True)
@@ -98,13 +105,35 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         #self.lfbArrayOutput.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
 
     def setTableData(self, data):
+        self.lfbArrayOutput.clear()
+
         self.lfbArrayOutput.setRowCount(len(data))
 
         for row in range(0, len(data)):
-            idx = 0
+            idx = 1
             for attr, column in data[row].items():
                 self.lfbArrayOutput.setItem(row, idx, QTableWidgetItem(str(column)))
                 idx += 1
+
+            # create an cell widget
+            btn = QPushButton(self.lfbArrayOutput)
+            btn.clicked.connect(self.make_removeRow(row))
+            btn.setStyleSheet("margin:0; padding:0; border: 2px solid grey; border-radius: 5px;background: #333; color: #fff;")
+            self.row=row
+            btn.setText('delete')
+            btn.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+            self.lfbArrayOutput.setCellWidget(row, 0, btn)    
+
+    def make_removeRow(self, row):
+        def removeRow():
+            self.removeRow(row)
+        return removeRow
+        
+        #self.lfbArrayOutput.removeRow(row)
+
+    def removeRow(self, row):
+        del self.json[self.key][row]
+        self.setTableData(self.json[self.key])
 
     def addRow(self):
 

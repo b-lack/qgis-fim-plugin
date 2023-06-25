@@ -78,12 +78,12 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         #self.fields.append(QgsField("fid", QVariant.DateTime))
         self.fields.append(QgsField("id", QVariant.String))
         self.fields.append(QgsField("status", QVariant.Bool))
-        self.fields.append(QgsField("geometry", QVariant.Map))
+        #self.fields.append(QgsField("geometry", QVariant.Map))
         
         self.fields.append(QgsField("created", QVariant.DateTime))
         self.fields.append(QgsField("modified", QVariant.DateTime))
         self.fields.append(QgsField("workflow", QVariant.Int))
-        self.fields.append(QgsField("unterlosnr", QVariant.String))
+        #self.fields.append(QgsField("unterlosnr", QVariant.String))
 
         self.fields.append(QgsField("form", QVariant.String))
         
@@ -234,9 +234,9 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         
         sorted_featureList = sorted(featureList, key=lambda x: x['modified'], reverse=True)
         filtered = filter(lambda c: c['status'] == status, sorted_featureList)
-        sorted_featureList = list(filtered)
+        sorted_filtered_featureList = list(filtered)
         
-        for feature in sorted_featureList:
+        for feature in sorted_filtered_featureList:
             item = DraftItem(self.iface, feature, self.schema)
             item.featureSelected.connect(self.listWidgetClicked)
             item.removeFeature.connect(self.removeFeature)

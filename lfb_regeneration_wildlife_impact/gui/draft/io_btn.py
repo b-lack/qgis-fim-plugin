@@ -103,11 +103,10 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
 
     def importSelectedBtnClicked(self):
 
-        
-
         currentDateTime = QDateTime.currentDateTime()
 
-        selectedFeatures  = Utils.getSelectedFeatures(self.interface, 'LFB-Regeneration-Wildlife-Impact-Monitoring')
+        selectedFeatures  = Utils.getSelectedFeatures(self.interface, 'LFB-Regeneration-Wildlife-Impact-Monitoring', True)
+        self.update()
 
         layer = Utils.getLayerByName('LFB-Regeneration-Wildlife-Impact-Monitoring')
         fields = layer.fields()
@@ -136,13 +135,14 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
             qgsFeature.setAttribute('workflow', 4)
             qgsFeature.setAttribute('status', False)
             qgsFeature.setAttribute('form', json.dumps(defaultJson['properties']))
-            qgsFeature.setAttribute('geometry', {
-                'type': 'Point',
-            })
+            #qgsFeature.setAttribute('geometry', {
+            #    'type': 'Point',
+            #})
 
             QgsMessageLog.logMessage(str(coordinates[0]), 'LFB')
 
             layer.addFeature(qgsFeature)
+            layer.removeSelection()
 
         layer.commitChanges()
         layer.endEditCommand()
@@ -235,6 +235,7 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
             return
         
         try:
+            QgsMessageLog.logMessage(str(layer), 'LFB')
             res = QgsVectorFileWriter.writeAsVectorFormatV3(
                 layer,
                 fileName,

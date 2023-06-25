@@ -44,7 +44,7 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'textfield.
 
 
 class TextField(QtWidgets.QWidget, UI_CLASS):
-    inputChanged = QtCore.pyqtSignal(str)
+    inputChanged = QtCore.pyqtSignal(str, str)
     lfbInfoBox = QtCore.pyqtSignal(object)
 
     def __init__(self, interface, json, schema, key):
@@ -200,4 +200,4 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
                 self.lfbTextFieldError.setText(error.message)
 
         
-        self.inputChanged.emit(str(self.json[self.key]))
+        self.inputChanged.emit(str(self.json[self.key]), self.key)

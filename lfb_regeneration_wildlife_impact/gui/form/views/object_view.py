@@ -34,7 +34,7 @@ from qgis.PyQt.QtWidgets import QDialog, QTableWidgetItem
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
+from jsonschema import Draft7Validator
 
 from ...form.textfield import TextField
 from ..dropdown import DropDown
@@ -45,7 +45,7 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'object_vie
 
 
 class ObjectView(QtWidgets.QWidget, UI_CLASS):
-    inputChanged = QtCore.pyqtSignal(object)
+    inputChanged = QtCore.pyqtSignal(object, str)
 
     def __init__(self, interface, json, schema, key):
         """Constructor."""
@@ -55,14 +55,17 @@ class ObjectView(QtWidgets.QWidget, UI_CLASS):
         self.setupUi(self)
 
         self.json = json
+        self.key = key
+        self.schema = schema
+
+        if self.key not in self.json:
+            self.json[self.key] = {}
 
         self.fieldArray = []
 
-        if self.findChild(QtWidgets.QWidget, 'lfbFormObject'):
-            QgsMessageLog.logMessage('lfbFormObject', 'LFB')
-            
+
+        self.lfbObjectGroup.setTitle(self.schema['title'])
         if self.findChild(QtWidgets.QWidget, 'lfbObjectGroup'):
-            QgsMessageLog.logMessage('ObjectView: ' + str(schema), 'LFB')
             if 'title' in schema:
                 self.lfbObjectGroup.setTitle(schema['title'])
             else:
@@ -72,6 +75,11 @@ class ObjectView(QtWidgets.QWidget, UI_CLASS):
 
         for attr, value in items:
 
+            if attr not in self.json[self.key]:
+                self.json[self.key][attr] = None
+
+            QgsMessageLog.logMessage('TEXTFIELD: ' + str(attr), 'LFG')
+
             valueType = value['type']
 
             if 'enum' in value:
@@ -80,19 +88,57 @@ class ObjectView(QtWidgets.QWidget, UI_CLASS):
                 field = Boolean(interface, self.json, value, attr)
                 #field.lfbInfoBox.connect(self.infoBoxClicked)
             else:
-                field = TextField(interface, self.json, value, attr)
+                
+                field = TextField(interface, self.json[self.key], value, attr)
 
             self.lfbFormObject.addWidget(field)
-            #field.inputChanged.connect(self.emitText)
+            field.inputChanged.connect(self.onInputChanged)
             
             #self.fieldArray.append(field)
 
 
         self.show()
 
+    def onInputChanged(self, jsons, key):
+        QgsMessageLog.logMessage('setJson: ' + str(self.json), 'LFe')
+
+        #self.json[self.key] = value
+        #self.validate()
+    
     def setJson(self, newJson, setFields = True):
         
-        self.json = newJson
+        QgsMessageLog.logMessage('SET NEW: ' + str(newJson), 'LFe')
+        
+    
+    def validate(self):
+        #jsonCpy = self.json.copy()
+        #jsonCpy['name'] = self.lfbTextField.text()
 
+        # https://python-jsonschema.readthedocs.io/en/stable/validate/
+        v = Draft7Validator(self.schema)
+        errors = sorted(v.iter_errors(self.internJson[self.key]), key=lambda e: e.path)
 
-        return
+        self.json[self.key] = self.internJson[self.key]
+
+        if self.json[self.key] is None:
+            self.lfbTextFieldError.hide()
+            self.lfbTextFieldSuccess.hide()
+            self.lfbTextFieldHelp.show()
+            self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid red;\n	border-radius: 10px;\n	padding: 10px;\n}")
+
+        elif len(errors) == 0:
+            self.lfbTextFieldError.hide()
+            self.lfbTextFieldSuccess.hide()
+            self.lfbTextFieldHelp.show()
+            self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid green;\n	border-radius: 10px;\n	padding: 10px;\n}")            
+        else:
+            self.lfbTextFieldError.show()
+            self.lfbTextFieldSuccess.hide()
+            self.lfbTextFieldHelp.hide()
+            self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid red;\n	border-radius: 10px;\n	padding: 10px;\n}")
+
+            for error in errors:
+                self.lfbTextFieldError.setText(error.message)
+
+        
+        #self.inputChanged.emit(str(self.json[self.key]))

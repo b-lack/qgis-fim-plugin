@@ -24,6 +24,9 @@ class Ui_Form(object):
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.toolButton_2 = QtWidgets.QToolButton(Form)
+        font = QtGui.QFont()
+        font.setPointSize(25)
+        self.toolButton_2.setFont(font)
         self.toolButton_2.setStyleSheet("margin: 10px;\n"
 "padding: 10px;\n"
 "border-radius: 22px;\n"
@@ -92,6 +95,9 @@ class Ui_Form(object):
         self.lfbTabScroll.setWidget(self.scrollAreaWidgetContents)
         self.horizontalLayout_2.addWidget(self.lfbTabScroll)
         self.toolButton = QtWidgets.QToolButton(Form)
+        font = QtGui.QFont()
+        font.setPointSize(25)
+        self.toolButton.setFont(font)
         self.toolButton.setStyleSheet("margin: 10px;\n"
 "padding: 10px;\n"
 "border-radius: 22px;\n"
@@ -118,9 +124,9 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.toolButton_2.setText(_translate("Form", "<-"))
+        self.toolButton_2.setText(_translate("Form", "<"))
         self.lfbObjectDescription.setText(_translate("Form", "TextLabel"))
-        self.toolButton.setText(_translate("Form", "->"))
+        self.toolButton.setText(_translate("Form", ">"))
         self.lfbInfoBox.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"

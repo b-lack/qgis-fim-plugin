@@ -17,14 +17,23 @@ class Ui_Form(object):
         Form.resize(719, 540)
         self.gridLayout = QtWidgets.QGridLayout(Form)
         self.gridLayout.setObjectName("gridLayout")
-        self.groupBox = QtWidgets.QGroupBox(Form)
-        self.groupBox.setObjectName("groupBox")
-        self.gridLayout_3 = QtWidgets.QGridLayout(self.groupBox)
+        self.lfbObjectGroup = QtWidgets.QGroupBox(Form)
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lfbObjectGroup.setFont(font)
+        self.lfbObjectGroup.setStyleSheet("QGroupBox#lfbObjectGroup{\n"
+"    background: rgba(0,0,0,0.1);\n"
+"border-radius: 10px;\n"
+"}")
+        self.lfbObjectGroup.setObjectName("lfbObjectGroup")
+        self.gridLayout_3 = QtWidgets.QGridLayout(self.lfbObjectGroup)
         self.gridLayout_3.setObjectName("gridLayout_3")
         self.lfbFormObject = QtWidgets.QGridLayout()
         self.lfbFormObject.setObjectName("lfbFormObject")
         self.gridLayout_3.addLayout(self.lfbFormObject, 0, 0, 1, 1)
-        self.gridLayout.addWidget(self.groupBox, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.lfbObjectGroup, 0, 0, 1, 1)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -32,4 +41,4 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.groupBox.setTitle(_translate("Form", "GroupBox"))
+        self.lfbObjectGroup.setTitle(_translate("Form", "GroupBox"))

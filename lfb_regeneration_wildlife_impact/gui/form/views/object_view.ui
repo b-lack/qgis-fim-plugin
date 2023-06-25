@@ -15,7 +15,20 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="lfbObjectGroup">
+     <property name="font">
+      <font>
+       <pointsize>15</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QGroupBox#lfbObjectGroup{
+	background: rgba(0,0,0,0.1);
+border-radius: 10px;
+}</string>
+     </property>
      <property name="title">
       <string>GroupBox</string>
      </property>

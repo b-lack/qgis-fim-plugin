@@ -27,7 +27,7 @@ import os
 from qgis.core import QgsMessageLog
 from qgis.PyQt import QtWidgets, uic
 from qgis.PyQt.QtCore import QCoreApplication
-from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.QtWidgets import QDialog, QPushButton
 
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore
@@ -35,7 +35,7 @@ from PyQt5 import QtCore
 from jsonschema import Draft7Validator
 
 from ...utils.helper import Utils
-
+from .chips import Chips
 
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'dropdown.ui'))
 
@@ -93,13 +93,18 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
             self.setDefaultValue()
             
 
+        if "qtChips" in self.schema:
+            self.chips = Chips(interface, self.schema, self.schema['qtChips'])
+            self.chips.inputChanged.connect(self.setIndex)
+            self.lfbChipsLayout.addWidget(self.chips)
+
         self.validate() 
 
         if "writeOnly" in self.schema:
             if self.schema['writeOnly'] == True:
-                self.hide()
+                self.lfbComboBox.hide()
             else:
-                self.show()
+                self.lfbComboBox.show()
         
     def setDefaultValue(self):
         if "default" not in self.schema:
@@ -107,8 +112,8 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         
         index = self.schema['enum'].index(self.schema['default'])
 
-        if self.key == 'bestandbetriebsartid':
-            QgsMessageLog.logMessage(self.key + " DEFAULT " + str(index), 'LFB')
+        #if self.key == 'bestandbetriebsartid':
+        #    QgsMessageLog.logMessage(self.key + " DEFAULT " + str(index), 'LFB')
 
         if index == -1:
             return
@@ -165,17 +170,29 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         except ValueError:
             return False
         
-    def setInputText(self, value):
+    #from Chips
+    def setIndex(self, value):
+
+        self.setInputText(value, False)
+        if value is not None and self.lfbComboBox.currentIndex() != value:
+            self.lfbComboBox.setCurrentIndex(value)
+
+    #from dd
+    def setInputText(self, value, setChips = True):
         
         value = self.schema['enum'][value]
+
+        if setChips and hasattr(self, 'chips'):
+            index = self.schema['enum'].index(value)
+            self.chips.setValue(self.schema['enumLabels'][index])
 
         self.internJson[self.key] = value
 
         self.validate()
 
-        self.lfbTextFieldHelp.show()
-        self.lfbTextFieldHelp.setText(str(self.internJson[self.key]))
-
+        #self.lfbTextFieldHelp.show()
+        #self.lfbTextFieldHelp.setText(str(self.internJson[self.key]))
+        
     def validate(self):
 
         # https://python-jsonschema.readthedocs.io/en/stable/validate/

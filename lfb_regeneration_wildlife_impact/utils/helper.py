@@ -26,7 +26,7 @@ class Utils(object):
             
         return None
     
-    def getSelectedFeatures(interface, lfbName):
+    def getSelectedFeatures(interface, lfbName, removeSelection = False):
         for layer in QgsProject.instance().mapLayers().values():
 
             if not layer.isSpatial():
@@ -42,6 +42,10 @@ class Utils(object):
                 continue
             
             selected_features = layer.selectedFeatures()
+
+            if removeSelection:
+                layer.removeSelection()
+
             return selected_features
 
                 # Now we have a layer without geometry

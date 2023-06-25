@@ -16,10 +16,7 @@
         "coordinates": {
 
         },
-        "stichprobenpunkt": {
-            "unbestockt": null,
-            "nichtWald": null
-        },
+        "stichprobenpunkt": {},
         "baumplot1":{
             "baumplot1": [],
             "transectLocation": 0
