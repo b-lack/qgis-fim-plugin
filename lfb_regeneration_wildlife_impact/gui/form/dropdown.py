@@ -70,6 +70,9 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         if "readOnly" in self.schema:
             self.lfbComboBox.setEnabled(not self.schema['readOnly'])
 
+        if "unit" in self.schema:
+            self.lfbUnit.setText(self.schema['unit'])
+
         self.lfbComboBox.currentIndexChanged.connect(self.setInputText)
         self.lfbComboBox.addItems(self.schema['enumLabels'])
 

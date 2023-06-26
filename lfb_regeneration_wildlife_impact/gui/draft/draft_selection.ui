@@ -13,21 +13,48 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget#lfbItem{
+	background-color: rgba(0,0,0,0.2);
+	border-radius: 5px;
+}</string>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
+     <property name="font">
+      <font>
+       <pointsize>13</pointsize>
+      </font>
+     </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
        <string>ToDo</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
         <widget class="QScrollArea" name="scrollArea">
          <property name="styleSheet">
-          <string notr="true"/>
+          <string notr="true">border:none;
+background:transparent;</string>
          </property>
          <property name="widgetResizable">
           <bool>true</bool>
@@ -40,8 +67,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>825</width>
-            <height>643</height>
+            <width>845</width>
+            <height>660</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout">
@@ -80,8 +107,27 @@
        <string>Abgeschlossen</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
         <widget class="QScrollArea" name="scrollArea_2">
+         <property name="styleSheet">
+          <string notr="true">border:none;
+background:transparent;</string>
+         </property>
          <property name="widgetResizable">
           <bool>true</bool>
          </property>
@@ -90,8 +136,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>374</width>
-            <height>43</height>
+            <width>845</width>
+            <height>660</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">

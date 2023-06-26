@@ -28,10 +28,10 @@ import datetime
 import uuid
 
 
-from qgis.core import QgsFeature, QgsExpressionContextUtils, QgsPointXY, QgsGeometry, QgsMessageLog, QgsProject, QgsVectorLayer, QgsSymbol, QgsRendererRange, QgsGraduatedSymbolRenderer, QgsMarkerSymbol, QgsJsonUtils, QgsMapLayer, QgsField, QgsFields, QgsVectorFileWriter, QgsCoordinateTransformContext
+from qgis.core import QgsFeature, QgsExpressionContextUtils, QgsPalLayerSettings, QgsTextFormat, QgsTextBufferSettings, QgsVectorLayerSimpleLabeling, QgsMessageLog, QgsProject, QgsVectorLayer, QgsSymbol, QgsRendererRange, QgsGraduatedSymbolRenderer, QgsMarkerSymbol, QgsJsonUtils, QgsMapLayer, QgsField, QgsFields, QgsVectorFileWriter, QgsCoordinateTransformContext
 from qgis.PyQt import QtWidgets, uic, QtGui
 from qgis.PyQt.QtCore import QDateTime, QVariant, QCoreApplication, QSettings, QTranslator
-from PyQt5.QtGui import QColor
+from PyQt5.QtGui import QColor, QFont
 
 from qgis.PyQt.QtWidgets import QDialog, QTableWidgetItem
 
@@ -48,7 +48,7 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'draft_sele
 
 class DraftSelection(QtWidgets.QWidget, UI_CLASS):
     # https://forum.qt.io/topic/133959/example-of-calling-a-function-to-parent/6
-    draftSelected = QtCore.pyqtSignal(object, int)
+    draftSelected = QtCore.pyqtSignal(object, int, object)
     folderSelected = QtCore.pyqtSignal(str)
 
     def __init__(self, interface, schema):
@@ -184,7 +184,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             if(feat.id() == item):
                 json_object = json.loads(feat['form'])
                 self.currentFeatureId = feat.id()
-                self.draftSelected.emit(json_object, self.currentFeatureId)
+                self.draftSelected.emit(json_object, self.currentFeatureId, feat.attributes())
                 break
             
     def setupSymbols(self):
@@ -211,7 +211,35 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         renderer = QgsGraduatedSymbolRenderer(expression, ranges)
         self.vl.setRenderer(renderer)
 
-        #self..mapCanvas().refresh() 
+
+        self.addLabel(self.vl)
+
+        self.vl.triggerRepaint()
+
+    def addLabel(self, layer):
+        layer_settings  = QgsPalLayerSettings()
+        text_format = QgsTextFormat()
+
+        text_format.setFont(QFont("Arial", 12))
+        text_format.setSize(12)
+
+        buffer_settings = QgsTextBufferSettings()
+        buffer_settings.setEnabled(True)
+        buffer_settings.setSize(0.10)
+        buffer_settings.setColor(QColor("black"))
+
+        text_format.setBuffer(buffer_settings)
+        layer_settings.setFormat(text_format)
+
+        layer_settings.fieldName = "id"
+        #layer_settings.placement = 4
+
+        layer_settings.enabled = True
+
+        layer_settings = QgsVectorLayerSimpleLabeling(layer_settings)
+        layer.setLabelsEnabled(True)
+        layer.setLabeling(layer_settings)
+        
 
     def readLayer(self):
         """Read the layer and return the features"""
@@ -240,6 +268,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             item = DraftItem(self.iface, feature, self.schema)
             item.featureSelected.connect(self.listWidgetClicked)
             item.removeFeature.connect(self.removeFeature)
+            item.setStyleSheet("QFrame#lfbItemFrame{ background-color: rgba(0,0,0,0.2); border-radius: 5px; padding: 10px 10px 0; }")
             self.lfbDraftList.addWidget(item)
 
         self.ioBtn.setExportLength(len(sorted_featureList))
@@ -259,6 +288,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             item = DraftItem(self.iface, feature, self.schema)
             item.featureSelected.connect(self.listWidgetClicked)
             item.removeFeature.connect(self.removeFeature)
+            item.setStyleSheet("QFrame#lfbItemFrame{ background-color: rgba(0,0,0,0.2); border-radius: 5px; padding: 10px 10px 0; }")
             self.lfbDoneList.addWidget(item)
 
     def removeFeature(self, featureId):
@@ -300,6 +330,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                     feature = tFeature
                     #geometry = QgsGeometry.fromPointXY(QgsPointXY(x, y))
                     #feature.setGeometry(geometry)
+                    
         else:
             QgsMessageLog.logMessage('ERROR: layer should exist', 'LFB')
             feature = QgsFeature()

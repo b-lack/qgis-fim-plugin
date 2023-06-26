@@ -15,21 +15,31 @@ class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(867, 720)
+        Form.setStyleSheet("QWidget#lfbItem{\n"
+"    background-color: rgba(0,0,0,0.2);\n"
+"    border-radius: 5px;\n"
+"}")
         self.gridLayout = QtWidgets.QGridLayout(Form)
         self.gridLayout.setObjectName("gridLayout")
         self.tabWidget = QtWidgets.QTabWidget(Form)
+        font = QtGui.QFont()
+        font.setPointSize(13)
+        self.tabWidget.setFont(font)
         self.tabWidget.setObjectName("tabWidget")
         self.tab = QtWidgets.QWidget()
         self.tab.setObjectName("tab")
         self.gridLayout_3 = QtWidgets.QGridLayout(self.tab)
+        self.gridLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_3.setSpacing(0)
         self.gridLayout_3.setObjectName("gridLayout_3")
         self.scrollArea = QtWidgets.QScrollArea(self.tab)
-        self.scrollArea.setStyleSheet("")
+        self.scrollArea.setStyleSheet("border:none;\n"
+"background:transparent;")
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 825, 643))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 845, 660))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -47,12 +57,16 @@ class Ui_Form(object):
         self.tab_2 = QtWidgets.QWidget()
         self.tab_2.setObjectName("tab_2")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.tab_2)
+        self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_2.setSpacing(0)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.scrollArea_2 = QtWidgets.QScrollArea(self.tab_2)
+        self.scrollArea_2.setStyleSheet("border:none;\n"
+"background:transparent;")
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollArea_2.setObjectName("scrollArea_2")
         self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 374, 43))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 845, 660))
         self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_2)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
@@ -73,7 +87,7 @@ class Ui_Form(object):
         self.gridLayout.addLayout(self.lfbIoWidget, 1, 0, 1, 1)
 
         self.retranslateUi(Form)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):

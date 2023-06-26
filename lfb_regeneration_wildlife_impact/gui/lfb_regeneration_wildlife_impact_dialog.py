@@ -201,10 +201,8 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.changeState()
 
-        #if self.saveBar.validate(self.json) == True:
         if self.validateTabs(True):
             self.draft.saveFeature(self.json)
-        # if self.json['coordinates']['latitude'] != None and self.json['coordinates']['longitude'] != None and self.json['aufnahmetrupp'] != None and self.json['GNSSDevice'] != None:
             
 
     def openHome(self):
@@ -273,11 +271,12 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.draft.setupDraftLayer()
     
-    def draftSelected(self, newJson, id):
+    def draftSelected(self, newJson, id, attributes):
         self.json = newJson
         self.resetForm(True)
         self.changeState()
         self.setPosition(2)
+        self.saveBar.setAttributes(attributes)
         self.draft.resetCurrentDraft(id)
 
     def changeState(self, validate = True):        

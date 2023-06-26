@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>921</width>
-    <height>645</height>
+    <height>555</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,7 +18,7 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>400</width>
+    <width>600</width>
     <height>100</height>
    </size>
   </property>
@@ -74,25 +74,23 @@
     border-top: 0px;
 }
 QTabBar::tab {
-    background-color: transparent;
-    width: 32px;
+    background-color: #555;
+	border: 1px solid #555;
+	width: 32px;
     height: 32px;
-    margin: 10px 10px 0 10px;
+    margin: 0px 5px 0 5px;
     border-radius: 10px;
-    padding: 0px;
+    padding: 3px;
     text-align: center;
+ 	border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+	border-bottom: none;
 }
 QTabBar::tab:enabled{
-    background-color: transparent;
+    background-color: #555;
 }
 QTabBar::tab:selected{
     color: black;
-    height: 32px;
-    margin:  7px 7px 0px 7px;
-    padding: 0px 5px 10px 5px;
-	border: none;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
     background-color: #eee;
 }
 QTabWidget::pane { border: 0; }</string>
@@ -141,7 +139,7 @@ padding:0;</string>
         <x>0</x>
         <y>0</y>
         <width>919</width>
-        <height>319</height>
+        <height>274</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -164,58 +162,11 @@ padding:0;</string>
          </property>
          <layout class="QVBoxLayout" name="_2">
           <property name="topMargin">
-           <number>50</number>
+           <number>0</number>
           </property>
           <property name="bottomMargin">
            <number>10</number>
           </property>
-          <item>
-           <widget class="QLabel" name="label">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>18</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Verbiss und Wildtier Monitoring w</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="margin">
-             <number>10</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_2">
-            <property name="font">
-             <font>
-              <pointsize>15</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Überwachung des Verjüngungszustandes durch die Aufnahme von Naturaldaten.</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-            <property name="margin">
-             <number>5</number>
-            </property>
-           </widget>
-          </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout">
             <property name="spacing">
@@ -225,7 +176,7 @@ padding:0;</string>
              <number>0</number>
             </property>
             <property name="topMargin">
-             <number>20</number>
+             <number>0</number>
             </property>
             <item>
              <spacer name="horizontalSpacer">

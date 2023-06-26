@@ -122,6 +122,13 @@ class Ui_Form(object):
         self.lfbTextFieldLabel.setFont(font)
         self.lfbTextFieldLabel.setObjectName("lfbTextFieldLabel")
         self.gridLayout.addWidget(self.lfbTextFieldLabel, 1, 1, 1, 1)
+        self.lfbUnit = QtWidgets.QLabel(Form)
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        self.lfbUnit.setFont(font)
+        self.lfbUnit.setText("")
+        self.lfbUnit.setObjectName("lfbUnit")
+        self.gridLayout.addWidget(self.lfbUnit, 3, 2, 1, 1)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)

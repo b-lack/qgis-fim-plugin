@@ -14,36 +14,20 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(952, 236)
+        Form.resize(832, 117)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(Form.sizePolicy().hasHeightForWidth())
+        Form.setSizePolicy(sizePolicy)
         self.gridLayout = QtWidgets.QGridLayout(Form)
         self.gridLayout.setObjectName("gridLayout")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.lfbImportBtn = QtWidgets.QPushButton(Form)
-        font = QtGui.QFont()
-        font.setPointSize(13)
-        font.setBold(True)
-        font.setWeight(75)
-        self.lfbImportBtn.setFont(font)
-        self.lfbImportBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.lfbImportBtn.setStyleSheet("QPushButton{\n"
-"    border-radius: 1px;\n"
-"    border: 2px solid #333;\n"
-"    color: #555;\n"
-"    margin: 0 5px;\n"
-"    padding: 5px;\n"
-"}\n"
-"QPushButton:enabled{\n"
-"    border-radius: 20px;\n"
-"    border: 2px solid #333;\n"
-"    background-color: green;\n"
-"    color: #fff;\n"
-"}")
-        self.lfbImportBtn.setObjectName("lfbImportBtn")
-        self.verticalLayout_2.addWidget(self.lfbImportBtn)
-        self.gridLayout.addLayout(self.verticalLayout_2, 0, 1, 1, 1)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem, 0, 2, 1, 1)
+        self.lfbExportFeedback = QtWidgets.QLabel(Form)
+        self.lfbExportFeedback.setText("")
+        self.lfbExportFeedback.setObjectName("lfbExportFeedback")
+        self.gridLayout.addWidget(self.lfbExportFeedback, 1, 0, 1, 4)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.verticalLayout = QtWidgets.QVBoxLayout()
@@ -70,12 +54,35 @@ class Ui_Form(object):
 "}")
         self.lfbExportBtn.setObjectName("lfbExportBtn")
         self.verticalLayout.addWidget(self.lfbExportBtn)
+        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem1)
         self.horizontalLayout.addLayout(self.verticalLayout)
         self.gridLayout.addLayout(self.horizontalLayout, 0, 3, 1, 1)
-        self.lfbExportFeedback = QtWidgets.QLabel(Form)
-        self.lfbExportFeedback.setText("")
-        self.lfbExportFeedback.setObjectName("lfbExportFeedback")
-        self.gridLayout.addWidget(self.lfbExportFeedback, 1, 1, 1, 3)
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_3.setContentsMargins(10, -1, -1, -1)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.lfbImportBtn = QtWidgets.QPushButton(Form)
+        font = QtGui.QFont()
+        font.setPointSize(13)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lfbImportBtn.setFont(font)
+        self.lfbImportBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.lfbImportBtn.setStyleSheet("QPushButton{\n"
+"    border-radius: 1px;\n"
+"    border: 2px solid #333;\n"
+"    color: #555;\n"
+"    margin: 0 5px;\n"
+"    padding: 5px;\n"
+"}\n"
+"QPushButton:enabled{\n"
+"    border-radius: 20px;\n"
+"    border: 2px solid #333;\n"
+"    background-color: green;\n"
+"    color: #fff;\n"
+"}")
+        self.lfbImportBtn.setObjectName("lfbImportBtn")
+        self.verticalLayout_3.addWidget(self.lfbImportBtn)
         self.lfbImportSelectedBtn = QtWidgets.QPushButton(Form)
         font = QtGui.QFont()
         font.setPointSize(13)
@@ -97,7 +104,8 @@ class Ui_Form(object):
 "    color: #fff;\n"
 "}")
         self.lfbImportSelectedBtn.setObjectName("lfbImportSelectedBtn")
-        self.gridLayout.addWidget(self.lfbImportSelectedBtn, 0, 0, 1, 1)
+        self.verticalLayout_3.addWidget(self.lfbImportSelectedBtn)
+        self.gridLayout.addLayout(self.verticalLayout_3, 0, 0, 1, 1)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -105,6 +113,6 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.lfbImportBtn.setText(_translate("Form", "IMPORT .GEOJSON"))
         self.lfbExportBtn.setText(_translate("Form", "EXPORT AS .GEOJSON"))
+        self.lfbImportBtn.setText(_translate("Form", "IMPORT .GEOJSON"))
         self.lfbImportSelectedBtn.setText(_translate("Form", "IMPORTIERE AUSGEWÄHLTE PUNKTE"))

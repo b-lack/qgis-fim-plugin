@@ -97,6 +97,8 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
     def saveBtnClicked(self):
         self.saveFeature.emit(self.json)
 
+    def setAttributes(self, attributes):
+        self.lfbId.setText(str(attributes[1]))
     
 
     def checkMinimumSet(self, jsonToTest, errorLen):

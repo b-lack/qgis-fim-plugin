@@ -6,50 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>952</width>
-    <height>236</height>
+    <width>832</width>
+    <height>117</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="1">
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="QPushButton" name="lfbImportBtn">
-       <property name="font">
-        <font>
-         <pointsize>13</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="cursor">
-        <cursorShape>PointingHandCursor</cursorShape>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton{
-	border-radius: 1px;
-	border: 2px solid #333;
-	color: #555;
-	margin: 0 5px;
-	padding: 5px;
-}
-QPushButton:enabled{
-	border-radius: 20px;
-	border: 2px solid #333;
-	background-color: green;
-	color: #fff;
-}</string>
-       </property>
-       <property name="text">
-        <string>IMPORT .GEOJSON</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
    <item row="0" column="2">
     <spacer name="horizontalSpacer">
      <property name="orientation">
@@ -62,6 +32,13 @@ QPushButton:enabled{
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="1" column="0" colspan="4">
+    <widget class="QLabel" name="lfbExportFeedback">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </item>
    <item row="0" column="3">
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -99,31 +76,74 @@ QPushButton:enabled{
          </property>
         </widget>
        </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
      </item>
     </layout>
    </item>
-   <item row="1" column="1" colspan="3">
-    <widget class="QLabel" name="lfbExportFeedback">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0">
-    <widget class="QPushButton" name="lfbImportSelectedBtn">
-     <property name="font">
-      <font>
-       <pointsize>13</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <property name="leftMargin">
+      <number>10</number>
      </property>
-     <property name="cursor">
-      <cursorShape>PointingHandCursor</cursorShape>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton{
+     <item>
+      <widget class="QPushButton" name="lfbImportBtn">
+       <property name="font">
+        <font>
+         <pointsize>13</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+	border-radius: 1px;
+	border: 2px solid #333;
+	color: #555;
+	margin: 0 5px;
+	padding: 5px;
+}
+QPushButton:enabled{
+	border-radius: 20px;
+	border: 2px solid #333;
+	background-color: green;
+	color: #fff;
+}</string>
+       </property>
+       <property name="text">
+        <string>IMPORT .GEOJSON</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="lfbImportSelectedBtn">
+       <property name="font">
+        <font>
+         <pointsize>13</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
 	border-radius: 10px;
 	border: 2px solid #333;
 	color: #555;
@@ -136,11 +156,13 @@ QPushButton:enabled{
 	background-color: green;
 	color: #fff;
 }</string>
-     </property>
-     <property name="text">
-      <string>IMPORTIERE AUSGEWÄHLTE PUNKTE</string>
-     </property>
-    </widget>
+       </property>
+       <property name="text">
+        <string>IMPORTIERE AUSGEWÄHLTE PUNKTE</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

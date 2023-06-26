@@ -14,13 +14,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_LfbRegenerationWildlifeImpactDialogBase(object):
     def setupUi(self, LfbRegenerationWildlifeImpactDialogBase):
         LfbRegenerationWildlifeImpactDialogBase.setObjectName("LfbRegenerationWildlifeImpactDialogBase")
-        LfbRegenerationWildlifeImpactDialogBase.resize(921, 645)
+        LfbRegenerationWildlifeImpactDialogBase.resize(921, 555)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(LfbRegenerationWildlifeImpactDialogBase.sizePolicy().hasHeightForWidth())
         LfbRegenerationWildlifeImpactDialogBase.setSizePolicy(sizePolicy)
-        LfbRegenerationWildlifeImpactDialogBase.setMinimumSize(QtCore.QSize(400, 100))
+        LfbRegenerationWildlifeImpactDialogBase.setMinimumSize(QtCore.QSize(600, 100))
         self.gridLayout = QtWidgets.QGridLayout(LfbRegenerationWildlifeImpactDialogBase)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setSpacing(0)
@@ -46,25 +46,23 @@ class Ui_LfbRegenerationWildlifeImpactDialogBase(object):
 "    border-top: 0px;\n"
 "}\n"
 "QTabBar::tab {\n"
-"    background-color: transparent;\n"
+"    background-color: #555;\n"
+"    border: 1px solid #555;\n"
 "    width: 32px;\n"
 "    height: 32px;\n"
-"    margin: 10px 10px 0 10px;\n"
+"    margin: 0px 5px 0 5px;\n"
 "    border-radius: 10px;\n"
-"    padding: 0px;\n"
+"    padding: 3px;\n"
 "    text-align: center;\n"
+"     border-bottom-left-radius: 0px;\n"
+"    border-bottom-right-radius: 0px;\n"
+"    border-bottom: none;\n"
 "}\n"
 "QTabBar::tab:enabled{\n"
-"    background-color: transparent;\n"
+"    background-color: #555;\n"
 "}\n"
 "QTabBar::tab:selected{\n"
 "    color: black;\n"
-"    height: 32px;\n"
-"    margin:  7px 7px 0px 7px;\n"
-"    padding: 0px 5px 10px 5px;\n"
-"    border: none;\n"
-"    border-bottom-left-radius: 0px;\n"
-"    border-bottom-right-radius: 0px;\n"
 "    background-color: #eee;\n"
 "}\n"
 "QTabWidget::pane { border: 0; }")
@@ -86,7 +84,7 @@ class Ui_LfbRegenerationWildlifeImpactDialogBase(object):
         self.lfbHomeScreen.setWidgetResizable(True)
         self.lfbHomeScreen.setObjectName("lfbHomeScreen")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 919, 319))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 919, 274))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -104,32 +102,10 @@ class Ui_LfbRegenerationWildlifeImpactDialogBase(object):
         self.lfbHeadline.setSizePolicy(sizePolicy)
         self.lfbHeadline.setObjectName("lfbHeadline")
         self._2 = QtWidgets.QVBoxLayout(self.lfbHeadline)
-        self._2.setContentsMargins(-1, 50, -1, 10)
+        self._2.setContentsMargins(-1, 0, -1, 10)
         self._2.setObjectName("_2")
-        self.label = QtWidgets.QLabel(self.lfbHeadline)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
-        self.label.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setPointSize(18)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label.setFont(font)
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
-        self.label.setObjectName("label")
-        self._2.addWidget(self.label)
-        self.label_2 = QtWidgets.QLabel(self.lfbHeadline)
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        self.label_2.setFont(font)
-        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_2.setWordWrap(True)
-        self.label_2.setObjectName("label_2")
-        self._2.addWidget(self.label_2)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setContentsMargins(0, 20, -1, -1)
+        self.horizontalLayout.setContentsMargins(0, 0, -1, -1)
         self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName("horizontalLayout")
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -182,6 +158,4 @@ class Ui_LfbRegenerationWildlifeImpactDialogBase(object):
     def retranslateUi(self, LfbRegenerationWildlifeImpactDialogBase):
         _translate = QtCore.QCoreApplication.translate
         LfbRegenerationWildlifeImpactDialogBase.setWindowTitle(_translate("LfbRegenerationWildlifeImpactDialogBase", "Lfb Regeneration and Wildlife Impact Monitoring"))
-        self.label.setText(_translate("LfbRegenerationWildlifeImpactDialogBase", "Verbiss und Wildtier Monitoring w"))
-        self.label_2.setText(_translate("LfbRegenerationWildlifeImpactDialogBase", "Überwachung des Verjüngungszustandes durch die Aufnahme von Naturaldaten."))
         self.lfbNewEntry.setText(_translate("LfbRegenerationWildlifeImpactDialogBase", "AUFNAHME STARTEN"))
