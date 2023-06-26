@@ -69,6 +69,8 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
 
         self.lfbTextField.setPlaceholderText(placeholderText) 
         self.lfbTextField.setToolTip(placeholderText)
+        self.lfbTextField.returnPressed.connect(self.onEnter)
+
 
         if self.lfbTextFieldHelp is not None and 'description' in self.schema:
             self.lfbTextFieldHelp.setText(self.schema['description'])
@@ -104,6 +106,9 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
         self.validate() 
 
         self.show()
+
+    def onEnter(self):
+        self.focusNextChild()
 
     def shouldBeNumeric(self):
         return (type(self.schema['type']) == str and (self.schema['type'] == "number" or self.schema['type'] == "integer") or (hasattr(self.schema['type'], "__len__") and ("integer" in self.schema['type'] or "number" in self.schema['type'])))
