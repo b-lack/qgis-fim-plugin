@@ -43,7 +43,7 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'tab_defaul
 class Tabs(QtWidgets.QWidget, UI_CLASS):
     inputChanged = QtCore.pyqtSignal(object, str)
 
-    def __init__(self, interface, json, schema, attr):
+    def __init__(self, interface, json, schema, attr, inheritedErrors = []):
         """Constructor."""
 
         QDialog.__init__(self, interface.mainWindow())
@@ -52,8 +52,7 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
 
         self.json = json
         self.attr = attr
-
-        self.show()
+        self.inheritedErrors = inheritedErrors
 
         self.infoTitle = ""
 
@@ -85,7 +84,7 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
             if valueType == 'array':
                 field = ArrayField(interface, self.json, value, attr)
             elif valueType == 'object':
-                field = ObjectView(interface, self.json, value, attr)
+                field = ObjectView(interface, self.json, value, attr, self.inheritedErrors)
             elif valueType == 'boolean':
                 field = Boolean(interface, self.json, value, attr)
                 field.lfbInfoBox.connect(self.infoBoxClicked)
@@ -105,6 +104,8 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
             self.fieldArray.append(field)
 
         self.lfbInfoBox.hide()
+
+        self.show()
 
     def infoBoxClicked(self, info):
 

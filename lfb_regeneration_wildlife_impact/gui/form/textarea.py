@@ -41,7 +41,7 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'textarea.u
 
 
 class TextArea(QtWidgets.QWidget, UI_CLASS):
-    inputChanged = QtCore.pyqtSignal(str)
+    inputChanged = QtCore.pyqtSignal(object)
     lfbInfoBox = QtCore.pyqtSignal(object)
 
     def __init__(self, interface, json, schema, key):
@@ -72,9 +72,7 @@ class TextArea(QtWidgets.QWidget, UI_CLASS):
         else:
             self.lfbTextFieldHelp.setText('')
 
-        QgsMessageLog.logMessage("Read only: " + self.schema['title'], "LFB")
         if "readOnly" in self.schema:
-            QgsMessageLog.logMessage("Read only: " + self.schema['title'], "LFB")
             self.lfbTextField.setReadOnly(self.schema['readOnly'])
             self.lfbTextField.setStyleSheet("background-color: #e0e0e0;")
 
@@ -155,10 +153,13 @@ class TextArea(QtWidgets.QWidget, UI_CLASS):
             value = float(valueStr)
             
         elif self.shouldBeInteger() and valueStr.isnumeric():
+            
             value = int(valueStr)
+            
         else:
             value = valueStr
 
+        
         self.internJson[self.key] = value
 
 
@@ -191,4 +192,5 @@ class TextArea(QtWidgets.QWidget, UI_CLASS):
             for error in errors:
                 self.lfbTextFieldError.setText(error.message)
 
-        self.inputChanged.emit(str(self.json[self.key]))
+        
+        self.inputChanged.emit(self.json[self.key])

@@ -27,7 +27,7 @@ class Ui_Form(object):
         font = QtGui.QFont()
         font.setPointSize(25)
         self.toolButton_2.setFont(font)
-        self.toolButton_2.setStyleSheet("margin: 10px;\n"
+        self.toolButton_2.setStyleSheet("margin-left: 10px;\n"
 "padding: 10px;\n"
 "border-radius: 22px;\n"
 "border: 2px solid grey;\n"
@@ -51,7 +51,7 @@ class Ui_Form(object):
         self.lfbTabScroll.setWidgetResizable(True)
         self.lfbTabScroll.setObjectName("lfbTabScroll")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 385, 902))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 395, 902))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -98,13 +98,14 @@ class Ui_Form(object):
         font = QtGui.QFont()
         font.setPointSize(25)
         self.toolButton.setFont(font)
-        self.toolButton.setStyleSheet("margin: 10px;\n"
+        self.toolButton.setStyleSheet("margin-right: 10px;\n"
 "padding: 10px;\n"
 "border-radius: 22px;\n"
 "border: 2px solid grey;\n"
 "background-color: grey;\n"
 "width: 20px;\n"
 "height: 20px;")
+        self.toolButton.setAutoRaise(False)
         self.toolButton.setObjectName("toolButton")
         self.horizontalLayout_2.addWidget(self.toolButton)
         self.lfbInfoBox = QtWidgets.QTextBrowser(Form)

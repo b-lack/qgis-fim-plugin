@@ -19,7 +19,7 @@ class Ui_Form(object):
         self.gridLayout.setObjectName("gridLayout")
         self.lfbObjectGroup = QtWidgets.QGroupBox(Form)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setPointSize(13)
         font.setBold(True)
         font.setWeight(75)
         self.lfbObjectGroup.setFont(font)
@@ -27,11 +27,17 @@ class Ui_Form(object):
 "    background: rgba(0,0,0,0.1);\n"
 "border-radius: 10px;\n"
 "}")
+        self.lfbObjectGroup.setAlignment(QtCore.Qt.AlignCenter)
         self.lfbObjectGroup.setObjectName("lfbObjectGroup")
         self.gridLayout_3 = QtWidgets.QGridLayout(self.lfbObjectGroup)
+        self.gridLayout_3.setContentsMargins(0, 9, 0, 9)
         self.gridLayout_3.setObjectName("gridLayout_3")
         self.lfbFormObject = QtWidgets.QGridLayout()
         self.lfbFormObject.setObjectName("lfbFormObject")
+        self.lfbErrorWidget = QtWidgets.QVBoxLayout()
+        self.lfbErrorWidget.setContentsMargins(9, 9, 9, 9)
+        self.lfbErrorWidget.setObjectName("lfbErrorWidget")
+        self.lfbFormObject.addLayout(self.lfbErrorWidget, 0, 0, 1, 1)
         self.gridLayout_3.addLayout(self.lfbFormObject, 0, 0, 1, 1)
         self.gridLayout.addWidget(self.lfbObjectGroup, 0, 0, 1, 1)
 

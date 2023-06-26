@@ -29,7 +29,7 @@ import json
 from qgis.core import QgsMessageLog, QgsProject, QgsVectorLayer, QgsJsonUtils, QgsField, QgsFields, QgsVectorFileWriter, QgsCoordinateTransformContext
 from qgis.PyQt import QtWidgets, uic
 from qgis.PyQt.QtCore import QCoreApplication, QSettings, QTranslator
-from qgis.PyQt.QtWidgets import QDialog, QTableWidgetItem
+from qgis.PyQt.QtWidgets import QDialog, QTableWidgetItem, QLabel
 
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -47,7 +47,7 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'object_vie
 class ObjectView(QtWidgets.QWidget, UI_CLASS):
     inputChanged = QtCore.pyqtSignal(object, str)
 
-    def __init__(self, interface, json, schema, key):
+    def __init__(self, interface, json, schema, key, inheritedErrors = []):
         """Constructor."""
 
         QDialog.__init__(self, interface.mainWindow())
@@ -57,6 +57,8 @@ class ObjectView(QtWidgets.QWidget, UI_CLASS):
         self.json = json
         self.key = key
         self.schema = schema
+        self.inheritedErrors = inheritedErrors
+
 
         if self.key not in self.json:
             self.json[self.key] = {}
@@ -78,8 +80,6 @@ class ObjectView(QtWidgets.QWidget, UI_CLASS):
             if attr not in self.json[self.key]:
                 self.json[self.key][attr] = None
 
-            QgsMessageLog.logMessage('TEXTFIELD: ' + str(attr), 'LFG')
-
             valueType = value['type']
 
             if 'enum' in value:
@@ -88,57 +88,72 @@ class ObjectView(QtWidgets.QWidget, UI_CLASS):
                 field = Boolean(interface, self.json, value, attr)
                 #field.lfbInfoBox.connect(self.infoBoxClicked)
             else:
-                
                 field = TextField(interface, self.json[self.key], value, attr)
 
             self.lfbFormObject.addWidget(field)
             field.inputChanged.connect(self.onInputChanged)
             
-            #self.fieldArray.append(field)
+            self.fieldArray.append(field)
 
 
         self.show()
 
-    def onInputChanged(self, jsons, key):
-        QgsMessageLog.logMessage('setJson: ' + str(self.json), 'LFe')
+    def onInputChanged(self, newJson, key):
+        
+        self.json[self.key][key] = newJson
 
-        #self.json[self.key] = value
-        #self.validate()
+        self.validate()
     
     def setJson(self, newJson, setFields = True):
+
+        self.json = newJson
+
+        for field in self.fieldArray :
+            field.setJson(self.json[self.key], setFields)
+
         
-        QgsMessageLog.logMessage('SET NEW: ' + str(newJson), 'LFe')
-        
+        #self.validate()
     
     def validate(self):
-        #jsonCpy = self.json.copy()
-        #jsonCpy['name'] = self.lfbTextField.text()
 
-        # https://python-jsonschema.readthedocs.io/en/stable/validate/
+        errors = []
+        self.inheritedErrors.clear()
+        
         v = Draft7Validator(self.schema)
-        errors = sorted(v.iter_errors(self.internJson[self.key]), key=lambda e: e.path)
+        errors = sorted(v.iter_errors(self.json[self.key]), key=lambda e: e.path)
 
-        self.json[self.key] = self.internJson[self.key]
+        if len(errors) == 0 and (self.key == 'kraut' or self.key == 'grass' or self.key == 'farne' or self.key == 'doldengewaechse' or self.key == 'beerenstraucher' or self.key == 'grosstraucher'):
+            self.check100(self.key)
+        
+            
+        self.updateErrors()
+        self.inputChanged.emit(str(self.json[self.key]), self.key)
+    
+    def check100(self, key):
+        
+        currentValue = 0
 
-        if self.json[self.key] is None:
-            self.lfbTextFieldError.hide()
-            self.lfbTextFieldSuccess.hide()
-            self.lfbTextFieldHelp.show()
-            self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid red;\n	border-radius: 10px;\n	padding: 10px;\n}")
-
-        elif len(errors) == 0:
-            self.lfbTextFieldError.hide()
-            self.lfbTextFieldSuccess.hide()
-            self.lfbTextFieldHelp.show()
-            self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid green;\n	border-radius: 10px;\n	padding: 10px;\n}")            
+        for item in self.json[key].items():
+            currentValue += item[1]
+           
+        if currentValue > 100:
+            self.lfbObjectGroup.setStyleSheet('QGroupBox#lfbObjectGroup{ padding: 10px; background: rgba(0,0,0,0.1);border-radius: 10px; border: 2px solid red;}')
+            #self.errors.append({
+            #    'message': 'Die Summe der Prozentangaben darf nicht größer als 100 sein.',
+            #})
+            self.inheritedErrors.append({
+                'message': 'Die Summe der Prozentangaben darf nicht größer als 100 sein.',
+            })
         else:
-            self.lfbTextFieldError.show()
-            self.lfbTextFieldSuccess.hide()
-            self.lfbTextFieldHelp.hide()
-            self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid red;\n	border-radius: 10px;\n	padding: 10px;\n}")
-
-            for error in errors:
-                self.lfbTextFieldError.setText(error.message)
+            self.lfbObjectGroup.setStyleSheet('QGroupBox#lfbObjectGroup{ padding: 10px; background: rgba(0,0,0,0.1);border-radius: 10px; border: 2px solid green;}')
 
         
-        #self.inputChanged.emit(str(self.json[self.key]))
+
+    def updateErrors(self):
+        for i in reversed(range(self.lfbErrorWidget.count())): 
+            self.lfbErrorWidget.itemAt(i).widget().setParent(None)
+
+        for error in self.inheritedErrors:
+            label = QLabel(error['message'])
+            label.setStyleSheet('QLabel { font-size: 15px; color: red; padding: 5px; margin: 10px; background-color: rgba(0,0,0,0.3); border-radius: 5px;}')
+            self.lfbErrorWidget.addWidget(label)

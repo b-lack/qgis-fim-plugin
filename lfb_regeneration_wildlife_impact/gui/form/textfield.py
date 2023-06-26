@@ -44,7 +44,7 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'textfield.
 
 
 class TextField(QtWidgets.QWidget, UI_CLASS):
-    inputChanged = QtCore.pyqtSignal(str, str)
+    inputChanged = QtCore.pyqtSignal(object, str)
     lfbInfoBox = QtCore.pyqtSignal(object)
 
     def __init__(self, interface, json, schema, key):
@@ -82,8 +82,6 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             self.lfbTextFieldDescriptionBtn.hide()
             self.lfbTextFieldDescriptionBtn.clicked.connect(self.triggerInfoBox)
 
-        if key == 'workflow':
-            QgsMessageLog.logMessage("Read only: ", "LFB")
 
         if "readOnly" in self.schema:
             self.lfbTextField.setReadOnly(self.schema['readOnly'])
@@ -200,4 +198,4 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
                 self.lfbTextFieldError.setText(error.message)
 
         
-        self.inputChanged.emit(str(self.json[self.key]), self.key)
+        self.inputChanged.emit(self.json[self.key], self.key)

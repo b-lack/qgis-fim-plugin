@@ -26,7 +26,7 @@ import os
 
 import json
 
-from qgis.core import QgsMessageLog, QgsProject, QgsVectorLayer, QgsJsonUtils, QgsField, QgsFields, QgsVectorFileWriter, QgsCoordinateTransformContext
+from qgis.core import QgsMessageLog
 from qgis.PyQt import QtWidgets, uic
 from qgis.PyQt.QtCore import QCoreApplication, QSettings, QTranslator
 from qgis.PyQt.QtWidgets import QDialog
@@ -78,6 +78,7 @@ class Chips(QtWidgets.QWidget, UI_CLASS):
                     border-style: outset;
                 }
             ''');
+            button.setCursor(QtCore.Qt.PointingHandCursor)
             button.clicked.connect(self.selectedChip)
             self.flowLayout.addWidget(button)
             self.buttons.append(button)
@@ -90,7 +91,6 @@ class Chips(QtWidgets.QWidget, UI_CLASS):
         buttons = self.flowLayout.children()
         
         for i in self.buttons:
-            QgsMessageLog.logMessage(str(value) + 'value : text' + i.text(), 'LFB')
             i.setChecked(i.text() == value)
 
     def selectedChip(self):

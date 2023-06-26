@@ -91,9 +91,6 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
 
         self.show()
 
-    def refreshTable(self):
-        self.setTableHeaders(self.tableHeaders)
-        self.setTableData(self.json[self.key])
 
     def setTableHeaders(self, headers):
 
@@ -136,8 +133,8 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         self.setTableData(self.json[self.key])
 
     def addRow(self):
-
-        self.json[self.key].append(self.defaultValue)
+        newValue = copy.deepcopy(self.defaultValue)
+        self.json[self.key].append(newValue)
         
     
         #self.lfbArrayOutput.clear()
@@ -147,7 +144,7 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         self.lfbArrayOutput.insertRow(rowCount)
 
         idx = 0
-        for attr, column in self.defaultValue.items():
+        for attr, column in newValue.items():
             self.lfbArrayOutput.setItem(rowCount, idx, QTableWidgetItem(str(column)))
             idx += 1
 
@@ -178,7 +175,6 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         if len(errors) == 0:
             self.lfbAddBtn.setEnabled(True)
         else:
-            #QgsMessageLog.logMessage('errors' + str(errors[0]), "LFB")
             self.lfbAddBtn.setEnabled(False)
 
         self.inputChanged.emit(self.json)

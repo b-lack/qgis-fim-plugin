@@ -92,9 +92,6 @@ class DBWidget(QtWidgets.QWidget, UI_CLASS):
 
         cursor = self.curR.execute("""SELECT * FROM io_test""")
 
-        for item in cursor:
-            QgsMessageLog.logMessage(str(item), 'LFB')
-
     def connectPostgres(self):
 
         conn = psycopg2.connect("dbname='VWM'host='localhost' user='postgres' password='hardcore'")
@@ -102,8 +99,6 @@ class DBWidget(QtWidgets.QWidget, UI_CLASS):
         sql = "SELECT * from io_test;"
         cur.execute(sql)
         result = cur.fetchall()
-        for row in result:
-            QgsMessageLog.logMessage(str(row), 'LFB')
 
         cur.execute("INSERT INTO io_test (json, dbh) VALUES (%s, %s)", (json.dumps({'test': 'test'}), 66))
         conn.commit()
@@ -152,8 +147,6 @@ class DBWidget(QtWidgets.QWidget, UI_CLASS):
             SELECT astext(st_intersection(geom, GeomFromText(?, 4326))) from my_line
             WHERE st_intersects(geom, GeomFromText(?, 4326))''', (polygon_wkt, polygon_wkt))
 
-        for item in cursor:
-            QgsMessageLog.logMessage(str(item), 'LFB')
 
         
 

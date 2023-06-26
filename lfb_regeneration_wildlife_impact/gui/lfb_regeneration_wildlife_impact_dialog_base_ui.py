@@ -58,7 +58,7 @@ class Ui_LfbRegenerationWildlifeImpactDialogBase(object):
 "    background-color: transparent;\n"
 "}\n"
 "QTabBar::tab:selected{\n"
-"    width: 32px;\n"
+"    color: black;\n"
 "    height: 32px;\n"
 "    margin:  7px 7px 0px 7px;\n"
 "    padding: 0px 5px 10px 5px;\n"
@@ -70,7 +70,7 @@ class Ui_LfbRegenerationWildlifeImpactDialogBase(object):
 "QTabWidget::pane { border: 0; }")
         self.lfbTabWidget.setTabPosition(QtWidgets.QTabWidget.North)
         self.lfbTabWidget.setIconSize(QtCore.QSize(32, 32))
-        self.lfbTabWidget.setElideMode(QtCore.Qt.ElideLeft)
+        self.lfbTabWidget.setElideMode(QtCore.Qt.ElideNone)
         self.lfbTabWidget.setDocumentMode(True)
         self.lfbTabWidget.setMovable(False)
         self.lfbTabWidget.setObjectName("lfbTabWidget")

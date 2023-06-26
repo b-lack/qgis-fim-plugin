@@ -91,7 +91,7 @@
                                 "null"
                             ],
                             "description": "Eindeutige Bezeichnung des teil Nutzers/Trupps.",
-                            "minLength": 3,
+                            "minLength": 2,
                             "maxLength": 100,
                             "helperText": "Ein Kürzel aus mindestens 3 Zeichen. Idealerweise besteht aus den ersten drei Buchstaben des Nachnamens des Truppführers."
                         },
@@ -105,14 +105,15 @@
                             "default": null,
                             "enum": [
                                 null,
+                                1,
                                 2,
-                                3,
                                 7,
                                 5,
                                 6,
+                                3,
                                 4,
-                                9,
-                                10
+                                8,
+                                9
                             ],
                             "enumLabels": [
                                 "Angabe fehlt",
@@ -311,16 +312,15 @@
                         "spaufsuchenichtwaldursacheid": {
                             "title": "Stichprobenpunt ist nicht Wald",
                             "type": [
-                                "integer",
-                                "null"
+                                "integer"
                             ],
                             "description": "Stichprobenpunkt liegt eindeutig nicht im Wald und wäre auch nach Verlegung nicht im Wald.",
                             "minLength": 1,
                             "maxLength": 100,
                             "QTType": "tree",
-                            "default": null,
+                            "default": 0,
                             "enum": [
-                                null,
+                                0,
                                 1,
                                 1100,
                                 1103,
@@ -1213,7 +1213,6 @@
                             "default": 0,
                             "helperText": "Schutzmaßnahmen",
                             "qtChips": 10,
-                            "writeOnly": true,
                             "enum": [
                                 0,
                                 2,
@@ -1473,7 +1472,7 @@
                                             "Lücke"
                                         ]
                                     },
-                                    "height": {
+                                    "id_hohst": {
                                         "title": "Höhenstufe ab*",
                                         "type": "integer",
                                         "description": "Höhenstufe ab",
@@ -1492,13 +1491,13 @@
                                             6
                                         ],
                                         "enumLabels": [
-                                            "",
+                                            "keine Auswahl",
                                             "von 10 bis 25",
                                             "von 26 bis 50",
                                             "von 51 bis 100",
                                             "von 101 bis 150",
                                             "von 151 bis 200",
-                                            "von 201"
+                                            "höher 201"
                                         ]
                                     },
                                     "verjuengungstransektbhd": {
@@ -1509,11 +1508,10 @@
                                         "unit": "Millimeter"
                                     },
                                     "verjuengungstransektschutzmassnahmen": {
+                                        "title": "Schutzmaßnahmen",
                                         "type": "integer",
-                                        "title": "Schutzmaßnahme im Bestand",
-                                        "description": "Bestandesbeschreibung",
-                                        "helperText": "Bestandesbeschreibung",
                                         "default": 0,
+                                        "helperText": "Schutzmaßnahmen",
                                         "qtChips": 10,
                                         "enum": [
                                             0,
@@ -1580,6 +1578,15 @@
                     "type": "object",
                     "description": "Prozentuale Bedeckung des Transektes mit unten stehenden Weisepflanzen.",
                     "properties": {
+                        "krautanteil": {
+                            "title": "Krautanteil",
+                            "type": "integer",
+                            "description": "Wie viel Prozent des Transektes ist mit Bodenpflanzen bedeckt? (Nicht die Summe der Weiserpflanzen.)",
+                            "default": 0,
+                            "minimum": 0,
+                            "maximum": 100,
+                            "unit": "Prozent"
+                        },
                         "moos": {
                             "title": "Moose",
                             "type": "object",
@@ -1855,15 +1862,6 @@
                             "description": "Biber",
                             "helperText": "Biber",
                             "default": false
-                        },
-                        "krautanteil": {
-                            "title": "Krautanteil",
-                            "type": "integer",
-                            "description": "Wie viel Prozent des Transektes ist mit Bodenpflanzen bedeckt? (Nicht die Summe der Weiserpflanzen.)",
-                            "default": 0,
-                            "minimum": 0,
-                            "maximum": 100,
-                            "unit": "Prozent"
                         }
                     }
                 },
@@ -1922,14 +1920,23 @@
                                 "lückig",
                                 "licht",
                                 "räumig"
+                            ],
+                            "enumDescription": [
+                                "",
+                                "gedrängt oder dichtgeschlossen - die kronen greifen in- und übereinander",
+                                "Kronen berühren sich. Deckungsgrad: 100%",
+                                "locker oder lichtgeschlossen - Kronen haben solche Abstände, dass keine zusätzliche Krone Platz findet. Deckungsgrad: 80%",
+                                "Bestand weitgehend geschlossen, an wenigen Stellen Unterbrechungen von mindestens einer Kronenbreite. Deckungsgrad: > 100%",
+                                "es ist eine Kronenbreite Zwischenraum. Deckungsgrad: 40 % bis 70%",
+                                "Kronen bieten für mehrere weitere Kronen Platz. Deckungsgrad: < 40 %"
                             ]
                         },
                         "bestandschutzmassnahmenid": {
+                            "title": "Schutzmaßnahmen",
                             "type": "integer",
-                            "title": "Schutzmaßnahme im Bestand",
-                            "description": "Bestandesbeschreibung",
-                            "helperText": "Bestandesbeschreibung",
                             "default": 0,
+                            "helperText": "Schutzmaßnahmen",
+                            "qtChips": 10,
                             "enum": [
                                 0,
                                 2,
@@ -2072,27 +2079,27 @@
                                         "helperText": "Bestandesbeschreibung",
                                         "enum": [
                                             null,
-                                            7,
-                                            10,
-                                            5,
-                                            6,
-                                            8,
-                                            9,
+                                            0,
+                                            1,
                                             2,
                                             3,
-                                            4
+                                            4,
+                                            9,
+                                            25,
+                                            31,
+                                            36
                                         ],
                                         "enumLabels": [
                                             "Angabe fehlt",
-                                            "P",
-                                            "Hb",
-                                            "US",
-                                            "OS",
-                                            "VuS",
-                                            "I",
-                                            "MH",
-                                            "UeH",
-                                            "AB"
+                                            "keine Zuordnung möglich (Plenterwald)",
+                                            "Hauptbestand - wirtschaftliches Hauptgewicht",
+                                            "Unterstand - erkennbar unterhalb des Oberstandes befinden, jedoch entweder dessen halbe Höhe nicht erreichen oder noch keinen Derbholzvorrat aufweisen",
+                                            "Oberstand",
+                                            "Verjüngung unter Schirm",
+                                            "liegender Baum / sehr schräg stehend",
+                                            "Zwischenstand, Mittelholz - erkennbar unterhalb des Oberstandes befinden, jedoch mindestens dessen halbe Höhe erreichen und einen Derbholzvorrat aufweisen",
+                                            "Überhalt - Reste des Vorbestandes mit annährnd gleichmäßiger Verteilung auf der Fläche",
+                                            "Altbäume - alte Einzelbäume, die nicht der Schichtart UeH zugeorndet werden können - Restvorrat"
                                         ]
                                     },
                                     "icode_ba": {
@@ -2319,16 +2326,16 @@
                                         "helperText": "Natürliche Altersklasse",
                                         "enum": [
                                             null,
-                                            7,
-                                            8,
-                                            9,
-                                            10,
-                                            11,
-                                            5,
                                             1,
                                             2,
                                             3,
-                                            4
+                                            4,
+                                            5,
+                                            9,
+                                            10,
+                                            11,
+                                            12,
+                                            13
                                         ],
                                         "enumLabels": [
                                             "Angabe fehlt",
@@ -2354,14 +2361,14 @@
                                         "helperText": "Entstehungsart",
                                         "enum": [
                                             null,
+                                            1,
                                             2,
                                             3,
                                             4,
                                             5,
-                                            6,
-                                            7,
-                                            8,
-                                            9
+                                            11,
+                                            12,
+                                            13
                                         ],
                                         "enumLabels": [
                                             "Angabe fehlt",
@@ -2382,17 +2389,17 @@
                                         "helperText": "Verteilung",
                                         "enum": [
                                             null,
-                                            6,
                                             1,
-                                            11,
-                                            12,
-                                            13,
+                                            2,
                                             3,
                                             4,
                                             5,
+                                            6,
                                             7,
                                             8,
-                                            9
+                                            41,
+                                            51,
+                                            71
                                         ],
                                         "enumLabels": [
                                             "Angabe fehlt",
@@ -3119,6 +3126,27 @@
                     "unit": "Zentimeter"
                 }
             }
+        },
+        "schutzmassnahme": {
+            "title": "Schutzmaßnahmen",
+            "type": "integer",
+            "default": 0,
+            "helperText": "Schutzmaßnahmen",
+            "qtChips": 10,
+            "enum": [
+                0,
+                2,
+                11,
+                12,
+                1
+            ],
+            "enumLabels": [
+                "ohne Schutz",
+                "Zaunschutz",
+                "Wuchshülle",
+                "Äste, Stäbe",
+                "Einzelschutz"
+            ]
         }
     }
 }

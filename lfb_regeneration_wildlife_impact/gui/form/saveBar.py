@@ -141,8 +141,6 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
 
     def validate(self, jsonToTest):
 
-        QgsMessageLog.logMessage('validate', 'LFB')
-
         self.customErrors = []
 
         self.json = jsonToTest
@@ -176,9 +174,6 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
     def checkIsForest(self, jsonToTest):
         messages = []
 
-        #QgsMessageLog.logMessage(str(jsonToTest['coordinates']['spaufsuchenichtbegehbarursacheid']), 'LFB')
-        #QgsMessageLog.logMessage('ssss', 'LFB')
-        #QgsMessageLog.logMessage(str(self.schema['if']), 'LFB')
 
         if jsonToTest['general']['spaufsuchenichtbegehbarursacheid'] is None or jsonToTest['general']['spaufsuchenichtbegehbarursacheid'] == 2: # begehbar
             messages += [

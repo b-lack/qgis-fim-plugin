@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(906, 623)
+        Form.resize(962, 797)
         Form.setStyleSheet("")
         self.gridLayout_2 = QtWidgets.QGridLayout(Form)
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -24,11 +24,16 @@ class Ui_Form(object):
         self.verticalLayout.setObjectName("verticalLayout")
         self.lfbArrayGroup = QtWidgets.QGroupBox(Form)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setPointSize(13)
         font.setBold(True)
         font.setWeight(75)
         self.lfbArrayGroup.setFont(font)
-        self.lfbArrayGroup.setStyleSheet("")
+        self.lfbArrayGroup.setStyleSheet("QGroupBox#lfbArrayGroup{\n"
+"    background: rgba(0,0,0,0.1);\n"
+"border-radius: 10px;\n"
+"padding: 10px;\n"
+"}")
+        self.lfbArrayGroup.setAlignment(QtCore.Qt.AlignCenter)
         self.lfbArrayGroup.setObjectName("lfbArrayGroup")
         self.gridLayout = QtWidgets.QGridLayout(self.lfbArrayGroup)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
@@ -66,12 +71,13 @@ class Ui_Form(object):
         font.setBold(False)
         font.setWeight(50)
         self.lfbArrayOutput.setFont(font)
+        self.lfbArrayOutput.setStyleSheet("")
         self.lfbArrayOutput.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.lfbArrayOutput.setTextElideMode(QtCore.Qt.ElideNone)
         self.lfbArrayOutput.setObjectName("lfbArrayOutput")
         self.lfbArrayOutput.setColumnCount(0)
         self.lfbArrayOutput.setRowCount(0)
-        self.lfbArrayOutput.verticalHeader().setStretchLastSection(True)
+        self.lfbArrayOutput.verticalHeader().setStretchLastSection(False)
         self.verticalLayout_2.addWidget(self.lfbArrayOutput)
         self.gridLayout.addLayout(self.verticalLayout_2, 0, 0, 1, 1)
         self.verticalLayout.addWidget(self.lfbArrayGroup)

@@ -86,7 +86,7 @@ QTabBar::tab:enabled{
     background-color: transparent;
 }
 QTabBar::tab:selected{
-    width: 32px;
+    color: black;
     height: 32px;
     margin:  7px 7px 0px 7px;
     padding: 0px 5px 10px 5px;
@@ -110,7 +110,7 @@ QTabWidget::pane { border: 0; }</string>
       </size>
      </property>
      <property name="elideMode">
-      <enum>Qt::ElideLeft</enum>
+      <enum>Qt::ElideNone</enum>
      </property>
      <property name="documentMode">
       <bool>true</bool>

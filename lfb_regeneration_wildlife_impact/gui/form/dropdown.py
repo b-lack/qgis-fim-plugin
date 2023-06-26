@@ -78,27 +78,30 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         
         if "QTType" in self.schema and self.schema['QTType'] == "tree":
             #self.lfbReplaceWidget.show()
-            self.lfbComboBox.hide()
+            #self.lfbComboBox.hide()
+            self.lfbComboBox.setEnabled(False)
             
             self.tree = QtWidgets.QTreeWidget()
+            self.tree.setFixedHeight(480)
             self.tree.setStyleSheet("QTreeWidget { font-size: 13pt; }")
             self.tree.itemClicked.connect(self.onItemClicked)
             self.lfbReplaceWidget.layout().addWidget(self.tree)
 
             self.createTreeWidget(self.schema)
 
-        
-        
+
         if "default" in self.schema and self.json[self.key] is None:
             self.setDefaultValue()
-            
+        else:
+            self.validate() 
 
         if "qtChips" in self.schema:
             self.chips = Chips(interface, self.schema, self.schema['qtChips'])
             self.chips.inputChanged.connect(self.setIndex)
             self.lfbChipsLayout.addWidget(self.chips)
+            index = self.schema['enum'].index(self.json[self.key])
+            self.chips.setValue(self.schema['enumLabels'][index])
 
-        self.validate() 
 
         if "writeOnly" in self.schema:
             if self.schema['writeOnly'] == True:
@@ -112,15 +115,14 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         
         index = self.schema['enum'].index(self.schema['default'])
 
-        #if self.key == 'bestandbetriebsartid':
-        #    QgsMessageLog.logMessage(self.key + " DEFAULT " + str(index), 'LFB')
-
         if index == -1:
             return
         
         
         self.internJson[self.key] = self.schema['default']
         self.validate()
+
+
 
         self.lfbComboBox.setCurrentIndex(index)
 
@@ -212,10 +214,9 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
             self.lfbTextFieldHelp.show()
             self.lfbComboBox.setStyleSheet("QComboBox {\n	border: 2px solid green;\n	border-radius: 10px;\n	padding: 10px;\n}")
 
-            if "QTType" in self.schema and self.schema['QTType'] == "tree":
-
-                self.lfbTextFieldLabel.setText(Utils.enumLabel(self.json[self.key], self.schema))
-                self.lfbTextFieldLabel.setText(QCoreApplication.translate("FormFields", Utils.enumLabel(self.json[self.key], self.schema)))
+            #if "QTType" in self.schema and self.schema['QTType'] == "tree":
+                #self.lfbTextFieldLabel.setText(Utils.enumLabel(self.json[self.key], self.schema))
+                #self.lfbTextFieldLabel.setText(QCoreApplication.translate("FormFields", Utils.enumLabel(self.json[self.key], self.schema)))
         else:
             self.lfbTextFieldError.show()
             self.lfbTextFieldSuccess.hide()
@@ -248,11 +249,16 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
     def onItemClicked(self, item, column):
 
         if str(item.data(column, 1)) == 'None':
-            self.internJson[self.key] = None
+            self.internJson[self.key] = 0
         else:
             self.internJson[self.key] = int(item.data(column, 1))
 
         self.validate()
+
+        
+        index = self.schema['enum'].index(self.json[self.key])
+        if index != -1:
+            self.lfbComboBox.setCurrentIndex(index)
 
     def createTreeWidget(self, data):
         

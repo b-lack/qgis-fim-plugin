@@ -18,7 +18,7 @@
     <widget class="QGroupBox" name="lfbObjectGroup">
      <property name="font">
       <font>
-       <pointsize>15</pointsize>
+       <pointsize>13</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -32,9 +32,41 @@ border-radius: 10px;
      <property name="title">
       <string>GroupBox</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
      <layout class="QGridLayout" name="gridLayout_3">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>9</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>9</number>
+      </property>
       <item row="0" column="0">
-       <layout class="QGridLayout" name="lfbFormObject"/>
+       <layout class="QGridLayout" name="lfbFormObject">
+        <item row="0" column="0">
+         <layout class="QVBoxLayout" name="lfbErrorWidget">
+          <property name="leftMargin">
+           <number>9</number>
+          </property>
+          <property name="topMargin">
+           <number>9</number>
+          </property>
+          <property name="rightMargin">
+           <number>9</number>
+          </property>
+          <property name="bottomMargin">
+           <number>9</number>
+          </property>
+         </layout>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>

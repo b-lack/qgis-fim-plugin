@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>906</width>
-    <height>623</height>
+    <width>962</width>
+    <height>797</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -38,16 +38,23 @@
       <widget class="QGroupBox" name="lfbArrayGroup">
        <property name="font">
         <font>
-         <pointsize>15</pointsize>
+         <pointsize>13</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true"/>
+        <string notr="true">QGroupBox#lfbArrayGroup{
+	background: rgba(0,0,0,0.1);
+border-radius: 10px;
+padding: 10px;
+}</string>
        </property>
        <property name="title">
         <string>GroupBox</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
        <layout class="QGridLayout" name="gridLayout">
         <property name="leftMargin">
@@ -131,6 +138,9 @@
               <bold>false</bold>
              </font>
             </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
             <property name="editTriggers">
              <set>QAbstractItemView::NoEditTriggers</set>
             </property>
@@ -141,7 +151,7 @@
              <bool>true</bool>
             </property>
             <attribute name="verticalHeaderStretchLastSection">
-             <bool>true</bool>
+             <bool>false</bool>
             </attribute>
            </widget>
           </item>

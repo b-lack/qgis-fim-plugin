@@ -285,14 +285,6 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         if jsonObj is None:
             return
         
-        #if jsonObj['properties']['geometry']['coordinates'] is None:
-        #    return 
-        
-        #x = jsonObj['properties']['geometry']['coordinates'][0]
-        #y = jsonObj['properties']['geometry']['coordinates'][1]
-
-        #QgsMessageLog.logMessage(str(x) + ' ' + str(y), 'LFB')
-
         currentDateTime = QDateTime.currentDateTime()
 
         self.vl.startEditing()

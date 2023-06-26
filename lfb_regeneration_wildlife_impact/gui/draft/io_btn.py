@@ -135,11 +135,7 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
             qgsFeature.setAttribute('workflow', 4)
             qgsFeature.setAttribute('status', False)
             qgsFeature.setAttribute('form', json.dumps(defaultJson['properties']))
-            #qgsFeature.setAttribute('geometry', {
-            #    'type': 'Point',
-            #})
 
-            QgsMessageLog.logMessage(str(coordinates[0]), 'LFB')
 
             layer.addFeature(qgsFeature)
             layer.removeSelection()
@@ -235,7 +231,6 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
             return
         
         try:
-            QgsMessageLog.logMessage(str(layer), 'LFB')
             res = QgsVectorFileWriter.writeAsVectorFormatV3(
                 layer,
                 fileName,
