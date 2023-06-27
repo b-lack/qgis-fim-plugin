@@ -56,6 +56,8 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
 
         self.setupUi(self)
 
+        self.fieldsToBeMapped = ['los_id', 'created', 'modified', 'workflow', 'status', 'form']
+
         self.lfbExportBtn.clicked.connect(self.exportBtnClicked)
         self.lfbImportBtn.clicked.connect(self.importBtnClicked)
         self.lfbImportSelectedBtn.clicked.connect(self.importSelectedBtnClicked)
@@ -117,28 +119,52 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         defaultJson = Utils.loadDefaultJson()
         
 
-        for i in selectedFeatures:
-            geom = i.geometry()
-            coordinates = geom.asPoint()
+        for selectedLayer in selectedFeatures:
+            QgsMessageLog.logMessage(str(selectedLayer), 'LFB')
+            for feature in selectedLayer['features']:
 
-            attrs = i.attributeMap()
+                geom = feature.geometry()
+                coordinates = geom.asPoint()
 
-            ## SAVE FEATURES
-            qgsFeature = QgsFeature()
-            qgsFeature.setFields(fields)
-            geometry = QgsGeometry.fromPointXY(QgsPointXY(coordinates))
-            qgsFeature.setGeometry(geometry)
+                #attrs = i.attributeMap()
+                layerFields = selectedLayer['layer'].fields()
+                attributes = feature.attributes()
+                defaultAttributes = {
+                    'los_id': str(uuid.uuid4()),
+                    'created': currentDateTime,
+                    'modified': currentDateTime,
+                    'workflow': 4,
+                    'status': False,
+                    'form': json.dumps(defaultJson['properties'])
+                }
 
-            qgsFeature.setAttribute('id', str(uuid.uuid4()))
-            qgsFeature.setAttribute('created', currentDateTime)
-            qgsFeature.setAttribute('modified', currentDateTime)
-            qgsFeature.setAttribute('workflow', 4)
-            qgsFeature.setAttribute('status', False)
-            qgsFeature.setAttribute('form', json.dumps(defaultJson['properties']))
+                ## SAVE FEATURES
+                qgsFeature = QgsFeature()
+                qgsFeature.setFields(fields)
+                geometry = QgsGeometry.fromPointXY(QgsPointXY(coordinates))
+                qgsFeature.setGeometry(geometry)
 
 
-            layer.addFeature(qgsFeature)
-            layer.removeSelection()
+
+                for fieldName in self.fieldsToBeMapped:
+                    QgsMessageLog.logMessage(str(fieldName), 'LFB')
+                    idx = layerFields.indexFromName(fieldName)
+                    if idx >= 0:
+                        QgsMessageLog.logMessage(str(attributes[idx]), 'LFB')
+                        qgsFeature.setAttribute(fieldName, attributes[idx])
+                    else:
+                        qgsFeature.setAttribute(fieldName, defaultAttributes[fieldName])
+
+                qgsFeature.setAttribute('id', str(uuid.uuid4()))
+                #qgsFeature.setAttribute('created', currentDateTime)
+                #qgsFeature.setAttribute('modified', currentDateTime)
+                #qgsFeature.setAttribute('workflow', 4)
+                #qgsFeature.setAttribute('status', False)
+                #qgsFeature.setAttribute('form', json.dumps(defaultJson['properties']))
+
+
+                layer.addFeature(qgsFeature)
+                layer.removeSelection()
 
         layer.commitChanges()
         layer.endEditCommand()
@@ -189,6 +215,8 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
                 qgsFeature.setGeometry(geometry)
                 qgsFeature.setAttribute('created', currentDateTime)
                 qgsFeature.setAttribute('modified', currentDateTime)
+
+
 
 
                 for field in fields:

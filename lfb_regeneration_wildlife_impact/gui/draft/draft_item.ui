@@ -131,59 +131,6 @@
           </item>
          </layout>
         </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <property name="leftMargin">
-           <number>10</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <item>
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QPushButton" name="lfbFocusBtn">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="cursor">
-               <cursorShape>PointingHandCursor</cursorShape>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">background-color: green;
-padding:10px;
-border: none;
-border-radius: 5px;
-color: white;</string>
-              </property>
-              <property name="text">
-               <string>Fokus</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </item>
        </layout>
       </item>
       <item>
@@ -221,6 +168,29 @@ border-radius: 5px;</string>
          </spacer>
         </item>
         <item>
+         <widget class="QPushButton" name="lfbFocusBtn">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: green;
+padding:5px;
+border: none;
+border-radius: 5px;
+color: white;</string>
+          </property>
+          <property name="text">
+           <string>Fokus</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="lfbDraftIconBtn">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -239,7 +209,7 @@ border-radius: 5px;
 color: white;</string>
           </property>
           <property name="text">
-           <string>ändern</string>
+           <string>AUSWÄHLEN</string>
           </property>
          </widget>
         </item>

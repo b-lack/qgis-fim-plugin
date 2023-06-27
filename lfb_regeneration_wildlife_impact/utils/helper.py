@@ -4,6 +4,8 @@ import json
 from qgis.core import QgsProject, QgsExpressionContextUtils, QgsMapLayer
 from qgis.core import QgsMessageLog
 
+LFB_NAME = 'LFB-Regeneration-Wildlife-Impact-Monitoring'
+
 class Utils(object):
 
     @staticmethod    
@@ -17,7 +19,37 @@ class Utils(object):
         fd = open(filename, 'r')
         return json.load(fd)
 
-    def getLayerByName(lfbName, lfbVersion = None):
+    def focusFeature(interface, feature, select = False, zoom = 150000):
+        geom = feature.geometry()
+        coordinates = geom.asPoint()
+        
+        interface.mapCanvas().setCenter(coordinates)
+        
+        current_scale =  interface.mapCanvas().scale()
+        interface.mapCanvas().zoomScale(min(zoom, current_scale))
+
+        if select:
+            Utils.deselectFeature()
+            Utils.selectFeature(feature)
+
+    def selectFeature(feature):
+        layer = Utils.getLayerByName(LFB_NAME)
+        if layer is not None:
+            layer.selectByIds([feature.id()])
+    
+    def deselectFeature(feature = None):
+        layer = Utils.getLayerByName(LFB_NAME)
+        if layer is not None:
+            if feature is None:
+                layer.removeSelection()
+            else:
+                layer.deselect(feature.id())
+
+    def getLayerByName(lfbName = None, lfbVersion = None):
+
+        if lfbName is None:
+            lfbName = LFB_NAME
+
         names = [layer for layer in QgsProject.instance().mapLayers().values()]
 
         for i in names:
@@ -27,6 +59,10 @@ class Utils(object):
         return None
     
     def getSelectedFeatures(interface, lfbName, removeSelection = False):
+
+        selected_features = []
+        selected_layers = []
+
         for layer in QgsProject.instance().mapLayers().values():
 
             if not layer.isSpatial():
@@ -42,18 +78,22 @@ class Utils(object):
                 continue
             
             selected_features = layer.selectedFeatures()
+            if len(selected_features) == 0:
+                continue
 
             if removeSelection:
                 layer.removeSelection()
 
-            return selected_features
+            selected_layers.append({
+                'layer': layer,
+                'features': selected_features
+            })
 
                 # Now we have a layer without geometry
-        return []
+
+        return selected_layers
 
         layer = interface.activeLayer()
 
-        
-        
         selected_features = layer.selectedFeatures()
         return selected_features

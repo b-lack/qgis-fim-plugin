@@ -77,6 +77,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         self.fields = QgsFields()
         #self.fields.append(QgsField("fid", QVariant.DateTime))
         self.fields.append(QgsField("id", QVariant.String))
+        self.fields.append(QgsField("los_id", QVariant.String))
         self.fields.append(QgsField("status", QVariant.Bool))
         #self.fields.append(QgsField("geometry", QVariant.Map))
         
@@ -184,7 +185,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             if(feat.id() == item):
                 json_object = json.loads(feat['form'])
                 self.currentFeatureId = feat.id()
-                self.draftSelected.emit(json_object, self.currentFeatureId, feat.attributes())
+                self.draftSelected.emit(json_object, self.currentFeatureId, feat)
                 break
             
     def setupSymbols(self):
@@ -231,7 +232,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         text_format.setBuffer(buffer_settings)
         layer_settings.setFormat(text_format)
 
-        layer_settings.fieldName = "id"
+        layer_settings.fieldName = "los_id"
         #layer_settings.placement = 4
 
         layer_settings.enabled = True

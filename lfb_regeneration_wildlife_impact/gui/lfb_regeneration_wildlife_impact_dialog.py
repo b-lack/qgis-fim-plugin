@@ -44,6 +44,8 @@ from .form.saveBar import SaveBar
 
 from jsonschema import Draft7Validator
 
+from ..utils.helper import Utils
+
 from .. import resources
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
@@ -212,6 +214,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.lfbTabWidget.setCurrentIndex(0)
         self.tabChange(None)
 
+        Utils.deselectFeature()
 
     def setPosition(self, position):
 
@@ -271,13 +274,15 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.draft.setupDraftLayer()
     
-    def draftSelected(self, newJson, id, attributes):
+    def draftSelected(self, newJson, id, feature):
         self.json = newJson
         self.resetForm(True)
         self.changeState()
         self.setPosition(2)
-        self.saveBar.setAttributes(attributes)
+        self.saveBar.setAttributes(feature, 'los_id')
         self.draft.resetCurrentDraft(id)
+
+        Utils.focusFeature(self.iface, feature, True, 15000)
 
     def changeState(self, validate = True):        
         self.state.change_state(self.json)

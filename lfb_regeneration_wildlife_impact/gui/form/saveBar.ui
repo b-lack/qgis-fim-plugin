@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>912</width>
-    <height>172</height>
+    <height>104</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -180,21 +180,45 @@ background-color: #333;</string>
          </spacer>
         </item>
         <item>
-         <widget class="QLabel" name="lfbId">
-          <property name="font">
-           <font>
-            <pointsize>13</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <property name="spacing">
+           <number>20</number>
           </property>
-          <property name="styleSheet">
-           <string notr="true">padding:0;</string>
+          <property name="leftMargin">
+           <number>0</number>
           </property>
-          <property name="text">
-           <string>TextLabel</string>
+          <property name="topMargin">
+           <number>0</number>
           </property>
-         </widget>
+          <item>
+           <widget class="QLabel" name="lfbId">
+            <property name="font">
+             <font>
+              <pointsize>13</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">padding:0;</string>
+            </property>
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="lfbFokusFeature">
+            <property name="styleSheet">
+             <string notr="true">background: #222222;
+padding: 0;</string>
+            </property>
+            <property name="text">
+             <string>fokus</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
          <widget class="QLabel" name="lfbProcessInfo">

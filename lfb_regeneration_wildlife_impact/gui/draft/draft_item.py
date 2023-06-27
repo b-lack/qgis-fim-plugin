@@ -69,11 +69,7 @@ class DraftItem(QtWidgets.QWidget, UI_CLASS):
         self.show()
 
     def focusFeature(self):
-
-        geom = self.feature.geometry()
-        coordinates = geom.asPoint()
-
-        self.interface.mapCanvas().setCenter(coordinates)
+        Utils.focusFeature(self.interface, self.feature, False)
 
     def on_lfbDraftIconBtn_clicked(self):
         self.featureSelected.emit(self.feature.id())

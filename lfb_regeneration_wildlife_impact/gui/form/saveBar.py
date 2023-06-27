@@ -36,6 +36,8 @@ from PyQt5 import QtCore
 
 from jsonschema import Draft7Validator
 
+from ...utils.helper import Utils
+
 
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'saveBar.ui'))
 
@@ -52,12 +54,19 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
 
         self.setupUi(self)
 
-
+        self.interface = interface
         self.json = json
         self.schema = schema
 
         self.isValidating = True
         self.isValid = False
+
+        self.maxErrors = 0
+        self.currentErrors = 0
+
+        self.currentFeature = None
+
+        self.customErrors = []
 
         self.lfbSaveBtn.setDisabled(True)
         self.lfbSaveBtn.clicked.connect(self.saveBtnClicked)
@@ -74,14 +83,15 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.lfbActionRow.setContentsMargins(0,0,0,0)
         self.lfbProgressBar.setContentsMargins(0,0,0,0)
 
-        self.maxErrors = 0
-        self.currentErrors = 0
-
-        self.customErrors = []
+        self.lfbFokusFeature.hide()
+        self.lfbFokusFeature.clicked.connect(self.focusFeature)
 
         self.validate(self.json) 
 
         self.show()
+
+    def focusFeature(self):
+        Utils.focusFeature(self.interface, self.currentFeature, True, 15000)
 
     def openSchema(self):
         msgBox = QtWidgets.QMessageBox()
@@ -97,9 +107,17 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
     def saveBtnClicked(self):
         self.saveFeature.emit(self.json)
 
-    def setAttributes(self, attributes):
-        self.lfbId.setText(str(attributes[1]))
-    
+    def setFeatureAttributes(self, feature, key):
+        layer = Utils.getLayerByName()
+        fields = layer.fields()
+        idx = fields.indexFromName(key)
+        self.lfbId.setText(str(feature.attributes()[idx]))
+
+        self.lfbFokusFeature.show()
+
+    def setAttributes(self,feature, key):
+        self.currentFeature = feature
+        self.setFeatureAttributes(feature, key)
 
     def checkMinimumSet(self, jsonToTest, errorLen):
         return True
