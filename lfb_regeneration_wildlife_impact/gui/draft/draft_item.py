@@ -61,10 +61,12 @@ class DraftItem(QtWidgets.QWidget, UI_CLASS):
         self.lfbDraftModifiedByBtn.setText(feature['modified'].toString() if feature['modified'] is not None else '-')
         self.lfbDraftModifiedBtn.setText(feature['created'].toString() if feature['created'] is not None else '-')
 
+        if 'general' in self.properties:
+            self.lfbDraftAufnahmetruppLabel.setText(self.properties['general']['spaufsucheaufnahmetruppkuerzel'] if self.properties['general']['spaufsucheaufnahmetruppkuerzel'] is not None else '-')
         #if 'general' in self.properties:
-        #    self.lfbDraftAufnahmetruppLabel.setText(self.properties['general']['aufnahmetrupp'] if self.properties['general']['aufnahmetrupp'] is not None else '-')
-        #if 'workflow' in self.properties:
-        #    self.lfbDraftWorkflowLabel.setText(Utils.enumLabel(self.properties['workflow'], schema['properties']['workflow']) if self.properties['workflow'] is not None else '-')
+        #    workflowId = Utils.getFeatureAttribute(feature, 'workflow')
+        #    workflowStr = Utils.enumLabel(workflowId, schema['properties']['general']['properties']['workflow'])
+        #    self.lfbDraftWorkflowLabel.setText(workflowStr)
 
         self.show()
 

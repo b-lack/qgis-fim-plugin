@@ -40,7 +40,7 @@ from PyQt5 import QtCore
 
 from .io_btn import IoBtn
 from .draft_item import DraftItem
-
+from ...utils.helper import Utils
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'draft_selection.ui'))
@@ -305,8 +305,16 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         if self.currentFeatureId is not None:
             for tFeature in self.vl.getFeatures():
                 if tFeature.id() == self.currentFeatureId:
+                    currentWorkflow = Utils.getFeatureAttribute(tFeature, 'workflow')
+                    if currentWorkflow == 4 or currentWorkflow == 11:
+                        currentWorkflow = currentWorkflow +1
+
                     self.vl.startEditing()
+                    
+
+                    tFeature.setAttribute('workflow', currentWorkflow)
                     tFeature.setAttribute('status', newState)
+                    
                     self.vl.updateFeature(tFeature)
                     self.vl.commitChanges()
                     self.vl.endEditCommand()

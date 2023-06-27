@@ -13,6 +13,13 @@ class Utils(object):
         idx = b['enum'].index(a)
         return str(b['enumLabels'][idx])
     
+    def getFeatureAttribute(feature, key):
+
+        layer = Utils.getLayerByName()
+        fields = layer.fields()
+        idx = fields.indexFromName(key)
+        return feature.attributes()[idx]
+
     def loadDefaultJson():
         dirname = os.path.dirname(__file__)
         filename = os.path.realpath(os.path.join(dirname, '..', 'schema', 'default.json'))
@@ -22,7 +29,7 @@ class Utils(object):
     def focusFeature(interface, feature, select = False, zoom = 150000):
         geom = feature.geometry()
         coordinates = geom.asPoint()
-        
+
         interface.mapCanvas().setCenter(coordinates)
         
         current_scale =  interface.mapCanvas().scale()
