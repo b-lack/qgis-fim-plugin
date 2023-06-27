@@ -76,7 +76,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.iface = interface
 
         self.tabsArray = []
-        self.currentTab = None
+        self.currentTab = 0
 
         self.inheritedErrors = {}
 
@@ -122,11 +122,13 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.lfbTabWidget.currentChanged.connect(self.tabChange)
         tabNr = 1
+        
         for attr, value in self.schema['properties'].items():
 
             self.inheritedErrors[attr] = []
 
             tab = Tabs(self.iface, self.json[attr], self.schema['properties'][attr], attr, self.inheritedErrors[attr])
+            tab.nextTab.connect(self.nextTab)
             tab.inputChanged.connect(self.inputChanged)
             #self.lfbTabWidget.addWidget(tab)
             #newTab = QWidget(myTabWidget)
@@ -159,6 +161,15 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.resetForm(False)
         self.setPosition(1)
 
+    def nextTab(self, nextTab):
+        if nextTab:
+            indexToSet = min(self.currentTab + 1, len(self.tabsArray) - 1)
+        else:
+           indexToSet = max(self.currentTab - 1, 0)
+
+        if self.lfbTabWidget.isTabEnabled(indexToSet):
+            self.lfbTabWidget.setCurrentIndex(indexToSet)
+
     def update(self):
         self.draft.update()
 
@@ -170,11 +181,24 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
     def tabChange(self, index):
         self.currentTab = index
+        tab = self.lfbTabWidget.currentWidget()
+        self.updateLinearButtons()
 
-        #if self.currentTab == None:
-        #    self.lfbTitle.setText('LFB Regeneration and Wildlife Impact Monitoring')
-        #else:
-        #    self.lfbTitle.setText(self.schema['properties'][self.tabsArray[index]['attr']]['title'])
+    def updateLinearButtons(self):   
+        indexToSet = min(self.currentTab + 1, len(self.tabsArray) - 1)
+        tab = self.lfbTabWidget.currentWidget()
+
+        QgsMessageLog.logMessage(str(indexToSet), 'LFB')
+        if self.currentTab < len(self.tabsArray)-1 and self.lfbTabWidget.isTabEnabled(indexToSet):
+            tab.lfbTabBtnFwd.setEnabled(True)
+        else:
+            tab.lfbTabBtnFwd.setEnabled(False)
+
+        indexToSet = max(self.currentTab - 1, 0)
+        if self.currentTab > 0 and self.lfbTabWidget.isTabEnabled(indexToSet):
+            tab.lfbTabBtnBack.setEnabled(True)
+        else:
+            tab.lfbTabBtnBack.setEnabled(False)
 
     def resetForm(self, setFields = True):
 
@@ -307,7 +331,6 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
             attr = tab['attr']
 
-            QgsMessageLog.logMessage(attr + ': ' +str(len(tab['inheritedErrors'])), 'LFB')
             for i in tab['inheritedErrors']:
                 QgsMessageLog.logMessage(i['message'], 'LFB')
             
@@ -346,7 +369,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.lfbCoordinates(self.json, cErrors)
 
         
-        
+        self.updateLinearButtons()
         return enableAll
 
     def lfbNotAccessable(self, json, taberrors):

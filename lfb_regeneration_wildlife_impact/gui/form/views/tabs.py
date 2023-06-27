@@ -42,6 +42,7 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'tab_defaul
 
 class Tabs(QtWidgets.QWidget, UI_CLASS):
     inputChanged = QtCore.pyqtSignal(object, str)
+    nextTab = QtCore.pyqtSignal(bool)
 
     def __init__(self, interface, json, schema, attr, inheritedErrors = []):
         """Constructor."""
@@ -61,6 +62,14 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
         scroll = QScroller.scroller(self.lfbTabScroll.viewport())
         scroll.grabGesture(self.lfbTabScroll.viewport(), QScroller.LeftMouseButtonGesture)
         
+        QgsMessageLog.logMessage(str('INIT' + attr), 'LFB')
+        try:
+            self.lfbTabBtnBack.clicked.disconnect()
+            self.lfbTabBtnFwd.clicked.disconnect()
+        except:
+            pass
+        self.lfbTabBtnBack.clicked.connect(self.on_lfbTabBtnBack_clicked)
+        self.lfbTabBtnFwd.clicked.connect(self.on_lfbTabBtnFwd_clicked)
 
         #if 'title' in schema:
         #    self.lfbObjectHeadeline.setText(schema['title'])
@@ -106,6 +115,14 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
         self.lfbInfoBox.hide()
 
         self.show()
+
+    def on_lfbTabBtnBack_clicked(self):
+        QgsMessageLog.logMessage(str('---False' + self.attr), 'LFB')
+        self.nextTab.emit(False)
+
+    def on_lfbTabBtnFwd_clicked(self):
+        QgsMessageLog.logMessage(str('---True' + self.attr), 'LFB')
+        self.nextTab.emit(True)
 
     def infoBoxClicked(self, info):
 

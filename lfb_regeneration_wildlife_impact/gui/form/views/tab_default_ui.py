@@ -23,19 +23,26 @@ class Ui_Form(object):
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(Form)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.toolButton_2 = QtWidgets.QToolButton(Form)
+        self.lfbTabBtnBack = QtWidgets.QToolButton(Form)
         font = QtGui.QFont()
         font.setPointSize(25)
-        self.toolButton_2.setFont(font)
-        self.toolButton_2.setStyleSheet("margin-left: 10px;\n"
-"padding: 10px;\n"
-"border-radius: 22px;\n"
-"border: 2px solid grey;\n"
-"background-color: grey;\n"
-"width: 20px;\n"
-"height: 20px;")
-        self.toolButton_2.setObjectName("toolButton_2")
-        self.horizontalLayout_2.addWidget(self.toolButton_2)
+        self.lfbTabBtnBack.setFont(font)
+        self.lfbTabBtnBack.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.lfbTabBtnBack.setStyleSheet("QToolButton{\n"
+"    margin-left: 10px;\n"
+"    padding: 10px;\n"
+"    border-radius: 22px;\n"
+"    border: 2px solid grey;\n"
+"    background-color: grey;\n"
+"    width: 20px;\n"
+"    height: 20px;\n"
+"    background-color: grey;\n"
+"}\n"
+"QToolButton:enabled{\n"
+"    background-color: green;\n"
+"}")
+        self.lfbTabBtnBack.setObjectName("lfbTabBtnBack")
+        self.horizontalLayout_2.addWidget(self.lfbTabBtnBack)
         self.lfbTabScroll = QtWidgets.QScrollArea(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
@@ -94,20 +101,27 @@ class Ui_Form(object):
         self.verticalLayout.addLayout(self.lfbTabLayout)
         self.lfbTabScroll.setWidget(self.scrollAreaWidgetContents)
         self.horizontalLayout_2.addWidget(self.lfbTabScroll)
-        self.toolButton = QtWidgets.QToolButton(Form)
+        self.lfbTabBtnFwd = QtWidgets.QToolButton(Form)
         font = QtGui.QFont()
         font.setPointSize(25)
-        self.toolButton.setFont(font)
-        self.toolButton.setStyleSheet("margin-right: 10px;\n"
-"padding: 10px;\n"
-"border-radius: 22px;\n"
-"border: 2px solid grey;\n"
-"background-color: grey;\n"
-"width: 20px;\n"
-"height: 20px;")
-        self.toolButton.setAutoRaise(False)
-        self.toolButton.setObjectName("toolButton")
-        self.horizontalLayout_2.addWidget(self.toolButton)
+        self.lfbTabBtnFwd.setFont(font)
+        self.lfbTabBtnFwd.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.lfbTabBtnFwd.setStyleSheet("QToolButton{\n"
+"    margin-right: 10px;\n"
+"    padding: 10px;\n"
+"    border-radius: 22px;\n"
+"    border: 2px solid grey;\n"
+"    background-color: grey;\n"
+"    width: 20px;\n"
+"    height: 20px;\n"
+"    background-color: grey;\n"
+"}\n"
+"QToolButton:enabled{\n"
+"    background-color: green;\n"
+"}")
+        self.lfbTabBtnFwd.setAutoRaise(False)
+        self.lfbTabBtnFwd.setObjectName("lfbTabBtnFwd")
+        self.horizontalLayout_2.addWidget(self.lfbTabBtnFwd)
         self.lfbInfoBox = QtWidgets.QTextBrowser(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
@@ -125,9 +139,9 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.toolButton_2.setText(_translate("Form", "<"))
+        self.lfbTabBtnBack.setText(_translate("Form", "<"))
         self.lfbObjectDescription.setText(_translate("Form", "TextLabel"))
-        self.toolButton.setText(_translate("Form", ">"))
+        self.lfbTabBtnFwd.setText(_translate("Form", ">"))
         self.lfbInfoBox.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"

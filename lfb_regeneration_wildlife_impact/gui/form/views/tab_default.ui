@@ -33,20 +33,29 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QToolButton" name="toolButton_2">
+    <widget class="QToolButton" name="lfbTabBtnBack">
      <property name="font">
       <font>
        <pointsize>25</pointsize>
       </font>
      </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
      <property name="styleSheet">
-      <string notr="true">margin-left: 10px;
-padding: 10px;
-border-radius: 22px;
-border: 2px solid grey;
-background-color: grey;
-width: 20px;
-height: 20px;</string>
+      <string notr="true">QToolButton{
+	margin-left: 10px;
+	padding: 10px;
+	border-radius: 22px;
+	border: 2px solid grey;
+	background-color: grey;
+	width: 20px;
+	height: 20px;
+	background-color: grey;
+}
+QToolButton:enabled{
+	background-color: green;
+}</string>
      </property>
      <property name="text">
       <string>&lt;</string>
@@ -170,20 +179,29 @@ background-color: transparent;</string>
     </widget>
    </item>
    <item>
-    <widget class="QToolButton" name="toolButton">
+    <widget class="QToolButton" name="lfbTabBtnFwd">
      <property name="font">
       <font>
        <pointsize>25</pointsize>
       </font>
      </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
      <property name="styleSheet">
-      <string notr="true">margin-right: 10px;
-padding: 10px;
-border-radius: 22px;
-border: 2px solid grey;
-background-color: grey;
-width: 20px;
-height: 20px;</string>
+      <string notr="true">QToolButton{
+	margin-right: 10px;
+	padding: 10px;
+	border-radius: 22px;
+	border: 2px solid grey;
+	background-color: grey;
+	width: 20px;
+	height: 20px;
+	background-color: grey;
+}
+QToolButton:enabled{
+	background-color: green;
+}</string>
      </property>
      <property name="text">
       <string>&gt;</string>

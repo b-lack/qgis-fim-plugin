@@ -95,8 +95,46 @@
                                 }
                             }
                         }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "bestandsbeschreibung": {
+                                "properties": {
+                                    "bestandbetriebsartid": {
+                                        "const": 2
+                                    }
+                                }
+                            }
+                        }
                     },
-                    "else": {
+                    "then": {
+                        "properties": {
+                            "t_bestockung": {
+                                "properties": {
+                                    "t_bestockung": {
+                                        "minItems": 0,
+                                        "maxItems": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "bestandsbeschreibung": {
+                                "properties": {
+                                    "bestandbetriebsartid": {
+                                        "const": 2
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "then": {
                         "properties": {
                             "t_bestockung": {
                                 "properties": {
@@ -125,16 +163,13 @@
                             "maxLength": 100,
                             "helperText": "Ein Kürzel aus mindestens 3 Zeichen. Idealerweise besteht aus den ersten drei Buchstaben des Nachnamens des Truppführers."
                         },
-                        "unterlosnr": {
-                            "title": "Aufnahmetruppkürzel",
-                            "type": [
-                                "string",
-                                "null"
-                            ],
-                            "description": "Eindeutige Bezeichnung des teil Nutzers/Trupps.",
-                            "minLength": 2,
+                        "spaufsucheaufnahmetruppgnss": {
+                            "title": "GNSS-Gerätkürzel",
+                            "type": "string",
+                            "description": "Möglichst eindeutige Bezeichnung des Gerätes.",
+                            "minLength": 3,
                             "maxLength": 100,
-                            "helperText": "Ein Kürzel aus mindestens 3 Zeichen. Idealerweise besteht aus den ersten drei Buchstaben des Nachnamens des Truppführers."
+                            "helperText": "Ein Kürzel aus mindestens 3 Zeichen. "
                         },
                         "spaufsuchenichtbegehbarursacheid": {
                             "title": "Zugänglichkeit*",
@@ -168,61 +203,11 @@
                                 "nicht begehbar, Gefahren wegen sonstiger Kalamitäten",
                                 "nicht begehbar, sonstige Gefahren (ohne Kalamitäten)"
                             ]
-                        },
-                        "workflow": {
-                            "type": [
-                                "integer",
-                                "null"
-                            ],
-                            "title": "Status der Aufnahme",
-                            "description": "Der Status wird automatisch gesetzt und kann nicht geändert werden.",
-                            "default": 4,
-                            "readOnly": true,
-                            "enum": [
-                                16,
-                                15,
-                                1,
-                                2,
-                                3,
-                                4,
-                                5,
-                                6,
-                                7,
-                                8,
-                                9,
-                                10,
-                                11,
-                                12,
-                                13,
-                                14,
-                                17,
-                                18
-                            ],
-                            "enumLabels": [
-                                "von Aufnahme ausgeschlossen",
-                                "im aktuellen Jahr keine Aufnahme",
-                                "für Stichprobeneninventur in diesem Jahr ausgewählt",
-                                "für Stichprobeninventur in diesem Jahr ausgewählt und Los zugeordnet",
-                                "Bereitgestellt an FU für download",
-                                "Von FU heruntergeladen - offline bei FU",
-                                "offline bei FU und bearbeitet",
-                                "von FU hochgeladen",
-                                "von LFB für kontrolle vorgesehen",
-                                "von KT heruntergeladen",
-                                "offline bei KT und bearbeitet",
-                                "hochgeladen, vom LFB kontrolliert und fehlerfrei",
-                                "zur Wiederholungsaufnahme vorgesehen und für FU zum Download bereitgestellt",
-                                "offline bei FU für Wiederholungsaufnahme (Korrektur der Aufnahme)",
-                                "von FU wieder hochgeladen",
-                                "von LFB abgenommen - voll rechnungsfähig",
-                                "von LFB abgenommen - teil-rechnungsfähig",
-                                "von LFB nicht abgenommen - nicht rechnungsfähig"
-                            ]
                         }
                     },
                     "required": [
                         "spaufsucheaufnahmetruppkuerzel",
-                        "unterlosnr",
+                        "spaufsucheaufnahmetruppgnss",
                         "spaufsuchenichtbegehbarursacheid"
                     ]
                 },
@@ -232,19 +217,10 @@
                     "type": "object",
                     "additionalProperties": false,
                     "required": [
-                        "spaufsuchegnss",
                         "istgeom_y",
                         "istgeom_x"
                     ],
                     "properties": {
-                        "spaufsuchegnss": {
-                            "title": "GNSS-Gerät*",
-                            "type": "string",
-                            "description": "Möglichst eindeutige Bezeichnung des Gerätes.",
-                            "minLength": 3,
-                            "maxLength": 100,
-                            "helperText": "Möglichst eindeutige Bezeichnung des Gerätes."
-                        },
                         "istgeom_y": {
                             "title": "Latitude*",
                             "description": "The latitude of the user",
@@ -284,10 +260,9 @@
                                 "integer",
                                 "null"
                             ],
-                            "description": "Elevation in Meter",
+                            "description": "Der vom Gerät übermittelte HDOP Wert.",
                             "minimum": 1,
-                            "maximum": 10,
-                            "helperText": "Verringerung der Genauigkeit"
+                            "maximum": 10
                         },
                         "istgeom_vdop": {
                             "title": "Vertikalgenauigkeit",
@@ -295,10 +270,9 @@
                                 "integer",
                                 "null"
                             ],
-                            "description": "Elevation in Meter",
+                            "description": "Der vom Gerät übermittelte VDOP Wert.",
                             "minimum": 1,
-                            "maximum": 10,
-                            "helperText": "Verringerung der Genauigkeit"
+                            "maximum": 10
                         },
                         "istgeom_sat": {
                             "title": "Satellitenanzahl",
@@ -351,7 +325,7 @@
                             ]
                         },
                         "spaufsuchenichtwaldursacheid": {
-                            "title": "Stichprobenpunt liegt/oder liegt nicht auf Waldfläche:",
+                            "title": "Stichprobenpunt ist auch nach Verlegung nicht im Wald. Geben Sie das tatsächliche Landschaftselement an.",
                             "type": [
                                 "integer"
                             ],
@@ -384,13 +358,18 @@
                                 3,
                                 3100,
                                 3200,
+                                3300,
                                 3400,
                                 4,
                                 4200,
                                 4311,
+                                5,
                                 5100,
                                 5120,
                                 5150,
+                                6100,
+                                7,
+                                7110,
                                 7200,
                                 9,
                                 9150,
@@ -405,6 +384,7 @@
                                 10180,
                                 10200,
                                 10250,
+                                11,
                                 11130,
                                 11160,
                                 11190,
@@ -448,101 +428,103 @@
                                 12832,
                                 12833,
                                 12834,
-                                12835,
-                                3300,
-                                5
+                                12835
                             ],
                             "enumLabels": [
                                 "ist Wald",
-                                "Fließgewässer",
-                                "Quellen und Quellfluren",
-                                "gefasste oder verbaute Quelle",
-                                "Sickerwasseraustritte oder Quellhänge in der Bergbaufolgelandschaft ",
-                                "Bäche und kleine Flüsse ",
-                                "naturnahe, unbeschattete Bäche und kleine Flüsse ",
-                                "naturnahe, beschattete Bäche und kleine Flüsse ",
-                                "begradigte, weitgehend naturferne Bäche und kl. Flüsse ohne Verbauung",
-                                "Flüsse und Ströme ",
-                                "Gräben",
-                                "Kanäle, Hafenbecken",
-                                "Röhrichtgesellschaften an Fließgewässern",
-                                "Standgewässer (einschließlich Uferbereiche, Röhricht etc.)",
-                                "Seen",
-                                "perennierende Kleingewässer (Sölle, Kolke, Pfuhle etc., <1ha)",
-                                "temporäre Kleingewässer ",
-                                "Staugewässer/Kleinspeicher",
-                                "Teiche",
-                                "Grubengewässer, Abgrabungsseen",
-                                "Anthropogene Rohbodenstandorte und Ruderalfluren",
-                                "vegetationsfreie und -arme Rohbodenstandorte (Deckungsgrad < 10%)",
-                                "ruderale Pionier-, Gras- und Staudenfluren ",
-                                "künstlich begründete Gras- und Staudenfluren (Ansaaten) auf Sekundärstandorten ohne wirtschaftliche Nutzung (keine Grünland- und Ackerflächen!)",
-                                "Moore und Sümpfe",
-                                "sekundäre Moorbildungen in der Bergbaufolgelandschaft",
-                                "Torfmoosrasen",
-                                "Feuchtwiesen und Feuchtweiden",
-                                "Trockenrasen",
-                                "Intensivgrasland",
-                                "Intensiv-Obstanlage",
-                                "Äcker ",
-                                "Wildäcker",
-                                "Biotope der Grün- und Freiflächen ",
-                                "Parkanlagen und Friedhöfe (incl. Friedhofsbrachen)",
-                                "Gärten und Gartenbrachen, Grabeland",
-                                "Energieleitungstrassen",
-                                "Waldschneisen",
-                                "Trockenmauern",
-                                "Kleingartenanlagen",
-                                "offene Sport- und Erholungsanlagen",
-                                "Campingplätze",
-                                "Spielplätze",
-                                "Wochenend- und Ferienhausbebauung, Ferienlager",
-                                "Erosionstäler, Trockentäler und Hohlwege",
-                                "Steinhaufen und -wälle",
-                                "Felsbildungen/Steinbruchwände",
-                                "trockene Gruben",
-                                "Spülflächen (Baggergut-Deponieflächen)",
-                                "Rieselfelder",
-                                "Baumschulen, Erwerbsgartenbau",
-                                "Buhnen",
-                                "Deiche und Dämme",
-                                "Bebaute Gebiete, Verkehrsanlagen und Sonderflächen",
-                                "Industrie-, Gewerbe-, Handels- und Dienstleistungsflächen, Gemeinbedarfsflächen ",
-                                "Landwirtschaft und Tierhaltung",
-                                "Ver- und Entsorgungsanlagen",
-                                "Verkehrsflächen",
-                                "Straßen",
-                                "Autobahnen und Schnellstraßen",
-                                "Parkplätze",
-                                "Wege",
-                                "unbefestigter Weg",
-                                "Weg mit wasserdurchlässiger Befestigung",
-                                "teilversiegelter Weg (incl. Pflaster)",
-                                "versiegelter Weg",
-                                "Steg (über Wasser oder Land)",
-                                "Bahnanlagen",
-                                "Gleisanlagen außerhalb der Bahnhöfe",
-                                "Flugplätze",
-                                "Hafen- und Schleusenanlagen, Anlegestege (inkl. Sportbootanlagen) ",
-                                "anthropogene Sonderflächen",
-                                "Müll-, Bauschutt- und sonstige Deponien",
-                                "Aufschüttungen und Abgrabungen",
-                                "Bauflächen / Baustellen",
-                                "Lagerflächen",
-                                "Sonderformen der Bauflächen",
-                                "Historische Bauwerke und Anlagen",
-                                "Burg, Schloss",
-                                "Kirche",
-                                "Festung",
-                                "militärische Sonderbauflächen",
-                                "sonstige Bauwerke",
-                                "Ruinen",
-                                "Bunker",
-                                "Gabionen",
-                                "gemauerte Lärmschutzwälle",
-                                "alte Mauern mit zerfallendem Mörtel, die von Pflanzen besiedelt sind und Tieren Lebensräume bieten",
-                                "sonstige Spontanvegetation auf Sekundärstandorten ",
-                                "Gras- und Staudenfluren"
+                                "01Fließgewässer",
+                                "01100Quellen und Quellfluren",
+                                "01103gefasste oder verbaute Quelle",
+                                "01104Sickerwasseraustritte oder Quellhänge in der Bergbaufolgelandschaft ",
+                                "01110Bäche und kleine Flüsse ",
+                                "01111naturnahe, unbeschattete Bäche und kleine Flüsse ",
+                                "01112naturnahe, beschattete Bäche und kleine Flüsse ",
+                                "01113begradigte, weitgehend naturferne Bäche und kl. Flüsse ohne Verbauung",
+                                "01120Flüsse und Ströme ",
+                                "01130Gräben",
+                                "01140Kanäle, Hafenbecken",
+                                "01210Röhrichtgesellschaften an Fließgewässern",
+                                "02Standgewässer (einschließlich Uferbereiche, Röhricht etc.)",
+                                "02100Seen",
+                                "02120perennierende Kleingewässer (Sölle, Kolke, Pfuhle etc., <1ha)",
+                                "02130temporäre Kleingewässer ",
+                                "02140Staugewässer/Kleinspeicher",
+                                "02150Teiche",
+                                "02160Grubengewässer, Abgrabungsseen",
+                                "03Anthropogene Rohbodenstandorte und Ruderalfluren",
+                                "03100vegetationsfreie und -arme Rohbodenstandorte (Deckungsgrad < 10%)",
+                                "03200ruderale Pionier-, Gras- und Staudenfluren ",
+                                "03300sonstige Spontanvegetation auf Sekundärstandorten ",
+                                "03400künstlich begründete Gras- und Staudenfluren (Ansaaten) auf Sekundärstandorten ohne wirtschaftliche Nutzung (keine Grünland- und Ackerflächen!)",
+                                "04Moore und Sümpfe",
+                                "04200sekundäre Moorbildungen in der Bergbaufolgelandschaft",
+                                "04311Torfmoosrasen",
+                                "05Gras-und Staudenfluren",
+                                "05100Feuchtwiesen und Feuchtweiden",
+                                "05120Trockenrasen",
+                                "05150Intensivgrasland",
+                                "06100Zwergstrauchheiden",
+                                "07Laubgebüsche, Feldgehölze, Alleen, Baumreihen",
+                                "07110Feldgehölze",
+                                "07200Intensiv-Obstanlage",
+                                "09Äcker ",
+                                "09150Wildäcker",
+                                "10Biotope der Grün- und Freiflächen ",
+                                "10100Parkanlagen und Friedhöfe (incl. Friedhofsbrachen)",
+                                "10110Gärten und Gartenbrachen, Grabeland",
+                                "10124Energieleitungstrassen",
+                                "10125Waldschneisen",
+                                "10130Trockenmauern",
+                                "10150Kleingartenanlagen",
+                                "10170offene Sport- und Erholungsanlagen",
+                                "10180Campingplätze",
+                                "10200Spielplätze",
+                                "10250Wochenend- und Ferienhausbebauung, Ferienlager",
+                                "11Sonderbiotope",
+                                "11130Erosionstäler, Trockentäler und Hohlwege",
+                                "11160Steinhaufen und -wälle",
+                                "11190Felsbildungen/Steinbruchwände",
+                                "11200trockene Gruben",
+                                "11220Spülflächen (Baggergut-Deponieflächen)",
+                                "11230Rieselfelder",
+                                "11250Baumschulen, Erwerbsgartenbau",
+                                "11280Buhnen",
+                                "11290Deiche und Dämme",
+                                "12Bebaute Gebiete, Verkehrsanlagen und Sonderflächen",
+                                "12300Industrie-, Gewerbe-, Handels- und Dienstleistungsflächen, Gemeinbedarfsflächen ",
+                                "12400Landwirtschaft und Tierhaltung",
+                                "12500Ver- und Entsorgungsanlagen",
+                                "12600Verkehrsflächen",
+                                "12610Straßen",
+                                "12630Autobahnen und Schnellstraßen",
+                                "12640Parkplätze",
+                                "12650Wege",
+                                "12651unbefestigter Weg",
+                                "12652Weg mit wasserdurchlässiger Befestigung",
+                                "12653teilversiegelter Weg (incl. Pflaster)",
+                                "12654versiegelter Weg",
+                                "12655Steg (über Wasser oder Land)",
+                                "12660Bahnanlagen",
+                                "12661Gleisanlagen außerhalb der Bahnhöfe",
+                                "12670Flugplätze",
+                                "12680Hafen- und Schleusenanlagen, Anlegestege (inkl. Sportbootanlagen) ",
+                                "12700anthropogene Sonderflächen",
+                                "12710Müll-, Bauschutt- und sonstige Deponien",
+                                "12720Aufschüttungen und Abgrabungen",
+                                "12730Bauflächen / Baustellen",
+                                "12740Lagerflächen",
+                                "12800Sonderformen der Bauflächen",
+                                "12810Historische Bauwerke und Anlagen",
+                                "12811Burg, Schloss",
+                                "12812Kirche",
+                                "12813Festung",
+                                "12820militärische Sonderbauflächen",
+                                "12830sonstige Bauwerke",
+                                "12831Ruinen",
+                                "12832Bunker",
+                                "12833Gabionen",
+                                "12834gemauerte Lärmschutzwälle",
+                                "12835alte Mauern mit zerfallendem Mörtel, die von Pflanzen besiedelt sind und Tieren Lebensräume bieten"
                             ]
                         }
                     }
@@ -550,7 +532,7 @@
                 "baumplot1": {
                     "type": "object",
                     "title": "Baumplot 1",
-                    "description": "Vom Stichprobenpunkt wird der erste Baumplot als fünf-Baumstichprobe angelegt. Dabei werden die fünf nahestehenden Bäume erfasst.",
+                    "description": "Der erste Baumplot. Wählen Sie die fünf nahesten Bäume aus und geben Sie die Baumart, Entfernung, Azimut, den Durchmesser und das Vorhandensein von Schäle und/oder Fege an.",
                     "properties": {
                         "azimuttransektploteins": {
                             "title": "Transektenlage",
@@ -679,9 +661,7 @@
                                             95,
                                             34,
                                             121,
-                                            31,
-                                            950,
-                                            951
+                                            31
                                         ],
                                         "enumLabels": [
                                             "Gemeine Kiefer",
@@ -784,9 +764,7 @@
                                             "Lawsonszypresse",
                                             "Nikkotanne",
                                             "Weißesche",
-                                            "Amerikanische Edeltanne",
-                                            "Blöße",
-                                            "Lücke"
+                                            "Amerikanische Edeltanne"
                                         ]
                                     },
                                     "azimut": {
@@ -853,7 +831,7 @@
                 "landmarken1": {
                     "type": "object",
                     "title": "Landmarken 1",
-                    "description": "Es sollen die fünf nahesten Bäume mit einem BHD > 7 cm erfasst werden. Der maximale Erfassungsradius liegt bei 12 m. Wenn innerhalb dieses Radius nicht ausreichend Bäume vorhanden sind, sind geeignete Landmarke mit der Art dem Azimut und der Entfernung zu erfassen um den Stichprobenpunkt bei Wiederholungsaufnahmen wiederzufinden.",
+                    "description": "Geben Sie Landmarken, z.B. Kirchtürme, Funktürme, Bäume, etc. an um den Stichprobenpunkt zu lokalisieren.",
                     "properties": {
                         "landmarken1": {
                             "type": "array",
@@ -1023,9 +1001,7 @@
                                             95,
                                             34,
                                             121,
-                                            31,
-                                            950,
-                                            951
+                                            31
                                         ],
                                         "enumLabels": [
                                             "Gemeine Kiefer",
@@ -1128,9 +1104,7 @@
                                             "Lawsonszypresse",
                                             "Nikkotanne",
                                             "Weißesche",
-                                            "Amerikanische Edeltanne",
-                                            "Blöße",
-                                            "Lücke"
+                                            "Amerikanische Edeltanne"
                                         ]
                                     },
                                     "azimut": {
@@ -1196,7 +1170,7 @@
                 "landmarken2": {
                     "type": "object",
                     "title": "Landmarken 2",
-                    "description": "Es sollen die fünf nahesten Bäume mit einem BHD > 7 cm erfasst werden. Der maximale Erfassungsradius liegt bei 12 m. Wenn innerhalb dieses Radius nicht ausreichend Bäume vorhanden sind, sind geeignete Landmarke mit der Art dem Azimut und der Entfernung zu erfassen um den Stichprobenpunkt bei Wiederholungsaufnahmen wiederzufinden.",
+                    "description": "Geben Sie Landmarken, z.B. Kirchtürme, Funktürme, Bäume, etc. an um den Stichprobenpunkt zu lokalisieren.",
                     "properties": {
                         "landmarken2": {
                             "type": "array",
@@ -1282,7 +1256,7 @@
                 "verjuengungstransekt": {
                     "title": "Verjüngung",
                     "type": "object",
-                    "description": "Der Verjüngungstransekt wird im 25 Meter Umfeld zum Stichprobenpunkt eingerichtet. Er misst eine Fläche von 2 m x 20 m im Wald auf ungestörtem dauerhaft bestocktem Areal. Die Grundrichtung ist dabei 0 Gon. Die Grundrichtung darf verändert werden, wenn in diese Richtung keine verwertbaren Aussagen erzielt werden können. Beispielsweise, wenn in dieser Richtung ein befestigter Weg oder ein z.B. durch beispielsweise eine Straße dauerhaft gestörter Bereich oder wenn der Verjüngungstransekt zum überwiegenden Teil auf einer Rückgegasse liegen würde.",
+                    "description": "Bäume von 10 cm Höhe bis 7 cm BHD im Verjüngungstransekt. Erfassen Sie den gesamten Transekt oder mindestens 50 Bäume dann Rückmessung.",
                     "required": [
                         "verjuengungstransektlaenge"
                     ],
@@ -1290,6 +1264,7 @@
                         "verjuengungstransekten": {
                             "type": "array",
                             "title": "Verjüngungstransekt",
+                            "description": "Bäume von 10 cm Höhe bis 7 cm BHD im Verjüngungstransekt. Erfassen Sie den gesamten Transekt oder mindestens 50 Bäume dann Rückmessung.",
                             "additionalItems": false,
                             "items": {
                                 "title": "Baumplot 1",
@@ -1403,9 +1378,7 @@
                                             95,
                                             34,
                                             121,
-                                            31,
-                                            950,
-                                            951
+                                            31
                                         ],
                                         "enumLabels": [
                                             "Gemeine Kiefer",
@@ -1508,17 +1481,15 @@
                                             "Lawsonszypresse",
                                             "Nikkotanne",
                                             "Weißesche",
-                                            "Amerikanische Edeltanne",
-                                            "Blöße",
-                                            "Lücke"
+                                            "Amerikanische Edeltanne"
                                         ]
                                     },
-                                    "id_hohst": {
+                                    "height": {
                                         "title": "Höhenstufe",
                                         "type": "integer",
+                                        "description": "Höhenstufe",
                                         "minimum": 1,
                                         "maximum": 250,
-                                        "helperText": "Höhe",
                                         "unit": "Dezimeter",
                                         "qtChips": 10,
                                         "enum": [
@@ -1537,14 +1508,15 @@
                                             "von 51 bis 100",
                                             "von 101 bis 150",
                                             "von 151 bis 200",
-                                            "höher 201"
+                                            "von 201 bis <7 cm BHD"
                                         ]
                                     },
                                     "verjuengungstransektbhd": {
                                         "title": "BHD bei Bäuen > 2 Meter",
+                                        "description": "BHD bei Bäumen > 2 Meter Höhe, gemessen in mm mit Umfangsmaßband",
                                         "type": "integer",
                                         "minimum": 1,
-                                        "maximum": 2500,
+                                        "maximum": 75,
                                         "unit": "Millimeter"
                                     },
                                     "verjuengungstransektschutzmassnahmen": {
@@ -1614,9 +1586,9 @@
                     }
                 },
                 "weiserpflanzen": {
-                    "title": "Weisepflanzen",
+                    "title": "Weiserpflanzen im Verjüngungstransekt",
                     "type": "object",
-                    "description": "Prozentuale Bedeckung des Transektes mit unten stehenden Weisepflanzen.",
+                    "description": "Bedeckungsgrad mit Weiserpflanzen im Verjüngungstransekt",
                     "properties": {
                         "krautanteil": {
                             "title": "Krautanteil",
@@ -1633,6 +1605,7 @@
                             "properties": {
                                 "weiserpflanzenmoos": {
                                     "title": "Moos",
+                                    "description": "Bedeckungsgrad mit Moos",
                                     "type": "integer",
                                     "default": 0,
                                     "minimum": 0,
@@ -1647,6 +1620,7 @@
                             "properties": {
                                 "weiserpflanzenbrennessel": {
                                     "title": "Brennessel",
+                                    "description": "Bedeckungsgrad mit Brennessel",
                                     "type": "integer",
                                     "default": 0,
                                     "minimum": 0,
@@ -1655,6 +1629,7 @@
                                 },
                                 "weiserpflanzengoldnessel": {
                                     "title": "Goldnessel",
+                                    "description": "Bedeckungsgrad mit Goldnessel",
                                     "type": "integer",
                                     "default": 0,
                                     "minimum": 0,
@@ -1663,6 +1638,7 @@
                                 },
                                 "weiserpflanzenheidekraut": {
                                     "title": "Heidekraut",
+                                    "description": "Bedeckungsgrad mit Heidekraut",
                                     "type": "integer",
                                     "default": 0,
                                     "minimum": 0,
@@ -1671,6 +1647,7 @@
                                 },
                                 "weiserpflanzenspringkraut": {
                                     "title": "Kleinblütiges Springkraut",
+                                    "description": "Bedeckungsgrad mit Kleinblütiges Springkraut",
                                     "type": "integer",
                                     "default": 0,
                                     "minimum": 0,
@@ -1679,6 +1656,7 @@
                                 },
                                 "weiserpflanzenmaigloeckchen": {
                                     "title": "Maiglöckchen",
+                                    "description": "Bedeckungsgrad mit Maiglöckchen",
                                     "type": "integer",
                                     "default": 0,
                                     "minimum": 0,
@@ -1687,6 +1665,7 @@
                                 },
                                 "weiserpflanzenweidenroesschen": {
                                     "title": "Schmalblättriges Weidenröschen",
+                                    "description": "Bedeckungsgrad mit Schmalblättriges Weidenröschen",
                                     "type": "integer",
                                     "default": 0,
                                     "minimum": 0,
@@ -1695,6 +1674,7 @@
                                 },
                                 "weiserpflanzenwaldmeister": {
                                     "title": "Waldmeister",
+                                    "description": "Bedeckungsgrad mit Waldmeister",
                                     "type": "integer",
                                     "default": 0,
                                     "minimum": 0,
@@ -1703,6 +1683,7 @@
                                 },
                                 "weiserpflanzenwaldsauerklee": {
                                     "title": "Waldsauerklee",
+                                    "description": "Bedeckungsgrad mit Waldsauerklee",
                                     "type": "integer",
                                     "default": 0,
                                     "minimum": 0,
@@ -1711,6 +1692,7 @@
                                 },
                                 "weiserpflanzenwegerich": {
                                     "title": "Wegerich",
+                                    "description": "Bedeckungsgrad mit Wegerich",
                                     "type": "integer",
                                     "default": 0,
                                     "minimum": 0,
@@ -1726,7 +1708,7 @@
                                 "weiserpflanzendrahtschmiele": {
                                     "title": "Drahtschmiede",
                                     "type": "integer",
-                                    "description": "Drahtschmiede",
+                                    "description": "Bedeckungsgrad mit Drahtschmiede",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1735,7 +1717,7 @@
                                 "weiserpflanzenflaterbinse": {
                                     "title": "Flatterbinse",
                                     "type": "integer",
-                                    "description": "Flatterbinse",
+                                    "description": "Bedeckungsgrad mit Flatterbinse",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1744,7 +1726,7 @@
                                 "weiserpflanzenhainrispengras": {
                                     "title": "Hainrispengras",
                                     "type": "integer",
-                                    "description": "Hainrispengras",
+                                    "description": "Bedeckungsgrad mit Hainrispengras",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1753,7 +1735,7 @@
                                 "weiserpflanzenperlgras": {
                                     "title": "Perlgras",
                                     "type": "integer",
-                                    "description": "Perlgras",
+                                    "description": "Bedeckungsgrad mit Perlgras",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1762,7 +1744,7 @@
                                 "weiserpflanzenpfeifengras": {
                                     "title": "Pfeiffengras",
                                     "type": "integer",
-                                    "description": "Pfeiffengras",
+                                    "description": "Bedeckungsgrad mit Pfeiffengras",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1771,7 +1753,7 @@
                                 "weiserpflanzensandrohr": {
                                     "title": "Sandrohr",
                                     "type": "integer",
-                                    "description": "Sandrohr",
+                                    "description": "Bedeckungsgrad mit Sandrohr/Calamagrostis",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1780,7 +1762,7 @@
                                 "weiserpflanzenwaldzwenke": {
                                     "title": "Waldzwenke",
                                     "type": "integer",
-                                    "description": "Waldzwenke",
+                                    "description": "Bedeckungsgrad mit Waldzwenke",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1789,7 +1771,7 @@
                                 "weiserpflanzenwinkelsegge": {
                                     "title": "Winkelsegge",
                                     "type": "integer",
-                                    "description": "Winkelsegge",
+                                    "description": "Bedeckungsgrad mit Winkelsegge",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1798,13 +1780,13 @@
                             }
                         },
                         "farne": {
-                            "title": "Kraut",
+                            "title": "Farne",
                             "type": "object",
                             "properties": {
                                 "weiserpflanzenadlerfarn": {
                                     "title": "Adlerfarn",
                                     "type": "integer",
-                                    "description": "Adlerfarn",
+                                    "description": "Bedeckungsgrad mit Adlerfarn",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1819,7 +1801,7 @@
                                 "weiserpflanzengiersch": {
                                     "title": "Girsch",
                                     "type": "integer",
-                                    "description": "Girsch",
+                                    "description": "Bedeckungsgrad mit Girsch",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1834,7 +1816,7 @@
                                 "weiserpflanzenheidelbeere": {
                                     "title": "Heidelbeere",
                                     "type": "integer",
-                                    "description": "Girsch",
+                                    "description": "Bedeckungsgrad mit Heidelbeere",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1843,7 +1825,7 @@
                                 "weiserpflanzenpreiselbeere": {
                                     "title": "Preiselbeere",
                                     "type": "integer",
-                                    "description": "Preiselbeere",
+                                    "description": "Bedeckungsgrad mit Preiselbeere",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1858,7 +1840,7 @@
                                 "weiserpflanzenhimbeere": {
                                     "title": "Himbeere",
                                     "type": "integer",
-                                    "description": "Himbeere",
+                                    "description": "Bedeckungsgrad mit Himbeere",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1867,7 +1849,7 @@
                                 "weiserpflanzenbrombeere": {
                                     "title": "Brombeere",
                                     "type": "integer",
-                                    "description": "Brombeere",
+                                    "description": "Bedeckungsgrad mit Brombeere",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1918,8 +1900,7 @@
                         "bestandbetriebsartid": {
                             "type": "integer",
                             "title": "Betriebsart*",
-                            "description": "Bestandesbeschreibung",
-                            "helperText": "Bestandesbeschreibung",
+                            "description": "Die Bestandesbeschreibung bezieht sich auf den Wald in dem der Transekt liegt. Die Fläche ist in etwa ein Halbkreis mit dem Transekt als Radius.",
                             "default": 1,
                             "enum": [
                                 2,
@@ -1995,8 +1976,7 @@
                         "bestandnschichtigid": {
                             "type": "integer",
                             "title": "n-schichtig*",
-                            "description": "Bestandesbeschreibung",
-                            "helperText": "Bestandesbeschreibung",
+                            "description": "Geben Sie die Anzahl der Schichten an. Eine einzelne Schicht können Sie dann ausweisen, wenn die Kronenbereiche nicht ineinander überlaufen.",
                             "default": 1,
                             "enum": [
                                 7,
@@ -2249,9 +2229,7 @@
                                             95,
                                             34,
                                             121,
-                                            31,
-                                            950,
-                                            951
+                                            31
                                         ],
                                         "enumLabels": [
                                             "Gemeine Kiefer",
@@ -2354,9 +2332,7 @@
                                             "Lawsonszypresse",
                                             "Nikkotanne",
                                             "Weißesche",
-                                            "Amerikanische Edeltanne",
-                                            "Blöße",
-                                            "Lücke"
+                                            "Amerikanische Edeltanne"
                                         ]
                                     },
                                     "nas_id": {
@@ -2641,6 +2617,56 @@
         }
     },
     "$defs": {
+        "workflow": {
+            "type": [
+                "integer",
+                "null"
+            ],
+            "title": "Status der Aufnahme",
+            "description": "Der Status wird automatisch gesetzt und kann nicht geändert werden.",
+            "default": 4,
+            "readOnly": true,
+            "enum": [
+                16,
+                15,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                17,
+                18
+            ],
+            "enumLabels": [
+                "von Aufnahme ausgeschlossen",
+                "im aktuellen Jahr keine Aufnahme",
+                "für Stichprobeneninventur in diesem Jahr ausgewählt",
+                "für Stichprobeninventur in diesem Jahr ausgewählt und Los zugeordnet",
+                "Bereitgestellt an FU für download",
+                "Von FU heruntergeladen - offline bei FU",
+                "offline bei FU und bearbeitet",
+                "von FU hochgeladen",
+                "von LFB für kontrolle vorgesehen",
+                "von KT heruntergeladen",
+                "offline bei KT und bearbeitet",
+                "hochgeladen, vom LFB kontrolliert und fehlerfrei",
+                "zur Wiederholungsaufnahme vorgesehen und für FU zum Download bereitgestellt",
+                "offline bei FU für Wiederholungsaufnahme (Korrektur der Aufnahme)",
+                "von FU wieder hochgeladen",
+                "von LFB abgenommen - voll rechnungsfähig",
+                "von LFB abgenommen - teil-rechnungsfähig",
+                "von LFB nicht abgenommen - nicht rechnungsfähig"
+            ]
+        },
         "baumart": {
             "title": "Baumart",
             "type": "integer",
@@ -2748,9 +2774,7 @@
                 95,
                 34,
                 121,
-                31,
-                950,
-                951
+                31
             ],
             "enumLabels": [
                 "Gemeine Kiefer",
@@ -2853,9 +2877,7 @@
                 "Lawsonszypresse",
                 "Nikkotanne",
                 "Weißesche",
-                "Amerikanische Edeltanne",
-                "Blöße",
-                "Lücke"
+                "Amerikanische Edeltanne"
             ]
         },
         "baumplot": {
@@ -2970,9 +2992,7 @@
                         95,
                         34,
                         121,
-                        31,
-                        950,
-                        951
+                        31
                     ],
                     "enumLabels": [
                         "Gemeine Kiefer",
@@ -3075,9 +3095,7 @@
                         "Lawsonszypresse",
                         "Nikkotanne",
                         "Weißesche",
-                        "Amerikanische Edeltanne",
-                        "Blöße",
-                        "Lücke"
+                        "Amerikanische Edeltanne"
                     ]
                 },
                 "azimut": {

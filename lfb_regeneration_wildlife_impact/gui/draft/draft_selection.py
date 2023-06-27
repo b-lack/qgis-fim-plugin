@@ -306,7 +306,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             for tFeature in self.vl.getFeatures():
                 if tFeature.id() == self.currentFeatureId:
                     currentWorkflow = Utils.getFeatureAttribute(tFeature, 'workflow')
-                    if currentWorkflow == 4 or currentWorkflow == 11:
+                    if currentWorkflow == 4 or currentWorkflow == 12:
                         currentWorkflow = currentWorkflow +1
 
                     self.vl.startEditing()
@@ -314,7 +314,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
                     tFeature.setAttribute('workflow', currentWorkflow)
                     tFeature.setAttribute('status', newState)
-                    
+
                     self.vl.updateFeature(tFeature)
                     self.vl.commitChanges()
                     self.vl.endEditCommand()
@@ -361,7 +361,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             self.vl.addFeature(feature)
                 
         # SET META DATA
-        feature.setAttribute('workflow', jsonObj['general']['workflow'])
+        #feature.setAttribute('workflow', jsonObj['general']['workflow'])
         feature.setAttribute('form', json.dumps(jsonObj))
 
         self.vl.updateFeature(feature)

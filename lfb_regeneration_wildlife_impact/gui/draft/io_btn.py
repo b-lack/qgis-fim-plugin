@@ -120,7 +120,6 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         
 
         for selectedLayer in selectedFeatures:
-            QgsMessageLog.logMessage(str(selectedLayer), 'LFB')
             for feature in selectedLayer['features']:
 
                 geom = feature.geometry()
@@ -147,10 +146,8 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
 
 
                 for fieldName in self.fieldsToBeMapped:
-                    QgsMessageLog.logMessage(str(fieldName), 'LFB')
                     idx = layerFields.indexFromName(fieldName)
                     if idx >= 0:
-                        QgsMessageLog.logMessage(str(attributes[idx]), 'LFB')
                         qgsFeature.setAttribute(fieldName, attributes[idx])
                     else:
                         qgsFeature.setAttribute(fieldName, defaultAttributes[fieldName])

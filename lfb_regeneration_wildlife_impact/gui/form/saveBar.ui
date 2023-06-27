@@ -226,7 +226,7 @@ padding: 0;</string>
            <string notr="true">padding:0;</string>
           </property>
           <property name="text">
-           <string>TextLabel</string>
+           <string/>
           </property>
          </widget>
         </item>

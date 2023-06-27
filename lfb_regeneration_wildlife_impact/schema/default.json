@@ -11,11 +11,9 @@
         "general": {
             "spaufsucheaufnahmetruppkuerzel": null,
             "spaufsuchenichtbegehbarursacheid": null,
-            "workflow": 4
+            "spaufsucheaufnahmetruppgnss": null
         },
-        "coordinates": {
-
-        },
+        "coordinates": {},
         "stichprobenpunkt": {},
         "baumplot1":{
             "baumplot1": [],
