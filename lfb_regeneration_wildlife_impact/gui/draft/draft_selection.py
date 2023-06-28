@@ -319,6 +319,8 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                     self.vl.commitChanges()
                     self.vl.endEditCommand()
 
+                    QgsMessageLog.logMessage('STATUS: ' + str(newState), 'LFB')
+
     def saveFeature(self, jsonObj):
 
         if jsonObj is None:
@@ -363,6 +365,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         # SET META DATA
         #feature.setAttribute('workflow', jsonObj['general']['workflow'])
         feature.setAttribute('form', json.dumps(jsonObj))
+        QgsMessageLog.logMessage('SAVED: ' + str(jsonObj), 'LFB')
 
         self.vl.updateFeature(feature)
 

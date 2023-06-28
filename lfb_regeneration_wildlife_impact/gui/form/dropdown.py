@@ -73,6 +73,11 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         if "unit" in self.schema:
             self.lfbUnit.setText(self.schema['unit'])
 
+        if "helpText" in self.schema:
+            self.lfbTextFieldDescriptionBtn.show()
+        else:
+            self.lfbTextFieldDescriptionBtn.hide()
+
         self.lfbComboBox.currentIndexChanged.connect(self.setInputText)
         self.lfbComboBox.addItems(self.schema['enumLabels'])
 
@@ -85,7 +90,7 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
             self.lfbComboBox.setEnabled(False)
             
             self.tree = QtWidgets.QTreeWidget()
-            self.tree.setFixedHeight(480)
+            self.tree.setFixedHeight(300)
             self.tree.setStyleSheet("QTreeWidget { font-size: 13pt; }")
             self.tree.itemClicked.connect(self.onItemClicked)
             self.lfbReplaceWidget.layout().addWidget(self.tree)

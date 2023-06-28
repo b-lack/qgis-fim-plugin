@@ -53,6 +53,7 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
 
         self.json = json
         self.attr = attr
+        self.schema = schema
         self.inheritedErrors = inheritedErrors
 
         self.infoTitle = ""
@@ -62,7 +63,6 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
         scroll = QScroller.scroller(self.lfbTabScroll.viewport())
         scroll.grabGesture(self.lfbTabScroll.viewport(), QScroller.LeftMouseButtonGesture)
         
-        QgsMessageLog.logMessage(str('INIT' + attr), 'LFB')
         try:
             self.lfbTabBtnBack.clicked.disconnect()
             self.lfbTabBtnFwd.clicked.disconnect()
@@ -76,10 +76,14 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
         #else:
         #    self.lfbObjectHeadeline.hide()
 
+        self.lfbInfoButton.clicked.connect(self.tabInfoBoxClicked)
+        self.lfbTabDescription.hide()
         if 'description' in schema:
-            self.lfbObjectDescription.setText(schema['description'])
+            #self.lfbObjectDescription.setText(schema['description'])
+            self.lfbInfoButton.show()
         else:
-            self.lfbObjectDescription.hide()
+            #self.lfbObjectDescription.hide()
+            self.lfbInfoButton.hide()
 
         if 'properties' in schema:
             items = schema['properties'].items()
@@ -112,9 +116,19 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
 
             self.fieldArray.append(field)
 
-        self.lfbInfoBox.hide()
+        self.lfbTabInfoWidget.hide()
 
         self.show()
+
+    def tabInfoBoxClicked(self, info):
+        QgsMessageLog.logMessage(str(info), 'LFB')
+
+        self.lfbInfoBox.setText(self.schema['description'])
+
+        if self.lfbTabInfoWidget.isVisible():
+            self.lfbTabInfoWidget.hide()
+        else:
+            self.lfbTabInfoWidget.show()
 
     def on_lfbTabBtnBack_clicked(self):
         QgsMessageLog.logMessage(str('---False' + self.attr), 'LFB')
@@ -127,13 +141,13 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
     def infoBoxClicked(self, info):
 
         if self.infoTitle == info['title']:
-            if self.lfbInfoBox.isVisible():
-                self.lfbInfoBox.hide()
+            if self.lfbTabInfoWidget.isVisible():
+                self.lfbTabInfoWidget.hide()
             else:
-                self.lfbInfoBox.show()
+                self.lfbTabInfoWidget.show()
         else:
             self.lfbInfoBox.setText(info['description'])
-            self.lfbInfoBox.show()
+            self.lfbTabInfoWidget.show()
 
         self.infoTitle = info['title']
 

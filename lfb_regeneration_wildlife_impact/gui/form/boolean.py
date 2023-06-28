@@ -67,6 +67,13 @@ class Boolean(QtWidgets.QWidget, UI_CLASS):
 
         self.lfbTextFieldDescriptionBtn.clicked.connect(self.triggerInfoBox)
 
+        if "helpText" in self.schema:
+            self.lfbTextFieldDescriptionBtn.show()
+        else:
+            self.lfbTextFieldDescriptionBtn.hide()
+
+        self.lfbTextFieldHelp.setText('')
+
         self.setDefaultValue()
             
 
@@ -137,7 +144,5 @@ class Boolean(QtWidgets.QWidget, UI_CLASS):
             #self.lfbTextFieldHelp.hide()
             for error in errors:
                 self.lfbTextFieldError.setText(error.message)
-
-        self.lfbTextFieldHelp.setText(str(self.json[self.key]))
 
         self.inputChanged.emit(str(self.json[self.key]))

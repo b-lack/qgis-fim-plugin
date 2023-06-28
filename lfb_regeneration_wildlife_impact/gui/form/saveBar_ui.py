@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(912, 104)
+        Form.resize(917, 492)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -67,14 +67,25 @@ class Ui_Form(object):
 "margin:0px;")
         self.lfbActionRow.setObjectName("lfbActionRow")
         self.lfbsabeLayout = QtWidgets.QHBoxLayout(self.lfbActionRow)
-        self.lfbsabeLayout.setContentsMargins(0, 0, 0, 0)
+        self.lfbsabeLayout.setContentsMargins(0, 5, 0, 5)
         self.lfbsabeLayout.setSpacing(0)
         self.lfbsabeLayout.setObjectName("lfbsabeLayout")
         self.lfbHomeBtn = QtWidgets.QToolButton(self.lfbActionRow)
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        self.lfbHomeBtn.setFont(font)
         self.lfbHomeBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.lfbHomeBtn.setStyleSheet("color: #fff;\n"
-"background-color:#222;\n"
-"border:none;")
+        self.lfbHomeBtn.setStyleSheet("QToolButton{\n"
+"    border-radius: 20px;\n"
+"    border: 2px solid #333;\n"
+"    color: #555;\n"
+"    margin: 5px;\n"
+"}\n"
+"QToolButton:enabled{\n"
+"    background-color: green;\n"
+"    color: #fff;\n"
+"}")
         self.lfbHomeBtn.setObjectName("lfbHomeBtn")
         self.lfbsabeLayout.addWidget(self.lfbHomeBtn)
         self.lfbDevBtn = QtWidgets.QPushButton(self.lfbActionRow)
@@ -89,8 +100,6 @@ class Ui_Form(object):
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setContentsMargins(10, -1, -1, -1)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_2.addItem(spacerItem)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setContentsMargins(0, 0, -1, -1)
         self.horizontalLayout.setSpacing(20)
@@ -115,11 +124,9 @@ class Ui_Form(object):
         self.lfbProcessInfo.setText("")
         self.lfbProcessInfo.setObjectName("lfbProcessInfo")
         self.verticalLayout_2.addWidget(self.lfbProcessInfo)
-        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_2.addItem(spacerItem1)
         self.lfbsabeLayout.addLayout(self.verticalLayout_2)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.lfbsabeLayout.addItem(spacerItem2)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.lfbsabeLayout.addItem(spacerItem)
         self.lfbErrorDialogBtn = QtWidgets.QPushButton(self.lfbActionRow)
         self.lfbErrorDialogBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.lfbErrorDialogBtn.setStyleSheet("color: red;\n"
@@ -130,9 +137,8 @@ class Ui_Form(object):
         self.lfbErrorDialogBtn.setObjectName("lfbErrorDialogBtn")
         self.lfbsabeLayout.addWidget(self.lfbErrorDialogBtn)
         self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setContentsMargins(10, -1, 10, -1)
         self.verticalLayout.setObjectName("verticalLayout")
-        spacerItem3 = QtWidgets.QSpacerItem(20, 0, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem3)
         self.lfbSaveBtn = QtWidgets.QPushButton(self.lfbActionRow)
         font = QtGui.QFont()
         font.setPointSize(15)
@@ -144,7 +150,7 @@ class Ui_Form(object):
 "    border-radius: 20px;\n"
 "    border: 2px solid #333;\n"
 "    color: #555;\n"
-"    margin: 5px;\n"
+"    margin: 2px;\n"
 "}\n"
 "QPushButton:enabled{\n"
 "    border-radius: 20px;\n"
@@ -154,8 +160,6 @@ class Ui_Form(object):
 "}")
         self.lfbSaveBtn.setObjectName("lfbSaveBtn")
         self.verticalLayout.addWidget(self.lfbSaveBtn)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 0, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem4)
         self.lfbsabeLayout.addLayout(self.verticalLayout)
         self.gridLayout.addWidget(self.lfbActionRow, 2, 0, 1, 1)
 

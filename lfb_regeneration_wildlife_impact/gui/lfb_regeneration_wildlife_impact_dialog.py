@@ -90,20 +90,6 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.state = state
 
-        #qss = os.path.realpath(os.path.join(dirname, '..', 'styles', 'global.qss'))
-        
-        #with open(qss,"r") as fh:
-            #self.setStyleSheet(fh.read())
-            
-            #self.setStyleSheet("QLineEdit { background-color: yellow }")
-
-
-        #self.lfbDevBtn.clicked.connect(self.openState)
-
-        #self.lfbHomeScreen
-        #self.lfbHomeScreen.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        #self.lfbHomeScreen.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-
         scroll = QScroller.scroller(self.lfbHomeScreen.viewport())
         scroll.grabGesture(self.lfbHomeScreen.viewport(), QScroller.LeftMouseButtonGesture)
  
@@ -180,7 +166,9 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.draft.readDone(True)
 
     def tabChange(self, index):
-        self.currentTab = index
+        
+        self.currentTab = int(index)
+
         tab = self.lfbTabWidget.currentWidget()
         self.updateLinearButtons()
 
@@ -236,7 +224,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.changeState(False)
         self.setPosition(1)
         self.lfbTabWidget.setCurrentIndex(0)
-        self.tabChange(None)
+        self.tabChange(0)
 
         Utils.deselectFeature()
 
@@ -370,7 +358,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         
         self.updateLinearButtons()
-        return enableAll
+        return len(gErrors) == 0
 
     def lfbNotAccessable(self, json, taberrors):
         if json['general']['spaufsuchenichtbegehbarursacheid'] != 1 or len(taberrors) > 0:

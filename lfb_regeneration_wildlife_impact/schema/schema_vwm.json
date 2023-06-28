@@ -330,8 +330,6 @@
                                 "integer"
                             ],
                             "description": "Stichprobenpunkt liegt eindeutig nicht im Wald und wäre auch nach Verlegung nicht im Wald.",
-                            "minLength": 1,
-                            "maxLength": 100,
                             "QTType": "tree",
                             "default": 0,
                             "enum": [
@@ -1246,6 +1244,7 @@
                         "transektstoerungursache": {
                             "title": "Temporäre Störung Ursache",
                             "description": "Temporäre Störung - Es liegt eine Störung vor, die eine Aufnahme unmöglich macht (z.B. Totholz)",
+                            "maxLength": 1500,
                             "type": [
                                 "string",
                                 "null"

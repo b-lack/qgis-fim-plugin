@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>848</width>
-    <height>388</height>
+    <width>860</width>
+    <height>302</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Form</string>
@@ -20,15 +26,14 @@
    <property name="bottomMargin">
     <number>50</number>
    </property>
-   <item row="3" column="2" colspan="3">
-    <widget class="QLabel" name="lfbFolderSelectionError">
-     <property name="text">
-      <string>Select a folder you want to save data in.</string>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="1" colspan="4">
     <widget class="QLabel" name="label">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="font">
       <font>
        <pointsize>15</pointsize>
@@ -46,6 +51,12 @@
    </item>
    <item row="1" column="2" colspan="2">
     <widget class="QLabel" name="lfbTempAlert">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="styleSheet">
       <string notr="true">color: orange;</string>
      </property>
@@ -57,8 +68,14 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="2" colspan="2">
+   <item row="2" column="1" colspan="4">
     <widget class="QgsFileWidget" name="lfbFolderSelection">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="fullUrl">
       <bool>false</bool>
      </property>
@@ -67,6 +84,19 @@
      </property>
      <property name="options">
       <set>QFileDialog::ReadOnly|QFileDialog::ShowDirsOnly</set>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1" colspan="4">
+    <widget class="QLabel" name="lfbFolderSelectionError">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Select a folder you want to save data in.</string>
      </property>
     </widget>
    </item>

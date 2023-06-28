@@ -84,6 +84,11 @@ class TextArea(QtWidgets.QWidget, UI_CLASS):
         if "unit" in self.schema:
             self.lfbTextFieldUnit.setText(self.schema['unit'])
 
+        if "helpText" in self.schema:
+            self.lfbTextFieldDescriptionBtn.show()
+        else:
+            self.lfbTextFieldDescriptionBtn.hide()
+
         if self.shouldBeNumeric():
             #self.lfbTextField.setValidator(QDoubleValidator())
             self.lfbTextField.setAlignment(QtCore.Qt.AlignRight)

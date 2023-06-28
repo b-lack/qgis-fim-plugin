@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(921, 902)
+        Form.resize(586, 755)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -22,27 +22,43 @@ class Ui_Form(object):
         Form.setSizePolicy(sizePolicy)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(Form)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_2.setSpacing(0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.lfbTabBtnBack = QtWidgets.QToolButton(Form)
+        self.verticalWidget_2 = QtWidgets.QWidget(Form)
+        self.verticalWidget_2.setStyleSheet("")
+        self.verticalWidget_2.setObjectName("verticalWidget_2")
+        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.verticalWidget_2)
+        self.verticalLayout_5.setContentsMargins(1, -1, -1, -1)
+        self.verticalLayout_5.setSpacing(0)
+        self.verticalLayout_5.setObjectName("verticalLayout_5")
+        spacerItem = QtWidgets.QSpacerItem(20, 55, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.verticalLayout_5.addItem(spacerItem)
+        self.lfbTabBtnBack = QtWidgets.QToolButton(self.verticalWidget_2)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.MinimumExpanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lfbTabBtnBack.sizePolicy().hasHeightForWidth())
+        self.lfbTabBtnBack.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setPointSize(25)
         self.lfbTabBtnBack.setFont(font)
         self.lfbTabBtnBack.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.lfbTabBtnBack.setStyleSheet("QToolButton{\n"
-"    margin-left: 10px;\n"
+"    margin: 0 5px;\n"
 "    padding: 10px;\n"
 "    border-radius: 22px;\n"
 "    border: 2px solid grey;\n"
-"    background-color: grey;\n"
+"    background-color: rgba(0,0,0,0.2);\n"
 "    width: 20px;\n"
 "    height: 20px;\n"
 "    background-color: grey;\n"
 "}\n"
 "QToolButton:enabled{\n"
-"    background-color: green;\n"
+"    background-color: rgba(0,100,0,0.5);\n"
 "}")
         self.lfbTabBtnBack.setObjectName("lfbTabBtnBack")
-        self.horizontalLayout_2.addWidget(self.lfbTabBtnBack)
+        self.verticalLayout_5.addWidget(self.lfbTabBtnBack)
+        self.horizontalLayout_2.addWidget(self.verticalWidget_2)
         self.lfbTabScroll = QtWidgets.QScrollArea(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
@@ -58,26 +74,27 @@ class Ui_Form(object):
         self.lfbTabScroll.setWidgetResizable(True)
         self.lfbTabScroll.setObjectName("lfbTabScroll")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 395, 902))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 166, 755))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.widget = QtWidgets.QWidget(self.scrollAreaWidgetContents)
+        self.lfbTabDescription = QtWidgets.QWidget(self.scrollAreaWidgetContents)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.widget.sizePolicy().hasHeightForWidth())
-        self.widget.setSizePolicy(sizePolicy)
-        self.widget.setStyleSheet("QWidget{\n"
+        sizePolicy.setHeightForWidth(self.lfbTabDescription.sizePolicy().hasHeightForWidth())
+        self.lfbTabDescription.setSizePolicy(sizePolicy)
+        self.lfbTabDescription.setStyleSheet("QWidget{\n"
 "    border: 2px solid grey;\n"
 "    border-radius: 10px;\n"
 "    padding: 10px;\n"
 "    background-color: rgba(0,0,0,0.1);\n"
 "}")
-        self.widget.setObjectName("widget")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget)
+        self.lfbTabDescription.setObjectName("lfbTabDescription")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.lfbTabDescription)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.lfbObjectDescription = QtWidgets.QLabel(self.widget)
+        self.lfbObjectDescription = QtWidgets.QLabel(self.lfbTabDescription)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -92,46 +109,105 @@ class Ui_Form(object):
         self.lfbObjectDescription.setWordWrap(True)
         self.lfbObjectDescription.setObjectName("lfbObjectDescription")
         self.horizontalLayout.addWidget(self.lfbObjectDescription)
-        self.verticalLayout.addWidget(self.widget)
+        self.verticalLayout.addWidget(self.lfbTabDescription)
         self.lfbTabLayout = QtWidgets.QFormLayout()
         self.lfbTabLayout.setSizeConstraint(QtWidgets.QLayout.SetMinimumSize)
-        self.lfbTabLayout.setContentsMargins(20, 20, 20, -1)
+        self.lfbTabLayout.setContentsMargins(10, 10, 10, 10)
         self.lfbTabLayout.setSpacing(0)
         self.lfbTabLayout.setObjectName("lfbTabLayout")
         self.verticalLayout.addLayout(self.lfbTabLayout)
         self.lfbTabScroll.setWidget(self.scrollAreaWidgetContents)
         self.horizontalLayout_2.addWidget(self.lfbTabScroll)
-        self.lfbTabBtnFwd = QtWidgets.QToolButton(Form)
+        self.verticalWidget = QtWidgets.QWidget(Form)
+        self.verticalWidget.setStyleSheet("")
+        self.verticalWidget.setObjectName("verticalWidget")
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.verticalWidget)
+        self.verticalLayout_4.setContentsMargins(1, -1, -1, -1)
+        self.verticalLayout_4.setSpacing(0)
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.lfbInfoButton = QtWidgets.QToolButton(self.verticalWidget)
+        self.lfbInfoButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.lfbInfoButton.setStyleSheet("QToolButton{\n"
+"    margin: 10px;\n"
+"    padding: 10px;\n"
+"    border-radius: 2px;\n"
+"    border: 2px solid grey;\n"
+"    background-color: grey;\n"
+"    width: 10px;\n"
+"    height: 10px;\n"
+"    background-color: #eee;\n"
+"}")
+        self.lfbInfoButton.setObjectName("lfbInfoButton")
+        self.verticalLayout_4.addWidget(self.lfbInfoButton)
+        self.lfbTabBtnFwd = QtWidgets.QToolButton(self.verticalWidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.MinimumExpanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lfbTabBtnFwd.sizePolicy().hasHeightForWidth())
+        self.lfbTabBtnFwd.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setPointSize(25)
         self.lfbTabBtnFwd.setFont(font)
         self.lfbTabBtnFwd.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.lfbTabBtnFwd.setStyleSheet("QToolButton{\n"
-"    margin-right: 10px;\n"
+"    margin: 0 5px;\n"
 "    padding: 10px;\n"
 "    border-radius: 22px;\n"
 "    border: 2px solid grey;\n"
-"    background-color: grey;\n"
+"    background-color: rgba(100,100,100,0.5);\n"
 "    width: 20px;\n"
 "    height: 20px;\n"
 "    background-color: grey;\n"
 "}\n"
 "QToolButton:enabled{\n"
-"    background-color: green;\n"
+"    background-color: rgba(0,100,0,0.5);\n"
 "}")
         self.lfbTabBtnFwd.setAutoRaise(False)
         self.lfbTabBtnFwd.setObjectName("lfbTabBtnFwd")
-        self.horizontalLayout_2.addWidget(self.lfbTabBtnFwd)
-        self.lfbInfoBox = QtWidgets.QTextBrowser(Form)
+        self.verticalLayout_4.addWidget(self.lfbTabBtnFwd)
+        self.horizontalLayout_2.addWidget(self.verticalWidget)
+        self.lfbTabInfoWidget = QtWidgets.QWidget(Form)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lfbTabInfoWidget.sizePolicy().hasHeightForWidth())
+        self.lfbTabInfoWidget.setSizePolicy(sizePolicy)
+        self.lfbTabInfoWidget.setStyleSheet("QWidget#lfbTabInfoWidget{\n"
+"    background-color:#fff;\n"
+"    padding: 10px;\n"
+"    border-left: 1px solid grey;\n"
+"}")
+        self.lfbTabInfoWidget.setObjectName("lfbTabInfoWidget")
+        self.lfbTabInfo = QtWidgets.QVBoxLayout(self.lfbTabInfoWidget)
+        self.lfbTabInfo.setContentsMargins(1, -1, -1, -1)
+        self.lfbTabInfo.setSpacing(0)
+        self.lfbTabInfo.setObjectName("lfbTabInfo")
+        self.label = QtWidgets.QLabel(self.lfbTabInfoWidget)
+        font = QtGui.QFont()
+        font.setPointSize(16)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label.setFont(font)
+        self.label.setStyleSheet("margin:10px;")
+        self.label.setWordWrap(True)
+        self.label.setObjectName("label")
+        self.lfbTabInfo.addWidget(self.label)
+        self.lfbInfoBox = QtWidgets.QTextBrowser(self.lfbTabInfoWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lfbInfoBox.sizePolicy().hasHeightForWidth())
         self.lfbInfoBox.setSizePolicy(sizePolicy)
-        self.lfbInfoBox.setMinimumSize(QtCore.QSize(200, 0))
+        self.lfbInfoBox.setMinimumSize(QtCore.QSize(300, 0))
         self.lfbInfoBox.setMaximumSize(QtCore.QSize(500, 16777215))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.lfbInfoBox.setFont(font)
+        self.lfbInfoBox.setStyleSheet("border:none;\n"
+"margin-left: 10px;")
         self.lfbInfoBox.setObjectName("lfbInfoBox")
-        self.horizontalLayout_2.addWidget(self.lfbInfoBox)
+        self.lfbTabInfo.addWidget(self.lfbInfoBox)
+        self.horizontalLayout_2.addWidget(self.lfbTabInfoWidget)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -141,36 +217,11 @@ class Ui_Form(object):
         Form.setWindowTitle(_translate("Form", "Form"))
         self.lfbTabBtnBack.setText(_translate("Form", "<"))
         self.lfbObjectDescription.setText(_translate("Form", "TextLabel"))
+        self.lfbInfoButton.setText(_translate("Form", "i"))
         self.lfbTabBtnFwd.setText(_translate("Form", ">"))
+        self.label.setText(_translate("Form", "Title"))
         self.lfbInfoBox.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying __init__.py</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying lfb_regeneration_wildlife_impact.py</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying resources.py</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying metadata.txt</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying contents of i18n to /home/gerrit/.local/share/QGIS/QGIS3/profiles/default/python/plugins/lfb_regeneration_wildlife_impact</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying contents of state to /home/gerrit/.local/share/QGIS/QGIS3/profiles/default/python/plugins/lfb_regeneration_wildlife_impact</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying contents of gui to /home/gerrit/.local/share/QGIS/QGIS3/profiles/default/python/plugins/lfb_regeneration_wildlife_impact</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying contents of schema to /home/gerrit/.local/share/QGIS/QGIS3/profiles/default/python/plugins/lfb_regeneration_wildlife_impact</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying contents of assets to /home/gerrit/.local/share/QGIS/QGIS3/profiles/default/python/plugins/lfb_regeneration_wildlife_impact</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying help/build/html to /home/gerrit/.local/share/QGIS/QGIS3/profiles/default/python/plugins/lfb_regeneration_wildlife_impact/helpCopying __init__.py</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying lfb_regeneration_wildlife_impact.py</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying resources.py</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying metadata.txt</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying contents of i18n to /home/gerrit/.local/share/QGIS/QGIS3/profiles/default/python/plugins/lfb_regeneration_wildlife_impact</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying contents of state to /home/gerrit/.local/share/QGIS/QGIS3/profiles/default/python/plugins/lfb_regeneration_wildlife_impact</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying contents of gui to /home/gerrit/.local/share/QGIS/QGIS3/profiles/default/python/plugins/lfb_regeneration_wildlife_impact</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying contents of schema to /home/gerrit/.local/share/QGIS/QGIS3/profiles/default/python/plugins/lfb_regeneration_wildlife_impact</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying contents of assets to /home/gerrit/.local/share/QGIS/QGIS3/profiles/default/python/plugins/lfb_regeneration_wildlife_impact</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying help/build/html to /home/gerrit/.local/share/QGIS/QGIS3/profiles/default/python/plugins/lfb_regeneration_wildlife_impact/helpCopying __init__.py</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying lfb_regeneration_wildlife_impact.py</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying resources.py</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying metadata.txt</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying contents of i18n to /home/gerrit/.local/share/QGIS/QGIS3/profiles/default/python/plugins/lfb_regeneration_wildlife_impact</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying contents of state to /home/gerrit/.local/share/QGIS/QGIS3/profiles/default/python/plugins/lfb_regeneration_wildlife_impact</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying contents of gui to /home/gerrit/.local/share/QGIS/QGIS3/profiles/default/python/plugins/lfb_regeneration_wildlife_impact</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying contents of schema to /home/gerrit/.local/share/QGIS/QGIS3/profiles/default/python/plugins/lfb_regeneration_wildlife_impact</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying contents of assets to /home/gerrit/.local/share/QGIS/QGIS3/profiles/default/python/plugins/lfb_regeneration_wildlife_impact</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copying help/build/html to /home/gerrit/.local/share/QGIS/QGIS3/profiles/default/python/plugins/lfb_regeneration_wildlife_impact/help</p></body></html>"))
+"</style></head><body style=\" font-family:\'Ubuntu\'; font-size:15pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
