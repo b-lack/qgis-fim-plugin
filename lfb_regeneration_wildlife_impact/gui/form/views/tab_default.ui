@@ -139,7 +139,7 @@ QToolButton:enabled{
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>166</width>
+        <width>142</width>
         <height>755</height>
        </rect>
       </property>
@@ -332,7 +332,7 @@ QToolButton:enabled{
        <number>1</number>
       </property>
       <item>
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="lfbInfoBoxTitle">
         <property name="font">
          <font>
           <pointsize>16</pointsize>

@@ -93,7 +93,7 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.label.setText(_translate("Form", "Drücke \"Aufnahme starten\" um Daten hinzuzufügen."))
+        self.label.setText(_translate("Form", "Importiere eine .geojson Datei oder wähle einen Punkt aus."))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("Form", "ToDo"))
-        self.label_2.setText(_translate("Form", "Drücke \"Aufnahme starten\" um Daten hinzuzufügen."))
+        self.label_2.setText(_translate("Form", "Importiere eine .geojson Datei oder wähle einen Punkt aus."))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("Form", "Abgeschlossen"))

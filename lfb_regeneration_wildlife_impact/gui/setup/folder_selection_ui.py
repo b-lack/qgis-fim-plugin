@@ -21,7 +21,7 @@ class Ui_Form(object):
         sizePolicy.setHeightForWidth(Form.sizePolicy().hasHeightForWidth())
         Form.setSizePolicy(sizePolicy)
         self.gridLayout = QtWidgets.QGridLayout(Form)
-        self.gridLayout.setContentsMargins(-1, 50, -1, 50)
+        self.gridLayout.setContentsMargins(-1, 10, -1, 10)
         self.gridLayout.setObjectName("gridLayout")
         self.label = QtWidgets.QLabel(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)

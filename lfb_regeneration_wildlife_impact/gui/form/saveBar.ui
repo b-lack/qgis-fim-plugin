@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>lfbSaveBar</class>
+ <widget class="QWidget" name="lfbSaveBar">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -20,8 +20,11 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: #222;
-color: #fff;</string>
+   <string notr="true">Qwidget#lfbSaveBar{
+	background-color: #222;
+	color: #fff;
+}
+</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
@@ -176,8 +179,11 @@ background-color: #333;</string>
       </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="spacing">
+         <number>0</number>
+        </property>
         <property name="leftMargin">
-         <number>10</number>
+         <number>15</number>
         </property>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout">
@@ -207,26 +213,16 @@ background-color: #333;</string>
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QToolButton" name="lfbFokusFeature">
-            <property name="styleSheet">
-             <string notr="true">background: #222222;
-padding: 0;</string>
-            </property>
-            <property name="text">
-             <string>fokus</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
         <item>
-         <widget class="QLabel" name="lfbProcessInfo">
+         <widget class="QToolButton" name="lfbFokusFeature">
           <property name="styleSheet">
-           <string notr="true">padding:0;</string>
+           <string notr="true">background: #222222;
+padding: 5px;</string>
           </property>
           <property name="text">
-           <string/>
+           <string>Karte auf Punkt zentrieren</string>
           </property>
          </widget>
         </item>
@@ -249,6 +245,9 @@ padding: 0;</string>
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="lfbErrorsLayout"/>
       </item>
       <item>
        <widget class="QPushButton" name="lfbErrorDialogBtn">

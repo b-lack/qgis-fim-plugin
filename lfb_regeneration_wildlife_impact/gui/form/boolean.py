@@ -72,7 +72,9 @@ class Boolean(QtWidgets.QWidget, UI_CLASS):
         else:
             self.lfbTextFieldDescriptionBtn.hide()
 
-        self.lfbTextFieldHelp.setText('')
+        if "description" in self.schema:
+            self.lfbTextFieldHelp.setText(self.schema['description'])
+
 
         self.setDefaultValue()
             

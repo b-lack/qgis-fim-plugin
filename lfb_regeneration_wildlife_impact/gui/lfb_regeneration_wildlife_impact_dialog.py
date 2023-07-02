@@ -176,7 +176,6 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         indexToSet = min(self.currentTab + 1, len(self.tabsArray) - 1)
         tab = self.lfbTabWidget.currentWidget()
 
-        QgsMessageLog.logMessage(str(indexToSet), 'LFB')
         if self.currentTab < len(self.tabsArray)-1 and self.lfbTabWidget.isTabEnabled(indexToSet):
             tab.lfbTabBtnFwd.setEnabled(True)
         else:
@@ -298,12 +297,13 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
     def changeState(self, validate = True):        
         self.state.change_state(self.json)
-        self.saveBar.validate(self.state.state)
+       
         
         self.resetForm(False)
 
         if validate:
             self.validateTabs()
+            self.saveBar.validate(self.state.state)
 
     def openState(self):
         msgBox = QtWidgets.QMessageBox()
@@ -319,8 +319,8 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
             attr = tab['attr']
 
-            for i in tab['inheritedErrors']:
-                QgsMessageLog.logMessage(i['message'], 'LFB')
+            #for i in tab['inheritedErrors']:
+            #    QgsMessageLog.logMessage(i['message'], 'LFB')
             
 
             if attr in self.json:
@@ -361,7 +361,8 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         return len(gErrors) == 0
 
     def lfbNotAccessable(self, json, taberrors):
-        if json['general']['spaufsuchenichtbegehbarursacheid'] != 1 or len(taberrors) > 0:
+
+        if json['general']['spaufsuchenichtbegehbarursacheid'] != 1 or json['general']['spaufsuchenichtwaldursacheid'] != 0 or len(taberrors) > 0:
 
             for i in self.tabsArray:
                 if i['attr'] != 'general':

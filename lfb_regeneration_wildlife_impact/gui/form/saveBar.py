@@ -37,6 +37,7 @@ from PyQt5 import QtCore
 from jsonschema import Draft7Validator
 
 from ...utils.helper import Utils
+from ..setup.errors import ErrorsWidget
 
 
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'saveBar.ui'))
@@ -78,7 +79,10 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.lfbSchemaBtn.clicked.connect(self.openSchema)
         self.lfbSchemaBtn.hide()
 
+        self.lfbErrorDialogBtn.hide()
         self.lfbErrorDialogBtn.clicked.connect(self.openErrorDialog)
+        self.errorsWidget = ErrorsWidget(self.interface, self.schema)
+        self.lfbErrorsLayout.addWidget(self.errorsWidget)
 
         self.lfbProgressBar.setValue(100)
 
@@ -186,9 +190,11 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
             #self.isValid = False
             self.lfbErrorDialogBtn.setText(str(len(self.errors)) + ' verbleibende Fehler.')
             
-        self.checkMinimumSet(jsonToTest, len(self.errors))
+        # self.checkMinimumSet(jsonToTest, len(self.errors))
 
         #self.customErrors = self.customErrors + self.checkIsForest(jsonToTest)
+        QgsMessageLog.logMessage(str(jsonToTest), 'LFB')
+        self.errorsWidget.updateErrors(self.errors)
 
         return len(self.errors) == 0
 

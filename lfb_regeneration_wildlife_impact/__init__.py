@@ -48,7 +48,7 @@ def installer_func():
 
     plugin_dir = os.path.dirname(os.path.realpath(__file__))
 
-    QgsMessageLog.logMessage("Plugin dir: {}".format(plugin_dir), "LFG")
+    # QgsMessageLog.logMessage("Plugin dir: {}".format(plugin_dir), "LFG")
 
     try:
         import pip

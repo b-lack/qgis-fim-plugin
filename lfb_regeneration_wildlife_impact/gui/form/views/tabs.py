@@ -120,9 +120,9 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
 
         self.show()
 
-    def tabInfoBoxClicked(self, info):
-        QgsMessageLog.logMessage(str(info), 'LFB')
+    def tabInfoBoxClicked(self):
 
+        self.lfbInfoBoxTitle.setText(self.schema['title'])
         self.lfbInfoBox.setText(self.schema['description'])
 
         if self.lfbTabInfoWidget.isVisible():
@@ -131,11 +131,9 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
             self.lfbTabInfoWidget.show()
 
     def on_lfbTabBtnBack_clicked(self):
-        QgsMessageLog.logMessage(str('---False' + self.attr), 'LFB')
         self.nextTab.emit(False)
 
     def on_lfbTabBtnFwd_clicked(self):
-        QgsMessageLog.logMessage(str('---True' + self.attr), 'LFB')
         self.nextTab.emit(True)
 
     def infoBoxClicked(self, info):

@@ -11,22 +11,25 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Form(object):
-    def setupUi(self, Form):
-        Form.setObjectName("Form")
-        Form.resize(917, 492)
+class Ui_lfbSaveBar(object):
+    def setupUi(self, lfbSaveBar):
+        lfbSaveBar.setObjectName("lfbSaveBar")
+        lfbSaveBar.resize(917, 492)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(Form.sizePolicy().hasHeightForWidth())
-        Form.setSizePolicy(sizePolicy)
-        Form.setStyleSheet("background-color: #222;\n"
-"color: #fff;")
-        self.gridLayout = QtWidgets.QGridLayout(Form)
+        sizePolicy.setHeightForWidth(lfbSaveBar.sizePolicy().hasHeightForWidth())
+        lfbSaveBar.setSizePolicy(sizePolicy)
+        lfbSaveBar.setStyleSheet("Qwidget#lfbSaveBar{\n"
+"    background-color: #222;\n"
+"    color: #fff;\n"
+"}\n"
+"")
+        self.gridLayout = QtWidgets.QGridLayout(lfbSaveBar)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName("gridLayout")
-        self.lfbProgressBar = QtWidgets.QProgressBar(Form)
+        self.lfbProgressBar = QtWidgets.QProgressBar(lfbSaveBar)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -52,7 +55,7 @@ class Ui_Form(object):
         self.lfbProgressBar.setProperty("value", 24)
         self.lfbProgressBar.setObjectName("lfbProgressBar")
         self.gridLayout.addWidget(self.lfbProgressBar, 1, 0, 1, 1)
-        self.lfbActionRow = QtWidgets.QWidget(Form)
+        self.lfbActionRow = QtWidgets.QWidget(lfbSaveBar)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -98,7 +101,8 @@ class Ui_Form(object):
         self.lfbSchemaBtn.setObjectName("lfbSchemaBtn")
         self.lfbsabeLayout.addWidget(self.lfbSchemaBtn)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_2.setContentsMargins(10, -1, -1, -1)
+        self.verticalLayout_2.setContentsMargins(15, -1, -1, -1)
+        self.verticalLayout_2.setSpacing(0)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setContentsMargins(0, 0, -1, -1)
@@ -113,20 +117,18 @@ class Ui_Form(object):
         self.lfbId.setStyleSheet("padding:0;")
         self.lfbId.setObjectName("lfbId")
         self.horizontalLayout.addWidget(self.lfbId)
+        self.verticalLayout_2.addLayout(self.horizontalLayout)
         self.lfbFokusFeature = QtWidgets.QToolButton(self.lfbActionRow)
         self.lfbFokusFeature.setStyleSheet("background: #222222;\n"
-"padding: 0;")
+"padding: 5px;")
         self.lfbFokusFeature.setObjectName("lfbFokusFeature")
-        self.horizontalLayout.addWidget(self.lfbFokusFeature)
-        self.verticalLayout_2.addLayout(self.horizontalLayout)
-        self.lfbProcessInfo = QtWidgets.QLabel(self.lfbActionRow)
-        self.lfbProcessInfo.setStyleSheet("padding:0;")
-        self.lfbProcessInfo.setText("")
-        self.lfbProcessInfo.setObjectName("lfbProcessInfo")
-        self.verticalLayout_2.addWidget(self.lfbProcessInfo)
+        self.verticalLayout_2.addWidget(self.lfbFokusFeature)
         self.lfbsabeLayout.addLayout(self.verticalLayout_2)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.lfbsabeLayout.addItem(spacerItem)
+        self.lfbErrorsLayout = QtWidgets.QHBoxLayout()
+        self.lfbErrorsLayout.setObjectName("lfbErrorsLayout")
+        self.lfbsabeLayout.addLayout(self.lfbErrorsLayout)
         self.lfbErrorDialogBtn = QtWidgets.QPushButton(self.lfbActionRow)
         self.lfbErrorDialogBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.lfbErrorDialogBtn.setStyleSheet("color: red;\n"
@@ -163,16 +165,16 @@ class Ui_Form(object):
         self.lfbsabeLayout.addLayout(self.verticalLayout)
         self.gridLayout.addWidget(self.lfbActionRow, 2, 0, 1, 1)
 
-        self.retranslateUi(Form)
-        QtCore.QMetaObject.connectSlotsByName(Form)
+        self.retranslateUi(lfbSaveBar)
+        QtCore.QMetaObject.connectSlotsByName(lfbSaveBar)
 
-    def retranslateUi(self, Form):
+    def retranslateUi(self, lfbSaveBar):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.lfbHomeBtn.setText(_translate("Form", "<"))
-        self.lfbDevBtn.setText(_translate("Form", "DEV"))
-        self.lfbSchemaBtn.setText(_translate("Form", "SCHEMA"))
-        self.lfbId.setText(_translate("Form", "TextLabel"))
-        self.lfbFokusFeature.setText(_translate("Form", "fokus"))
-        self.lfbErrorDialogBtn.setText(_translate("Form", "Error Text"))
-        self.lfbSaveBtn.setText(_translate("Form", "FERTIG"))
+        lfbSaveBar.setWindowTitle(_translate("lfbSaveBar", "Form"))
+        self.lfbHomeBtn.setText(_translate("lfbSaveBar", "<"))
+        self.lfbDevBtn.setText(_translate("lfbSaveBar", "DEV"))
+        self.lfbSchemaBtn.setText(_translate("lfbSaveBar", "SCHEMA"))
+        self.lfbId.setText(_translate("lfbSaveBar", "TextLabel"))
+        self.lfbFokusFeature.setText(_translate("lfbSaveBar", "Karte auf Punkt zentrieren"))
+        self.lfbErrorDialogBtn.setText(_translate("lfbSaveBar", "Error Text"))
+        self.lfbSaveBtn.setText(_translate("lfbSaveBar", "FERTIG"))

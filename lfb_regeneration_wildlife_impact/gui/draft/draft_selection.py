@@ -84,7 +84,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         self.fields.append(QgsField("created", QVariant.DateTime))
         self.fields.append(QgsField("modified", QVariant.DateTime))
         self.fields.append(QgsField("workflow", QVariant.Int))
-        #self.fields.append(QgsField("unterlosnr", QVariant.String))
+        self.fields.append(QgsField("unterlosnr", QVariant.String))
 
         self.fields.append(QgsField("form", QVariant.String))
         
@@ -221,7 +221,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         layer_settings  = QgsPalLayerSettings()
         text_format = QgsTextFormat()
 
-        text_format.setFont(QFont("Arial", 12))
+        #text_format.setFont(QFont("Arial", 12))
         text_format.setSize(12)
 
         buffer_settings = QgsTextBufferSettings()
@@ -319,7 +319,6 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                     self.vl.commitChanges()
                     self.vl.endEditCommand()
 
-                    QgsMessageLog.logMessage('STATUS: ' + str(newState), 'LFB')
 
     def saveFeature(self, jsonObj):
 
@@ -365,7 +364,6 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         # SET META DATA
         #feature.setAttribute('workflow', jsonObj['general']['workflow'])
         feature.setAttribute('form', json.dumps(jsonObj))
-        QgsMessageLog.logMessage('SAVED: ' + str(jsonObj), 'LFB')
 
         self.vl.updateFeature(feature)
 
