@@ -37,6 +37,8 @@ from ..array_field import ArrayField
 from ..boolean import Boolean
 from ..views.object_view import ObjectView
 
+from ...plugins.find_position.setup_device import SetupDevice
+
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'tab_default.ui'))
 
 
@@ -97,7 +99,11 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
             if valueType == 'array':
                 field = ArrayField(interface, self.json, value, attr)
             elif valueType == 'object':
-                field = ObjectView(interface, self.json, value, attr, self.inheritedErrors)
+                if '$plugin' in value:
+                    if value['$plugin'] == 'find_position':
+                        field = SetupDevice(interface, self.json, value, attr, self.inheritedErrors)
+                else:        
+                    field = ObjectView(interface, self.json, value, attr, self.inheritedErrors)
             elif valueType == 'boolean':
                 field = Boolean(interface, self.json, value, attr)
                 field.lfbInfoBox.connect(self.infoBoxClicked)

@@ -84,7 +84,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         self.fields.append(QgsField("created", QVariant.DateTime))
         self.fields.append(QgsField("modified", QVariant.DateTime))
         self.fields.append(QgsField("workflow", QVariant.Int))
-        self.fields.append(QgsField("unterlosnr", QVariant.String))
+        self.fields.append(QgsField("losnr", QVariant.String))
 
         self.fields.append(QgsField("form", QVariant.String))
         
@@ -342,7 +342,6 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                     #feature.setGeometry(geometry)
                     
         else:
-            QgsMessageLog.logMessage('ERROR: layer should exist', 'LFB')
             feature = QgsFeature()
 
             # inform the feature of its fields

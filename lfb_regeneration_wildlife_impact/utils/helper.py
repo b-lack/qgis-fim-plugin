@@ -4,6 +4,9 @@ import json
 from qgis.core import QgsProject, QgsExpressionContextUtils, QgsMapLayer
 from qgis.core import QgsMessageLog
 
+# GNSS plugin
+from qgis import qgis
+
 LFB_NAME = 'LFB-Regeneration-Wildlife-Impact-Monitoring'
 
 class Utils(object):
@@ -104,3 +107,10 @@ class Utils(object):
 
         selected_features = layer.selectedFeatures()
         return selected_features
+    
+    #GNSS PLUGIN
+    def getPluginByName(plugin_name):
+        return qgis.utils.plugins[plugin_name]
+
+    def checkPluginExists(plugin_name):
+        return plugin_name in qgis.utils.plugins

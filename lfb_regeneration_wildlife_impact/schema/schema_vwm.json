@@ -557,6 +557,11 @@
                                 "temp. Störung (z.B. Sturmwurf) an Punkt"
                             ]
                         },
+                        "gnss": {
+                            "title": "Position des Stichprobenpunktes",
+                            "type": "object",
+                            "$plugin": "find_position"
+                        },
                         "istgeom_y": {
                             "title": "Latitude*",
                             "description": "The latitude of the user",

@@ -314,14 +314,9 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         tabNr = 0
 
-        #for attr, value in self.schema['properties'].items():
         for tab in self.tabsArray:
 
-            attr = tab['attr']
-
-            #for i in tab['inheritedErrors']:
-            #    QgsMessageLog.logMessage(i['message'], 'LFB')
-            
+            attr = tab['attr']            
 
             if attr in self.json:
                 v = Draft7Validator(self.schema['properties'][attr])

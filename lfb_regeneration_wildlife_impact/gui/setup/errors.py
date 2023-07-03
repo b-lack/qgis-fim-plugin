@@ -93,12 +93,8 @@ class ErrorsWidget(QtWidgets.QWidget, UI_CLASS):
         self.lfbErrorsOfCount.setText(str(len(self.errors)))
 
         
-        QgsMessageLog.logMessage(str(len(self.errors)), 'LFE')
 
         if len(self.errors) > 0:
-            QgsMessageLog.logMessage(str(self.errors[0].relative_schema_path), 'LFE')
-            if len(self.errors) > 1:
-                QgsMessageLog.logMessage(str(self.errors[1].relative_schema_path), 'LFE')
             errorLocation = self.translateRelativeSchemaPath(self.errors[0].relative_schema_path)
             self.lfbErrorLocation.setText(errorLocation)
             self.lfbErrorDescription.setText(str(self.errors[0].message))
