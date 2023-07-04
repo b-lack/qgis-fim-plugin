@@ -206,11 +206,16 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.lfbTabWidget.setCurrentIndex(0)
         self.tabChange(0)
 
-    def inputChanged(self, save, attr):
+    def inputChanged(self, save, attr, forceUpdate = False):
         if attr in self.json:
             self.json[attr].update(save)
         else:
             self.json[attr] = save
+
+        if forceUpdate:
+            for tab in self.tabsArray:
+                if tab['attr'] in self.json:
+                    tab['setJson'](self.json[tab['attr']], True)
 
         self.changeState()
 

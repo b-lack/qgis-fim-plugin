@@ -14,7 +14,7 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'setup_devi
 PLUGIN_NAME = "lfb_regeneration_wildlife_impact" #lfb_regeneration_wildlife_impact/pb_tool.cfg
 
 class SetupDevice(QtWidgets.QWidget, UI_CLASS):
-    inputChanged = QtCore.pyqtSignal(object, str)
+    inputChanged = QtCore.pyqtSignal(object, str, bool)
 
     def __init__(self, interface, json, value, attr, inheritedErrors):
         """Constructor."""
@@ -23,8 +23,10 @@ class SetupDevice(QtWidgets.QWidget, UI_CLASS):
         self.setupUi(self)
 
         self.json = json
+        self.attr = attr
 
-        self.pushButton.clicked.connect(self.test)
+        self.lfbGetCoordinatesGtn.clicked.connect(self.test)
+        self.lfbGPSError.setText("")
 
         s=QgsSettings()
         val=s.value(PLUGIN_NAME+"/layername_fieldname_a")
@@ -111,19 +113,17 @@ class SetupDevice(QtWidgets.QWidget, UI_CLASS):
 
     def status_changed(self, gpsInfo):
 
-        
-        QgsMessageLog.logMessage('Status:' + str(self.gpsCon.status()), "FindLocation")
         try:
             if self.gpsCon.status() == 3: #data received
                 if 'istgeom_y' in self.json:
                     self.json['istgeom_y'] = gpsInfo.latitude
                 if 'istgeom_x' in self.json:
                     self.json['istgeom_x'] = gpsInfo.longitude
-                    
-                QgsMessageLog.logMessage(str(gpsInfo.longitude), "FindLocation")
-                QgsMessageLog.logMessage(str(gpsInfo.status), "FindLocation")
+
+                self.inputChanged.emit(self.json, self.attr, True)
+                self.lfbGPSError.setText('')
         except Exception as e:
-            QgsMessageLog.logMessage('Status:' + str(e), "FindLocation")
+            self.lfbGPSError.setText('Status:' + str(e))
 
            
 
@@ -140,10 +140,10 @@ class SetupDevice(QtWidgets.QWidget, UI_CLASS):
             self.gpsCon = connectionList[0]
             self.gpsCon.stateChanged.connect(self.status_changed)
             
-            QgsMessageLog.logMessage(str('state.change'), "FindLocation")
+            self.lfbGPSError.setText("")
 
         else:
-            QgsMessageLog.logMessage(str('no.gps'), "FindLocation")
+            self.lfbGPSError.setText("Es konnte keine aktive Verbindung gefunden verden.")
 
     def setJson(self, newJson, setFields = True):
         self.json = newJson

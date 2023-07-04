@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/gerrit/Sites/lfb/lfb-regeneration_wildlife_impact_monitoring/lfb_regeneration_wildlife_impact/plugins/find_position/setup_device.ui'
+# Form implementation generated from reading ui file '/home/gerrit/Sites/lfb/lfb-regeneration_wildlife_impact_monitoring/lfb_regeneration_wildlife_impact/gui/plugins/find_position/setup_device.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -14,17 +14,50 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(522, 471)
-        self.verticalLayout = QtWidgets.QVBoxLayout(Form)
-        self.verticalLayout.setObjectName("verticalLayout")
+        Form.resize(938, 410)
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(Form)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
         self.geSetupLabel = QtWidgets.QLabel(Form)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(1)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.geSetupLabel.sizePolicy().hasHeightForWidth())
+        self.geSetupLabel.setSizePolicy(sizePolicy)
+        self.geSetupLabel.setWordWrap(True)
         self.geSetupLabel.setObjectName("geSetupLabel")
-        self.verticalLayout.addWidget(self.geSetupLabel)
-        self.pushButton = QtWidgets.QPushButton(Form)
-        self.pushButton.setObjectName("pushButton")
-        self.verticalLayout.addWidget(self.pushButton)
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem)
+        self.horizontalLayout.addWidget(self.geSetupLabel)
+        self.lfbGetCoordinatesGtn = QtWidgets.QPushButton(Form)
+        self.lfbGetCoordinatesGtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.lfbGetCoordinatesGtn.setStyleSheet("QPushButton{\n"
+"    border-radius: 20px;\n"
+"    border: 2px solid #333;\n"
+"    color: #555;\n"
+"    margin: 10px 0px 0px;\n"
+"    padding: 10px;\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: yellow;\n"
+"}\n"
+"QPushButton:enabled{\n"
+"    border-radius: 20px;\n"
+"    border: 2px solid #fff;\n"
+"    background-color: green;\n"
+"    color: #fff;\n"
+"}")
+        self.lfbGetCoordinatesGtn.setObjectName("lfbGetCoordinatesGtn")
+        self.horizontalLayout.addWidget(self.lfbGetCoordinatesGtn)
+        self.verticalLayout_3.addLayout(self.horizontalLayout)
+        self.lfbGPSError = QtWidgets.QLabel(Form)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lfbGPSError.sizePolicy().hasHeightForWidth())
+        self.lfbGPSError.setSizePolicy(sizePolicy)
+        self.lfbGPSError.setStyleSheet("color:#ff0000;")
+        self.lfbGPSError.setObjectName("lfbGPSError")
+        self.verticalLayout_3.addWidget(self.lfbGPSError)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -32,5 +65,8 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.geSetupLabel.setText(_translate("Form", "Setup"))
-        self.pushButton.setText(_translate("Form", "Check"))
+        self.geSetupLabel.setText(_translate("Form", "1. Verbinde dein GNSS Gerät und verbinde es in \"GPS Information\".\n"
+" 2. Drücke in \"GPS Information\" den Button \"Verbinden\"\n"
+" 3. Drücke den Button \"Koordinaten erheben\"."))
+        self.lfbGetCoordinatesGtn.setText(_translate("Form", "KOORDINATEN ERHEBEN"))
+        self.lfbGPSError.setText(_translate("Form", "TextLabel"))

@@ -43,7 +43,7 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'tab_defaul
 
 
 class Tabs(QtWidgets.QWidget, UI_CLASS):
-    inputChanged = QtCore.pyqtSignal(object, str)
+    inputChanged = QtCore.pyqtSignal(object, str, bool)
     nextTab = QtCore.pyqtSignal(bool)
 
     def __init__(self, interface, json, schema, attr, inheritedErrors = []):
@@ -93,6 +93,8 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
             items = schema['items'].items()
 
         for attr, value in items:
+
+
             
             valueType = value['type']
 
@@ -162,5 +164,6 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
         for field in self.fieldArray :
             field.setJson(self.json, setFields)
 
-    def onInputChanged(self):
-        self.inputChanged.emit(self.json, self.attr)
+    def onInputChanged(self, json, attr=None, forceUpdate = False):
+        QgsMessageLog.logMessage('is: ' + str(attr), 'LFB')
+        self.inputChanged.emit(self.json, self.attr, forceUpdate)

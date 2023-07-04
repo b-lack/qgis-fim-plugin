@@ -73,7 +73,7 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.lfbSaveBtn.clicked.connect(self.saveBtnClicked)
 
         self.lfbDevBtn.clicked.connect(self.openState)
-        self.lfbDevBtn.hide()
+        #self.lfbDevBtn.hide()
         
         self.lfbHomeBtn.clicked.connect(self.openHome)
         self.lfbSchemaBtn.clicked.connect(self.openSchema)
