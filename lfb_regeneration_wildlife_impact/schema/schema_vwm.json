@@ -568,9 +568,7 @@
                             "type": "number",
                             "minimum": -90,
                             "maximum": 90,
-                            "helperText": "Enter your latitude",
-                            "unit": "°",
-                            "multipleOf": 1e-07
+                            "unit": "°"
                         },
                         "istgeom_x": {
                             "title": "Longitude*",
@@ -578,9 +576,7 @@
                             "description": "The longitude of the user",
                             "minimum": -180,
                             "maximum": 180,
-                            "helperText": "Enter your longitude",
-                            "unit": "°",
-                            "multipleOf": 1e-07
+                            "unit": "°"
                         },
                         "istgeom_elev": {
                             "title": "Elevation",
@@ -588,10 +584,9 @@
                                 "number",
                                 "null"
                             ],
-                            "description": "Elevation in Meter",
+                            "description": "Enter Elevation",
                             "minimum": 0,
                             "maximum": 3000,
-                            "helperText": "Enter your longitude",
                             "unit": "Meter",
                             "multipleOf": 0.01
                         },
@@ -622,9 +617,7 @@
                                 "null"
                             ],
                             "description": "Elevation in Meter",
-                            "minimum": 1,
-                            "maximum": 10,
-                            "helperText": "Anzahl der zur Messung genutzten Satelliten"
+                            "minimum": 3
                         }
                     }
                 },

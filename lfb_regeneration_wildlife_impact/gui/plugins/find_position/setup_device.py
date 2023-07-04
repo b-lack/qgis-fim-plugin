@@ -115,10 +115,18 @@ class SetupDevice(QtWidgets.QWidget, UI_CLASS):
 
         try:
             if self.gpsCon.status() == 3: #data received
-                if 'istgeom_y' in self.json:
+                if 'istgeom_y' in self.json and 'latitude' in gpsInfo:
                     self.json['istgeom_y'] = gpsInfo.latitude
-                if 'istgeom_x' in self.json:
+                if 'istgeom_x' in self.json and 'longitude' in gpsInfo:
                     self.json['istgeom_x'] = gpsInfo.longitude
+                if 'istgeom_elev' in self.json and 'elevation' in gpsInfo:
+                    self.json['istgeom_elev'] = gpsInfo.elevation
+                if 'istgeom_hdop' in self.json and 'hdop' in gpsInfo:
+                    self.json['istgeom_hdop'] = gpsInfo.hdop
+                if 'istgeom_vdop' in self.json and 'hdop' in gpsInfo:
+                    self.json['istgeom_vdop'] = gpsInfo.hdop
+                if 'istgeom_sat' in self.json and 'satellitesUsed' in gpsInfo:
+                    self.json['istgeom_sat'] = gpsInfo.satellitesUsed
 
                 self.inputChanged.emit(self.json, self.attr, True)
                 self.lfbGPSError.setText('')
