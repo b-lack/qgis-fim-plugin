@@ -115,17 +115,17 @@ class SetupDevice(QtWidgets.QWidget, UI_CLASS):
 
         try:
             if self.gpsCon.status() == 3: #data received
-                if 'istgeom_y' in self.json and 'latitude' in gpsInfo:
+                if 'istgeom_y' in self.json and hasattr(gpsInfo, 'latitude'):
                     self.json['istgeom_y'] = gpsInfo.latitude
-                if 'istgeom_x' in self.json and 'longitude' in gpsInfo:
+                if 'istgeom_x' in self.json and hasattr(gpsInfo, 'longitude'):
                     self.json['istgeom_x'] = gpsInfo.longitude
-                if 'istgeom_elev' in self.json and 'elevation' in gpsInfo:
+                if 'istgeom_elev' in self.json and hasattr(gpsInfo, 'elevation'):
                     self.json['istgeom_elev'] = gpsInfo.elevation
                 if 'istgeom_hdop' in self.json and 'hdop' in gpsInfo:
                     self.json['istgeom_hdop'] = gpsInfo.hdop
-                if 'istgeom_vdop' in self.json and 'hdop' in gpsInfo:
-                    self.json['istgeom_vdop'] = gpsInfo.hdop
-                if 'istgeom_sat' in self.json and 'satellitesUsed' in gpsInfo:
+                if 'istgeom_vdop' in self.json and 'vdop' in gpsInfo:
+                    self.json['istgeom_vdop'] = gpsInfo.vdop
+                if 'istgeom_sat' in self.json and hasattr(gpsInfo, 'satellitesUsed'):
                     self.json['istgeom_sat'] = gpsInfo.satellitesUsed
 
                 self.inputChanged.emit(self.json, self.attr, True)
@@ -138,8 +138,6 @@ class SetupDevice(QtWidgets.QWidget, UI_CLASS):
     def test(self):
         # https://qgis.org/pyqgis/3.2/core/Gps/QgsGpsInformation.html
         # https://gis.stackexchange.com/questions/307209/accessing-gps-via-pyqgis
-
-        QgsMessageLog.logMessage('Status:' + str(self.json), "FindLocation")
 
         connectionRegistry = QgsApplication.gpsConnectionRegistry()
         connectionList = connectionRegistry.connectionList()
