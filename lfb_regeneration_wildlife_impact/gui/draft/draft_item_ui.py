@@ -99,11 +99,8 @@ class Ui_lfbItem(object):
         sizePolicy.setHeightForWidth(self.lfbFocusBtn.sizePolicy().hasHeightForWidth())
         self.lfbFocusBtn.setSizePolicy(sizePolicy)
         self.lfbFocusBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.lfbFocusBtn.setStyleSheet("background-color: green;\n"
-"padding:5px;\n"
-"border: none;\n"
-"border-radius: 5px;\n"
-"color: white;")
+        self.lfbFocusBtn.setStyleSheet("color: #000;\n"
+"padding:10px;")
         self.lfbFocusBtn.setObjectName("lfbFocusBtn")
         self.horizontalLayout_2.addWidget(self.lfbFocusBtn)
         self.lfbDraftIconBtn = QtWidgets.QPushButton(self.lfbItemFrame)

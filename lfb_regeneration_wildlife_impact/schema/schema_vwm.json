@@ -587,13 +587,12 @@
                             "description": "Enter Elevation",
                             "minimum": 0,
                             "maximum": 3000,
-                            "unit": "Meter",
-                            "multipleOf": 0.01
+                            "unit": "Meter"
                         },
                         "istgeom_hdop": {
                             "title": "Horizontalgenauigkeit",
                             "type": [
-                                "integer",
+                                "number",
                                 "null"
                             ],
                             "description": "Der vom Gerät übermittelte HDOP Wert.",
@@ -603,7 +602,7 @@
                         "istgeom_vdop": {
                             "title": "Vertikalgenauigkeit",
                             "type": [
-                                "integer",
+                                "number",
                                 "null"
                             ],
                             "description": "Der vom Gerät übermittelte VDOP Wert.",
@@ -616,8 +615,7 @@
                                 "integer",
                                 "null"
                             ],
-                            "description": "Elevation in Meter",
-                            "minimum": 3
+                            "description": "Elevation in Meter"
                         }
                     }
                 },
@@ -861,53 +859,47 @@
                                     "azimut": {
                                         "title": "Azimut",
                                         "type": "integer",
-                                        "description": "Azimuth",
+                                        "description": "Azimuth des Baumes vom Stichprobenpunkt",
                                         "minimum": 0,
                                         "maximum": 400,
-                                        "helperText": "Azimuth",
                                         "unit": "Gon",
                                         "default": 0
                                     },
                                     "distanz": {
                                         "title": "Distanz",
                                         "type": "integer",
-                                        "description": "Distanz",
+                                        "description": "Distanz des Baumes vom Stichprobenpunkt",
                                         "minimum": 0,
                                         "maximum": 9999,
-                                        "helperText": "Baum <-> Stichprobenpunkt",
                                         "unit": "Zentimeter"
                                     },
                                     "bhd": {
                                         "title": "BHD",
                                         "type": "integer",
-                                        "description": "DBH",
+                                        "description": "Brusthöhendurchmesser",
                                         "minimum": 10,
                                         "maximum": 9999,
-                                        "helperText": "DBH",
                                         "unit": "Millimeter"
                                     },
                                     "messhoehebhd": {
                                         "title": "Messhöhe",
                                         "type": "integer",
-                                        "description": "Höhe",
+                                        "description": "Höhe der Messung des BHD",
                                         "default": 13,
                                         "minimum": 1,
                                         "maximum": 250,
-                                        "helperText": "Höhe",
                                         "unit": "Dezimeter"
                                     },
                                     "schaele": {
                                         "title": "Schäle",
                                         "type": "boolean",
-                                        "description": "Schäle",
-                                        "helperText": "Schäle",
+                                        "description": "Schäle durch Wild",
                                         "default": false
                                     },
                                     "fege": {
                                         "title": "Fege",
                                         "type": "boolean",
-                                        "description": "Fege",
-                                        "helperText": "Fege",
+                                        "description": "Fege durch Wild",
                                         "default": false
                                     }
                                 }
@@ -1199,53 +1191,47 @@
                                     "azimut": {
                                         "title": "Azimut",
                                         "type": "integer",
-                                        "description": "Azimuth",
+                                        "description": "Azimuth des Baumes vom Stichprobenpunkt",
                                         "minimum": 0,
                                         "maximum": 400,
-                                        "helperText": "Azimuth",
                                         "unit": "Gon",
                                         "default": 0
                                     },
                                     "distanz": {
                                         "title": "Distanz",
                                         "type": "integer",
-                                        "description": "Distanz",
+                                        "description": "Distanz des Baumes vom Stichprobenpunkt",
                                         "minimum": 0,
                                         "maximum": 9999,
-                                        "helperText": "Baum <-> Stichprobenpunkt",
                                         "unit": "Zentimeter"
                                     },
                                     "bhd": {
                                         "title": "BHD",
                                         "type": "integer",
-                                        "description": "DBH",
+                                        "description": "Brusthöhendurchmesser",
                                         "minimum": 10,
                                         "maximum": 9999,
-                                        "helperText": "DBH",
                                         "unit": "Millimeter"
                                     },
                                     "messhoehebhd": {
                                         "title": "Messhöhe",
                                         "type": "integer",
-                                        "description": "Höhe",
+                                        "description": "Höhe der Messung des BHD",
                                         "default": 13,
                                         "minimum": 1,
                                         "maximum": 250,
-                                        "helperText": "Höhe",
                                         "unit": "Dezimeter"
                                     },
                                     "schaele": {
                                         "title": "Schäle",
                                         "type": "boolean",
-                                        "description": "Schäle",
-                                        "helperText": "Schäle",
+                                        "description": "Schäle durch Wild",
                                         "default": false
                                     },
                                     "fege": {
                                         "title": "Fege",
                                         "type": "boolean",
-                                        "description": "Fege",
-                                        "helperText": "Fege",
+                                        "description": "Fege durch Wild",
                                         "default": false
                                     }
                                 }
@@ -1366,6 +1352,9 @@
                                     }
                                 },
                                 "then": {
+                                    "required": [
+                                        "verjuengungstransektbhd"
+                                    ],
                                     "properties": {
                                         "verjuengungstransektbhd": {
                                             "type": [
@@ -1375,6 +1364,7 @@
                                     }
                                 },
                                 "else": {
+                                    "required": [],
                                     "properties": {
                                         "verjuengungstransektbhd": {
                                             "type": [
@@ -1622,14 +1612,16 @@
                                             "von 51 bis 100",
                                             "von 101 bis 150",
                                             "von 151 bis 200",
-                                            "von 201 bis <7 cm BHD"
+                                            "ab 201 und BHD < 7 cm "
                                         ]
                                     },
                                     "verjuengungstransektbhd": {
                                         "title": "BHD bei Bäuen > 2 Meter",
                                         "description": "BHD bei Bäumen > 2 Meter Höhe, gemessen in mm mit Umfangsmaßband",
-                                        "type": "integer",
-                                        "minimum": 1,
+                                        "type": [
+                                            "integer",
+                                            "null"
+                                        ],
                                         "maximum": 75,
                                         "unit": "Millimeter",
                                         "default": null
@@ -3210,53 +3202,47 @@
                 "azimut": {
                     "title": "Azimut",
                     "type": "integer",
-                    "description": "Azimuth",
+                    "description": "Azimuth des Baumes vom Stichprobenpunkt",
                     "minimum": 0,
                     "maximum": 400,
-                    "helperText": "Azimuth",
                     "unit": "Gon",
                     "default": 0
                 },
                 "distanz": {
                     "title": "Distanz",
                     "type": "integer",
-                    "description": "Distanz",
+                    "description": "Distanz des Baumes vom Stichprobenpunkt",
                     "minimum": 0,
                     "maximum": 9999,
-                    "helperText": "Baum <-> Stichprobenpunkt",
                     "unit": "Zentimeter"
                 },
                 "bhd": {
                     "title": "BHD",
                     "type": "integer",
-                    "description": "DBH",
+                    "description": "Brusthöhendurchmesser",
                     "minimum": 10,
                     "maximum": 9999,
-                    "helperText": "DBH",
                     "unit": "Millimeter"
                 },
                 "messhoehebhd": {
                     "title": "Messhöhe",
                     "type": "integer",
-                    "description": "Höhe",
+                    "description": "Höhe der Messung des BHD",
                     "default": 13,
                     "minimum": 1,
                     "maximum": 250,
-                    "helperText": "Höhe",
                     "unit": "Dezimeter"
                 },
                 "schaele": {
                     "title": "Schäle",
                     "type": "boolean",
-                    "description": "Schäle",
-                    "helperText": "Schäle",
+                    "description": "Schäle durch Wild",
                     "default": false
                 },
                 "fege": {
                     "title": "Fege",
                     "type": "boolean",
-                    "description": "Fege",
-                    "helperText": "Fege",
+                    "description": "Fege durch Wild",
                     "default": false
                 }
             }

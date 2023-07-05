@@ -80,6 +80,8 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.inheritedErrors = {}
 
+        self.previousGeneral  = None
+
         filename = os.path.realpath(os.path.join(dirname, '..', 'schema', 'default.json'))
 
         with open(filename) as f:
@@ -160,6 +162,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.draft.update()
 
     def saveFeature(self, json):
+        
         self.draft.setStatus(True)
         self.openHome()
         self.draft.readDrafts()
@@ -193,7 +196,9 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
             if tab['attr'] in self.json:
                 tab['setJson'](self.json[tab['attr']], setFields)
             else:
-                tab['setJson'](self.defaultJson[tab['attr']], setFields)
+                cpy = copy.deepcopy(self.defaultJson[tab['attr']])
+                QgsMessageLog.logMessage('DEFAULT: ' + str(cpy), 'LFB')
+                tab['setJson'](cpy, setFields)
 
 
     def newEntry(self):
@@ -221,6 +226,14 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         if self.validateTabs(True):
             self.draft.saveFeature(self.json)
+
+            if self.previousGeneral == None:
+                self.previousGeneral = copy.deepcopy(self.json['general'])
+
+            if self.json['general']['spaufsucheaufnahmetruppkuerzel'] != self.previousGeneral['spaufsucheaufnahmetruppkuerzel']:
+                self.previousGeneral['spaufsucheaufnahmetruppkuerzel'] = self.json['general']['spaufsucheaufnahmetruppkuerzel']
+            if self.json['general']['spaufsucheaufnahmetruppgnss'] != self.previousGeneral['spaufsucheaufnahmetruppgnss']:
+                self.previousGeneral['spaufsucheaufnahmetruppgnss'] = self.json['general']['spaufsucheaufnahmetruppgnss']
             
 
     def openHome(self):
@@ -284,16 +297,36 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
     def addDraft(self):
         self.draft = DraftSelection(self.iface, self.schema)
+
+        try:
+            self.draft.draftSelected.disconnect()
+            self.draft.folderSelected.disconnect()
+        except:
+            pass
+
         self.draft.draftSelected.connect(self.draftSelected)
         self.draft.folderSelected.connect(self.folderSelected)
         self.lfbHomeInputs.addWidget(self.draft)
 
         self.draft.setupDraftLayer()
+
+    def addPreviousGeneral(self, newJson):
+        if 'general' in newJson and self.previousGeneral != None:
+            if 'spaufsucheaufnahmetruppkuerzel' in self.previousGeneral and newJson['general']['spaufsucheaufnahmetruppkuerzel'] == None:
+                newJson['general']['spaufsucheaufnahmetruppkuerzel'] = self.previousGeneral['spaufsucheaufnahmetruppkuerzel']
+            if 'spaufsucheaufnahmetruppgnss' in self.previousGeneral and newJson['general']['spaufsucheaufnahmetruppgnss'] == None:
+                newJson['general']['spaufsucheaufnahmetruppgnss'] = self.previousGeneral['spaufsucheaufnahmetruppgnss']
+
     
     def draftSelected(self, newJson, id, feature):
+        self.json = copy.deepcopy(self.defaultJson)
+
+        self.addPreviousGeneral(newJson)
+
         self.json = newJson
-        self.resetForm(True)
         self.changeState()
+
+        self.resetForm(True)
         self.setPosition(2)
         self.saveBar.setAttributes(feature, 'los_id')
         self.draft.resetCurrentDraft(id)
@@ -379,7 +412,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
             for i in self.tabsArray:
                 if i['attr'] not in self.json:
                     newValue = True
-                    self.json[i['attr']] = self.defaultJson[i['attr']]
+                    self.json[i['attr']] = copy.deepcopy(self.defaultJson[i['attr']])
                     i['setJson'](self.json[i['attr']], True)
 
             if newValue:

@@ -31,6 +31,8 @@ from qgis.PyQt.QtWidgets import QDialog
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore
 
+from ...utils.helper import Utils
+
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'errors.ui'))
 
 class ErrorsWidget(QtWidgets.QWidget, UI_CLASS):
@@ -61,8 +63,7 @@ class ErrorsWidget(QtWidgets.QWidget, UI_CLASS):
                         return self.findNameInJsonSchema(name, item)
         return None
     
-    def translateRelativeSchemaPath(self, relative_schema_path):
-        # QgsMessageLog.logMessage(str(relative_schema_path), 'LFB')
+    def translateRelativeSchemaPath(self, schema, relative_schema_path):
         isProperties = False
         tab = None
         tabCount = None
@@ -95,7 +96,8 @@ class ErrorsWidget(QtWidgets.QWidget, UI_CLASS):
         
 
         if len(self.errors) > 0:
-            errorLocation = self.translateRelativeSchemaPath(self.errors[0].relative_schema_path)
+            errorLocation = Utils.translateRelativeSchemaPath(self.schema, self.errors[0].relative_schema_path)
+            # errorLocation = self.translateRelativeSchemaPath(self.schema, self.errors[0].relative_schema_path)
             self.lfbErrorLocation.setText(errorLocation)
             self.lfbErrorDescription.setText(str(self.errors[0].message))
             self.show()

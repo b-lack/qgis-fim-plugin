@@ -38,6 +38,7 @@ from PyQt5 import QtCore
 
 from jsonschema import Draft7Validator
 
+from ...utils.helper import Utils
 
 
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'array_field.ui'))
@@ -64,6 +65,7 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         self.schema = schema
         self.key = key
 
+        self.headerSet = False
         
         self.defaultValue = {} #copy.deepcopy(self.json[self.key][0])
         #del self.json[self.key][0]
@@ -77,24 +79,23 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         self.lfbAddBtn.clicked.connect(self.addRow)
         self.lfbAddBtn.setEnabled(False)
 
-        self.tableHeaders = [
-            'Aktion'
-        ]
-
+        self.tableHeaders = ['']
         for attr, value in self.schema['items']['properties'].items():
             self.tableHeaders.append(value['title'])
+        self.tableHeaders.append('')
         
         self.validate() 
 
-        self.setTableHeaders(self.tableHeaders)
-        self.setTableData(self.json[self.key])
+        #self.setTableData(self.json[self.key])
 
         self.show()
 
 
-    def setTableHeaders(self, headers):
+    def setTableHeaders(self, headers, data):
 
         self.lfbArrayOutput.setColumnCount(len(headers))
+        self.lfbArrayOutput.setRowCount(len(data))
+
         self.lfbArrayOutput.setHorizontalHeaderLabels(headers)
         self.lfbArrayOutput.horizontalHeader().setStretchLastSection(True)
         #self.lfbArrayOutput.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
@@ -104,7 +105,9 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
     def setTableData(self, data):
         self.lfbArrayOutput.clear()
 
-        self.lfbArrayOutput.setRowCount(len(data))
+        self.setTableHeaders(self.tableHeaders, data)
+
+        #self.lfbArrayOutput.setRowCount(len(data))
 
         for row in range(0, len(data)):
             idx = 1
@@ -115,12 +118,29 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
             # create an cell widget
             btn = QPushButton(self.lfbArrayOutput)
             btn.clicked.connect(self.make_removeRow(row))
-            btn.setStyleSheet("margin:0; padding:0; border: 2px solid grey; border-radius: 5px;background: #333; color: #fff;")
+            btn.setStyleSheet("color: red;")
             self.row=row
-            btn.setText('delete')
+            btn.setText('löschen')
             btn.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-            self.lfbArrayOutput.setCellWidget(row, 0, btn)    
+            self.lfbArrayOutput.setCellWidget(row, idx, btn) 
+            # create an cell widget
+            btn = QPushButton(self.lfbArrayOutput)
+            btn.clicked.connect(self.make_editRow(row))
+            btn.setStyleSheet("color: green;")
+            self.row=row
+            btn.setText('bearbeiten')
+            btn.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+            self.lfbArrayOutput.setCellWidget(row, 0, btn)   
 
+    def make_editRow(self, row):
+        def editRow():
+            self.editRow(row)
+        return editRow
+    
+    def editRow(self, row):
+        #self.child.setJson(self.json[self.key][row])
+        QgsMessageLog.logMessage(str('edit Row'), 'LFB')
+    
     def make_removeRow(self, row):
         def removeRow():
             self.removeRow(row)
@@ -129,12 +149,15 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         #self.lfbArrayOutput.removeRow(row)
 
     def removeRow(self, row):
-        del self.json[self.key][row]
-        self.setTableData(self.json[self.key])
+        res = Utils.confirmDialog(self, 'Zeile löschen', 'Möchtest du die Zeile wirklich löschen?')
+        if res == QtWidgets.QMessageBox.Yes:
+            del self.json[self.key][row]
+            self.setTableData(self.json[self.key])
+            self.inputChanged.emit(self.json)
 
     def addRow(self):
         newValue = copy.deepcopy(self.defaultValue)
-        self.json[self.key].append(newValue)
+        self.json[self.key].insert(0, newValue)
         
     
         #self.lfbArrayOutput.clear()
@@ -149,18 +172,17 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
             idx += 1
 
         self.inputChanged.emit(self.json)
-        
+        self.resetForm()
 
-        #for column in range(0, columnCount):
-        #    self.lfbArrayOutput.setItem(rowCount, column, QTableWidgetItem('First Name'))
-        
+    def resetForm(self):
+        self.defaultValue = {}
+        self.child.setJson(self.defaultValue, True)
+
     def setJson(self, newJson, setFields = True):
         self.json = newJson
-
         self.setTableData(self.json[self.key])
 
     def setInputText(self, value):
-        
         self.validate()
         
 
@@ -174,7 +196,13 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
 
         if len(errors) == 0:
             self.lfbAddBtn.setEnabled(True)
+            self.lfbArrayError.hide()
+            self.lfbArrayGroup.setStyleSheet("QGroupBox { border: 2px solid green; padding: 10px; border-radius:10px;}")
         else:
             self.lfbAddBtn.setEnabled(False)
+            self.lfbArrayGroup.setStyleSheet("QGroupBox { border: 2px solid red; padding: 10px; border-radius:10px;}")
+
+            self.lfbArrayError.setText('Fehler im Document')
+            self.lfbArrayError.show()
 
         self.inputChanged.emit(self.json)

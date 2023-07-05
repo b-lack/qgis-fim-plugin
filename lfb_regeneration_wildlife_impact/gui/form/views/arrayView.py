@@ -85,8 +85,9 @@ class ArrayView(QtWidgets.QWidget, UI_CLASS):
 
         self.json = newJson
 
-        for field in self.fieldArray :
+        for field in self.fieldArray:
             field.setJson(self.json, setFields)
 
     def emitText(self):
+        
         self.inputChanged.emit(self.json)

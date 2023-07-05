@@ -245,7 +245,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
     def readLayer(self):
         """Read the layer and return the features"""
         featureList = self.vl.getFeatures()
-        sorted_featureList = sorted(featureList, key=lambda x: x['modified'], reverse=True)
+        sorted_featureList = sorted(featureList, key=lambda x: x['created'], reverse=True)
 
         properties = []
 
@@ -261,7 +261,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         featureList = self.vl.getFeatures()
         
-        sorted_featureList = sorted(featureList, key=lambda x: x['modified'], reverse=True)
+        sorted_featureList = sorted(featureList, key=lambda x: x['created'], reverse=True)
         filtered = filter(lambda c: c['status'] == status, sorted_featureList)
         sorted_filtered_featureList = list(filtered)
         
@@ -281,7 +281,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         featureList = self.vl.getFeatures()
         
-        sorted_featureList = sorted(featureList, key=lambda x: x['modified'], reverse=True)
+        sorted_featureList = sorted(featureList, key=lambda x: x['created'], reverse=True)
         filtered = filter(lambda c: c['status'] == status, sorted_featureList)
         sorted_featureList = list(filtered)
         

@@ -3,6 +3,7 @@ import json
 
 from qgis.core import QgsProject, QgsExpressionContextUtils, QgsMapLayer
 from qgis.core import QgsMessageLog
+from PyQt5.QtWidgets import QMessageBox
 
 # GNSS plugin
 from qgis import qgis
@@ -15,6 +16,52 @@ class Utils(object):
     def enumLabel(a,b):
         idx = b['enum'].index(a)
         return str(b['enumLabels'][idx])
+    
+    def confirmDialog(interface, title, message):
+        return QMessageBox.question(interface, title, message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+
+    def schemaTypeHasNull(schema):
+
+        if schema is None:
+            return False
+        
+        if 'type' not in schema:
+            return False
+        
+        if hasattr(schema, "__len__"):
+            return 'null' in schema['type']
+        else:
+            return schema['type'] == 'null'
+        
+    def isAttributeRequired(schema, key):
+        if 'required' in schema:
+            return key in schema['required']
+        else:
+            return True
+
+    def translateRelativeSchemaPath(schema, relative_schema_path):
+        isProperties = False
+        tab = None
+        tabCount = None
+
+        for path in relative_schema_path:
+
+            if isProperties and not tab:
+                tabCount = 0
+                for key, value in schema['properties'].items():
+                    if path  == key:
+                        tab = schema['properties'][path]
+                        break
+                    tabCount += 1
+
+            if path == 'properties':
+                isProperties = True
+            
+           
+        if tab is not None and 'title' in tab:
+            return tab['title']
+        
+        return ''
     
     def getFeatureAttribute(feature, key):
 

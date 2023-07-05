@@ -44,6 +44,11 @@ class Ui_Form(object):
         self.lfbArrayInput = QtWidgets.QGridLayout()
         self.lfbArrayInput.setObjectName("lfbArrayInput")
         self.verticalLayout_2.addLayout(self.lfbArrayInput)
+        self.lfbArrayError = QtWidgets.QLabel(self.lfbArrayGroup)
+        self.lfbArrayError.setStyleSheet("color:#f00;")
+        self.lfbArrayError.setAlignment(QtCore.Qt.AlignCenter)
+        self.lfbArrayError.setObjectName("lfbArrayError")
+        self.verticalLayout_2.addWidget(self.lfbArrayError)
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -54,11 +59,18 @@ class Ui_Form(object):
         font.setBold(False)
         font.setWeight(50)
         self.lfbAddBtn.setFont(font)
+        self.lfbAddBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.lfbAddBtn.setStyleSheet("QPushButton{\n"
 "    border: 2px solid gray;\n"
 "    border-radius: 25px;\n"
 "    padding:10px;\n"
 "    margin: 10px;\n"
+"    background-color: green;\n"
+"    color: #fff;\n"
+"}\n"
+"QPushButton:disabled{\n"
+"    background-color:transparent;\n"
+"    color: rgba(0,0,0,0.3);\n"
 "}")
         self.lfbAddBtn.setObjectName("lfbAddBtn")
         self.horizontalLayout_5.addWidget(self.lfbAddBtn)
@@ -74,6 +86,8 @@ class Ui_Form(object):
         self.lfbArrayOutput.setStyleSheet("")
         self.lfbArrayOutput.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.lfbArrayOutput.setTextElideMode(QtCore.Qt.ElideNone)
+        self.lfbArrayOutput.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
+        self.lfbArrayOutput.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
         self.lfbArrayOutput.setObjectName("lfbArrayOutput")
         self.lfbArrayOutput.setColumnCount(0)
         self.lfbArrayOutput.setRowCount(0)
@@ -90,5 +104,6 @@ class Ui_Form(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
         self.lfbArrayGroup.setTitle(_translate("Form", "GroupBox"))
+        self.lfbArrayError.setText(_translate("Form", "TextLabel"))
         self.lfbAddBtn.setText(_translate("Form", "Hinzufügen"))
         self.lfbArrayOutput.setSortingEnabled(True)

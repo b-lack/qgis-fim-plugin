@@ -54,8 +54,12 @@ class DraftItem(QtWidgets.QWidget, UI_CLASS):
         self.feature = feature
         self.properties = json.loads(feature['form'])
 
+        self.lfbDraftIconBtn.clicked.disconnect()
         self.lfbDraftIconBtn.clicked.connect(self.on_lfbDraftIconBtn_clicked)
+
+        self.lfbDraftIconRemoveBtn.clicked.disconnect()
         self.lfbDraftIconRemoveBtn.clicked.connect(self.on_lfbDraftIconRemoveBtn_clicked)
+
         self.lfbFocusBtn.clicked.connect(self.focusFeature)
 
         self.lfbDraftModifiedByBtn.setText(feature['modified'].toString() if feature['modified'] is not None else '-')
@@ -77,6 +81,8 @@ class DraftItem(QtWidgets.QWidget, UI_CLASS):
         self.featureSelected.emit(self.feature.id())
     
     def on_lfbDraftIconRemoveBtn_clicked(self):
-        self.removeFeature.emit(self.feature.id())
+        res = Utils.confirmDialog(self, 'Stichprobenpunkt löschen', 'Möchtest du den Stichprobenpunkt wirklich löschen?')
+        if res == QtWidgets.QMessageBox.Yes:
+            self.removeFeature.emit(self.feature.id())
         
  

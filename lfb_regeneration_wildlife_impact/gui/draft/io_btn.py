@@ -83,7 +83,7 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
 
         if len(selectedFeatures) > 0:
             self.lfbImportSelectedBtn.setEnabled(True)
-            self.lfbImportSelectedBtn.setText('IMPORTIERE ' + str(len(selectedFeatures)) + ' PUNKT(E)')
+            self.lfbImportSelectedBtn.setText('IMPORTIERE AUSGEWÄHLTE PUNKTE')
         else:
             self.lfbImportSelectedBtn.setText('IMPORTIERE AUSGEWÄHLTE PUNKTE')
             self.lfbImportSelectedBtn.setEnabled(False)
@@ -111,6 +111,8 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         self.update()
 
         layer = Utils.getLayerByName('LFB-Regeneration-Wildlife-Impact-Monitoring')
+        if not layer:
+            return
         fields = layer.fields()
 
         layer.startEditing()
@@ -145,10 +147,9 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
                 qgsFeature.setGeometry(geometry)
 
 
-
                 for fieldName in self.fieldsToBeMapped:
                     idx = layerFields.indexFromName(fieldName)
-                    if idx >= 0:
+                    if idx >= 0 and attributes[idx]:
                         qgsFeature.setAttribute(fieldName, attributes[idx])
                     else:
                         qgsFeature.setAttribute(fieldName, defaultAttributes[fieldName])

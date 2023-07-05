@@ -193,7 +193,6 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         # self.checkMinimumSet(jsonToTest, len(self.errors))
 
         #self.customErrors = self.customErrors + self.checkIsForest(jsonToTest)
-        QgsMessageLog.logMessage(str(jsonToTest), 'LFB')
         self.errorsWidget.updateErrors(self.errors)
 
         return len(self.errors) == 0

@@ -1,4 +1,4 @@
-
+import math
 import os
 
 from qgis.PyQt import QtWidgets, uic
@@ -30,8 +30,6 @@ class SetupDevice(QtWidgets.QWidget, UI_CLASS):
 
         s=QgsSettings()
         val=s.value(PLUGIN_NAME+"/layername_fieldname_a")
-
-        QgsMessageLog.logMessage(str(val), "FindLocation")
 
         # https://gis.stackexchange.com/questions/307209/accessing-gps-via-pyqgis
 
@@ -67,8 +65,6 @@ class SetupDevice(QtWidgets.QWidget, UI_CLASS):
         self.gpsDetector.detectionFailed.connect(self.connection_failed)
         #self.gpsDetector.advance()
         
-        QgsMessageLog.logMessage(str(port[0]), "FindLocation")
-
         return
 
         connectionRegistry = QgsApplication.gpsConnectionRegistry()
@@ -85,14 +81,11 @@ class SetupDevice(QtWidgets.QWidget, UI_CLASS):
 
     def connection_succeed(self, connection):
         try:
-            QgsMessageLog.logMessage(str('success'), "FindLocation")
             self.gpsCon = connection
-            #self.gpsCon.stateChanged.connect(self.status_changed)
         except Exception as e:
              QgsMessageLog.logMessage(str(e), "FindLocation")
 
     def connection_failed(self):
-        QgsMessageLog.logMessage('GPS connection failed: ' + str(self.availablePorts[self.portPositionChecked]), "FindLocation")
         self.tryNextPort()
 
 
@@ -106,7 +99,6 @@ class SetupDevice(QtWidgets.QWidget, UI_CLASS):
 
             #results = plugin.run()
             
-            QgsMessageLog.logMessage(str(results), "FindLocation")
         else:
             self.geSetupLabel.setText("Plugin NOT FOUND")
 
@@ -120,10 +112,14 @@ class SetupDevice(QtWidgets.QWidget, UI_CLASS):
                 if 'istgeom_x' in self.json and hasattr(gpsInfo, 'longitude'):
                     self.json['istgeom_x'] = gpsInfo.longitude
                 if 'istgeom_elev' in self.json and hasattr(gpsInfo, 'elevation'):
-                    self.json['istgeom_elev'] = gpsInfo.elevation
-                if 'istgeom_hdop' in self.json and 'hdop' in gpsInfo:
+                    
+                    if math.isnan(gpsInfo.elevation):
+                        self.json['istgeom_elev'] = None
+                    else:
+                        self.json['istgeom_elev'] = gpsInfo.elevation
+                if 'istgeom_hdop' in self.json and hasattr(gpsInfo, 'hdop'):
                     self.json['istgeom_hdop'] = gpsInfo.hdop
-                if 'istgeom_vdop' in self.json and 'vdop' in gpsInfo:
+                if 'istgeom_vdop' in self.json and hasattr(gpsInfo, 'vdop'):
                     self.json['istgeom_vdop'] = gpsInfo.vdop
                 if 'istgeom_sat' in self.json and hasattr(gpsInfo, 'satellitesUsed'):
                     self.json['istgeom_sat'] = gpsInfo.satellitesUsed

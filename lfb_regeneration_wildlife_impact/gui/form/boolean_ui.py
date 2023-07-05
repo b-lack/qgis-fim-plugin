@@ -36,6 +36,23 @@ class Ui_Form(object):
 "}")
         self.lfbTextFieldDescriptionBtn.setObjectName("lfbTextFieldDescriptionBtn")
         self.horizontalLayout.addWidget(self.lfbTextFieldDescriptionBtn)
+        self.lfbCheckBox = QtWidgets.QCheckBox(Form)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lfbCheckBox.sizePolicy().hasHeightForWidth())
+        self.lfbCheckBox.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        self.lfbCheckBox.setFont(font)
+        self.lfbCheckBox.setStyleSheet("QCheckBox::indicator {\n"
+"     width: 30px;\n"
+"     height: 30px;\n"
+" }")
+        self.lfbCheckBox.setText("")
+        self.lfbCheckBox.setIconSize(QtCore.QSize(25, 25))
+        self.lfbCheckBox.setObjectName("lfbCheckBox")
+        self.horizontalLayout.addWidget(self.lfbCheckBox)
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
         self.lfbTextFieldLabel = QtWidgets.QLabel(Form)
@@ -62,23 +79,6 @@ class Ui_Form(object):
         self.lfbTextFieldError.setObjectName("lfbTextFieldError")
         self.verticalLayout.addWidget(self.lfbTextFieldError)
         self.horizontalLayout.addLayout(self.verticalLayout)
-        self.lfbCheckBox = QtWidgets.QCheckBox(Form)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.lfbCheckBox.sizePolicy().hasHeightForWidth())
-        self.lfbCheckBox.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setPointSize(20)
-        self.lfbCheckBox.setFont(font)
-        self.lfbCheckBox.setStyleSheet("QCheckBox::indicator {\n"
-"     width: 30px;\n"
-"     height: 30px;\n"
-" }")
-        self.lfbCheckBox.setText("")
-        self.lfbCheckBox.setIconSize(QtCore.QSize(25, 25))
-        self.lfbCheckBox.setObjectName("lfbCheckBox")
-        self.horizontalLayout.addWidget(self.lfbCheckBox)
         self.formLayout.setLayout(0, QtWidgets.QFormLayout.SpanningRole, self.horizontalLayout)
 
         self.retranslateUi(Form)
