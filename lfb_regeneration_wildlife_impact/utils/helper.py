@@ -1,6 +1,7 @@
 import os
 import json
 
+
 from qgis.core import QgsProject, QgsExpressionContextUtils, QgsMapLayer
 from qgis.core import QgsMessageLog
 from PyQt5.QtWidgets import QMessageBox
@@ -18,7 +19,16 @@ class Utils(object):
         return str(b['enumLabels'][idx])
     
     def confirmDialog(interface, title, message):
-        return QMessageBox.question(interface, title, message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        msg = QMessageBox()
+        msg.setStyleSheet("text-color: rgb(0, 0, 0);")
+        msg.setStyleSheet("background-color: rgb(255, 255, 255);")
+        return msg.question(interface, title, message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+
+
+    def getMetaData():
+        return {
+            'version': '0.0.25'
+        }
 
     def schemaTypeHasNull(schema):
 

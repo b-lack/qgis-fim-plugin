@@ -138,7 +138,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
 
         #self.lfbTextField.setText("")
 
-        if "default" not in self.schema and self.json[self.key] is None:
+        if "default" not in self.schema:
             return
         
         self.json[self.key] = self.schema['default']
@@ -154,15 +154,10 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
         if setFields == False:
             return
         
-        if self.key not in self.json:
-            self.setDefaultValue()
-        
-        if self.json is None or self.json[self.key] is None:
+        if self.key not in self.json or self.json is None or self.json[self.key] is None:
             self.setDefaultValue()
 
-        QgsMessageLog.logMessage(str(self.json[self.key]), "LFB")
-
-        if self.json[self.key] is not None:
+        if self.key in self.json and self.json[self.key] is not None:
             self.lfbTextField.setText(str(self.json[self.key]))
         else:
             self.lfbTextField.setText('')
@@ -188,7 +183,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
 
         self.internJson[self.key] = value
 
-
+        QgsMessageLog.logMessage('setInputText: ' + self.key + ' ' + str(value), "LFB")
         self.validate()
 
     def validate(self):

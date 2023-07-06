@@ -130,7 +130,7 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
             self.row=row
             btn.setText('bearbeiten')
             btn.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-            self.lfbArrayOutput.setCellWidget(row, 0, btn)   
+            #self.lfbArrayOutput.setCellWidget(row, 0, btn)   
 
     def make_editRow(self, row):
         def editRow():

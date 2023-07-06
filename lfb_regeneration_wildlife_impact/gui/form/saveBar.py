@@ -44,7 +44,7 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'saveBar.ui
 
 
 class SaveBar(QtWidgets.QWidget, UI_CLASS):
-    saveFeature = QtCore.pyqtSignal(object)
+    saveFeature = QtCore.pyqtSignal(object, bool)
     toHome = QtCore.pyqtSignal(bool)
     devButton = QtCore.pyqtSignal(bool)
 
@@ -92,9 +92,14 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.lfbFokusFeature.hide()
         self.lfbFokusFeature.clicked.connect(self.focusFeature)
 
-        self.validate(self.json) 
+        self.validate(self.json)
+        self.showMetaData()
 
         self.show()
+
+    def showMetaData(self):
+        metaData = Utils.getMetaData()
+        self.lfbPluginVersion.setText('Version: ' + str(metaData['version']))
 
     def focusFeature(self):
         Utils.focusFeature(self.interface, self.currentFeature, True, 15000)
@@ -105,13 +110,15 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         msgBox.exec()
 
     def openState(self):
+        self.toHome.emit(True)
         self.devButton.emit(True)
         
     def openHome(self):
-        self.toHome.emit(True)
+        self.saveFeature.emit(self.json, False)
+        #self.toHome.emit(True)
 
     def saveBtnClicked(self):
-        self.saveFeature.emit(self.json)
+        self.saveFeature.emit(self.json, True)
 
     def setFeatureAttributes(self, feature, key):
         layer = Utils.getLayerByName()
@@ -155,7 +162,6 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         return True
 
     def openErrorDialog(self):
-        QgsMessageLog.logMessage(str(len(self.errors)), 'LFB')
 
         for error in self.errors:
             QgsMessageLog.logMessage(str(error.message) + ' ' + str(error.relative_schema_path), 'LFB')

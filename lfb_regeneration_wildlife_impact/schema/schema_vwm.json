@@ -596,7 +596,7 @@
                                 "null"
                             ],
                             "description": "Der vom Gerät übermittelte HDOP Wert.",
-                            "minimum": 1,
+                            "minimum": 0,
                             "maximum": 10
                         },
                         "istgeom_vdop": {
@@ -606,7 +606,7 @@
                                 "null"
                             ],
                             "description": "Der vom Gerät übermittelte VDOP Wert.",
-                            "minimum": 1,
+                            "minimum": 0,
                             "maximum": 10
                         },
                         "istgeom_sat": {

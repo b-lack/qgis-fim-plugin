@@ -161,10 +161,6 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
     def setJson(self, newJson, setFields = True):
         self.json.update(newJson)
 
-        QgsMessageLog.logMessage(str(self.attr), 'LFB')
-        QgsMessageLog.logMessage(str(self.json), 'LFB')
-        QgsMessageLog.logMessage(str(newJson), 'LFB')
-
         for field in self.fieldArray :
             field.setJson(self.json, setFields)
 

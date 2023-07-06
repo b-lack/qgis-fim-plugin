@@ -143,7 +143,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.saveBar.setContentsMargins(0,0,0,0)
         self.lfbMain.addWidget(self.saveBar)
 
-        self.saveBar.toHome.connect(self.openHome)
+        self.saveBar.toHome.connect(self.formToDefault)
         self.saveBar.devButton.connect(self.openState)
 
         self.resetForm(False)
@@ -161,9 +161,9 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
     def update(self):
         self.draft.update()
 
-    def saveFeature(self, json):
-        
-        self.draft.setStatus(True)
+    def saveFeature(self, json, status=False):
+
+        self.draft.setStatus(status)
         self.openHome()
         self.draft.readDrafts()
         self.draft.readDone(True)
@@ -192,12 +192,13 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
     def resetForm(self, setFields = True):
 
+        QgsMessageLog.logMessage('resetForm', 'LFB')
+
         for tab in self.tabsArray:
             if tab['attr'] in self.json:
                 tab['setJson'](self.json[tab['attr']], setFields)
             else:
                 cpy = copy.deepcopy(self.defaultJson[tab['attr']])
-                QgsMessageLog.logMessage('DEFAULT: ' + str(cpy), 'LFB')
                 tab['setJson'](cpy, setFields)
 
 
@@ -235,6 +236,9 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
             if self.json['general']['spaufsucheaufnahmetruppgnss'] != self.previousGeneral['spaufsucheaufnahmetruppgnss']:
                 self.previousGeneral['spaufsucheaufnahmetruppgnss'] = self.json['general']['spaufsucheaufnahmetruppgnss']
             
+    def formToDefault(self, setFields = True):
+        self.json = copy.deepcopy(self.defaultJson)
+        self.resetForm()
 
     def openHome(self):
         self.json = copy.deepcopy(self.defaultJson)
@@ -325,7 +329,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.json = newJson
         self.changeState()
-
+        QgsMessageLog.logMessage('draftSelected', 'LFB')
         self.resetForm(True)
         self.setPosition(2)
         self.saveBar.setAttributes(feature, 'los_id')
@@ -336,7 +340,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
     def changeState(self, validate = True):        
         self.state.change_state(self.json)
        
-        
+        QgsMessageLog.logMessage('changeState', 'LFB')
         self.resetForm(False)
 
         if validate:
