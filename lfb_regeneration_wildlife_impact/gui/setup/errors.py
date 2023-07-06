@@ -50,7 +50,6 @@ class ErrorsWidget(QtWidgets.QWidget, UI_CLASS):
 
         self.show()
 
-
     def findNameInJsonSchema(self, name, schema):
         for key, value in schema.items():
             if key == name:

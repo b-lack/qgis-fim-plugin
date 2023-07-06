@@ -81,8 +81,9 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
 
         self.lfbErrorDialogBtn.hide()
         self.lfbErrorDialogBtn.clicked.connect(self.openErrorDialog)
-        self.errorsWidget = ErrorsWidget(self.interface, self.schema)
-        self.lfbErrorsLayout.addWidget(self.errorsWidget)
+        #self.errorsWidget = ErrorsWidget(self.interface, self.schema)
+        #self.lfbErrorsLayout.addWidget(self.errorsWidget)
+        
 
         self.lfbProgressBar.setValue(100)
 
@@ -196,10 +197,9 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
             #self.isValid = False
             self.lfbErrorDialogBtn.setText(str(len(self.errors)) + ' verbleibende Fehler.')
             
-        # self.checkMinimumSet(jsonToTest, len(self.errors))
-
-        #self.customErrors = self.customErrors + self.checkIsForest(jsonToTest)
-        self.errorsWidget.updateErrors(self.errors)
+       
+       
+        #self.errorsWidget.updateErrors(self.errors)
 
         return len(self.errors) == 0
 

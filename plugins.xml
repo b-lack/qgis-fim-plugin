@@ -2,7 +2,7 @@
 <plugins>
     <pyqgis_plugin name="Lfb Regeneration and Wildlife Impact Monitoring" version="0.0.25">
         <description><![CDATA[Lfb Regeneration and Wildlife Impact Monitoring]]></description>
-        <version>0.0.25</version>
+        <version>0.0.26</version>
         <qgis_minimum_version>3.0</qgis_minimum_version>
         <homepage>https://github.com/b-lack/lfb-regeneration_wildlife_impact_monitoring</homepage>
         <file_name>lfb_regeneration_wildlife_impact.zip</file_name>
