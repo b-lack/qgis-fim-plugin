@@ -111,7 +111,7 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         msgBox.exec()
 
     def openState(self):
-        self.toHome.emit(True)
+        #self.toHome.emit(True)
         self.devButton.emit(True)
         
     def openHome(self):

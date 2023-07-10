@@ -64,6 +64,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
         self.schema = schema
         self.key = key
         self.defaultValue = self.json[self.key]
+        self.isValid = None
 
         placeholderText = QCoreApplication.translate("FormFields", self.schema['title'])
 
@@ -80,7 +81,9 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             pass
 
         self.lfbTextField.returnPressed.connect(self.onEnter)
-
+        
+        
+        
 
         if self.lfbTextFieldHelp is not None and 'description' in self.schema:
             self.lfbTextFieldHelp.setText(self.schema['description'])
@@ -88,6 +91,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             self.lfbTextFieldHelp.setText('')
 
         self.lfbTextField.textChanged.connect(self.setInputText)
+        self.lfbTextField.editingFinished.connect(self.editingFinished)
 
         self.lfbTextField.undoAvailable = True
 
@@ -95,7 +99,6 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             self.lfbTextFieldDescriptionBtn.hide()
 
             self.lfbTextFieldDescriptionBtn.clicked.connect(self.triggerInfoBox)
-
 
         if "readOnly" in self.schema:
             self.lfbTextField.setReadOnly(self.schema['readOnly'])
@@ -112,8 +115,10 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
         #    dv = QDoubleValidator(self.schema['properties'][self.key]['minimum'], self.schema['properties'][self.key]['maximum'], 7); # [0, 5] with 7 decimals of precision
         #    self.lfbTextField.setValidator(dv)
 
-        #if "default" in self.schema and self.json[self.key] is None:
-        #    self.setDefaultValue()
+        if self.key == "messhoehebhd":
+            QgsMessageLog.logMessage("TextField: " + self.key, "LFB")
+
+        self.setDefaultValue()
 
         self.validate() 
 
@@ -131,9 +136,10 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
 
     def setDefaultValue(self):
 
+        
+
         if not Utils.isAttributeRequired(self.schema, self.key):
-            self.json[self.key] = None
-            #self.lfbTextField.setText("")
+            del self.json[self.key]# = null
             return
 
         #self.lfbTextField.setText("")
@@ -142,7 +148,11 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             return
         
         self.json[self.key] = self.schema['default']
-        #self.lfbTextField.setText(str(self.json[self.key]))
+
+        if self.json[self.key] is not None:
+            self.lfbTextField.setText(str(self.json[self.key]))
+        else:
+            self.lfbTextField.setText('')
 
     def triggerInfoBox(self):
         self.lfbInfoBox.emit(self.schema)
@@ -183,10 +193,12 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
 
         self.internJson[self.key] = value
 
-        QgsMessageLog.logMessage('setInputText: ' + self.key + ' ' + str(value), "LFB")
         self.validate()
 
-    def validate(self):
+    def editingFinished(self):
+        self.validate(True)
+
+    def validate(self, emit = False):
         #jsonCpy = self.json.copy()
         #jsonCpy['name'] = self.lfbTextField.text()
 
@@ -196,10 +208,10 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
 
         self.json[self.key] = self.internJson[self.key]
 
-
-        QgsMessageLog.logMessage('error.message: ' + self.key, "LFB")
-        for error in errors:
-            QgsMessageLog.logMessage('--> ' + error.message, "LFB")
+        if len(errors) > 0:
+            isValid = False
+        else:
+            isValid = True
 
         if self.json[self.key] is None and not Utils.schemaTypeHasNull(self.schema):
             self.lfbTextFieldError.hide()
@@ -221,5 +233,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             for error in errors:
                 self.lfbTextFieldError.setText(error.message)
 
-        
-        self.inputChanged.emit(self.json[self.key], self.key)
+        if isValid != self.isValid or emit == True:
+            self.inputChanged.emit(self.json[self.key], self.key)
+
+        self.isValid = isValid

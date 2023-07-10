@@ -77,6 +77,7 @@ class TextArea(QtWidgets.QWidget, UI_CLASS):
             self.lfbTextField.setStyleSheet("background-color: #e0e0e0;")
 
         self.lfbTextField.textChanged.connect(self.setInputText)
+        #self.lfbTextField.editingFinished.connect(self.editingFinished)
         self.lfbTextField.undoAvailable = True
 
         self.lfbTextFieldDescriptionBtn.clicked.connect(self.triggerInfoBox)
@@ -138,6 +139,7 @@ class TextArea(QtWidgets.QWidget, UI_CLASS):
         if self.json is not None and self.json[self.key] is not None:
             self.lfbTextField.setPlainText(str(self.json[self.key]))
         else:
+            QgsMessageLog.logMessage("No value for key " + self.key + " found", "LFB")
             self.setDefaultValue()
 
         
@@ -170,7 +172,10 @@ class TextArea(QtWidgets.QWidget, UI_CLASS):
 
         self.validate()
 
-    def validate(self):
+    def editingFinished(self):
+        self.validate(True)
+
+    def validate(self, emit = True):
         #jsonCpy = self.json.copy()
         #jsonCpy['name'] = self.lfbTextField.text()
 
@@ -197,5 +202,5 @@ class TextArea(QtWidgets.QWidget, UI_CLASS):
             for error in errors:
                 self.lfbTextFieldError.setText(error.message)
 
-        
-        self.inputChanged.emit(self.json[self.key])
+        if emit:
+            self.inputChanged.emit(self.json[self.key])

@@ -329,7 +329,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.json = newJson
         self.changeState()
-        QgsMessageLog.logMessage('draftSelected', 'LFB')
+
         self.resetForm(True)
         self.setPosition(2)
         self.saveBar.setAttributes(feature, 'los_id')
@@ -340,7 +340,6 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
     def changeState(self, validate = True):        
         self.state.change_state(self.json)
        
-        QgsMessageLog.logMessage('changeState', 'LFB')
         self.resetForm(False)
 
         if validate:
@@ -353,6 +352,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         msgBox.exec()
 
     def validateTabs(self, minimumToDraft = False):
+        QgsMessageLog.logMessage('validateTabs', 'LFB')
 
         tabNr = 0
 
@@ -365,6 +365,10 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
                 errors = sorted(v.iter_errors(self.json[attr]), key=lambda e: e.path)
             else:
                 errors = [{'message': 'No data available'}]
+
+            for error in errors:
+                QgsMessageLog.logMessage('--> ' + str(error.relative_schema_path), "LFB")
+                QgsMessageLog.logMessage('--> ' + error.message, "LFB")
 
 
             if len(errors) == 0 and len(tab['inheritedErrors']) == 0:
