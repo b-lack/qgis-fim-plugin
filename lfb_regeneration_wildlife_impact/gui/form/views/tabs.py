@@ -46,7 +46,7 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
     inputChanged = QtCore.pyqtSignal(object, str, bool)
     nextTab = QtCore.pyqtSignal(bool)
 
-    def __init__(self, interface, json, schema, attr, inheritedErrors = []):
+    def __init__(self, interface, json, schema, attr, inheritedErrors = [], schemaErrors = []):
         """Constructor."""
 
         QDialog.__init__(self, interface.mainWindow())
@@ -57,6 +57,7 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
         self.attr = attr
         self.schema = schema
         self.inheritedErrors = inheritedErrors
+        self.schemaErrors = schemaErrors
 
         self.infoTitle = ""
 
@@ -99,7 +100,7 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
             valueType = value['type']
 
             if valueType == 'array':
-                field = ArrayField(interface, self.json, value, attr)
+                field = ArrayField(interface, self.json, value, attr, schemaErrors)
             elif valueType == 'object':
                 if '$plugin' in value:
                     if value['$plugin'] == 'find_position':

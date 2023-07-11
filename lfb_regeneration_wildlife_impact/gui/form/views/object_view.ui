@@ -13,41 +13,59 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string>QgsCollapsibleGroupBoxBasic::title, QgsCollapsibleGroupBox::title { 
+subcontrol-origin: margin; 
+subcontrol-position: top left; 
+margin-left: 20px; 
+margin-right: 5px; 
+left: 0px; 
+top: 8px;
+}
+
+QgsCollapsibleGroupBoxBasic{
+background: rgba(0,0,0,0.1);
+border-radius: 10px;
+}</string>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QGroupBox" name="lfbObjectGroup">
+    <widget class="QgsCollapsibleGroupBox" name="lfbObjectGroup">
      <property name="font">
       <font>
-       <pointsize>13</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
+       <pointsize>16</pointsize>
       </font>
      </property>
+     <property name="cursor">
+      <cursorShape>ArrowCursor</cursorShape>
+     </property>
      <property name="styleSheet">
-      <string notr="true">QGroupBox#lfbObjectGroup{
+      <string notr="true">QgsCollapsibleGroupBoxBasic::icon, QgsCollapsibleGroupBox::icon { 
+padding: 10px;
+}
+QgsCollapsibleGroupBoxBasic::title, QgsCollapsibleGroupBox::title { 
+subcontrol-origin: margin; 
+subcontrol-position: top left; 
+margin-left: 20px; 
+margin-right: 5px; 
+left: 0px; 
+top: 8px;
+
+}
+
+QgsCollapsibleGroupBoxBasic{
 	background: rgba(0,0,0,0.1);
-border-radius: 10px;
+	border-radius: 10px;
+padding: 10px;
 }</string>
      </property>
      <property name="title">
-      <string>GroupBox</string>
+      <string>Title</string>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+     <property name="collapsed">
+      <bool>true</bool>
      </property>
-     <layout class="QGridLayout" name="gridLayout_3">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>9</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>9</number>
-      </property>
+     <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
        <layout class="QGridLayout" name="lfbFormObject">
         <item row="0" column="0">
@@ -73,6 +91,14 @@ border-radius: 10px;
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QgsCollapsibleGroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>qgscollapsiblegroupbox.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

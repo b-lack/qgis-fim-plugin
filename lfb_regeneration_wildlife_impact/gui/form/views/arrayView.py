@@ -45,7 +45,7 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'array_defa
 class ArrayView(QtWidgets.QWidget, UI_CLASS):
     inputChanged = QtCore.pyqtSignal(object)
 
-    def __init__(self, interface, json, schema, attr):
+    def __init__(self, interface, json, schema, attr, schemaErrors = []):
         """Constructor."""
 
         QDialog.__init__(self, interface.mainWindow())
@@ -74,7 +74,7 @@ class ArrayView(QtWidgets.QWidget, UI_CLASS):
                 field = Boolean(interface, self.json, value, attr)
                 #field.lfbInfoBox.connect(self.infoBoxClicked)
             else:
-                field = TextField(interface, self.json, value, attr)
+                field = TextField(interface, self.json, value, attr, schemaErrors)
 
             self.lfbTabLayout.addWidget(field)
             field.inputChanged.connect(self.emitText)
@@ -88,6 +88,9 @@ class ArrayView(QtWidgets.QWidget, UI_CLASS):
         for field in self.fieldArray:
             field.setJson(self.json, setFields)
 
-    def emitText(self):
-        
+    def emitText(self, childJson, key = None):
         self.inputChanged.emit(self.json)
+
+    def triggerErrors(self, errors):
+        for field in self.fieldArray:
+            field.validate(False)

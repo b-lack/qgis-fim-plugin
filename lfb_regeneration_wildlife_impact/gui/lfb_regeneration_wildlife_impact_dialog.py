@@ -79,6 +79,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.currentTab = 0
 
         self.inheritedErrors = {}
+        self.schemaErrors = []
 
         self.previousGeneral  = None
 
@@ -109,13 +110,13 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.lfbNewEntry.hide()
 
         self.lfbTabWidget.currentChanged.connect(self.tabChange)
-        tabNr = 1
+        tabNr = 0
         
         for attr, value in self.schema['properties'].items():
 
             self.inheritedErrors[attr] = []
 
-            tab = Tabs(self.iface, self.json[attr], self.schema['properties'][attr], attr, self.inheritedErrors[attr])
+            tab = Tabs(self.iface, self.json[attr], self.schema['properties'][attr], attr, self.inheritedErrors[attr], self.schemaErrors)
             tab.nextTab.connect(self.nextTab)
             tab.inputChanged.connect(self.inputChanged)
             #self.lfbTabWidget.addWidget(tab)
@@ -342,9 +343,9 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
        
         self.resetForm(False)
 
-        if validate:
-            self.validateTabs()
-            self.saveBar.validate(self.state.state)
+        if validate and self.schemaErrors != None:
+            #self.validateTabs()
+            self.saveBar.validate(self.state.state, self.schemaErrors)
 
     def openState(self):
         msgBox = QtWidgets.QMessageBox()
@@ -352,9 +353,57 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         msgBox.exec()
 
     def validateTabs(self, minimumToDraft = False):
+
+        v = Draft7Validator(self.schema)
+        errors = sorted(v.iter_errors(self.json), key=lambda e: e.path)
+
+        for tab in self.tabsArray:
+
+            attr = tab['attr']
+
+            errorFound = False
+
+            for error in errors:
+                if attr in error.relative_schema_path:
+                    errorFound = True
+                    self.lfbTabWidget.setTabIcon(tab['tabNr'], QtGui.QIcon(':icons/red_rect.png'))
+                    break
+
+            if not errorFound:
+                self.lfbTabWidget.setTabIcon(tab['tabNr'], QtGui.QIcon(':icons/green_rect.png'))
+            
+
+        self.lfbValidation(errors)
+
+        self.schemaErrors.clear()
+        for error in errors:
+            self.schemaErrors.append(error)
+            QgsMessageLog.logMessage(str(error.relative_schema_path), 'LFB')
+
+        return True
+    
+    def lfbValidation(self, errors):
+        accessable = []
+        hasCoordinates = []
+
+        for error in errors:
+            if 'general' in error.relative_schema_path:
+                accessable.append(error)
+
+            if 'coordinates' in error.relative_schema_path:
+                hasCoordinates.append(error)
+
+        for tab in self.tabsArray:
+            self.lfbTabWidget.setTabEnabled(tab['tabNr'], True)
+
+        self.lfbNotAccessable(self.json, accessable)
+        self.lfbCoordinates(self.json, hasCoordinates)
+
+    def _deprecated_validateTabs(self, minimumToDraft = False):
         QgsMessageLog.logMessage('validateTabs', 'LFB')
 
         tabNr = 0
+
 
         for tab in self.tabsArray:
 
@@ -363,12 +412,13 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
             if attr in self.json:
                 v = Draft7Validator(self.schema['properties'][attr])
                 errors = sorted(v.iter_errors(self.json[attr]), key=lambda e: e.path)
+                for error in errors:
+                    QgsMessageLog.logMessage('--> ' + str(error.relative_schema_path), "LFB")
+                    QgsMessageLog.logMessage('--> ' + error.message, "LFB")
             else:
                 errors = [{'message': 'No data available'}]
 
-            for error in errors:
-                QgsMessageLog.logMessage('--> ' + str(error.relative_schema_path), "LFB")
-                QgsMessageLog.logMessage('--> ' + error.message, "LFB")
+            
 
 
             if len(errors) == 0 and len(tab['inheritedErrors']) == 0:
@@ -425,6 +475,8 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
             if newValue:
                 self.resetForm(True)
+
+        
 
         return True
     

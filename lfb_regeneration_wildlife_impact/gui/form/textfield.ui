@@ -97,9 +97,10 @@
       </font>
      </property>
      <property name="text">
-      <string>Text content in QLabel can wrap lines along word boundaries with the wordWrap property. By default, word wrap is disabled. To enable it use setWordWrap():
-
-</string>
+      <string>Text content in QLabel can wrap lines along word boundaries.</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
      </property>
      <property name="wordWrap">
       <bool>true</bool>

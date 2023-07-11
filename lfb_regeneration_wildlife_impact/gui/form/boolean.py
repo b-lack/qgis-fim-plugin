@@ -77,22 +77,18 @@ class Boolean(QtWidgets.QWidget, UI_CLASS):
 
 
         self.setDefaultValue()
-            
-
         self.validate() 
 
         self.show()
 
     def setDefaultValue(self):
 
-        if "default" not in self.schema:
+        if "default" in self.schema:
             self.json[self.key] = self.schema['default']
-            return
         else:
             self.json[self.key] = False
             
         self.internJson[self.key] = self.json[self.key]
-        self.validate()
 
     def triggerInfoBox(self):
         self.lfbInfoBox.emit(self.schema)
@@ -106,26 +102,25 @@ class Boolean(QtWidgets.QWidget, UI_CLASS):
         if setFields == False:
             return
         
-        if self.key not in self.json:
-            self.json[self.key] = None
+        #if self.key not in self.json:
+        #    self.json[self.key] = False
         
-        if self.json is not None and self.json[self.key] is not None:
-            self.lfbCheckBox.setChecked(self.json[self.key])
-        else:
+        if self.json is None or self.key not in self.json or self.json[self.key] is None:
             self.setDefaultValue()
-
         
-
+        self.lfbCheckBox.setChecked(self.json[self.key])
+        #self.validate()
         
     def setInputText(self, text):
         
         self.internJson[self.key] = text == 2
         self.json[self.key] = self.internJson[self.key]
 
-        #self.validate()
+        self.validate()
         self.inputChanged.emit(str(self.json[self.key]))
+        self.lfbCheckBox.setChecked(self.json[self.key])
 
-    def validate(self):
+    def validate(self, emit = False):
 
         # https://python-jsonschema.readthedocs.io/en/stable/validate/
         v = Draft7Validator(self.schema)
@@ -142,9 +137,12 @@ class Boolean(QtWidgets.QWidget, UI_CLASS):
             #self.lfbTextFieldHelp.hide()
             #self.emitText()
         else:
+            for error in errors:
+                QgsMessageLog.logMessage(str(error.message), 'LFB')
             self.lfbTextFieldError.show()
             #self.lfbTextFieldHelp.hide()
             for error in errors:
                 self.lfbTextFieldError.setText(error.message)
 
-        self.inputChanged.emit(str(self.json[self.key]))
+        #if emit == True:
+            # self.inputChanged.emit(str(self.json[self.key]))

@@ -17,28 +17,40 @@ class Ui_Form(object):
         Form.resize(719, 540)
         self.gridLayout = QtWidgets.QGridLayout(Form)
         self.gridLayout.setObjectName("gridLayout")
-        self.lfbObjectGroup = QtWidgets.QGroupBox(Form)
+        self.lfbObjectGroup = gui.QgsCollapsibleGroupBox(Form)
         font = QtGui.QFont()
-        font.setPointSize(13)
-        font.setBold(True)
-        font.setWeight(75)
+        font.setPointSize(16)
         self.lfbObjectGroup.setFont(font)
-        self.lfbObjectGroup.setStyleSheet("QGroupBox#lfbObjectGroup{\n"
+        self.lfbObjectGroup.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+        self.lfbObjectGroup.setStyleSheet("QgsCollapsibleGroupBoxBasic::icon, QgsCollapsibleGroupBox::icon { \n"
+"padding: 10px;\n"
+"}\n"
+"QgsCollapsibleGroupBoxBasic::title, QgsCollapsibleGroupBox::title { \n"
+"subcontrol-origin: margin; \n"
+"subcontrol-position: top left; \n"
+"margin-left: 20px; \n"
+"margin-right: 5px; \n"
+"left: 0px; \n"
+"top: 8px;\n"
+"\n"
+"}\n"
+"\n"
+"QgsCollapsibleGroupBoxBasic{\n"
 "    background: rgba(0,0,0,0.1);\n"
-"border-radius: 10px;\n"
+"    border-radius: 10px;\n"
+"padding: 10px;\n"
 "}")
-        self.lfbObjectGroup.setAlignment(QtCore.Qt.AlignCenter)
+        self.lfbObjectGroup.setCollapsed(True)
         self.lfbObjectGroup.setObjectName("lfbObjectGroup")
-        self.gridLayout_3 = QtWidgets.QGridLayout(self.lfbObjectGroup)
-        self.gridLayout_3.setContentsMargins(0, 9, 0, 9)
-        self.gridLayout_3.setObjectName("gridLayout_3")
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.lfbObjectGroup)
+        self.gridLayout_2.setObjectName("gridLayout_2")
         self.lfbFormObject = QtWidgets.QGridLayout()
         self.lfbFormObject.setObjectName("lfbFormObject")
         self.lfbErrorWidget = QtWidgets.QVBoxLayout()
         self.lfbErrorWidget.setContentsMargins(9, 9, 9, 9)
         self.lfbErrorWidget.setObjectName("lfbErrorWidget")
         self.lfbFormObject.addLayout(self.lfbErrorWidget, 0, 0, 1, 1)
-        self.gridLayout_3.addLayout(self.lfbFormObject, 0, 0, 1, 1)
+        self.gridLayout_2.addLayout(self.lfbFormObject, 0, 0, 1, 1)
         self.gridLayout.addWidget(self.lfbObjectGroup, 0, 0, 1, 1)
 
         self.retranslateUi(Form)
@@ -47,4 +59,18 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.lfbObjectGroup.setTitle(_translate("Form", "GroupBox"))
+        Form.setStyleSheet(_translate("Form", "QgsCollapsibleGroupBoxBasic::title, QgsCollapsibleGroupBox::title { \n"
+"subcontrol-origin: margin; \n"
+"subcontrol-position: top left; \n"
+"margin-left: 20px; \n"
+"margin-right: 5px; \n"
+"left: 0px; \n"
+"top: 8px;\n"
+"}\n"
+"\n"
+"QgsCollapsibleGroupBoxBasic{\n"
+"background: rgba(0,0,0,0.1);\n"
+"border-radius: 10px;\n"
+"}"))
+        self.lfbObjectGroup.setTitle(_translate("Form", "Title"))
+from qgis import gui

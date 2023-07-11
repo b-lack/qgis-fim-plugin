@@ -41,7 +41,7 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'dropdown.u
 
 
 class DropDown(QtWidgets.QWidget, UI_CLASS):
-    inputChanged = QtCore.pyqtSignal(str)
+    inputChanged = QtCore.pyqtSignal(object, str)
     lfbInfoBox = QtCore.pyqtSignal(object)
 
     def __init__(self, interface, json, schema, key):
@@ -100,8 +100,7 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
 
         if "default" in self.schema and self.json[self.key] is None:
             self.setDefaultValue()
-        else:
-            self.validate() 
+            
 
         if "qtChips" in self.schema:
             self.chips = Chips(interface, self.schema, self.schema['qtChips'])
@@ -116,9 +115,13 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
                 self.lfbComboBox.hide()
             else:
                 self.lfbComboBox.show()
+
+        self.validate(True) 
         
     def setDefaultValue(self):
         if "default" not in self.schema:
+            self.internJson[self.key] = None
+            self.lfbComboBox.setCurrentIndex(0)
             return
         
         index = self.schema['enum'].index(self.schema['default'])
@@ -128,10 +131,6 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         
         
         self.internJson[self.key] = self.schema['default']
-        self.validate()
-
-
-
         self.lfbComboBox.setCurrentIndex(index)
 
         
@@ -141,12 +140,14 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
 
     def setJson(self, newJson, setFields = True):
 
+        self.json = newJson
+
         if self.key not in newJson:
-            self.json[self.key] = None
+            QgsMessageLog.logMessage("Key not in Json: " + self.key, 'LFG')
+            self.setDefaultValue()
+            # self.json[self.key] = None
         else:
             self.json[self.key] = newJson[self.key]
-
-        
 
         if setFields == False:
             return
@@ -173,6 +174,7 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
             self.createTreeWidget(self.schema)
 
         
+        
     def isfloat(self, num):
         try:
             float(num)
@@ -198,12 +200,12 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
 
         self.internJson[self.key] = value
 
-        self.validate()
+        self.validate(True)
 
         #self.lfbTextFieldHelp.show()
         #self.lfbTextFieldHelp.setText(str(self.internJson[self.key]))
         
-    def validate(self):
+    def validate(self, emit = False):
 
         # https://python-jsonschema.readthedocs.io/en/stable/validate/
         v = Draft7Validator(self.schema)
@@ -236,8 +238,8 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
                     self.lfbTextFieldError.setText(QCoreApplication.translate("errorMessages", 'Eine Auswahl ist pflicht.'))
                 else:
                     self.lfbTextFieldError.setText(QCoreApplication.translate("errorMessages", error.message))
-
-        self.inputChanged.emit(str(self.json[self.key]))
+        if emit:
+            self.inputChanged.emit(self.json[self.key], self.key)
 
     def setTreeItems(self, tree, items):
 

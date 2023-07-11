@@ -47,7 +47,7 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'array_fiel
 class ArrayField(QtWidgets.QWidget, UI_CLASS):
     inputChanged = QtCore.pyqtSignal(object)
 
-    def __init__(self, interface, json, schema, key):
+    def __init__(self, interface, json, schema, key, schemaErrors):
         """Constructor."""
 
         from .views.arrayView import ArrayView
@@ -64,6 +64,7 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         self.json = json
         self.schema = schema
         self.key = key
+        self.draftFormErrors = []
 
         self.headerSet = False
         
@@ -72,19 +73,23 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
 
         self.lfbArrayGroup.setTitle(self.schema['title'])
         
-        self.child = ArrayView(interface, self.defaultValue , schema['items'], key)
+        self.child = ArrayView(interface, self.defaultValue , schema['items'], key, self.draftFormErrors)
         self.child.inputChanged.connect(self.setInputText)
         self.lfbArrayInput.addWidget(self.child)
 
         self.lfbAddBtn.clicked.connect(self.addRow)
         self.lfbAddBtn.setEnabled(False)
 
-        self.tableHeaders = ['']
+        self.tableHeaders = []
         for attr, value in self.schema['items']['properties'].items():
             self.tableHeaders.append(value['title'])
-        self.tableHeaders.append('')
+
+        self.tableHeaders.append('bearbeiten')
+        self.tableHeaders.append('löschen')
         
-        self.validate() 
+        errors = self.validate()
+        for error in errors:
+            self.draftFormErrors.append(error)
 
         #self.setTableData(self.json[self.key])
 
@@ -97,9 +102,12 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         self.lfbArrayOutput.setRowCount(len(data))
 
         self.lfbArrayOutput.setHorizontalHeaderLabels(headers)
-        self.lfbArrayOutput.horizontalHeader().setStretchLastSection(True)
-        #self.lfbArrayOutput.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
-        #self.lfbArrayOutput.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
+        #self.lfbArrayOutput.horizontalHeader().setStretchLastSection(True)
+        #self.lfbArrayOutput.horizontalHeader().setStretchFirstSection(True)
+        for i in range(0, len(headers)):
+            self.lfbArrayOutput.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeToContents)
+
+        self.lfbArrayOutput.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         #self.lfbArrayOutput.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
 
     def setTableData(self, data):
@@ -107,30 +115,36 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
 
         self.setTableHeaders(self.tableHeaders, data)
 
-        #self.lfbArrayOutput.setRowCount(len(data))
-
         for row in range(0, len(data)):
-            idx = 1
-            for attr, column in data[row].items():
-                self.lfbArrayOutput.setItem(row, idx, QTableWidgetItem(str(column)))
+            idx = 0
+            for attr, column in self.schema['items']['properties'].items():
+                if attr in data[row]:
+                    output = str(data[row][attr])
+                else:
+                    output = ''
+
+                self.lfbArrayOutput.setItem(row, idx, QTableWidgetItem(str(output)))
                 idx += 1
+
+            # create an cell widget
+            btn = QPushButton(self.lfbArrayOutput)
+            btn.clicked.connect(self.make_editRow(row))
+            btn.setStyleSheet("color: green;")
+            btn.setText('bearbeiten')
+            btn.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+            self.lfbArrayOutput.setCellWidget(row, idx, btn)
+            idx += 1
 
             # create an cell widget
             btn = QPushButton(self.lfbArrayOutput)
             btn.clicked.connect(self.make_removeRow(row))
             btn.setStyleSheet("color: red;")
-            self.row=row
             btn.setText('löschen')
             btn.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-            self.lfbArrayOutput.setCellWidget(row, idx, btn) 
-            # create an cell widget
-            btn = QPushButton(self.lfbArrayOutput)
-            btn.clicked.connect(self.make_editRow(row))
-            btn.setStyleSheet("color: green;")
-            self.row=row
-            btn.setText('bearbeiten')
-            btn.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-            #self.lfbArrayOutput.setCellWidget(row, 0, btn)   
+            self.lfbArrayOutput.setCellWidget(row, idx, btn)
+            idx += 1
+
+            
 
     def make_editRow(self, row):
         def editRow():
@@ -156,20 +170,12 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
             self.inputChanged.emit(self.json)
 
     def addRow(self):
+        #self.validate()
         newValue = copy.deepcopy(self.defaultValue)
-        self.json[self.key].insert(0, newValue)
         
-    
-        #self.lfbArrayOutput.clear()
-
-        rowCount = self.lfbArrayOutput.rowCount()
-        columnCount = self.lfbArrayOutput.columnCount()
-        self.lfbArrayOutput.insertRow(rowCount)
-
-        idx = 0
-        for attr, column in newValue.items():
-            self.lfbArrayOutput.setItem(rowCount, idx, QTableWidgetItem(str(column)))
-            idx += 1
+        
+        self.json[self.key].insert(0, newValue)
+ 
 
         self.inputChanged.emit(self.json)
         self.resetForm()
@@ -183,8 +189,13 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         self.setTableData(self.json[self.key])
 
     def setInputText(self, value):
-        self.validate()
+        self.draftFormErrors.clear()
+
+        errors = self.validate()
+        for error in errors:
+            self.draftFormErrors.append(error)
         
+        self.child.triggerErrors(self.draftFormErrors)
 
     def validate(self):
 
@@ -196,13 +207,11 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
 
         if len(errors) == 0:
             self.lfbAddBtn.setEnabled(True)
-            self.lfbArrayError.hide()
             self.lfbArrayGroup.setStyleSheet("QGroupBox { border: 2px solid green; padding: 10px; border-radius:10px;}")
         else:
             self.lfbAddBtn.setEnabled(False)
             self.lfbArrayGroup.setStyleSheet("QGroupBox { border: 2px solid red; padding: 10px; border-radius:10px;}")
 
-            self.lfbArrayError.setText('Fehler im Document')
-            self.lfbArrayError.show()
-
         self.inputChanged.emit(self.json)
+
+        return errors

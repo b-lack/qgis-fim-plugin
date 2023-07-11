@@ -251,12 +251,21 @@
                     }
                 }
             ],
+            "required": [
+                "general"
+            ],
             "properties": {
                 "general": {
                     "title": "Allgemeine Angaben",
                     "description": "Angaben zu Ihrer Person und zur genutzen Hardware.",
                     "type": "object",
                     "additionalProperties": false,
+                    "required": [
+                        "spaufsucheaufnahmetruppkuerzel",
+                        "spaufsucheaufnahmetruppgnss",
+                        "spaufsuchenichtbegehbarursacheid",
+                        "spaufsuchenichtwaldursacheid"
+                    ],
                     "properties": {
                         "spaufsucheaufnahmetruppkuerzel": {
                             "title": "Aufnahmetruppkürzel",
@@ -506,13 +515,7 @@
                                 "12835alte Mauern mit zerfallendem Mörtel, die von Pflanzen besiedelt sind und Tieren Lebensräume bieten"
                             ]
                         }
-                    },
-                    "required": [
-                        "spaufsucheaufnahmetruppkuerzel",
-                        "spaufsucheaufnahmetruppgnss",
-                        "spaufsuchenichtbegehbarursacheid",
-                        "spaufsuchenichtwaldursacheid"
-                    ]
+                    }
                 },
                 "coordinates": {
                     "title": "Koordinaten des Stichprobenpunktes",
@@ -642,13 +645,20 @@
                                 "title": "Baumplot",
                                 "type": "object",
                                 "additionalProperties": false,
+                                "required": [
+                                    "icode_ba",
+                                    "azimut",
+                                    "distanz",
+                                    "bhd",
+                                    "messhoehebhd"
+                                ],
                                 "properties": {
                                     "icode_ba": {
                                         "title": "Baumart",
                                         "type": "integer",
                                         "description": "weitere..",
                                         "default": 20,
-                                        "qtChips": 10,
+                                        "qtChips": 20,
                                         "enum": [
                                             20,
                                             200,
@@ -974,13 +984,20 @@
                                 "title": "Baumplot",
                                 "type": "object",
                                 "additionalProperties": false,
+                                "required": [
+                                    "icode_ba",
+                                    "azimut",
+                                    "distanz",
+                                    "bhd",
+                                    "messhoehebhd"
+                                ],
                                 "properties": {
                                     "icode_ba": {
                                         "title": "Baumart",
                                         "type": "integer",
                                         "description": "weitere..",
                                         "default": 20,
-                                        "qtChips": 10,
+                                        "qtChips": 20,
                                         "enum": [
                                             20,
                                             200,
@@ -1352,6 +1369,9 @@
                                     }
                                 },
                                 "then": {
+                                    "required": [
+                                        "verjuengungstransektbhd"
+                                    ],
                                     "properties": {
                                         "verjuengungstransektbhd": {
                                             "type": [
@@ -1361,6 +1381,7 @@
                                     }
                                 },
                                 "else": {
+                                    "required": [],
                                     "properties": {
                                         "verjuengungstransektbhd": {
                                             "type": [
@@ -1376,7 +1397,7 @@
                                         "type": "integer",
                                         "description": "weitere..",
                                         "default": 20,
-                                        "qtChips": 10,
+                                        "qtChips": 20,
                                         "enum": [
                                             20,
                                             200,
@@ -1588,8 +1609,6 @@
                                         "title": "Höhenstufe",
                                         "type": "integer",
                                         "description": "Höhenstufe in Zentimeter",
-                                        "minimum": 1,
-                                        "maximum": 250,
                                         "unit": "Zentimeter",
                                         "qtChips": 10,
                                         "enum": [
@@ -1970,20 +1989,17 @@
                         "transektfrassmaus": {
                             "type": "boolean",
                             "title": "Maus",
-                            "description": "Signifikanter Fraß durch Maus",
-                            "default": false
+                            "description": "Signifikanter Fraß durch Maus"
                         },
                         "transektfrasshase": {
                             "type": "boolean",
                             "title": "Hase",
-                            "description": "Signifikanter Fraß durch Hase",
-                            "default": false
+                            "description": "Signifikanter Fraß durch Hase"
                         },
                         "transektfrassbieber": {
                             "type": "boolean",
                             "title": "Biber",
-                            "description": "Signifikanter Fraß durch Biber",
-                            "default": false
+                            "description": "Signifikanter Fraß durch Biber"
                         }
                     }
                 },
@@ -2227,7 +2243,7 @@
                                         "type": "integer",
                                         "description": "weitere..",
                                         "default": 20,
-                                        "qtChips": 10,
+                                        "qtChips": 20,
                                         "enum": [
                                             20,
                                             200,
@@ -2769,7 +2785,7 @@
             "type": "integer",
             "description": "weitere..",
             "default": 20,
-            "qtChips": 10,
+            "qtChips": 20,
             "enum": [
                 20,
                 200,
@@ -2981,13 +2997,20 @@
             "title": "Baumplot",
             "type": "object",
             "additionalProperties": false,
+            "required": [
+                "icode_ba",
+                "azimut",
+                "distanz",
+                "bhd",
+                "messhoehebhd"
+            ],
             "properties": {
                 "icode_ba": {
                     "title": "Baumart",
                     "type": "integer",
                     "description": "weitere..",
                     "default": 20,
-                    "qtChips": 10,
+                    "qtChips": 20,
                     "enum": [
                         20,
                         200,

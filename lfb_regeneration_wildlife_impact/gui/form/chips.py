@@ -53,7 +53,8 @@ class Chips(QtWidgets.QWidget, UI_CLASS):
         self.schema = schema
         self.buttons = []
 
-        self.flowLayout = FlowLayout()
+        self.flowLayout = FlowLayout(round(maxNumber / 5))
+
         length = min(len(schema['enum']), maxNumber)
         for i in range(0, length):
             button = QPushButton(str(schema['enumLabels'][i]))
@@ -87,8 +88,9 @@ class Chips(QtWidgets.QWidget, UI_CLASS):
 
         self.show()
 
+
     def setValue(self, value):
-        buttons = self.flowLayout.children()
+        #buttons = self.flowLayout.children()
         
         for i in self.buttons:
             i.setChecked(i.text() == value)

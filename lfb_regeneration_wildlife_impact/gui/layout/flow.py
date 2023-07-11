@@ -1,16 +1,21 @@
 from PyQt5.QtCore import QPoint, QRect, QSize, Qt
 from PyQt5.QtWidgets import (QApplication, QLayout, QPushButton, QSizePolicy, QWidget)
+from PyQt5 import QtCore
 
 from qgis.core import QgsMessageLog
 
 class FlowLayout(QLayout):
-    def __init__(self, parent=None, margin=0, spacing=-1):
+    
+    resize = QtCore.pyqtSignal(int)
+
+    def __init__(self, lines=2, parent=None, margin=0, spacing=-1):
         super(FlowLayout, self).__init__(parent)
 
         if parent is not None:
             self.setContentsMargins(margin, margin, margin, margin)
 
         self.setSpacing(spacing)
+        self.lines = lines
 
         self.itemList = []
 
@@ -86,9 +91,10 @@ class FlowLayout(QLayout):
 
             x = nextX
             lineHeight = max(lineHeight, item.sizeHint().height())
+        #self.resize.emit(y)
 
-        return lineHeight * 2
-        
+        return lineHeight * self.lines + spaceY * (self.lines - 1)
+
     def doLayout2(self, rect, testOnly):
         x = rect.x()
         y = rect.y()
@@ -111,6 +117,7 @@ class FlowLayout(QLayout):
             x = nextX
             lineHeight = max(lineHeight, item.sizeHint().height())
 
+        
         return y - rect.y()
 
         return y + lineHeight - rect.y()

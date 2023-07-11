@@ -27,7 +27,7 @@ class Utils(object):
 
     def getMetaData():
         return {
-            'version': '0.0.26'
+            'version': '0.0.27'
         }
 
     def schemaTypeHasNull(schema):
@@ -89,7 +89,7 @@ class Utils(object):
     def focusFeature(interface, feature, select = False, zoom = 150000):
         geom = feature.geometry()
         coordinates = geom.asPoint()
-
+        QgsMessageLog.logMessage(str(coordinates.x()), 'LFB')
         interface.mapCanvas().setCenter(coordinates)
         
         current_scale =  interface.mapCanvas().scale()

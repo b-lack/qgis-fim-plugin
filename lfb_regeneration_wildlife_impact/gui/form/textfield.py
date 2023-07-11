@@ -49,7 +49,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
     inputChanged = QtCore.pyqtSignal(object, str)
     lfbInfoBox = QtCore.pyqtSignal(object)
 
-    def __init__(self, interface, json, schema, key):
+    def __init__(self, interface, json, schema, key, schemaErrors = []):
         """Constructor."""
 
         QDialog.__init__(self, interface.mainWindow())
@@ -65,6 +65,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
         self.key = key
         self.defaultValue = self.json[self.key]
         self.isValid = None
+        self.schemaErrors = schemaErrors
 
         placeholderText = QCoreApplication.translate("FormFields", self.schema['title'])
 
@@ -111,12 +112,6 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             #self.lfbTextField.setValidator(QDoubleValidator())
             self.lfbTextField.setAlignment(QtCore.Qt.AlignRight)
 
-        #if self.schema['properties'][self.key]['type'] == "number":
-        #    dv = QDoubleValidator(self.schema['properties'][self.key]['minimum'], self.schema['properties'][self.key]['maximum'], 7); # [0, 5] with 7 decimals of precision
-        #    self.lfbTextField.setValidator(dv)
-
-        if self.key == "messhoehebhd":
-            QgsMessageLog.logMessage("TextField: " + self.key, "LFB")
 
         self.setDefaultValue()
 
@@ -198,6 +193,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
     def editingFinished(self):
         self.validate(True)
 
+
     def validate(self, emit = False):
         #jsonCpy = self.json.copy()
         #jsonCpy['name'] = self.lfbTextField.text()
@@ -213,12 +209,15 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
         else:
             isValid = True
 
+        
+        for error in self.schemaErrors:
+            errors.append(error)
+
         if self.json[self.key] is None and not Utils.schemaTypeHasNull(self.schema):
             self.lfbTextFieldError.hide()
             self.lfbTextFieldSuccess.hide()
             self.lfbTextFieldHelp.show()
             self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid red;\n	border-radius: 10px;\n	padding: 10px;\n}")
-
         elif len(errors) == 0:
             self.lfbTextFieldError.hide()
             self.lfbTextFieldSuccess.hide()

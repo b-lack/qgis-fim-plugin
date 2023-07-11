@@ -67,8 +67,6 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
 
         self.currentFeature = None
 
-        self.customErrors = []
-
         self.lfbSaveBtn.setDisabled(True)
         self.lfbSaveBtn.clicked.connect(self.saveBtnClicked)
 
@@ -172,21 +170,20 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         msgBox.setText('llll')
         msgBox.exec()
 
-    def validate(self, jsonToTest):
-
-        self.customErrors = []
+    def validate(self, jsonToTest, errors = []):
 
         self.json = jsonToTest
         
-        v = Draft7Validator(self.schema)
-        self.errors = sorted(v.iter_errors(jsonToTest), key=lambda e: e.path)
+        #v = Draft7Validator(self.schema)
+        #self.errors = sorted(v.iter_errors(jsonToTest), key=lambda e: e.path)
+        self.errors = errors
 
-        if self.maxErrors < len(self.errors):
-            self.maxErrors = len(self.errors)
+        self.maxErrors = max(self.maxErrors, len(self.errors))
 
         self.currentErrors = len(self.errors)
 
-        self.lfbProgressBar.setValue(int(100 - self.currentErrors * 100 / self.maxErrors))
+        if self.maxErrors > 0:
+            self.lfbProgressBar.setValue(int(100 - self.currentErrors * 100 / self.maxErrors))
 
         if len(self.errors) == 0:
             #self.isValid = True

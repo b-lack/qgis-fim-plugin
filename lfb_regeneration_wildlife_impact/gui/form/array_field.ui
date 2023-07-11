@@ -78,19 +78,6 @@ padding: 10px;
            <layout class="QGridLayout" name="lfbArrayInput"/>
           </item>
           <item>
-           <widget class="QLabel" name="lfbArrayError">
-            <property name="styleSheet">
-             <string notr="true">color:#f00;</string>
-            </property>
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
              <spacer name="horizontalSpacer">
@@ -166,6 +153,9 @@ QPushButton:disabled{
             <property name="editTriggers">
              <set>QAbstractItemView::NoEditTriggers</set>
             </property>
+            <property name="alternatingRowColors">
+             <bool>true</bool>
+            </property>
             <property name="textElideMode">
              <enum>Qt::ElideNone</enum>
             </property>
@@ -176,7 +166,7 @@ QPushButton:disabled{
              <enum>QAbstractItemView::ScrollPerPixel</enum>
             </property>
             <property name="sortingEnabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <attribute name="verticalHeaderStretchLastSection">
              <bool>false</bool>

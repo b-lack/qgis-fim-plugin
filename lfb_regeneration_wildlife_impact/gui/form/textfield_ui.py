@@ -59,6 +59,7 @@ class Ui_Form(object):
         font = QtGui.QFont()
         font.setPointSize(13)
         self.lfbTextFieldHelp.setFont(font)
+        self.lfbTextFieldHelp.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.lfbTextFieldHelp.setWordWrap(True)
         self.lfbTextFieldHelp.setObjectName("lfbTextFieldHelp")
         self.gridLayout.addWidget(self.lfbTextFieldHelp, 2, 1, 1, 1)
@@ -127,8 +128,6 @@ class Ui_Form(object):
         Form.setWindowTitle(_translate("Form", "Form"))
         self.lfbTextFieldSuccess.setText(_translate("Form", "SuccessLabel"))
         self.lfbTextFieldError.setText(_translate("Form", "ErrorLabel"))
-        self.lfbTextFieldHelp.setText(_translate("Form", "Text content in QLabel can wrap lines along word boundaries with the wordWrap property. By default, word wrap is disabled. To enable it use setWordWrap():\n"
-"\n"
-""))
+        self.lfbTextFieldHelp.setText(_translate("Form", "Text content in QLabel can wrap lines along word boundaries."))
         self.lfbTextFieldDescriptionBtn.setText(_translate("Form", "i"))
         self.lfbTextFieldLabel.setText(_translate("Form", "TextLabel"))
