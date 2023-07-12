@@ -115,7 +115,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
 
         self.setDefaultValue()
 
-        self.validate() 
+        self.validate(False) 
 
         self.show()
 
@@ -156,8 +156,13 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
 
         self.json = newJson
 
-        if setFields == False:
-            return
+        #if self.key not in self.json:
+        #    self.json[self.key] = None
+        #elif self.key is newJson:
+        #    self.json[self.key] = newJson[self.key]
+        #else:
+        #    self.json[self.key] = None
+        
         
         if self.key not in self.json or self.json is None or self.json[self.key] is None:
             self.setDefaultValue()
@@ -188,11 +193,14 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
 
         self.internJson[self.key] = value
 
-        self.validate()
+        self.validate(False)
 
     def editingFinished(self):
         self.validate(True)
 
+    def setSchemaErrors(self, schemaErrors):
+        self.schemaErrors = schemaErrors
+        self.validate(False)
 
     def validate(self, emit = False):
         #jsonCpy = self.json.copy()
@@ -209,9 +217,14 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
         else:
             isValid = True
 
-        
-        for error in self.schemaErrors:
-            errors.append(error)
+        if emit:
+            for error in self.schemaErrors:
+                QgsMessageLog.logMessage(str(self.key), 'LFB')
+                QgsMessageLog.logMessage(str(self.json[self.key]), 'LFB')
+                if self.key in error.relative_schema_path:
+                    QgsMessageLog.logMessage(str(error.relative_schema_path), 'LFB')
+                    QgsMessageLog.logMessage(str(error.message), 'LFB')
+                    errors.append(error)
 
         if self.json[self.key] is None and not Utils.schemaTypeHasNull(self.schema):
             self.lfbTextFieldError.hide()

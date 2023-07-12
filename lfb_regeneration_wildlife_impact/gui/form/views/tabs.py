@@ -161,6 +161,7 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
 
     def setJson(self, newJson, setFields = True):
         self.json.update(newJson)
+        #self.json = newJson
 
         for field in self.fieldArray :
             field.setJson(self.json, setFields)

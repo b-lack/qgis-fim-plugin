@@ -1,8 +1,8 @@
 import os
 import json
+import collections.abc
 
-
-from qgis.core import QgsProject, QgsExpressionContextUtils, QgsMapLayer
+from qgis.core import QgsProject, QgsExpressionContextUtils, QgsMapLayer, QgsCoordinateReferenceSystem, QgsCoordinateTransform
 from qgis.core import QgsMessageLog
 from PyQt5.QtWidgets import QMessageBox
 
@@ -27,7 +27,7 @@ class Utils(object):
 
     def getMetaData():
         return {
-            'version': '0.0.27'
+            'version': '0.0.28'
         }
 
     def schemaTypeHasNull(schema):
@@ -80,16 +80,40 @@ class Utils(object):
         idx = fields.indexFromName(key)
         return feature.attributes()[idx]
 
+    def deepUpdate(d, u):
+        for k, v in u.items():
+            if isinstance(v, collections.abc.Mapping):
+                d[k] = Utils.deepUpdate(d.get(k, {}), v)
+            else:
+                d[k] = v
+        return d
+    
     def loadDefaultJson():
         dirname = os.path.dirname(__file__)
         filename = os.path.realpath(os.path.join(dirname, '..', 'schema', 'default.json'))
         fd = open(filename, 'r')
-        return json.load(fd)
+        jsonObj = json.load(fd)
+        fd.close()
+        return jsonObj
+    
+    def getCrs():
+        return QgsProject.instance().crs().authid()
+    
+    def transformCoordinates(geom):
+        crs = Utils.getCrs()
+    
+        sourceCrs = QgsCoordinateReferenceSystem.fromEpsgId(4326)
+        destCrs = QgsCoordinateReferenceSystem.fromProj(crs)
+        tr = QgsCoordinateTransform(sourceCrs, destCrs, QgsProject.instance())
+        geom.transform(tr)
 
     def focusFeature(interface, feature, select = False, zoom = 150000):
         geom = feature.geometry()
         coordinates = geom.asPoint()
-        QgsMessageLog.logMessage(str(coordinates.x()), 'LFB')
+
+        Utils.transformCoordinates(geom)
+
+        coordinates = geom.asPoint()
         interface.mapCanvas().setCenter(coordinates)
         
         current_scale =  interface.mapCanvas().scale()

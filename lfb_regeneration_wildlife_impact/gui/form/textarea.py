@@ -139,7 +139,6 @@ class TextArea(QtWidgets.QWidget, UI_CLASS):
         if self.json is not None and self.json[self.key] is not None:
             self.lfbTextField.setPlainText(str(self.json[self.key]))
         else:
-            QgsMessageLog.logMessage("No value for key " + self.key + " found", "LFB")
             self.setDefaultValue()
 
         

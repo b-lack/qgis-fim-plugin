@@ -93,6 +93,8 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
 
         #self.setTableData(self.json[self.key])
 
+        
+
         self.show()
 
 
@@ -129,7 +131,7 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
             # create an cell widget
             btn = QPushButton(self.lfbArrayOutput)
             btn.clicked.connect(self.make_editRow(row))
-            btn.setStyleSheet("color: green;")
+            btn.setStyleSheet("color: grey;")
             btn.setText('bearbeiten')
             btn.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
             self.lfbArrayOutput.setCellWidget(row, idx, btn)
@@ -178,11 +180,13 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
  
 
         self.inputChanged.emit(self.json)
+        self.setTableData(self.json[self.key])
         self.resetForm()
 
     def resetForm(self):
         self.defaultValue = {}
         self.child.setJson(self.defaultValue, True)
+        self.lfbArrayFormGroup.setCollapsed(True)
 
     def setJson(self, newJson, setFields = True):
         self.json = newJson
@@ -195,9 +199,9 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         for error in errors:
             self.draftFormErrors.append(error)
         
-        self.child.triggerErrors(self.draftFormErrors)
+        #self.child.triggerErrors(self.draftFormErrors)
 
-    def validate(self):
+    def validate(self, emit = True):
 
         # https://python-jsonschema.readthedocs.io/en/stable/validate/
         v = Draft7Validator(self.schema)
@@ -207,11 +211,12 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
 
         if len(errors) == 0:
             self.lfbAddBtn.setEnabled(True)
-            self.lfbArrayGroup.setStyleSheet("QGroupBox { border: 2px solid green; padding: 10px; border-radius:10px;}")
+            self.lfbArrayFormGroup.setStyleSheet(" QgsCollapsibleGroupBoxBasic { background: rgba(0,0,0,0.05); margin: 10px; border: 2px solid green; padding: 10px; border-radius:10px;} ")
         else:
             self.lfbAddBtn.setEnabled(False)
-            self.lfbArrayGroup.setStyleSheet("QGroupBox { border: 2px solid red; padding: 10px; border-radius:10px;}")
+            self.lfbArrayFormGroup.setStyleSheet(" QgsCollapsibleGroupBoxBasic { background: rgba(0,0,0,0.05); margin: 10px; border: 2px solid red; padding: 10px; border-radius:10px;} ")
 
-        self.inputChanged.emit(self.json)
+        if emit:
+            self.inputChanged.emit(self.json)
 
         return errors

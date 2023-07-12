@@ -83,11 +83,11 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.previousGeneral  = None
 
-        filename = os.path.realpath(os.path.join(dirname, '..', 'schema', 'default.json'))
+        #filename = os.path.realpath(os.path.join(dirname, '..', 'schema', 'default.json'))
 
-        with open(filename) as f:
-            schema = json.load(f)
-            self.defaultJson = schema['properties']
+        #with open(filename) as f:
+        schema = Utils.loadDefaultJson() #json.load(f)
+        self.defaultJson = schema['properties']
 
         self.json = copy.deepcopy(self.defaultJson)
 
@@ -109,9 +109,29 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         #self.lfbNewEntry.clicked.connect(self.newEntry)
         self.lfbNewEntry.hide()
 
-        self.lfbTabWidget.currentChanged.connect(self.tabChange)
-        tabNr = 0
         
+        self.lfbTabWidget.currentChanged.connect(self.tabChange)
+        
+        
+
+        #self.lfbTabWidget.setProperty("class", "my-label-style")
+
+        self.saveBar = SaveBar(self.iface, self.json, self.schema)
+        self.saveBar.saveFeature.connect(self.saveFeature)
+        self.saveBar.setContentsMargins(0,0,0,0)
+        self.lfbMain.addWidget(self.saveBar)
+
+        self.saveBar.toHome.connect(self.formToDefault)
+        self.saveBar.devButton.connect(self.openState)
+
+        self.resetForm(False)
+        self.setPosition(1)
+
+    def buildForm(self):
+        self.lfbTabWidget.clear()
+        self.tabsArray = []
+
+        tabNr = 0
         for attr, value in self.schema['properties'].items():
 
             self.inheritedErrors[attr] = []
@@ -136,19 +156,6 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
             tabNr += 1
         
         self.lfbTabWidget.tabBar().setCursor(QtCore.Qt.PointingHandCursor)
-
-        #self.lfbTabWidget.setProperty("class", "my-label-style")
-
-        self.saveBar = SaveBar(self.iface, self.json, self.schema)
-        self.saveBar.saveFeature.connect(self.saveFeature)
-        self.saveBar.setContentsMargins(0,0,0,0)
-        self.lfbMain.addWidget(self.saveBar)
-
-        self.saveBar.toHome.connect(self.formToDefault)
-        self.saveBar.devButton.connect(self.openState)
-
-        self.resetForm(False)
-        self.setPosition(1)
 
     def nextTab(self, nextTab):
         if nextTab:
@@ -180,6 +187,9 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         indexToSet = min(self.currentTab + 1, len(self.tabsArray) - 1)
         tab = self.lfbTabWidget.currentWidget()
 
+        if tab is None:
+            return
+
         if self.currentTab < len(self.tabsArray)-1 and self.lfbTabWidget.isTabEnabled(indexToSet):
             tab.lfbTabBtnFwd.setEnabled(True)
         else:
@@ -193,12 +203,11 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
     def resetForm(self, setFields = True):
 
-        QgsMessageLog.logMessage('resetForm', 'LFB')
-
         for tab in self.tabsArray:
             if tab['attr'] in self.json:
                 tab['setJson'](self.json[tab['attr']], setFields)
             else:
+                QgsMessageLog.logMessage('ERROR: ' + tab['attr'] , 'LFB')
                 cpy = copy.deepcopy(self.defaultJson[tab['attr']])
                 tab['setJson'](cpy, setFields)
 
@@ -324,12 +333,15 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
 
     
     def draftSelected(self, newJson, id, feature):
-        self.json = copy.deepcopy(self.defaultJson)
 
-        self.addPreviousGeneral(newJson)
+        #self.addPreviousGeneral(newJson)
 
         self.json = newJson
+        
+
         self.changeState()
+
+        self.buildForm()
 
         self.resetForm(True)
         self.setPosition(2)
@@ -341,10 +353,9 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
     def changeState(self, validate = True):        
         self.state.change_state(self.json)
        
-        self.resetForm(False)
+        #self.resetForm(False)
 
         if validate and self.schemaErrors != None:
-            #self.validateTabs()
             self.saveBar.validate(self.state.state, self.schemaErrors)
 
     def openState(self):
@@ -353,6 +364,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         msgBox.exec()
 
     def validateTabs(self, minimumToDraft = False):
+        QgsMessageLog.logMessage('validateTabs', 'LFB')
 
         v = Draft7Validator(self.schema)
         errors = sorted(v.iter_errors(self.json), key=lambda e: e.path)
@@ -373,14 +385,13 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
                 self.lfbTabWidget.setTabIcon(tab['tabNr'], QtGui.QIcon(':icons/green_rect.png'))
             
 
-        self.lfbValidation(errors)
+        minimum = self.lfbValidation(errors)
 
         self.schemaErrors.clear()
         for error in errors:
             self.schemaErrors.append(error)
-            QgsMessageLog.logMessage(str(error.relative_schema_path), 'LFB')
 
-        return True
+        return minimum
     
     def lfbValidation(self, errors):
         accessable = []
@@ -399,8 +410,10 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.lfbNotAccessable(self.json, accessable)
         self.lfbCoordinates(self.json, hasCoordinates)
 
+        return len(accessable) == 0 and len(hasCoordinates) == 0
+
     def _deprecated_validateTabs(self, minimumToDraft = False):
-        QgsMessageLog.logMessage('validateTabs', 'LFB')
+        QgsMessageLog.logMessage('_deprecated_validateTabs', 'LFB')
 
         tabNr = 0
 
@@ -412,9 +425,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
             if attr in self.json:
                 v = Draft7Validator(self.schema['properties'][attr])
                 errors = sorted(v.iter_errors(self.json[attr]), key=lambda e: e.path)
-                for error in errors:
-                    QgsMessageLog.logMessage('--> ' + str(error.relative_schema_path), "LFB")
-                    QgsMessageLog.logMessage('--> ' + error.message, "LFB")
+
             else:
                 errors = [{'message': 'No data available'}]
 

@@ -119,58 +119,50 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
             else:
                 self.lfbComboBox.show()
 
-        self.validate(True) 
+        self.validate(False) 
         
     def setDefaultValue(self):
-        if "default" not in self.schema:
-            self.internJson[self.key] = None
-            self.lfbComboBox.setCurrentIndex(0)
-            return
+
         
+        if "default" not in self.schema:
+            self.setIndex(0)
+        else:
+            self.internJson[self.key] = self.schema['default']
+            
+            self.validate(False)
+        return
         index = self.schema['enum'].index(self.schema['default'])
 
         if index == -1:
-            return
-        
+            index = 0
         
         self.internJson[self.key] = self.schema['default']
-        self.lfbComboBox.setCurrentIndex(index)
-
         
         
     def triggerInfoBox(self):
         self.lfbInfoBox.emit(self.schema)
 
     def setJson(self, newJson, setFields = True):
-
+        
+        
+        #self.json.update(newJson)
         self.json = newJson
+        #self.internJson[self.key] = newJson[self.key]
 
-        if self.key not in newJson:
-            QgsMessageLog.logMessage("Key not in Json: " + self.key, 'LFG')
+
+        if self.key not in self.internJson or self.internJson[self.key] is None:
             self.setDefaultValue()
             # self.json[self.key] = None
         else:
-            self.json[self.key] = newJson[self.key]
+            index = self.schema['enum'].index(int(self.internJson[self.key]))
 
-        if setFields == False:
-            return
-
-        if self.key not in self.json:
-            return
-            #self.json[self.key] = None
+            if index != -1:
+                self.setIndex(index)
+                #self.lfbComboBox.setCurrentIndex(index)
 
         
 
-        if self.json is not None and self.json[self.key] is not None:
-            vType = type(self.json[self.key])
-            
-            index = self.schema['enum'].index(int(self.json[self.key]))
-
-            if index != -1:
-                self.lfbComboBox.setCurrentIndex(index)
-        else:
-            self.setDefaultValue()
-
+        
             # self.lfbComboBox.setCurrentIndex(0)
 
         if "QTType" in self.schema and self.schema['QTType'] == "tree":
@@ -187,14 +179,16 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         
     #from Chips
     def setIndex(self, value):
-
+        if value is None:
+            return
+        
         self.setInputText(value, False)
         if value is not None and self.lfbComboBox.currentIndex() != value:
             self.lfbComboBox.setCurrentIndex(value)
 
     #from dd
     def setInputText(self, value, setChips = True):
-        
+
         value = self.schema['enum'][value]
 
         if setChips and hasattr(self, 'chips'):
@@ -207,7 +201,10 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
 
         #self.lfbTextFieldHelp.show()
         #self.lfbTextFieldHelp.setText(str(self.internJson[self.key]))
-        
+
+    def setSchemaErrors(self, schemaErrors):
+        self.schemaErrors = schemaErrors
+
     def validate(self, emit = False):
 
         # https://python-jsonschema.readthedocs.io/en/stable/validate/
@@ -241,6 +238,8 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
                     self.lfbTextFieldError.setText(QCoreApplication.translate("errorMessages", 'Eine Auswahl ist pflicht.'))
                 else:
                     self.lfbTextFieldError.setText(QCoreApplication.translate("errorMessages", error.message))
+        
+        
         if emit:
             self.inputChanged.emit(self.json[self.key], self.key)
 

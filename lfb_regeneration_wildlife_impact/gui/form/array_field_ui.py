@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(962, 797)
+        Form.resize(952, 825)
         Form.setStyleSheet("")
         self.gridLayout_2 = QtWidgets.QGridLayout(Form)
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -24,15 +24,16 @@ class Ui_Form(object):
         self.verticalLayout.setObjectName("verticalLayout")
         self.lfbArrayGroup = QtWidgets.QGroupBox(Form)
         font = QtGui.QFont()
-        font.setPointSize(13)
+        font.setPointSize(16)
         font.setBold(True)
         font.setWeight(75)
         self.lfbArrayGroup.setFont(font)
         self.lfbArrayGroup.setStyleSheet("QGroupBox#lfbArrayGroup{\n"
-"    background: rgba(0,0,0,0.1);\n"
-"border-radius: 10px;\n"
-"padding: 10px;\n"
-"}")
+"    background: rgba(0,0,0,0.05);\n"
+"    border-radius: 10px;\n"
+"    padding: 10px;\n"
+"}\n"
+"")
         self.lfbArrayGroup.setAlignment(QtCore.Qt.AlignCenter)
         self.lfbArrayGroup.setObjectName("lfbArrayGroup")
         self.gridLayout = QtWidgets.QGridLayout(self.lfbArrayGroup)
@@ -40,24 +41,45 @@ class Ui_Form(object):
         self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName("gridLayout")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setContentsMargins(-1, 20, -1, -1)
+        self.verticalLayout_2.setSpacing(10)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.lfbArrayFormGroup = gui.QgsCollapsibleGroupBox(self.lfbArrayGroup)
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.lfbArrayFormGroup.setFont(font)
+        self.lfbArrayFormGroup.setStyleSheet("QgsCollapsibleGroupBoxBasic{\n"
+"    background: rgba(0,0,0,0.1);\n"
+"    border-radius: 10px;\n"
+"    padding: 10px;\n"
+"}\n"
+"\n"
+"QgsCollapsibleGroupBoxBasic { border: none; }\n"
+"\n"
+"QgsCollapsibleGroupBoxBasic::title, QgsCollapsibleGroupBox::title {}")
+        self.lfbArrayFormGroup.setCollapsed(True)
+        self.lfbArrayFormGroup.setObjectName("lfbArrayFormGroup")
+        self.gridLayout_3 = QtWidgets.QGridLayout(self.lfbArrayFormGroup)
+        self.gridLayout_3.setContentsMargins(10, 0, 1, 0)
+        self.gridLayout_3.setObjectName("gridLayout_3")
         self.lfbArrayInput = QtWidgets.QGridLayout()
+        self.lfbArrayInput.setContentsMargins(-1, 25, -1, -1)
         self.lfbArrayInput.setObjectName("lfbArrayInput")
-        self.verticalLayout_2.addLayout(self.lfbArrayInput)
+        self.gridLayout_3.addLayout(self.lfbArrayInput, 0, 0, 1, 1)
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_5.addItem(spacerItem)
-        self.lfbAddBtn = QtWidgets.QPushButton(self.lfbArrayGroup)
+        self.lfbAddBtn = QtWidgets.QPushButton(self.lfbArrayFormGroup)
         font = QtGui.QFont()
-        font.setPointSize(20)
+        font.setPointSize(16)
         font.setBold(False)
         font.setWeight(50)
         self.lfbAddBtn.setFont(font)
         self.lfbAddBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.lfbAddBtn.setStyleSheet("QPushButton{\n"
 "    border: 2px solid gray;\n"
-"    border-radius: 25px;\n"
+"    border-radius: 20px;\n"
 "    padding:10px;\n"
 "    margin: 10px;\n"
 "    background-color: green;\n"
@@ -69,9 +91,8 @@ class Ui_Form(object):
 "}")
         self.lfbAddBtn.setObjectName("lfbAddBtn")
         self.horizontalLayout_5.addWidget(self.lfbAddBtn)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_5.addItem(spacerItem1)
-        self.verticalLayout_2.addLayout(self.horizontalLayout_5)
+        self.gridLayout_3.addLayout(self.horizontalLayout_5, 1, 0, 1, 1)
+        self.verticalLayout_2.addWidget(self.lfbArrayFormGroup)
         self.lfbArrayOutput = QtWidgets.QTableWidget(self.lfbArrayGroup)
         font = QtGui.QFont()
         font.setPointSize(13)
@@ -100,5 +121,7 @@ class Ui_Form(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
         self.lfbArrayGroup.setTitle(_translate("Form", "GroupBox"))
+        self.lfbArrayFormGroup.setTitle(_translate("Form", "Hinzufügen"))
         self.lfbAddBtn.setText(_translate("Form", "Hinzufügen"))
         self.lfbArrayOutput.setSortingEnabled(False)
+from qgis import gui

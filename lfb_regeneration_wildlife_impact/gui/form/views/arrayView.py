@@ -93,4 +93,4 @@ class ArrayView(QtWidgets.QWidget, UI_CLASS):
 
     def triggerErrors(self, errors):
         for field in self.fieldArray:
-            field.validate(False)
+            field.setSchemaErrors(errors)

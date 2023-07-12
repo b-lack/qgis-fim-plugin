@@ -217,9 +217,6 @@ class LfbRegenerationWildlifeImpact:
                 action)
             self.iface.removeToolBarIcon(action)
 
-    #def observerFn(self, value):
-    #    QgsMessageLog.logMessage('observer trigger', "LFB")
-
 
     def run(self):
         """Run method that performs all the real work"""

@@ -120,6 +120,9 @@ class Boolean(QtWidgets.QWidget, UI_CLASS):
         self.inputChanged.emit(str(self.json[self.key]))
         self.lfbCheckBox.setChecked(self.json[self.key])
 
+    def setSchemaErrors(self, schemaErrors):
+        self.schemaErrors = schemaErrors
+ 
     def validate(self, emit = False):
 
         # https://python-jsonschema.readthedocs.io/en/stable/validate/
@@ -137,8 +140,6 @@ class Boolean(QtWidgets.QWidget, UI_CLASS):
             #self.lfbTextFieldHelp.hide()
             #self.emitText()
         else:
-            for error in errors:
-                QgsMessageLog.logMessage(str(error.message), 'LFB')
             self.lfbTextFieldError.show()
             #self.lfbTextFieldHelp.hide()
             for error in errors:
