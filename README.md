@@ -3,17 +3,20 @@
 
 ## Requirements
 
-Go to ``Manage and Install Plugins...`` -> ``Python Console``
+If you do not have the python module ``jsonschema`` installed, you will get an error message when you try to start the plugin.
+
+
+In this case go to ``Manage and Install Plugins...`` -> ``Python Console``
 
 In the console type
 
 ```py
-import pip
+import subprocess
 ```
 and 
 
 ```py
-pip.main(['install', 'jsonschema'])
+subprocess.check_call(['python', '-m', 'pip', 'install', 'jsonschema'])
 ```
 
 Restart QGIS
