@@ -79,7 +79,7 @@ class Ui_Form(object):
         font.setPointSize(13)
         self.lfbTextFieldHelp.setFont(font)
         self.lfbTextFieldHelp.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
-        self.lfbTextFieldHelp.setWordWrap(False)
+        self.lfbTextFieldHelp.setWordWrap(True)
         self.lfbTextFieldHelp.setObjectName("lfbTextFieldHelp")
         self.gridLayout.addWidget(self.lfbTextFieldHelp, 5, 1, 1, 1)
         self.lfbUnit = QtWidgets.QLabel(Form)

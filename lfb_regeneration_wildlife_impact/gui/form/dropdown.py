@@ -64,8 +64,11 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
 
         self.lfbTextFieldLabel.setText(QCoreApplication.translate("FormFields", self.schema['title']))
         
+        self.lfbTextFieldHelp.setText('')
         if "description" in self.schema:
             self.lfbTextFieldHelp.setText(self.schema['description'])
+        else:
+            self.lfbTextFieldHelp.hide()
 
         if "readOnly" in self.schema:
             self.lfbComboBox.setEnabled(not self.schema['readOnly'])

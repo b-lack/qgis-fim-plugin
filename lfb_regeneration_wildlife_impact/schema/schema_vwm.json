@@ -864,7 +864,7 @@
                                     "azimut": {
                                         "title": "Azimut",
                                         "type": "integer",
-                                        "description": "Azimuth des Baumes vom Stichprobenpunkt",
+                                        "description": "Azimut des Baumes vom Stichprobenpunkt",
                                         "minimum": 0,
                                         "maximum": 400,
                                         "unit": "Gon"
@@ -933,14 +933,14 @@
                                     "landmarken": {
                                         "title": "Landmarke",
                                         "type": "string",
-                                        "description": "Landmarke",
+                                        "description": "Ein auffälliges, meist weithin sichtbares topographisches Objekt.",
                                         "minimum": 3,
                                         "maximum": 10000
                                     },
                                     "azimut": {
                                         "title": "Azimut",
                                         "type": "integer",
-                                        "description": "Azimuth",
+                                        "description": "Azimut der Landmarke vom Stichprobenpunkt",
                                         "minimum": 0,
                                         "maximum": 400,
                                         "unit": "Gon"
@@ -1198,7 +1198,7 @@
                                     "azimut": {
                                         "title": "Azimut",
                                         "type": "integer",
-                                        "description": "Azimuth des Baumes vom Stichprobenpunkt",
+                                        "description": "Azimut des Baumes vom Stichprobenpunkt",
                                         "minimum": 0,
                                         "maximum": 400,
                                         "unit": "Gon"
@@ -1266,14 +1266,14 @@
                                     "landmarken": {
                                         "title": "Landmarke",
                                         "type": "string",
-                                        "description": "Landmarke",
+                                        "description": "Ein auffälliges, meist weithin sichtbares topographisches Objekt.",
                                         "minimum": 3,
                                         "maximum": 10000
                                     },
                                     "azimut": {
                                         "title": "Azimut",
                                         "type": "integer",
-                                        "description": "Azimuth",
+                                        "description": "Azimut der Landmarke vom Stichprobenpunkt",
                                         "minimum": 0,
                                         "maximum": 400,
                                         "unit": "Gon"
@@ -3183,7 +3183,7 @@
                 "azimut": {
                     "title": "Azimut",
                     "type": "integer",
-                    "description": "Azimuth des Baumes vom Stichprobenpunkt",
+                    "description": "Azimut des Baumes vom Stichprobenpunkt",
                     "minimum": 0,
                     "maximum": 400,
                     "unit": "Gon"
@@ -3235,14 +3235,14 @@
                 "landmarken": {
                     "title": "Landmarke",
                     "type": "string",
-                    "description": "Landmarke",
+                    "description": "Ein auffälliges, meist weithin sichtbares topographisches Objekt.",
                     "minimum": 3,
                     "maximum": 10000
                 },
                 "azimut": {
                     "title": "Azimut",
                     "type": "integer",
-                    "description": "Azimuth",
+                    "description": "Azimut der Landmarke vom Stichprobenpunkt",
                     "minimum": 0,
                     "maximum": 400,
                     "unit": "Gon"
