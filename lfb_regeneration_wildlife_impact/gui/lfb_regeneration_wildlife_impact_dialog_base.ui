@@ -25,6 +25,9 @@
   <property name="windowTitle">
    <string>Lfb Regeneration and Wildlife Impact Monitoring</string>
   </property>
+  <property name="sizeGripEnabled">
+   <bool>false</bool>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
     <number>0</number>

@@ -21,6 +21,7 @@ class Ui_LfbRegenerationWildlifeImpactDialogBase(object):
         sizePolicy.setHeightForWidth(LfbRegenerationWildlifeImpactDialogBase.sizePolicy().hasHeightForWidth())
         LfbRegenerationWildlifeImpactDialogBase.setSizePolicy(sizePolicy)
         LfbRegenerationWildlifeImpactDialogBase.setMinimumSize(QtCore.QSize(600, 300))
+        LfbRegenerationWildlifeImpactDialogBase.setSizeGripEnabled(False)
         self.gridLayout = QtWidgets.QGridLayout(LfbRegenerationWildlifeImpactDialogBase)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setSpacing(0)
