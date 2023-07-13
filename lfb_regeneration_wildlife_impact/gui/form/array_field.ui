@@ -97,12 +97,15 @@
 
 QgsCollapsibleGroupBoxBasic { border: none; }
 
-QgsCollapsibleGroupBoxBasic::title, QgsCollapsibleGroupBox::title {}</string>
+QgsCollapsibleGroupBoxBasic::title, QgsCollapsibleGroupBox::title {}QgsCollapsibleGroupBoxBasic::title, QgsCollapsibleGroupBox::title {  subcontrol-origin: margin;  subcontrol-position: top left;  margin-left: 20px;  margin-right: 5px;  left: 0px;  top: 1px;}</string>
             </property>
             <property name="title">
              <string>Hinzufügen</string>
             </property>
             <property name="collapsed">
+             <bool>false</bool>
+            </property>
+            <property name="saveCollapsedState">
              <bool>true</bool>
             </property>
             <layout class="QGridLayout" name="gridLayout_3">
@@ -144,7 +147,7 @@ QgsCollapsibleGroupBoxBasic::title, QgsCollapsibleGroupBox::title {}</string>
                 <widget class="QPushButton" name="lfbAddBtn">
                  <property name="font">
                   <font>
-                   <pointsize>16</pointsize>
+                   <pointsize>14</pointsize>
                    <weight>50</weight>
                    <bold>false</bold>
                   </font>
@@ -155,8 +158,8 @@ QgsCollapsibleGroupBoxBasic::title, QgsCollapsibleGroupBox::title {}</string>
                  <property name="styleSheet">
                   <string notr="true">QPushButton{
 	border: 2px solid gray;
-	border-radius: 20px;
-	padding:10px;
+	border-radius: 15px;
+	padding:7px;
 	margin: 10px;
 	background-color: green;
 	color: #fff;
@@ -167,7 +170,7 @@ QPushButton:disabled{
 }</string>
                  </property>
                  <property name="text">
-                  <string>Hinzufügen</string>
+                  <string>HINZUFÜGEN</string>
                  </property>
                 </widget>
                </item>

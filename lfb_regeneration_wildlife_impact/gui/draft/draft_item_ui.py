@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_lfbItem(object):
     def setupUi(self, lfbItem):
         lfbItem.setObjectName("lfbItem")
-        lfbItem.resize(940, 429)
+        lfbItem.resize(448, 188)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -33,7 +33,7 @@ class Ui_lfbItem(object):
         self.lfbItemFrame.setSizePolicy(sizePolicy)
         self.lfbItemFrame.setObjectName("lfbItemFrame")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.lfbItemFrame)
-        self.verticalLayout_2.setContentsMargins(20, 0, -1, -1)
+        self.verticalLayout_2.setContentsMargins(9, 0, -1, -1)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setContentsMargins(-1, 0, -1, -1)
@@ -100,7 +100,9 @@ class Ui_lfbItem(object):
         self.lfbFocusBtn.setSizePolicy(sizePolicy)
         self.lfbFocusBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.lfbFocusBtn.setStyleSheet("color: #000;\n"
-"padding:10px;")
+"padding:10px;\n"
+"background: #ddd;\n"
+"border-radius: 10px;")
         self.lfbFocusBtn.setObjectName("lfbFocusBtn")
         self.horizontalLayout_2.addWidget(self.lfbFocusBtn)
         self.lfbDraftIconBtn = QtWidgets.QPushButton(self.lfbItemFrame)
@@ -133,5 +135,5 @@ class Ui_lfbItem(object):
         self.label_2.setText(_translate("lfbItem", "Aufnahmetrupp:"))
         self.lfbDraftAufnahmetruppLabel.setText(_translate("lfbItem", "-"))
         self.lfbDraftIconRemoveBtn.setText(_translate("lfbItem", "löschen"))
-        self.lfbFocusBtn.setText(_translate("lfbItem", "Fokus"))
+        self.lfbFocusBtn.setText(_translate("lfbItem", "FOKUS"))
         self.lfbDraftIconBtn.setText(_translate("lfbItem", "AUSWÄHLEN"))

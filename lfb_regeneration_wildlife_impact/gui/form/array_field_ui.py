@@ -56,8 +56,9 @@ class Ui_Form(object):
 "\n"
 "QgsCollapsibleGroupBoxBasic { border: none; }\n"
 "\n"
-"QgsCollapsibleGroupBoxBasic::title, QgsCollapsibleGroupBox::title {}")
-        self.lfbArrayFormGroup.setCollapsed(True)
+"QgsCollapsibleGroupBoxBasic::title, QgsCollapsibleGroupBox::title {}QgsCollapsibleGroupBoxBasic::title, QgsCollapsibleGroupBox::title {  subcontrol-origin: margin;  subcontrol-position: top left;  margin-left: 20px;  margin-right: 5px;  left: 0px;  top: 1px;}")
+        self.lfbArrayFormGroup.setCollapsed(False)
+        self.lfbArrayFormGroup.setSaveCollapsedState(True)
         self.lfbArrayFormGroup.setObjectName("lfbArrayFormGroup")
         self.gridLayout_3 = QtWidgets.QGridLayout(self.lfbArrayFormGroup)
         self.gridLayout_3.setContentsMargins(10, 0, 1, 0)
@@ -72,15 +73,15 @@ class Ui_Form(object):
         self.horizontalLayout_5.addItem(spacerItem)
         self.lfbAddBtn = QtWidgets.QPushButton(self.lfbArrayFormGroup)
         font = QtGui.QFont()
-        font.setPointSize(16)
+        font.setPointSize(14)
         font.setBold(False)
         font.setWeight(50)
         self.lfbAddBtn.setFont(font)
         self.lfbAddBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.lfbAddBtn.setStyleSheet("QPushButton{\n"
 "    border: 2px solid gray;\n"
-"    border-radius: 20px;\n"
-"    padding:10px;\n"
+"    border-radius: 15px;\n"
+"    padding:7px;\n"
 "    margin: 10px;\n"
 "    background-color: green;\n"
 "    color: #fff;\n"
@@ -122,6 +123,6 @@ class Ui_Form(object):
         Form.setWindowTitle(_translate("Form", "Form"))
         self.lfbArrayGroup.setTitle(_translate("Form", "GroupBox"))
         self.lfbArrayFormGroup.setTitle(_translate("Form", "Hinzufügen"))
-        self.lfbAddBtn.setText(_translate("Form", "Hinzufügen"))
+        self.lfbAddBtn.setText(_translate("Form", "HINZUFÜGEN"))
         self.lfbArrayOutput.setSortingEnabled(False)
 from qgis import gui

@@ -66,6 +66,8 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
         self.defaultValue = self.json[self.key]
         self.isValid = None
         self.schemaErrors = schemaErrors
+        self.errors = []
+        self.validationErrors = []
 
         placeholderText = QCoreApplication.translate("FormFields", self.schema['title'])
 
@@ -77,6 +79,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
         try:
             self.lfbTextField.returnPressed.disconnect()
             self.lfbTextField.textChanged.disconnect()
+            self.lfbTextField.editingFinished.disconnect()
             self.lfbTextFieldDescriptionBtn.clicked.disconnect()
         except:
             pass
@@ -115,7 +118,8 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
 
         self.setDefaultValue()
 
-        self.validate(False) 
+        self.validate()
+        self.displayErrors(False)
 
         self.show()
 
@@ -193,45 +197,60 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
 
         self.internJson[self.key] = value
 
-        self.validate(False)
+        self.validate()
+        self.mergeErrors()
+        self.displayErrors(True)
 
     def editingFinished(self):
-        self.validate(True)
+        self.validate()
+        self.mergeErrors()
+        self.displayErrors(True)
 
     def setSchemaErrors(self, schemaErrors):
         self.schemaErrors = schemaErrors
-        self.validate(False)
+        
+        self.validate()
+        self.mergeErrors()
+        self.displayErrors(False)
 
-    def validate(self, emit = False):
+    def mergeErrors(self):
+
+        self.errors = []
+
+        for error in self.schemaErrors:
+            if self.key in error.relative_schema_path:
+                self.errors.append(error)
+
+        for error in self.validationErrors:
+            self.errors.append(error)
+
+    def validate(self):
+        v = Draft7Validator(self.schema)
+        self.validationErrors = sorted(v.iter_errors(self.internJson[self.key]), key=lambda e: e.path)
+        
+
+    def displayErrors(self, emit = False):
+
         #jsonCpy = self.json.copy()
         #jsonCpy['name'] = self.lfbTextField.text()
 
         # https://python-jsonschema.readthedocs.io/en/stable/validate/
-        v = Draft7Validator(self.schema)
-        errors = sorted(v.iter_errors(self.internJson[self.key]), key=lambda e: e.path)
+        #v = Draft7Validator(self.schema)
+        #errors = sorted(v.iter_errors(self.internJson[self.key]), key=lambda e: e.path)
 
         self.json[self.key] = self.internJson[self.key]
 
-        if len(errors) > 0:
+        if len(self.errors) > 0:
             isValid = False
         else:
             isValid = True
-
-        if emit:
-            for error in self.schemaErrors:
-                QgsMessageLog.logMessage(str(self.key), 'LFB')
-                QgsMessageLog.logMessage(str(self.json[self.key]), 'LFB')
-                if self.key in error.relative_schema_path:
-                    QgsMessageLog.logMessage(str(error.relative_schema_path), 'LFB')
-                    QgsMessageLog.logMessage(str(error.message), 'LFB')
-                    errors.append(error)
 
         if self.json[self.key] is None and not Utils.schemaTypeHasNull(self.schema):
             self.lfbTextFieldError.hide()
             self.lfbTextFieldSuccess.hide()
             self.lfbTextFieldHelp.show()
             self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid red;\n	border-radius: 10px;\n	padding: 10px;\n}")
-        elif len(errors) == 0:
+        elif len(self.errors) == 0:
             self.lfbTextFieldError.hide()
             self.lfbTextFieldSuccess.hide()
             self.lfbTextFieldHelp.show()
@@ -242,10 +261,10 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             self.lfbTextFieldHelp.hide()
             self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid red;\n	border-radius: 10px;\n	padding: 10px;\n}")
 
-            for error in errors:
+            for error in self.errors:
                 self.lfbTextFieldError.setText(error.message)
 
-        if isValid != self.isValid or emit == True:
+        if emit:
             self.inputChanged.emit(self.json[self.key], self.key)
 
         self.isValid = isValid

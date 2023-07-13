@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>940</width>
-    <height>429</height>
+    <width>448</width>
+    <height>188</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -48,7 +48,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <property name="leftMargin">
-       <number>20</number>
+       <number>9</number>
       </property>
       <property name="topMargin">
        <number>0</number>
@@ -184,10 +184,12 @@ border-radius: 5px;</string>
           </property>
           <property name="styleSheet">
            <string notr="true">color: #000;
-padding:10px;</string>
+padding:10px;
+background: #ddd;
+border-radius: 10px;</string>
           </property>
           <property name="text">
-           <string>Fokus</string>
+           <string>FOKUS</string>
           </property>
          </widget>
         </item>

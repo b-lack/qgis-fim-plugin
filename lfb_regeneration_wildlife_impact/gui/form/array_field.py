@@ -86,12 +86,17 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
 
         self.tableHeaders.append('bearbeiten')
         self.tableHeaders.append('löschen')
+
+        self.buttonStyle = "" #" QgsCollapsibleGroupBoxBasic::title { background: #ccc; border: 1px solid black; border-radius: 30px; padding: 2px; } "
+        widgetStyle = " QgsCollapsibleGroupBoxBasic { background: rgba(0,0,0,0.05); margin: 10px; border: 2px solid green; padding: 10px; border-radius:10px;} "
+
+        self.lfbArrayFormGroup.setStyleSheet(self.buttonStyle + widgetStyle)
         
         errors = self.validate()
         for error in errors:
             self.draftFormErrors.append(error)
 
-        #self.setTableData(self.json[self.key])
+       
 
         
 
@@ -195,11 +200,11 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
     def setInputText(self, value):
         self.draftFormErrors.clear()
 
-        errors = self.validate()
+        errors = self.validate(False)
         for error in errors:
             self.draftFormErrors.append(error)
         
-        #self.child.triggerErrors(self.draftFormErrors)
+        self.child.triggerErrors(self.draftFormErrors)
 
     def validate(self, emit = True):
 
@@ -211,10 +216,10 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
 
         if len(errors) == 0:
             self.lfbAddBtn.setEnabled(True)
-            self.lfbArrayFormGroup.setStyleSheet(" QgsCollapsibleGroupBoxBasic { background: rgba(0,0,0,0.05); margin: 10px; border: 2px solid green; padding: 10px; border-radius:10px;} ")
+            self.lfbArrayFormGroup.setStyleSheet("QgsCollapsibleGroupBoxBasic { background: rgba(0,0,0,0.05); margin: 10px; border: 2px solid green; padding: 10px; border-radius:10px;} " + self.buttonStyle)
         else:
             self.lfbAddBtn.setEnabled(False)
-            self.lfbArrayFormGroup.setStyleSheet(" QgsCollapsibleGroupBoxBasic { background: rgba(0,0,0,0.05); margin: 10px; border: 2px solid red; padding: 10px; border-radius:10px;} ")
+            self.lfbArrayFormGroup.setStyleSheet(" QgsCollapsibleGroupBoxBasic { background: rgba(0,0,0,0.05); margin: 10px; border: 2px solid red; padding: 10px; border-radius:10px;} " + self.buttonStyle)
 
         if emit:
             self.inputChanged.emit(self.json)

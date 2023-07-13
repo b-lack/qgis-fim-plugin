@@ -236,6 +236,7 @@ class LfbRegenerationWildlifeImpactDialog(QtWidgets.QDialog, FORM_CLASS):
         self.changeState()
 
         if self.validateTabs(True):
+            self.saveBar.validate(self.state.state, self.schemaErrors)
             self.draft.saveFeature(self.json)
 
             if self.previousGeneral == None:
