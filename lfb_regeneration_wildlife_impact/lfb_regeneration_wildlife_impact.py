@@ -37,19 +37,11 @@ from . import resources
 # Before continuing, we check if scipy and scipy.interpolate can be imported.
 # If not, we will not import the plugin files.
 ERROR = False
+
 try:
     import jsonschema
 except ModuleNotFoundError:
-    import subprocess
-    import sys
-
-    #def install(package):
-    #    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-    #install("jsonschema")
-    # jsonschema isn't included in the standard qgis python
-    #   interpreter so the user has to add it manually
     ERROR = 1
-    print("jsonschema not found. Please install it manually.")
 
     
 if not ERROR:

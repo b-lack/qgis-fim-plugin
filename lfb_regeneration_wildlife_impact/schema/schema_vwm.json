@@ -1696,7 +1696,7 @@
                     "description": "Bedeckungsgrad mit Weiserpflanzen im Verjüngungstransekt",
                     "properties": {
                         "krautanteil": {
-                            "title": "Krautanteil",
+                            "title": "Anteil der Kraut- und Strauchschicht",
                             "type": "integer",
                             "description": "Wie viel Prozent des Transektes ist mit Bodenpflanzen bedeckt? (Nicht die Summe der Weiserpflanzen.)",
                             "default": 0,
