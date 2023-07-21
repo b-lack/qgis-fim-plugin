@@ -28,6 +28,9 @@ class Ui_Form(object):
         self.geSetupLabel.setWordWrap(True)
         self.geSetupLabel.setObjectName("geSetupLabel")
         self.horizontalLayout.addWidget(self.geSetupLabel)
+        self.lfbSerialPortList = QtWidgets.QComboBox(Form)
+        self.lfbSerialPortList.setObjectName("lfbSerialPortList")
+        self.horizontalLayout.addWidget(self.lfbSerialPortList)
         self.lfbGetCoordinatesGtn = QtWidgets.QPushButton(Form)
         self.lfbGetCoordinatesGtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.lfbGetCoordinatesGtn.setStyleSheet("QPushButton{\n"
@@ -48,7 +51,43 @@ class Ui_Form(object):
 "}")
         self.lfbGetCoordinatesGtn.setObjectName("lfbGetCoordinatesGtn")
         self.horizontalLayout.addWidget(self.lfbGetCoordinatesGtn)
+        self.lfbCancelCoordinatesBtn = QtWidgets.QPushButton(Form)
+        self.lfbCancelCoordinatesBtn.setStyleSheet("QPushButton{\n"
+"    border-radius: 20px;\n"
+"    border: 2px solid #333;\n"
+"    color: #555;\n"
+"    margin: 10px 0px 0px;\n"
+"    padding: 10px;\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: yellow;\n"
+"}\n"
+"QPushButton:enabled{\n"
+"    border-radius: 20px;\n"
+"    border: 2px solid #fff;\n"
+"    background-color: green;\n"
+"    color: #fff;\n"
+"}")
+        self.lfbCancelCoordinatesBtn.setObjectName("lfbCancelCoordinatesBtn")
+        self.horizontalLayout.addWidget(self.lfbCancelCoordinatesBtn)
         self.verticalLayout_3.addLayout(self.horizontalLayout)
+        self.lfbGPSCount = QtWidgets.QLabel(Form)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lfbGPSCount.sizePolicy().hasHeightForWidth())
+        self.lfbGPSCount.setSizePolicy(sizePolicy)
+        self.lfbGPSCount.setObjectName("lfbGPSCount")
+        self.verticalLayout_3.addWidget(self.lfbGPSCount)
+        self.lfbGPSState = QtWidgets.QLabel(Form)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lfbGPSState.sizePolicy().hasHeightForWidth())
+        self.lfbGPSState.setSizePolicy(sizePolicy)
+        self.lfbGPSState.setStyleSheet("color:orange;")
+        self.lfbGPSState.setObjectName("lfbGPSState")
+        self.verticalLayout_3.addWidget(self.lfbGPSState)
         self.lfbGPSError = QtWidgets.QLabel(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -69,4 +108,7 @@ class Ui_Form(object):
 " 2. Drücke in \"GPS Information\" den Button \"Verbinden\"\n"
 " 3. Drücke den Button \"Koordinaten erheben\"."))
         self.lfbGetCoordinatesGtn.setText(_translate("Form", "KOORDINATEN ERHEBEN"))
+        self.lfbCancelCoordinatesBtn.setText(_translate("Form", "ABBRECHEN"))
+        self.lfbGPSCount.setText(_translate("Form", "TextLabel"))
+        self.lfbGPSState.setText(_translate("Form", "TextLabel"))
         self.lfbGPSError.setText(_translate("Form", "TextLabel"))

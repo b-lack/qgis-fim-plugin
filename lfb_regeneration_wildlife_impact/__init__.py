@@ -47,21 +47,11 @@ def classFactory(iface):  # pylint: disable=invalid-name
 def installJsonschema():
     try:
         import jsonschema
-
-        QgsMessageLog.logMessage("jsonschema installed" + str(jsonschema.__file__), 'LFB')
     except ModuleNotFoundError:
         import subprocess
-        import sys
 
-        #res = subprocess.check_call(['python3', '-m', 'pip', 'install', 'jsonschema'])
-        #QgsMessageLog.logMessage("jsonschema installed: " + str(res), 'LFB')
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "jsonschema"])
+        subprocess.check_call(["python", "-m", "pip", "install", "jsonschema"])
         #pip.main(['install', 'jsonschema'])
-
-        # pip install -r requirements.txt --ignore-installed
-
-        ERROR = 1
-        QgsMessageLog.logMessage("jsonschema install: ", 'LFB')
 
 def installer_func():
 
