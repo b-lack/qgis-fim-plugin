@@ -46,6 +46,7 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'array_fiel
 
 class ArrayField(QtWidgets.QWidget, UI_CLASS):
     inputChanged = QtCore.pyqtSignal(object)
+    rowSelected = QtCore.pyqtSignal(object)
 
     def __init__(self, interface, json, schema, key, schemaErrors):
         """Constructor."""
@@ -60,7 +61,7 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
             json[key] = None
 
         
-        
+        self.selectedRow = None
         self.json = json
         self.schema = schema
         self.key = key
@@ -87,18 +88,19 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         self.tableHeaders.append('bearbeiten')
         self.tableHeaders.append('löschen')
 
-        self.buttonStyle = "" #" QgsCollapsibleGroupBoxBasic::title { background: #ccc; border: 1px solid black; border-radius: 30px; padding: 2px; } "
-        widgetStyle = " QgsCollapsibleGroupBoxBasic { background: rgba(0,0,0,0.05); margin: 10px; border: 2px solid green; padding: 10px; border-radius:10px;} "
+        self.show()
 
-        self.lfbArrayFormGroup.setStyleSheet(self.buttonStyle + widgetStyle)
+        self.buttonStyle = " QgsCollapsibleGroupBoxBasic::title, QgsCollapsibleGroupBox::title {left: 10px; top: -10px; padding-left: 10px; border: 2px solid gray; border-radius:10px; font-size: 8px; background: #cdcdcd; padding: 3px;} "
+        self.widgetStyle = " QgsCollapsibleGroupBoxBasic { background: rgba(0,0,0,0.05); margin: 10px; border: 2px solid green; padding: 10px; border-radius:10px;} "
+        self.widgetErrorStyle = " QgsCollapsibleGroupBoxBasic { background: rgba(0,0,0,0.05); margin: 10px; border: 2px solid red; padding: 10px; border-radius:10px;} "
+
+        self.lfbArrayFormGroup.setStyleSheet(self.buttonStyle + self.widgetStyle)
+        self.lfbArrayFormGroup.setTitle('NEUE ZEILE HINZUFÜGEN')
+        # .setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         
         errors = self.validate()
         for error in errors:
             self.draftFormErrors.append(error)
-
-       
-
-        
 
         self.show()
 
@@ -136,7 +138,7 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
             # create an cell widget
             btn = QPushButton(self.lfbArrayOutput)
             btn.clicked.connect(self.make_editRow(row))
-            btn.setStyleSheet("color: grey;")
+            btn.setStyleSheet("color: green;")
             btn.setText('bearbeiten')
             btn.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
             self.lfbArrayOutput.setCellWidget(row, idx, btn)
@@ -159,8 +161,29 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         return editRow
     
     def editRow(self, row):
-        #self.child.setJson(self.json[self.key][row])
-        QgsMessageLog.logMessage(str('edit Row'), 'LFB')
+
+       
+       
+        
+        # Mark the row as selected
+        self.lfbArrayOutput.selectRow(row)
+
+        # Open the form
+        self.lfbArrayFormGroup.setCollapsed(False)
+
+        # Create Copy of the row values
+        QgsMessageLog.logMessage(str(self.json[self.key][row]), 'LFB')
+        self.defaultValue = copy.deepcopy(self.json[self.key][row])
+        
+
+        self.child.setJson(self.defaultValue, True, row)
+        QgsMessageLog.logMessage(str(self.defaultValue), 'LFB')
+
+        
+
+        self.lfbAddBtn.setText('ÜBERSCHREIBEN')
+        self.selectedRow = row
+       
     
     def make_removeRow(self, row):
         def removeRow():
@@ -180,8 +203,10 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         #self.validate()
         newValue = copy.deepcopy(self.defaultValue)
         
-        
-        self.json[self.key].insert(0, newValue)
+        if self.selectedRow is not None and self.selectedRow >= 0 and self.selectedRow < len(self.json[self.key]):
+            self.json[self.key][self.selectedRow] = newValue
+        else:
+            self.json[self.key].insert(0, newValue)
  
 
         self.inputChanged.emit(self.json)
@@ -192,17 +217,23 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         self.defaultValue = {}
         self.child.setJson(self.defaultValue, True)
         self.lfbArrayFormGroup.setCollapsed(True)
+        
+        self.selectedRow = None
+        self.lfbAddBtn.setText('HINZUFÜGEN')
 
     def setJson(self, newJson, setFields = True):
         self.json = newJson
         self.setTableData(self.json[self.key])
 
-    def setInputText(self, value):
+    def setInputText(self, value, row = None):
         self.draftFormErrors.clear()
 
         errors = self.validate(False)
         for error in errors:
-            self.draftFormErrors.append(error)
+            if row is not None:
+                QgsMessageLog.logMessage(str(row), 'LFB')
+            else:
+                self.draftFormErrors.append(error)
         
         self.child.triggerErrors(self.draftFormErrors)
 
@@ -216,10 +247,10 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
 
         if len(errors) == 0:
             self.lfbAddBtn.setEnabled(True)
-            self.lfbArrayFormGroup.setStyleSheet("QgsCollapsibleGroupBoxBasic { background: rgba(0,0,0,0.05); margin: 10px; border: 2px solid green; padding: 10px; border-radius:10px;} " + self.buttonStyle)
+            self.lfbArrayFormGroup.setStyleSheet(self.buttonStyle + self.widgetStyle)
         else:
             self.lfbAddBtn.setEnabled(False)
-            self.lfbArrayFormGroup.setStyleSheet(" QgsCollapsibleGroupBoxBasic { background: rgba(0,0,0,0.05); margin: 10px; border: 2px solid red; padding: 10px; border-radius:10px;} " + self.buttonStyle)
+            self.lfbArrayFormGroup.setStyleSheet(self.buttonStyle + self.widgetErrorStyle)
 
         if emit:
             self.inputChanged.emit(self.json)

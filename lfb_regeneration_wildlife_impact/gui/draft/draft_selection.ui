@@ -14,10 +14,7 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget#lfbItem{
-	background-color: rgba(0,0,0,0.2);
-	border-radius: 5px;
-}</string>
+   <string notr="true"/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
@@ -67,8 +64,8 @@ background:transparent;</string>
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>845</width>
-            <height>660</height>
+            <width>839</width>
+            <height>664</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout">
@@ -136,8 +133,8 @@ background:transparent;</string>
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>845</width>
-            <height>660</height>
+            <width>839</width>
+            <height>649</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">

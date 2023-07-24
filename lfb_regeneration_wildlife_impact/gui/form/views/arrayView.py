@@ -43,7 +43,7 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'array_defa
 
 
 class ArrayView(QtWidgets.QWidget, UI_CLASS):
-    inputChanged = QtCore.pyqtSignal(object)
+    inputChanged = QtCore.pyqtSignal(object, int)
 
     def __init__(self, interface, json, schema, attr, schemaErrors = []):
         """Constructor."""
@@ -53,6 +53,7 @@ class ArrayView(QtWidgets.QWidget, UI_CLASS):
         self.setupUi(self)
 
         self.json = json
+        self.editRow = None
 
         self.show()
 
@@ -81,15 +82,16 @@ class ArrayView(QtWidgets.QWidget, UI_CLASS):
             
             self.fieldArray.append(field)
 
-    def setJson(self, newJson, setFields = True):
+    def setJson(self, newJson, setFields = True, editRow = None):
 
         self.json = newJson
+        self.editRow = editRow
 
         for field in self.fieldArray:
             field.setJson(self.json, setFields)
 
     def emitText(self, childJson, key = None):
-        self.inputChanged.emit(self.json)
+        self.inputChanged.emit(self.json, self.editRow)
 
     def triggerErrors(self, errors):
         for field in self.fieldArray:

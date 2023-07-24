@@ -4,6 +4,8 @@ import collections.abc
 
 from qgis.core import QgsProject, QgsExpressionContextUtils, QgsMapLayer, QgsCoordinateReferenceSystem, QgsCoordinateTransform
 from qgis.core import QgsMessageLog
+from qgis.utils import *
+
 from PyQt5.QtWidgets import QMessageBox
 
 # GNSS plugin
@@ -18,10 +20,19 @@ class Utils(object):
         idx = b['enum'].index(a)
         return str(b['enumLabels'][idx])
     
+    def pluginAvailable(pluginName):
+        if pluginName in available_plugins:
+            return True
+        return False
+    
     def confirmDialog(interface, title, message):
         msg = QMessageBox()
         msg.setStyleSheet("text-color: rgb(0, 0, 0);")
         msg.setStyleSheet("background-color: rgb(255, 255, 255);")
+        msg.setStyleSheet("QLabel{ color: white}")
+        msg.setStyleSheet("background-color:  rgb(255, 255, 255);color: rgb(0, 0, 0);")
+
+
         return msg.question(interface, title, message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
 

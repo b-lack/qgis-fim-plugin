@@ -30,12 +30,15 @@ from qgis.PyQt.QtWidgets import QDialog, QScroller
 
 from PyQt5 import QtCore
 
+from qgis.utils import plugins
+
 from ...form.textfield import TextField
 from ..textarea import TextArea
 from ..dropdown import DropDown
 from ..array_field import ArrayField
 from ..boolean import Boolean
 from ..views.object_view import ObjectView
+from ....utils.helper import Utils
 
 from ...plugins.find_position.setup_device import SetupDevice
 
@@ -103,7 +106,25 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
                 field = ArrayField(interface, self.json, value, attr, schemaErrors)
             elif valueType == 'object':
                 if '$plugin' in value:
-                    if value['$plugin'] == 'find_position':
+                    
+                    if Utils.pluginAvailable(value['$plugin']):
+
+                        # ROOT
+                        #plugin2_instance = plugins[value['$plugin']]
+                        #field = plugin2_instance.SetupDevices(interface, self.json, value, attr, self.inheritedErrors)
+                        # plugin2_instance.run()
+
+                        # https://gis.stackexchange.com/questions/403501/using-qgis-plugin-from-another-plugin
+
+                        #from find_location.gui.find_position.setup_device import SetupDevice
+                        #from find_location.utils.location import FindLocation
+                        #newLoc = FindLocation('sdfffff')
+                        #QgsMessageLog.logMessage("FindLocation: " + str(newLoc.find()), 'LFB')
+
+                        from find_location.gui.find_position.setup_device import SetupDevices
+                        field = SetupDevices(interface, self.json, value, attr, self.inheritedErrors)
+
+                    else:
                         field = SetupDevice(interface, self.json, value, attr, self.inheritedErrors)
                 else:        
                     field = ObjectView(interface, self.json, value, attr, self.inheritedErrors)

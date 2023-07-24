@@ -107,10 +107,12 @@ QProgressBar{
       <bool>false</bool>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: #222;
-color: #fff;
-padding:10px;
-margin:0px;</string>
+      <string notr="true">QWidget{
+	background-color: #222;
+	color: #fff;
+	padding:10px;
+	margin:0px;
+}</string>
      </property>
      <layout class="QHBoxLayout" name="lfbsabeLayout">
       <property name="spacing">

@@ -85,19 +85,11 @@
            <widget class="QgsCollapsibleGroupBox" name="lfbArrayFormGroup">
             <property name="font">
              <font>
-              <pointsize>14</pointsize>
+              <pointsize>12</pointsize>
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">QgsCollapsibleGroupBoxBasic{
-	background: rgba(0,0,0,0.1);
-	border-radius: 10px;
-	padding: 10px;
-}
-
-QgsCollapsibleGroupBoxBasic { border: none; }
-
-QgsCollapsibleGroupBoxBasic::title, QgsCollapsibleGroupBox::title {}QgsCollapsibleGroupBoxBasic::title, QgsCollapsibleGroupBox::title {  subcontrol-origin: margin;  subcontrol-position: top left;  margin-left: 20px;  margin-right: 5px;  left: 0px;  top: 1px;}</string>
+             <string notr="true"/>
             </property>
             <property name="title">
              <string>Hinzufügen</string>
@@ -130,6 +122,35 @@ QgsCollapsibleGroupBoxBasic::title, QgsCollapsibleGroupBox::title {}QgsCollapsib
              </item>
              <item row="1" column="0">
               <layout class="QHBoxLayout" name="horizontalLayout_5">
+               <item>
+                <widget class="QPushButton" name="pushButton">
+                 <property name="font">
+                  <font>
+                   <pointsize>14</pointsize>
+                  </font>
+                 </property>
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton{
+	border: 2px solid gray;
+	border-radius: 15px;
+	padding:7px;
+	margin: 10px;
+	background-color: transparent;
+	color: #000;
+}
+QPushButton:disabled{
+	background-color:transparent;
+	color: rgba(0,0,0,0.3);
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Reset</string>
+                 </property>
+                </widget>
+               </item>
                <item>
                 <spacer name="horizontalSpacer">
                  <property name="orientation">
@@ -193,6 +214,9 @@ QPushButton:disabled{
             </property>
             <property name="editTriggers">
              <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="dragDropOverwriteMode">
+             <bool>false</bool>
             </property>
             <property name="alternatingRowColors">
              <bool>true</bool>

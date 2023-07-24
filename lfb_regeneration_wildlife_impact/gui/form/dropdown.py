@@ -127,6 +127,7 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         if "default" not in self.schema:
             self.setIndex(0)
         else:
+            QgsMessageLog.logMessage("default not set: " + self.key + ' - ' + str(self.schema['default']), 'LFB')
             self.internJson[self.key] = self.schema['default']
             
             self.validate(False)
@@ -145,15 +146,22 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
     def setJson(self, newJson, setFields = True):
         
         
+        if self.key  == 'bestandnschichtigid':
+            QgsMessageLog.logMessage("setDefaultValue: " + str(newJson), 'LFB')
+
         #self.json.update(newJson)
         self.json = newJson
-        #self.internJson[self.key] = newJson[self.key]
+        self.internJson = newJson.copy()
+        if self.key not in self.internJson and self.key in self.json:
+            self.internJson[self.key] = self.json[self.key]
 
 
         if self.key not in self.internJson or self.internJson[self.key] is None:
+            QgsMessageLog.logMessage("setDefaultValue: " + self.key, 'LFB')
             self.setDefaultValue()
             # self.json[self.key] = None
         else:
+            QgsMessageLog.logMessage(self.key + ' = ' + str(self.internJson[self.key]), 'LFB')
             index = self.schema['enum'].index(int(self.internJson[self.key]))
 
             if index != -1:

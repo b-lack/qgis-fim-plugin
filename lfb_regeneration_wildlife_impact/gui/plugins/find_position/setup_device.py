@@ -115,14 +115,17 @@ class SetupDevice(QtWidgets.QWidget, UI_CLASS):
         QgsMessageLog.logMessage(str(self.gpsCon), 'LFB')
         try:
             if self.gpsCon is not None:
+                self.gpsCon.stateChanged.disconnect(self.status_changed)
+
                 self.gpsCon.close()
                 self.gpsCon = None
 
-            self.gpsCon.stateChanged.disconnect(self.status_changed)
+           
 
             self.gps_active = False
             #self.lfbGPSState.setText("Connection Cancelled")
             self.lfbCancelCoordinatesBtn.setEnabled(False)
+            self.lfbGetCoordinatesGtn.setEnabled(True)
             self.measures = []
             self.setMeasurementsCount()
             #self.lfbGPSState.setText("Keine Verbindung die geschlossen werden könnte.")
@@ -142,6 +145,7 @@ class SetupDevice(QtWidgets.QWidget, UI_CLASS):
             import sip
             gpsConnection = sip.cast(connection, QgsGpsConnection)
             self.gpsCon = gpsConnection
+
         elif isinstance(connection, QgsGpsConnection):
             self.gpsCon = gpsConnection
         else:
@@ -151,7 +155,7 @@ class SetupDevice(QtWidgets.QWidget, UI_CLASS):
         try:
             
             self.lfbCancelCoordinatesBtn.setEnabled(True)
-            self.gpsCon = connection
+            #self.gpsCon = connection
             self.gpsCon.stateChanged.connect(self.status_changed)
             #self.gpsCon.positionChanged.connect(self.position_changed)
             
@@ -170,6 +174,10 @@ class SetupDevice(QtWidgets.QWidget, UI_CLASS):
         QgsMessageLog.logMessage(str(gpsInfo))
 
     def status_changed(self, gpsInfo):
+        
+        QgsMessageLog.logMessage(str('fff'), 'LFB')
+        
+
         try:
             self.lfbGPSState.setText('Daten wurden erfolgreich ermittelt.')
             self.lfbGPSError.setText('')
@@ -182,6 +190,7 @@ class SetupDevice(QtWidgets.QWidget, UI_CLASS):
         self.lfbGPSCount.setText(str(len(self.measures)))
 
     def emitAggregatedValues(self, GPSInfo):
+        
 
         lat = GPSInfo.latitude
         long = GPSInfo.longitude
@@ -197,7 +206,7 @@ class SetupDevice(QtWidgets.QWidget, UI_CLASS):
         df = pd.DataFrame(self.measures)
         #result = [str(df[0].mean()), str(df[1].mean()), str(df[2].mean()), str(df[3].mean()), str(df[4].mean()), str(df[5].mean())]
 
-        QgsMessageLog.logMessage(str(df[0].mean()), 'FindLocation')
+        
 
         self.json['istgeom_y'] = df[0].mean()
         self.json['istgeom_x'] = df[1].mean()

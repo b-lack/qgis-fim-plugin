@@ -559,7 +559,7 @@
                         "gnss": {
                             "title": "Position des Stichprobenpunktes",
                             "type": "object",
-                            "$plugin": "find_position"
+                            "$plugin": "find_location"
                         },
                         "istgeom_y": {
                             "title": "Latitude*",
@@ -629,7 +629,8 @@
                             "description": "Azimut",
                             "minimum": 0,
                             "maximum": 400,
-                            "unit": "Gon"
+                            "unit": "Gon",
+                            "default": 0
                         },
                         "baumplot1": {
                             "type": "array",
@@ -867,7 +868,8 @@
                                         "description": "Azimut des Baumes vom Stichprobenpunkt",
                                         "minimum": 0,
                                         "maximum": 400,
-                                        "unit": "Gon"
+                                        "unit": "Gon",
+                                        "default": 0
                                     },
                                     "distanz": {
                                         "title": "Distanz",
@@ -933,22 +935,23 @@
                                     "landmarken": {
                                         "title": "Landmarke",
                                         "type": "string",
-                                        "description": "Ein auffälliges, meist weithin sichtbares topographisches Objekt.",
+                                        "description": "Bezeichnung der Landmarke",
                                         "minimum": 3,
                                         "maximum": 10000
                                     },
                                     "azimut": {
                                         "title": "Azimut",
                                         "type": "integer",
-                                        "description": "Azimut der Landmarke vom Stichprobenpunkt",
+                                        "description": "Azimut",
                                         "minimum": 0,
                                         "maximum": 400,
-                                        "unit": "Gon"
+                                        "unit": "Gon",
+                                        "default": 0
                                     },
                                     "distanz": {
                                         "title": "Distanz",
                                         "type": "integer",
-                                        "description": "Baum <-> Stichprobenpunkt",
+                                        "description": "Distanz von Stichprobenpunkt zu Landmarke",
                                         "minimum": 0,
                                         "unit": "Zentimeter"
                                     }
@@ -1201,7 +1204,8 @@
                                         "description": "Azimut des Baumes vom Stichprobenpunkt",
                                         "minimum": 0,
                                         "maximum": 400,
-                                        "unit": "Gon"
+                                        "unit": "Gon",
+                                        "default": 0
                                     },
                                     "distanz": {
                                         "title": "Distanz",
@@ -1266,22 +1270,23 @@
                                     "landmarken": {
                                         "title": "Landmarke",
                                         "type": "string",
-                                        "description": "Ein auffälliges, meist weithin sichtbares topographisches Objekt.",
+                                        "description": "Bezeichnung der Landmarke",
                                         "minimum": 3,
                                         "maximum": 10000
                                     },
                                     "azimut": {
                                         "title": "Azimut",
                                         "type": "integer",
-                                        "description": "Azimut der Landmarke vom Stichprobenpunkt",
+                                        "description": "Azimut",
                                         "minimum": 0,
                                         "maximum": 400,
-                                        "unit": "Gon"
+                                        "unit": "Gon",
+                                        "default": 0
                                     },
                                     "distanz": {
                                         "title": "Distanz",
                                         "type": "integer",
-                                        "description": "Baum <-> Stichprobenpunkt",
+                                        "description": "Distanz von Stichprobenpunkt zu Landmarke",
                                         "minimum": 0,
                                         "unit": "Zentimeter"
                                     }
@@ -1683,9 +1688,9 @@
                             "title": "Transektlänge",
                             "type": "integer",
                             "description": "Transektlänge",
-                            "default": 0,
+                            "default": 200,
                             "minimum": 1,
-                            "maximum": 250,
+                            "maximum": 300,
                             "unit": "Dezimeter"
                         }
                     }
@@ -1696,7 +1701,7 @@
                     "description": "Bedeckungsgrad mit Weiserpflanzen im Verjüngungstransekt",
                     "properties": {
                         "krautanteil": {
-                            "title": "Anteil der Kraut- und Strauchschicht",
+                            "title": "Krautanteil",
                             "type": "integer",
                             "description": "Wie viel Prozent des Transektes ist mit Bodenpflanzen bedeckt? (Nicht die Summe der Weiserpflanzen.)",
                             "default": 0,
@@ -2000,22 +2005,22 @@
                             "type": "integer",
                             "title": "Betriebsart*",
                             "description": "Die Bestandesbeschreibung bezieht sich auf den Wald in dem der Transekt liegt. Die Fläche ist in etwa ein Halbkreis mit dem Transekt als Radius.",
-                            "default": null,
+                            "default": 1,
                             "enum": [
+                                1,
                                 2,
                                 3,
                                 4,
                                 5,
-                                6,
-                                1
+                                6
                             ],
                             "enumLabels": [
+                                "Hochwald",
                                 "Plenterwald",
                                 "Mittelwald",
                                 "Niederwald",
                                 "Kurzumtriebsplantage",
-                                "Latschen- oder Grünerlenfeld",
-                                "Hochwald"
+                                "Latschen- oder Grünerlenfeld"
                             ]
                         },
                         "bestandkronenschlussgradid": {
@@ -2076,8 +2081,8 @@
                             "description": "Geben Sie die Anzahl der Schichten an. Eine einzelne Schicht können Sie dann ausweisen, wenn die Kronenbereiche nicht ineinander überlaufen.",
                             "default": 1,
                             "enum": [
-                                7,
                                 1,
+                                7,
                                 2,
                                 4,
                                 5,
@@ -2085,8 +2090,8 @@
                                 3
                             ],
                             "enumLabels": [
-                                "aus Ober-, Mittel- und Unterholz",
                                 "einschichtig",
+                                "aus Ober-, Mittel- und Unterholz",
                                 "zweischichtig",
                                 "zweischichtig mit Vorausverjüngung",
                                 "zweischichtig mit Unterbau",
@@ -3186,7 +3191,8 @@
                     "description": "Azimut des Baumes vom Stichprobenpunkt",
                     "minimum": 0,
                     "maximum": 400,
-                    "unit": "Gon"
+                    "unit": "Gon",
+                    "default": 0
                 },
                 "distanz": {
                     "title": "Distanz",
@@ -3235,22 +3241,23 @@
                 "landmarken": {
                     "title": "Landmarke",
                     "type": "string",
-                    "description": "Ein auffälliges, meist weithin sichtbares topographisches Objekt.",
+                    "description": "Bezeichnung der Landmarke",
                     "minimum": 3,
                     "maximum": 10000
                 },
                 "azimut": {
                     "title": "Azimut",
                     "type": "integer",
-                    "description": "Azimut der Landmarke vom Stichprobenpunkt",
+                    "description": "Azimut",
                     "minimum": 0,
                     "maximum": 400,
-                    "unit": "Gon"
+                    "unit": "Gon",
+                    "default": 0
                 },
                 "distanz": {
                     "title": "Distanz",
                     "type": "integer",
-                    "description": "Baum <-> Stichprobenpunkt",
+                    "description": "Distanz von Stichprobenpunkt zu Landmarke",
                     "minimum": 0,
                     "unit": "Zentimeter"
                 }
