@@ -28,7 +28,7 @@ QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``Settings``
 In the **Plugin Repositories** section click `+Add`.
 
 - Name: `LFB - VWM`
-- URL: `https://raw.githubusercontent.com/b-lack/lfb-regeneration_wildlife_impact_monitoring/main/plugins.xml`
+- URL: `https://raw.githubusercontent.com/b-lack/qgis-fim-plugin/main/plugins.xml`
 
 Check: "Allow experimental plugins"
 
@@ -38,7 +38,7 @@ Restart QGIS
 
 QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``ALL``
 
-Search for `LFB` and select `LFB Verjüngungszustands- und Wildeinfluss Monitoring`
+Search for `FIM` and select `FIM - Forest Inventory and Monitoring`
 
 Confirm by clicking `Install Plugin`
 
@@ -63,7 +63,7 @@ At this point you should restart QGIS.
 
 QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``Installed``
 
-Make sure that ``Lfb Regeneration and Wildlife Impact Monitoring`` is selected.
+Make sure that ``FIM`` is selected.
 
 
 ## Release
@@ -76,16 +76,6 @@ $ git log --pretty="- %s" > CHANGELOG.md
 
 ```bash
 $ git log --pretty="- %s" > CHANGELOG.md
-```
-
-## Tests
-
-![test workflow](https://github.com/b-lack/lfb-regeneration_wildlife_impact_monitoring/actions/workflows/run-all-tests.yml/badge.svg)
-
-Run pytest in the root directory of the project.
-
-```bash
-$ pytest
 ```
 
 ## 
