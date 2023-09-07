@@ -1,4 +1,4 @@
-# LFB Verjüngungszustands- und Wildeinfluss Monitoring
+# FIM - Forest Inventory and Monitoring
 
 
 ## Requirements
@@ -27,7 +27,7 @@ QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``Settings``
 
 In the **Plugin Repositories** section click `+Add`.
 
-- Name: `LFB - VWM`
+- Name: `FIM`
 - URL: `https://raw.githubusercontent.com/b-lack/qgis-fim-plugin/main/plugins.xml`
 
 Check: "Allow experimental plugins"
