@@ -34,7 +34,6 @@ from qgis.PyQt.QtWidgets import QDialog
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore
 
-from jsonschema import Draft7Validator
 
 from ...utils.helper import Utils
 from ..setup.errors import ErrorsWidget
@@ -48,7 +47,7 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
     toHome = QtCore.pyqtSignal(bool)
     devButton = QtCore.pyqtSignal(bool)
 
-    def __init__(self, interface, json, schema):
+    def __init__(self, interface, json):
         """Constructor."""
 
         QDialog.__init__(self, interface.mainWindow())
@@ -57,7 +56,6 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
 
         self.interface = interface
         self.json = json
-        self.schema = schema
 
         self.isValidating = True
         self.isValid = False
@@ -71,7 +69,7 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.lfbSaveBtn.clicked.connect(self.saveBtnClicked)
 
         self.lfbDevBtn.clicked.connect(self.openState)
-        #self.lfbDevBtn.hide()
+        self.lfbDevBtn.hide()
         
         self.lfbHomeBtn.clicked.connect(self.openHome)
         self.lfbSchemaBtn.clicked.connect(self.openSchema)
@@ -105,7 +103,7 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
 
     def openSchema(self):
         msgBox = QtWidgets.QMessageBox()
-        msgBox.setText(json.dumps(self.schema))
+        msgBox.setText(json.dumps(self.json, indent=4))
         msgBox.exec()
 
     def openState(self):
@@ -120,7 +118,7 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.saveFeature.emit(self.json, True)
 
     def setFeatureAttributes(self, feature, key):
-        layer = Utils.getLayerByName()
+        layer = Utils.getLayerById()
         fields = layer.fields()
         idx = fields.indexFromName(key)
         self.lfbId.setText(str(feature.attributes()[idx]))

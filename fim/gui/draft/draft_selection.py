@@ -51,7 +51,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
     draftSelected = QtCore.pyqtSignal(object, int, object)
     folderSelected = QtCore.pyqtSignal(str)
 
-    def __init__(self, interface, schema):
+    def __init__(self, interface):
         """Constructor."""
 
         # super(LfbRegenerationWildlifeImpactDialog, self).__init__(parent)
@@ -66,19 +66,22 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
 
-        self.schema = schema
-
-        self.LAYER_PREFIX = "LFB-Regeneration-Wildlife-Impact-Monitoring"
-        self.LAYER_VERSION = "0.0.1"
+        self.LAYER_PREFIX = Utils.getLayerName()
+        self.LAYER_VERSION = Utils.getLayerVersion()
 
         # QGIS interface
         self.iface = interface
+
+        self.vl = None
 
         self.fields = QgsFields()
         #self.fields.append(QgsField("fid", QVariant.DateTime))
         self.fields.append(QgsField("id", QVariant.String))
         self.fields.append(QgsField("los_id", QVariant.String))
         self.fields.append(QgsField("status", QVariant.Bool))
+
+        self.fields.append(QgsField("type", QVariant.String))
+        self.fields.append(QgsField("version", QVariant.String))
         #self.fields.append(QgsField("geometry", QVariant.Map))
         
         self.fields.append(QgsField("created", QVariant.DateTime))
@@ -95,7 +98,9 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         self.show()
 
     def update(self):
-        self.ioBtn.update()
+        if self.vl is not None:
+            self.readDrafts()
+            self.ioBtn.update()
 
     def imported(self, path):
         self.readDrafts()
@@ -137,22 +142,35 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         """Check if private layer exists"""
         
 
-        names = [layer for layer in QgsProject.instance().mapLayers().values()]
+        layer = Utils.getLayerById()
 
-        for i in names:
-            if QgsExpressionContextUtils.layerScope(i).variable('LFB-NAME') == self.LAYER_PREFIX :
+        if layer is not None:
+            self.vl = layer
+
+            folder = os.path.dirname(self.vl.dataProvider().dataSourceUri())
+            self.folderSelected.emit(str(folder))
+
+            self.readDrafts(False)
+            self.readDone(True)
+            return
+
+        #names = [layer for layer in QgsProject.instance().mapLayers().values()]
+
+        #for i in names:
+        #    if QgsExpressionContextUtils.layerScope(i).variable('LFB-NAME') == self.LAYER_PREFIX :
                 
-                self.vl = i
+        #        eslf.vl = i
 
-                folder = os.path.dirname(self.vl.dataProvider().dataSourceUri())
-                self.folderSelected.emit(str(folder))
+        #        folder = os.path.dirname(self.vl.dataProvider().dataSourceUri())
+        #        self.folderSelected.emit(str(folder))
 
-                self.readDrafts(False)
-                self.readDone(True)
-                return
+        #        self.readDrafts(False)
+        #        self.readDone(True)
+        #        return
 
         # https://anitagraser.com/pyqgis-101-introduction-to-qgis-python-programming-for-non-programmers/pyqgis101-creating-editing-a-new-vector-layer/
-        self.vl = QgsVectorLayer("Point", self.LAYER_PREFIX, "memory")
+        self.vl = QgsVectorLayer("Point", self.LAYER_PREFIX + '-' + self.LAYER_VERSION, "memory")
+        self.vl.setName(self.LAYER_PREFIX)
         QgsExpressionContextUtils.setLayerVariable(self.vl, 'LFB-NAME', self.LAYER_PREFIX)
         QgsExpressionContextUtils.setLayerVariable(self.vl, 'LFB-VERSION', self.LAYER_VERSION)
 
@@ -255,21 +273,35 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         return properties
 
     def readDrafts(self, status = False):
+        self.vl = Utils.getLayerById()
 
         for i in reversed(range(self.lfbDraftList.count())):
             self.lfbDraftList.itemAt(i).widget().setParent(None)
 
+            
         featureList = self.vl.getFeatures()
         
         sorted_featureList = sorted(featureList, key=lambda x: x['created'], reverse=True)
         filtered = filter(lambda c: c['status'] == status, sorted_featureList)
         sorted_filtered_featureList = list(filtered)
+
+        selectedFeatures = Utils.getSelectedFeaturesFim()
         
         for feature in sorted_filtered_featureList:
-            item = DraftItem(self.iface, feature, self.schema)
+
+            selected = False
+            if feature in selectedFeatures:
+                selected = True
+
+            item = DraftItem(self.iface, feature, True)
             item.featureSelected.connect(self.listWidgetClicked)
             item.removeFeature.connect(self.removeFeature)
-            item.setStyleSheet("QFrame#lfbItemFrame{ background-color: rgba(0,0,0,0.2); border-radius: 5px; padding: 10px 10px 0; }")
+
+            item.setStyleSheet("QFrame#lfbItemFrame{ background-color: rgba(0,0,0,0.2);  border: 2px solid #ddd; border-radius: 5px; padding: 10px 10px 0; }")
+
+            if selected:
+                item.setStyleSheet("QFrame#lfbItemFrame{ background-color: rgba(0,0,0,0.3); border: 2px solid #ff0; border-radius: 5px; padding: 10px 10px 0; }")
+
             self.lfbDraftList.addWidget(item)
 
         self.ioBtn.setExportLength(len(sorted_featureList))
@@ -286,7 +318,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         sorted_featureList = list(filtered)
         
         for feature in sorted_featureList:
-            item = DraftItem(self.iface, feature, self.schema)
+            item = DraftItem(self.iface, feature)
             item.featureSelected.connect(self.listWidgetClicked)
             item.removeFeature.connect(self.removeFeature)
             item.setStyleSheet("QFrame#lfbItemFrame{ background-color: rgba(0,0,0,0.2); border-radius: 5px; padding: 10px 10px 0; }")

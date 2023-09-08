@@ -43,7 +43,7 @@ class DraftItem(QtWidgets.QWidget, UI_CLASS):
     featureSelected = QtCore.pyqtSignal(int)
     removeFeature = QtCore.pyqtSignal(int)
 
-    def __init__(self, interface, feature, schema):
+    def __init__(self, interface, feature, selected):
         """Constructor."""
 
         QDialog.__init__(self, interface.mainWindow())
@@ -72,7 +72,18 @@ class DraftItem(QtWidgets.QWidget, UI_CLASS):
         #    workflowStr = Utils.enumLabel(workflowId, schema['properties']['general']['properties']['workflow'])
         #    self.lfbDraftWorkflowLabel.setText(workflowStr)
 
+        self.lfbItemTypeLabel.setText(self.typeMap(type))
+
+        self.lfbItemIdLabel.setText(feature['id'])
+
         self.show()
+    
+    def typeMap(self, type):
+
+        if(type == 'wze'):
+            return 'WZE' # - Waldzustandserhebung
+        
+        return 'VWM' # - Verjüngungs- und Wildeinflussmonitoring
 
     def focusFeature(self):
         Utils.focusFeature(self.interface, self.feature, False)

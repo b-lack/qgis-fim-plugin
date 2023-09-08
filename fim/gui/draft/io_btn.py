@@ -88,6 +88,8 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
             self.lfbImportSelectedBtn.setText('IMPORTIERE AUSGEWÄHLTE PUNKTE')
             self.lfbImportSelectedBtn.setEnabled(False)
 
+        return selectedFeatures
+
     def setExportLength(self, length):
         self.exportLength = length
 
@@ -110,7 +112,7 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         selectedFeatures  = Utils.getSelectedFeatures(self.interface, 'LFB-Regeneration-Wildlife-Impact-Monitoring', True)
         self.update()
 
-        layer = Utils.getLayerByName('LFB-Regeneration-Wildlife-Impact-Monitoring')
+        layer = Utils.getLayerById()
         if not layer:
             return
         fields = layer.fields()
@@ -154,7 +156,11 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
                     else:
                         qgsFeature.setAttribute(fieldName, defaultAttributes[fieldName])
 
-                qgsFeature.setAttribute('id', str(uuid.uuid4()))
+
+                if hasattr(qgsFeature, 'los_id'):
+                    qgsFeature.setAttribute('id', qgsFeature['los_id'])
+                else:
+                    qgsFeature.setAttribute('id', defaultAttributes['los_id'])
                 #qgsFeature.setAttribute('created', currentDateTime)
                 #qgsFeature.setAttribute('modified', currentDateTime)
                 #qgsFeature.setAttribute('workflow', 4)
@@ -189,7 +195,7 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
                 self.setFeedback('Fehler beim Import', True)
                 return
     
-            layer = Utils.getLayerByName('LFB-Regeneration-Wildlife-Impact-Monitoring')
+            layer = Utils.getLayerById()
     
             if not layer:
                 self.setFeedback('Layer nicht gefunden', True)
@@ -249,9 +255,9 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
     def exportToFolder(self, folder):
 
         currentDateTime = QDateTime.currentDateTime()
-        fileName = folder + '/VWM-' + currentDateTime.toString("yyyy-M-d_hh-mm") + '.geojson'
+        fileName = folder + '/FIM-' + currentDateTime.toString("yyyy-M-d_hh-mm") + '.geojson'
 
-        layer = Utils.getLayerByName('LFB-Regeneration-Wildlife-Impact-Monitoring')
+        layer = Utils.getLayerById()
 
         if not layer:
             self.setFeedback('Layer nicht gefunden', True)

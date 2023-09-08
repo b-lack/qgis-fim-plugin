@@ -158,7 +158,7 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
         self.json['istgeom_elev'] = aggregated['elevation']
         self.json['istgeom_hdop'] = aggregated['hdop']
         self.json['istgeom_vdop'] = aggregated['vdop']
-        self.json['istgeom_pdop'] = aggregated['pdop']
+        #self.json['istgeom_pdop'] = aggregated['pdop']
         self.json['istgeom_sat'] = int(aggregated['satellitesUsed'])
 
         self.inputChanged.emit(self.json, self.attr, True)

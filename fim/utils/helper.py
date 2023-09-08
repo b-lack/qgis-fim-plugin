@@ -1,8 +1,9 @@
 import os
 import json
 import collections.abc
+import re
 
-from qgis.core import QgsProject, QgsExpressionContextUtils, QgsMapLayer, QgsCoordinateReferenceSystem, QgsCoordinateTransform
+from qgis.core import QgsProject, QgsWkbTypes, QgsExpressionContextUtils, QgsMapLayer, QgsCoordinateReferenceSystem, QgsCoordinateTransform
 from qgis.core import QgsMessageLog
 from qgis.utils import *
 
@@ -11,7 +12,9 @@ from PyQt5.QtWidgets import QMessageBox
 # GNSS plugin
 from qgis import qgis
 
-LFB_NAME = 'LFB-Regeneration-Wildlife-Impact-Monitoring'
+FIM_LAYER_NAME = 'FIM'
+FIM_LAYER_VERSION = '1.0.0'
+FIM_LAYER_ID = FIM_LAYER_NAME + '-' + FIM_LAYER_VERSION
 
 class Utils(object):
 
@@ -19,6 +22,12 @@ class Utils(object):
     def enumLabel(a,b):
         idx = b['enum'].index(a)
         return str(b['enumLabels'][idx])
+    
+    def getLayerName():
+        return FIM_LAYER_NAME
+    
+    def getLayerVersion():
+        return FIM_LAYER_VERSION
     
     def pluginAvailable(pluginName):
         if pluginName in available_plugins:
@@ -38,7 +47,7 @@ class Utils(object):
 
     def getMetaData():
         return {
-            'version': '0.0.30'
+            'version': '1.0.0'
         }
 
     def schemaTypeHasNull(schema):
@@ -86,7 +95,7 @@ class Utils(object):
     
     def getFeatureAttribute(feature, key):
 
-        layer = Utils.getLayerByName()
+        layer = Utils.getLayerById()
         fields = layer.fields()
         idx = fields.indexFromName(key)
         return feature.attributes()[idx]
@@ -135,22 +144,39 @@ class Utils(object):
             Utils.selectFeature(feature)
 
     def selectFeature(feature):
-        layer = Utils.getLayerByName(LFB_NAME)
+        layer = Utils.getLayerById()
         if layer is not None:
             layer.selectByIds([feature.id()])
     
     def deselectFeature(feature = None):
-        layer = Utils.getLayerByName(LFB_NAME)
+        layer = Utils.getLayerById()
         if layer is not None:
             if feature is None:
                 layer.removeSelection()
             else:
                 layer.deselect(feature.id())
 
+    def getLayerById(layerId = None):
+        """Get the layer by name."""
+
+        if layerId is None:
+            layerId = FIM_LAYER_ID
+
+        layers = QgsProject.instance().mapLayers().values()
+
+        layerId1 = re.sub('[^a-zA-Z0-9 ]', '_', layerId)
+        #layerId2 = layerId.replace('-', '_')
+
+        for layer in layers:
+            if layer.id().startswith(layerId1) :
+                return layer
+        
+        return None
+    
     def getLayerByName(lfbName = None, lfbVersion = None):
 
         if lfbName is None:
-            lfbName = LFB_NAME
+            lfbName = FIM_LAYER_ID
 
         names = [layer for layer in QgsProject.instance().mapLayers().values()]
 
@@ -160,6 +186,50 @@ class Utils(object):
             
         return None
     
+
+    def updateToC(updateTocFn):
+        """Update the Table of Contents"""
+
+        layers = Utils.selectLayerByType(QgsWkbTypes.PointGeometry)
+
+        for layer in layers:
+
+            try:
+                layer.selectionChanged.disconnect(updateTocFn)
+            except:
+                pass
+
+            layer.selectionChanged.connect(updateTocFn)
+
+        #Utils.getSelections()
+
+    def selectLayerByType(geometryType):
+        """List all layers with geometry type."""
+
+        layerList = []
+
+        layers = QgsProject.instance().mapLayers().values()
+
+        for layer in layers:
+
+            try:
+                if layer.geometryType() == geometryType:
+                    layerList.append(layer)
+            except:
+                pass
+            
+        return layerList
+    
+    def getSelectedFeaturesFim():
+        for layer in QgsProject.instance().mapLayers().values():
+
+            layerId1 = re.sub('[^a-zA-Z0-9 ]', '_', FIM_LAYER_ID)
+            
+            if layer.id().startswith(layerId1) :
+                return layer.selectedFeatures()
+
+        return []
+
     def getSelectedFeatures(interface, lfbName, removeSelection = False):
 
         selected_features = []
@@ -170,7 +240,9 @@ class Utils(object):
             if not layer.isSpatial():
                 continue
 
-            if QgsExpressionContextUtils.layerScope(layer).variable('LFB-NAME') == lfbName :
+            layerId1 = re.sub('[^a-zA-Z0-9 ]', '_', FIM_LAYER_ID)
+            
+            if layer.id().startswith(layerId1) :
                 continue
             
             if layer.type() != QgsMapLayer.VectorLayer:

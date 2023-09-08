@@ -190,7 +190,7 @@ class Fim:
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
-        icon_path = ':/plugins/lfb_regeneration_wildlife_impact/icon.png'
+        icon_path = ':/plugins/fim/icon.png'
         self.add_action(
             icon_path,
             text=self.tr(u'FIM - Forest Inventory and Monitoring'),

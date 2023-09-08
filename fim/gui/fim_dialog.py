@@ -72,10 +72,10 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
 
-        dirname = os.path.dirname(__file__)
-
         # QGIS interface
         self.iface = interface
+
+        Utils.updateToC(self.update)
 
         self.tabsArray = []
         self.currentTab = 0
@@ -99,12 +99,6 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
         scroll = QScroller.scroller(self.lfbHomeScreen.viewport())
         scroll.grabGesture(self.lfbHomeScreen.viewport(), QScroller.LeftMouseButtonGesture)
- 
-        filename = os.path.realpath(os.path.join(dirname, '..', 'schema', 'schema_vwm.json'))
-
-        with open(filename) as f:
-            schema = json.load(f)
-            self.schema = schema['properties']['properties']
         
         self.addFolderSelection()
         self.addDraft()
@@ -120,7 +114,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
         #self.lfbTabWidget.setProperty("class", "my-label-style")
 
-        self.saveBar = SaveBar(self.iface, self.json, self.schema)
+        self.saveBar = SaveBar(self.iface, self.json)
         self.saveBar.saveFeature.connect(self.saveFeature)
         self.saveBar.setContentsMargins(0,0,0,0)
         self.lfbMain.addWidget(self.saveBar)
@@ -130,6 +124,17 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.resetForm(False)
         self.setPosition(1)
+
+    def loadSchema(self, type='vwm', version='1.0.0'):
+        dirname = os.path.dirname(__file__)
+        filename = os.path.realpath(os.path.join(dirname, '..', 'schema', type, version+'.json'))
+
+        with open(filename) as f:
+            schema = json.load(f)
+            self.schemaType = schema['$type']
+            self.schema = schema['properties']['properties']
+
+        return self.schema
 
     def buildForm(self):
         self.lfbTabWidget.clear()
@@ -227,7 +232,6 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.tabChange(0)
 
     def inputChanged(self, save, attr, forceUpdate = False):
-        QgsMessageLog.logMessage('inputChanged', 'LFB')
 
         if attr in self.json:
             self.json[attr].update(save)
@@ -241,18 +245,21 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.changeState()
 
-        if self.validateTabs():
-            self.saveBar.validate(self.state.state, self.schemaErrors)
-            self.draft.saveFeature(self.json)
-
-            if self.previousGeneral == None:
-                self.previousGeneral = copy.deepcopy(self.json['general'])
-
-            if self.json['general']['spaufsucheaufnahmetruppkuerzel'] != self.previousGeneral['spaufsucheaufnahmetruppkuerzel']:
-                self.previousGeneral['spaufsucheaufnahmetruppkuerzel'] = self.json['general']['spaufsucheaufnahmetruppkuerzel']
-            if self.json['general']['spaufsucheaufnahmetruppgnss'] != self.previousGeneral['spaufsucheaufnahmetruppgnss']:
-                self.previousGeneral['spaufsucheaufnahmetruppgnss'] = self.json['general']['spaufsucheaufnahmetruppgnss']
+        QgsMessageLog.logMessage('inputChanged', 'LFB')
+        self.validateTabs(True)
             
+    def save(self):
+        self.saveBar.validate(self.state.state, self.schemaErrors)
+        self.draft.saveFeature(self.json)
+
+        if self.previousGeneral == None:
+            self.previousGeneral = copy.deepcopy(self.json['general'])
+
+        if self.json['general']['spaufsucheaufnahmetruppkuerzel'] != self.previousGeneral['spaufsucheaufnahmetruppkuerzel']:
+            self.previousGeneral['spaufsucheaufnahmetruppkuerzel'] = self.json['general']['spaufsucheaufnahmetruppkuerzel']
+        if self.json['general']['spaufsucheaufnahmetruppgnss'] != self.previousGeneral['spaufsucheaufnahmetruppgnss']:
+            self.previousGeneral['spaufsucheaufnahmetruppgnss'] = self.json['general']['spaufsucheaufnahmetruppgnss']
+
     def formToDefault(self, setFields = True):
         self.json = copy.deepcopy(self.defaultJson)
         self.resetForm()
@@ -317,7 +324,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
 
     def addDraft(self):
-        self.draft = DraftSelection(self.iface, self.schema)
+        self.draft = DraftSelection(self.iface)
 
         try:
             self.draft.draftSelected.disconnect()
@@ -348,6 +355,11 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.changeState()
 
+
+        type = self.json['types'] if 'types' in self.json else 'vwm'
+        version = self.json['versions'] if 'versions' in self.json else '1.0.0'
+        self.schema = self.loadSchema(type, version)
+
         self.buildForm()
 
         self.resetForm(True)
@@ -370,17 +382,23 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         msgBox.setText(json.dumps(self.state.state))
         msgBox.exec()
 
-    def validateTabs(self):
+    def validateTabs(self, save = False):
+        QgsMessageLog.logMessage('validateTabs', 'LFB')
 
         if self.validationTimer != None:
             self.validationTimer.cancel()
             self.validationTimer = None
 
-        self.validationTimer = threading.Timer(0.5, self._validateTabs)
+        self.validationTimer = threading.Timer(0.5, lambda: self._validateTabs())
         self.validationTimer.start()
+
+        if save:
+            self.save()
 
     def _validateTabs(self):
         QgsMessageLog.logMessage('validateTabs', 'LFB')
+
+        isValidToSave = False
 
         v = Draft7Validator(self.schema)
         errors = sorted(v.iter_errors(self.json), key=lambda e: e.path)
@@ -404,15 +422,19 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
                 self.lfbTabWidget.setTabIcon(tab['tabNr'], QtGui.QIcon(':icons/green_rect.png'))
             
 
-        minimum = self.lfbValidation(errors)
+        if self.schemaType == 'vwm':
+            isValidToSave = self.VWMValidation(errors)
+        else:
+            isValidToSave = len(errors) == 0
 
         self.schemaErrors.clear()
         for error in errors:
             self.schemaErrors.append(error)
 
-        return minimum
+
+        return isValidToSave
     
-    def lfbValidation(self, errors):
+    def VWMValidation(self, errors):
         accessable = []
         hasCoordinates = []
 
@@ -428,6 +450,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.lfbNotAccessable(self.json, accessable)
         self.lfbCoordinates(self.json, hasCoordinates)
+
 
         return len(accessable) == 0 and len(hasCoordinates) == 0
 
@@ -466,55 +489,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
             for i in range(2, 16):
                 self.lfbTabWidget.setTabEnabled(i, False)
             return False
+        #else:
+        #    for i in range(2, 16):
+        #        self.lfbTabWidget.setTabEnabled(i, True)
         return True
-    
-    
-    def _deprecated_validateTabs(self, minimumToDraft = False):
-        QgsMessageLog.logMessage('_deprecated_validateTabs', 'LFB')
-
-        tabNr = 0
-
-
-        for tab in self.tabsArray:
-
-            attr = tab['attr']            
-
-            if attr in self.json:
-                v = Draft7Validator(self.schema['properties'][attr])
-                errors = sorted(v.iter_errors(self.json[attr]), key=lambda e: e.path)
-
-            else:
-                errors = [{'message': 'No data available'}]
-
-            
-
-
-            if len(errors) == 0 and len(tab['inheritedErrors']) == 0:
-                self.lfbTabWidget.setTabText(tabNr, '')
-                self.lfbTabWidget.setTabIcon(tabNr, QtGui.QIcon(':icons/green_rect.png'))
-            else:
-                self.lfbTabWidget.setTabIcon(tabNr, QtGui.QIcon(':icons/red_rect.png'))
-                self.lfbTabWidget.setTabText(tabNr, '')
-
-            if tabNr == 0:
-                gErrors = errors
-            elif tabNr == 1:
-                cErrors = errors
-            elif tabNr == 2:
-                tErrors = errors
-
-            tabNr += 1
-
-        enableAll = len(gErrors) == 0 and len(cErrors) == 0 and len(tErrors) == 0
-
-
-        #self.lfbTabWidget.setTabEnabled(0, True)
-        for i in range(0, 16):
-            self.lfbTabWidget.setTabEnabled(i, True)
-
-        self.lfbNotAccessable(self.json, gErrors)
-        self.lfbCoordinates(self.json, cErrors)
-
-        
-        self.updateLinearButtons()
-        return len(gErrors) == 0
