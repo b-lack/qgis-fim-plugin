@@ -127,3 +127,8 @@ Backup[ ]of[ ]*.numbers/
 
 plugin_upload.py
 lfb_regeneration_wildlife_impact/pb_tool.cfg
+
+
+zip_build
+*_ui.py
+*.qm

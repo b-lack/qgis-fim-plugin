@@ -24,9 +24,10 @@
 
 import os
 
-from qgis.core import QgsMessageLog
+from qgis.core import QgsMessageLog, QgsPointXY, QgsPoint
 from qgis.PyQt import QtWidgets, uic
-from qgis.PyQt.QtWidgets import QDialog, QScroller
+from qgis.PyQt.QtWidgets import QDialog, QScroller, QWidget, QFormLayout, QVBoxLayout, QGroupBox
+
 
 from PyQt5 import QtCore
 
@@ -106,17 +107,65 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
             if valueType == 'array':
                 field = ArrayField(interface, self.json, value, attr, schemaErrors)
             elif valueType == 'object':
-                if '$plugin' in value:
+                if '$plugin' in value and value['$plugin']['name'] is not None:
                     
-                    if Utils.pluginAvailable(value['$plugin']):
+                    if Utils.pluginAvailable(value['$plugin']['name']):
                         # https://gis.stackexchange.com/questions/403501/using-qgis-plugin-from-another-plugin
+                        if(value['$plugin']['attributes'] is not None):
+                            if(value['$plugin']['attributes'] == 'recording'):
 
-                        from gnavs.gui.recording.recording import Recording
-                        field = Recording(self.interface)
-                        field.aggregatedValuesChanged.connect(self.aggregatedValuesChanged)
+                                field = QWidget()
+                                fieldLayout = QVBoxLayout()
+                                field.setLayout(fieldLayout)
+
+                                group = QGroupBox()
+                                group.setTitle("Koordinaten bestimmen")
+                                group.setStyleSheet("QGroupBox { border: 1px solid #000; padding: 20px 10px 10px; }")
+                                fieldLayout.addWidget(group)
+
+                                layout = QVBoxLayout()
+                                group.setLayout(layout)
+
+                                from gnavs.gui.recording.recording import Recording
+                                rec = Recording(self.interface)
+                                rec.aggregatedValuesChanged.connect(self.aggregatedValuesChanged)
+
+                                layout.addWidget(rec)
+
+                            elif(value['$plugin']['attributes'] == 'navigation'):
+
+                                field = QWidget()
+                                fieldLayout = QVBoxLayout()
+                                field.setLayout(fieldLayout)
+
+                                group = QGroupBox()
+                                group.setTitle("Navigation")
+                                group.setStyleSheet("QGroupBox { border: 1px solid #000; padding: 20px 10px 10px; }")
+                                fieldLayout.addWidget(group)
+
+                                layout = QVBoxLayout()
+                                group.setLayout(layout)
+
+                                from gnavs.gui.recording.recording import Recording
+                                rec = Recording(self.interface)
+                                rec.toggleFocus(True)
+                                layout.addWidget(rec)
+
+                                from gnavs.gui.navigate.selection import Selection
+                                selection = Selection(self.interface, True)
+                                layout.addWidget(selection)
+
+                                rec.currentPositionChanged.connect(selection.updateCoordinates)
+                                #from gnavs.gui.recording.focus import Focus
+                                #selection = Focus(self.interface)
+                                #layout.addWidget(selection)
+
+                                
+                                #field.aggregatedValuesChanged.connect(self.aggregatedValuesChanged)
+
+
 
                     else:
-                        QgsMessageLog.logMessage("Plugin not available: " + value['$plugin'], 'LFB')
                         field = SetupDevice(interface, self.json, value, attr, self.inheritedErrors)
                 else:        
                     field = ObjectView(interface, self.json, value, attr, self.inheritedErrors)
@@ -150,8 +199,15 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
         """Update the aggregated values"""
         from gnavs.gui.measurement.aggregation import Aggregation
 
+
+        from gnavs.utils.utils import Utils as ganvs_utils
+
         aggregation = Aggregation(self.interface)
         aggregated = aggregation.aggregate(gpsInfos)
+
+        position = QgsPointXY(QgsPoint(aggregated['longitude'], aggregated['latitude']))
+        ganvs_utils.clearLayer('lfb-tmp-position', 'point')
+        ganvs_utils.drawPosition('lfb-tmp-position', position)
 
         self.json['istgeom_x'] = aggregated['latitude']
         self.json['istgeom_y'] = aggregated['longitude']
