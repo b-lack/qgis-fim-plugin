@@ -1849,7 +1849,7 @@
                             }
                         },
                         "grass": {
-                            "title": "Kraut",
+                            "title": "Gräser",
                             "type": "object",
                             "properties": {
                                 "weiserpflanzendrahtschmiele": {
