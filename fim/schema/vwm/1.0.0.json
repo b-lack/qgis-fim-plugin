@@ -2245,11 +2245,11 @@
                                             "Angabe fehlt",
                                             "keine Zuordnung möglich (Plenterwald)",
                                             "Hauptbestand - wirtschaftliches Hauptgewicht",
-                                            "Unterstand - erkennbar unterhalb des Oberstandes befinden, jedoch entweder dessen halbe Höhe nicht erreichen oder noch keinen Derbholzvorrat aufweisen",
+                                            "Unterstand - halbe Höhe des Oberstandes oder keinen Derbholzvorrat aufweisen",
                                             "Oberstand",
                                             "Verjüngung unter Schirm",
                                             "liegender Baum / sehr schräg stehend",
-                                            "Zwischenstand, Mittelholz - erkennbar unterhalb des Oberstandes befinden, jedoch mindestens dessen halbe Höhe erreichen und einen Derbholzvorrat aufweisen",
+                                            "Zwischenstand, Mittelholz - mindestens halbe Höhe des Oberstandes und Derbholzvorrat aufweisen",
                                             "Überhalt - Reste des Vorbestandes mit annährnd gleichmäßiger Verteilung auf der Fläche",
                                             "Altbäume - alte Einzelbäume, die nicht der Schichtart UeH zugeorndet werden können - Restvorrat"
                                         ]
