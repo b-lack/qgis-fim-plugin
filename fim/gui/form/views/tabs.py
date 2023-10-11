@@ -41,7 +41,7 @@ from ..boolean import Boolean
 from ..views.object_view import ObjectView
 from ....utils.helper import Utils
 
-from ...plugins.find_position.setup_device import SetupDevice
+#from ...plugins.find_position.setup_device import SetupDevice
 
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'tab_default.ui'))
 
@@ -165,8 +165,8 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
 
 
 
-                    else:
-                        field = SetupDevice(interface, self.json, value, attr, self.inheritedErrors)
+                    #else:
+                    #    field = SetupDevice(interface, self.json, value, attr, self.inheritedErrors)
                 else:        
                     field = ObjectView(interface, self.json, value, attr, self.inheritedErrors)
             elif valueType == 'boolean':

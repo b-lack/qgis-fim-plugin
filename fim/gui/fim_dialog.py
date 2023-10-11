@@ -245,13 +245,15 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.changeState()
 
-        QgsMessageLog.logMessage('inputChanged', 'LFB')
+        
         self.validateTabs(True)
             
     def save(self):
         self.saveBar.validate(self.state.state, self.schemaErrors)
         self.draft.saveFeature(self.json)
 
+        QgsMessageLog.logMessage(str(self.json), 'LFB')
+        
         if self.previousGeneral == None:
             self.previousGeneral = copy.deepcopy(self.json['general'])
 
@@ -265,7 +267,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.resetForm()
 
     def openHome(self):
-        self.json = copy.deepcopy(self.defaultJson)
+        #self.json = copy.deepcopy(self.defaultJson)
         self.changeState(False)
         self.setPosition(1)
         self.lfbTabWidget.setCurrentIndex(0)
@@ -383,7 +385,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         msgBox.exec()
 
     def validateTabs(self, save = False):
-        QgsMessageLog.logMessage('validateTabs', 'LFB')
+
 
         if self.validationTimer != None:
             self.validationTimer.cancel()
@@ -396,7 +398,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
             self.save()
 
     def _validateTabs(self):
-        QgsMessageLog.logMessage('validateTabs', 'LFB')
+        QgsMessageLog.logMessage('_validateTabs', 'LFB')
 
         isValidToSave = False
 

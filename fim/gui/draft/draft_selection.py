@@ -90,6 +90,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         self.fields.append(QgsField("losnr", QVariant.String))
 
         self.fields.append(QgsField("form", QVariant.String))
+        self.fields.append(QgsField("valid", QVariant.Bool))
         
         self.currentFeatureId = None
 
@@ -100,10 +101,12 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
     def update(self):
         if self.vl is not None:
             self.readDrafts()
+            self.readSelected()
             self.ioBtn.update()
 
     def imported(self, path):
         self.readDrafts()
+        self.readSelected()
         self.readDone(True)
 
     def addIoButton(self):
@@ -151,6 +154,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             self.folderSelected.emit(str(folder))
 
             self.readDrafts(False)
+            self.readSelected()
             self.readDone(True)
             return
 
@@ -271,6 +275,45 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             properties.append(json.loads(feature['properties']))
 
         return properties
+    
+    def readSelected(self):
+        """Read the layer and lists the selected features"""
+
+        self.vl = Utils.getLayerById()
+
+        for i in reversed(range(self.lfbSelectedList.count())):
+            self.lfbSelectedList.itemAt(i).widget().setParent(None)
+
+            
+        featureList = self.vl.getFeatures()
+        
+        sorted_featureList = sorted(featureList, key=lambda x: x['created'], reverse=True)
+        #filtered = filter(lambda c: c['status'] == status, sorted_featureList)
+        #sorted_filtered_featureList = list(filtered)
+
+        selectedFeatures = Utils.getSelectedFeaturesFim()
+        
+        for feature in sorted_featureList:
+
+            isSelected = feature in selectedFeatures
+            #if feature in selectedFeatures:
+            #    selected = True
+
+            if isSelected == False:
+                continue
+
+            item = DraftItem(self.iface, feature, True)
+            item.featureSelected.connect(self.listWidgetClicked)
+            item.removeFeature.connect(self.removeFeature)
+
+            item.setStyleSheet("QFrame#lfbItemFrame{ background-color: rgba(0,0,0,0.2);  border: 2px solid #ddd; border-radius: 5px; padding: 10px 10px 0; }")
+
+            if isSelected:
+                item.setStyleSheet("QFrame#lfbItemFrame{ background-color: rgba(0,0,0,0.3); border: 2px solid #ff0; border-radius: 5px; padding: 10px 10px 0; }")
+
+            self.lfbSelectedList.addWidget(item)
+
+        self.ioBtn.setExportLength(len(sorted_featureList))
 
     def readDrafts(self, status = False):
         self.vl = Utils.getLayerById()
@@ -299,8 +342,8 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
             item.setStyleSheet("QFrame#lfbItemFrame{ background-color: rgba(0,0,0,0.2);  border: 2px solid #ddd; border-radius: 5px; padding: 10px 10px 0; }")
 
-            if selected:
-                item.setStyleSheet("QFrame#lfbItemFrame{ background-color: rgba(0,0,0,0.3); border: 2px solid #ff0; border-radius: 5px; padding: 10px 10px 0; }")
+            #if selected:
+            #    item.setStyleSheet("QFrame#lfbItemFrame{ background-color: rgba(0,0,0,0.3); border: 2px solid #ff0; border-radius: 5px; padding: 10px 10px 0; }")
 
             self.lfbDraftList.addWidget(item)
 
@@ -331,6 +374,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         self.vl.endEditCommand()
         QgsProject.instance().write()
         self.readDrafts(False)
+        self.readSelected()
         self.readDone(True)
     
     def setStatus(self, newState):
@@ -409,6 +453,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         self.readDrafts(False)
         self.readDone(True)
+        self.readSelected()
         #self.addListRows()
 
 

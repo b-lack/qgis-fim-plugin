@@ -27,8 +27,8 @@ import os
 import json
 
 from qgis.core import QgsMessageLog, QgsPointXY
-from qgis.PyQt import QtWidgets, uic
-from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt import QtWidgets, uic, QtGui
+from qgis.PyQt.QtWidgets import QDialog, QMessageBox
 
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore
@@ -92,8 +92,16 @@ class DraftItem(QtWidgets.QWidget, UI_CLASS):
         self.featureSelected.emit(self.feature.id())
     
     def on_lfbDraftIconRemoveBtn_clicked(self):
-        res = Utils.confirmDialog(self, 'Stichprobenpunkt löschen', 'Möchtest du den Stichprobenpunkt wirklich löschen?')
-        if res == QtWidgets.QMessageBox.Yes:
+
+        msgBox = QMessageBox()
+        #msgBox.setIcon(QMessageBox.Information)
+        msgBox.setText("Möchtest du den Stichprobenpunkt einschließlich der aufgenommenen Daten wirklich löschen?")
+        msgBox.setWindowTitle("Stichprobenpunkt löschen")
+        msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+
+        returnValue = msgBox.exec()
+        if returnValue == QMessageBox.Ok:
             self.removeFeature.emit(self.feature.id())
+
         
  

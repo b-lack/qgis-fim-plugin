@@ -112,7 +112,6 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         
     def openHome(self):
         self.saveFeature.emit(self.json, False)
-        #self.toHome.emit(True)
 
     def saveBtnClicked(self):
         self.saveFeature.emit(self.json, True)

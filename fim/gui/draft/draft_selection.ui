@@ -24,9 +24,70 @@
        <pointsize>13</pointsize>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
+     <widget class="QWidget" name="tab_3">
+      <attribute name="title">
+       <string>Ausgewählt</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QScrollArea" name="scrollArea_3">
+         <property name="styleSheet">
+          <string notr="true">border:none;
+background:transparent;</string>
+         </property>
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents_3">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>845</width>
+            <height>663</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <layout class="QVBoxLayout" name="lfbSelectedList"/>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="tab">
       <attribute name="title">
        <string>ToDo</string>
@@ -64,8 +125,8 @@ background:transparent;</string>
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>839</width>
-            <height>664</height>
+            <width>845</width>
+            <height>660</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout">
@@ -133,8 +194,8 @@ background:transparent;</string>
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>839</width>
-            <height>649</height>
+            <width>845</width>
+            <height>660</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
