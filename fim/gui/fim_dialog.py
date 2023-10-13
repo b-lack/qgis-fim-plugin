@@ -44,6 +44,7 @@ from .db_connection.db_widget import DBWidget
 
 from .form.saveBar import SaveBar
 
+from collections import deque
 from jsonschema import Draft7Validator
 
 from ..utils.helper import Utils
@@ -216,7 +217,6 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
             if tab['attr'] in self.json:
                 tab['setJson'](self.json[tab['attr']], setFields)
             else:
-                QgsMessageLog.logMessage('ERROR: ' + tab['attr'] , 'LFB')
                 cpy = copy.deepcopy(self.defaultJson[tab['attr']])
                 tab['setJson'](cpy, setFields)
 
@@ -251,8 +251,6 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
     def save(self):
         self.saveBar.validate(self.state.state, self.schemaErrors)
         self.draft.saveFeature(self.json)
-
-        QgsMessageLog.logMessage(str(self.json), 'LFB')
         
         if self.previousGeneral == None:
             self.previousGeneral = copy.deepcopy(self.json['general'])
@@ -405,6 +403,9 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         v = Draft7Validator(self.schema)
         errors = sorted(v.iter_errors(self.json), key=lambda e: e.path)
 
+        #errors.extend(self.lfbLayers(self.json))
+        lfbErrors = self.lfbLayers(self.json)
+
         for e in errors:
             QgsMessageLog.logMessage(str(e.message) + ' ' + str(e.relative_schema_path), 'LFB')
 
@@ -416,6 +417,12 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
             for error in errors:
                 if attr in error.relative_schema_path:
+                    errorFound = True
+                    self.lfbTabWidget.setTabIcon(tab['tabNr'], QtGui.QIcon(':icons/red_rect.png'))
+                    break
+
+            for error in lfbErrors:
+                if attr in error['relative_schema_path']:
                     errorFound = True
                     self.lfbTabWidget.setTabIcon(tab['tabNr'], QtGui.QIcon(':icons/red_rect.png'))
                     break
@@ -452,6 +459,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.lfbNotAccessable(self.json, accessable)
         self.lfbCoordinates(self.json, hasCoordinates)
+        
 
 
         return len(accessable) == 0 and len(hasCoordinates) == 0
@@ -495,3 +503,95 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         #    for i in range(2, 16):
         #        self.lfbTabWidget.setTabEnabled(i, True)
         return True
+    
+    def lfbLayers(self, json):
+        label_errors = []
+
+        rules_type = {
+            1: [ # es
+                [3, 36, 9],
+                [31, 36, 9]
+            ],
+            2: [ # zs
+                [3, 2, 4, 36, 9],
+                [2, 4, 31, 36, 9]
+            ],
+            3: [ # ms
+                [3, 25, 2, 4, 31, 36, 9]
+            ],
+            4: [ # zsv
+                [3, 2, 4, 36, 9]
+            ],
+            5: [ # zsu
+                [3, 2, 4, 36, 9]
+            ],
+            6: [ # pl
+                [0]
+            ],
+            7: [ # 3
+                [3, 25, 2, 4, 36, 9],
+                [3, 2, 4, 31, 36, 9]
+            ]
+        }
+        rules_length = {
+            1: {
+                "min": 1,
+                "max": 1
+            },
+            2: {
+                "min": 2,
+                "max": 2
+            },
+            3: {
+                "min": 3,
+                "max": 3
+            },
+            4: {
+                "min": 3,
+                "max": 3
+            },
+            5: {
+                "min": 3,
+                "max": 3
+            },
+            6: {
+                "min": 1,
+                "max": 100
+            },
+            7: {
+                "min": 1,
+                "max": 100
+            }
+        }
+
+
+        elements = [d['schicht_id'] for d in json['t_bestockung']['t_bestockung']]
+        elements_unique = list(set(elements))
+        #elements_unique.sort()
+        
+        schicht_id = json['bestandsbeschreibung']['bestandnschichtigid']
+
+        if rules_length.get(schicht_id) != None:
+            if (len(elements_unique) < rules_length[schicht_id]['min'] or len(elements_unique) > rules_length[schicht_id]['max']):
+                label_errors.append({
+                    "message": 'Falsche Anzahl an Bestockungsschichten',
+                    "relative_schema_path": ['allOf', 3, 'then', 'properties', 't_bestockung', 'properties', 't_bestockung', 'minItems']
+                })
+        
+        isSublist = False
+        if rules_type.get(schicht_id) != None:
+            for i in rules_type[schicht_id]:
+                if(all(x in i for x in elements)):
+                    isSublist = True
+                    break
+                else:
+                    isSublist = False
+                    label_errors.append({
+                        "message": 'Falsche Schichtenkombination',
+                        "relative_schema_path": ['properties','t_bestockung', 'properties','t_bestockung']
+                    })
+
+        QgsMessageLog.logMessage('rule_errors: ' + str(label_errors), 'LFB')
+        
+        
+        return label_errors

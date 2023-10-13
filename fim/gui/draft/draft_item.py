@@ -43,7 +43,7 @@ class DraftItem(QtWidgets.QWidget, UI_CLASS):
     featureSelected = QtCore.pyqtSignal(int)
     removeFeature = QtCore.pyqtSignal(int)
 
-    def __init__(self, interface, feature, selected):
+    def __init__(self, interface, feature):
         """Constructor."""
 
         QDialog.__init__(self, interface.mainWindow())

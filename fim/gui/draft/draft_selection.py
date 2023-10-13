@@ -302,7 +302,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             if isSelected == False:
                 continue
 
-            item = DraftItem(self.iface, feature, True)
+            item = DraftItem(self.iface, feature)
             item.featureSelected.connect(self.listWidgetClicked)
             item.removeFeature.connect(self.removeFeature)
 
@@ -336,7 +336,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             if feature in selectedFeatures:
                 selected = True
 
-            item = DraftItem(self.iface, feature, True)
+            item = DraftItem(self.iface, feature)
             item.featureSelected.connect(self.listWidgetClicked)
             item.removeFeature.connect(self.removeFeature)
 
