@@ -1,5 +1,26 @@
-# FIM - Forest Inventory and Monitoring
+<h1>
+  <img src="./fim/icon.png" alt="Logo Plugin"/>
+  FIM - Forest Inventory and Monitoring
+</h1>
 
+## Installation from Repository
+
+QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``Settings``
+
+In the **Plugin Repositories** section click `+Add`.
+
+- Name: `FIM`
+- URL: `https://raw.githubusercontent.com/b-lack/qgis-fim-plugin/main/plugins.xml`
+
+Confirm by clicking `OK`
+
+Restart QGIS
+
+QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``ALL``
+
+Search for `FIM` and select `FIM - Forest Inventory and Monitoring`
+
+Confirm by clicking `Install Plugin`
 
 ## Requirements
 
@@ -21,44 +42,6 @@ subprocess.check_call(['python', '-m', 'pip', 'install', 'jsonschema'])
 
 Restart QGIS
 
-## Installation from Repository
-
-QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``Settings``
-
-In the **Plugin Repositories** section click `+Add`.
-
-- Name: `FIM`
-- URL: `https://raw.githubusercontent.com/b-lack/qgis-fim-plugin/main/plugins.xml`
-
-Check: "Allow experimental plugins"
-
-Confirm by clicking `OK`
-
-Restart QGIS
-
-QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``ALL``
-
-Search for `FIM` and select `FIM - Forest Inventory and Monitoring`
-
-Confirm by clicking `Install Plugin`
-
-Done: 
-
-## Development Installation
-
-For the installation from the repository ``pb_tool`` must be installed. For this follow the instructions in [pb_tool.cfg](pb_tool.cfg).
-
-After making sure you have installed pb_tool, you can deploy the cloned plugin to your QGIS plugins folder:
-
-```bash
-$ pb_tool deploy
-```
-The plugin will be copied to your QGIS plugins folder.
-
-QGIS: ``Settings`` -> ``User Profiles`` -> ``Open Active Profile Folder`` -> ``python`` -> ``plugins``
-
-At this point you should restart QGIS.
-
 ### Activate Plugin
 
 QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``Installed``
@@ -66,18 +49,20 @@ QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``Installed``
 Make sure that ``FIM`` is selected.
 
 
-## Release
+## Reporting Issues
 
-```bash
-$ git log --pretty="- %s" > CHANGELOG.md
-```
+Please report any issue regarding the FIM plugin [here](https://github.com/b-lack/qgis-fim-plugin/issues).
 
-## Generate Changelog
+## License
 
-```bash
-$ git log --pretty="- %s" > CHANGELOG.md
-```
+This plugin is licensed under the [GNU GENERAL PUBLIC LICENSE](./LICENSE).
 
-## 
+## About
 
-pg_dump --schema-only lfb > schema.sql
+Commissioned through the [Brandenburg State Forestry Office](https://forst.brandenburg.de/).
+
+- Concept by: Torsten Wiebke
+- Develpment by: [Gerrit Balindt](https://gruenecho.de/)
+
+
+💚 Free to use by everyone 💚

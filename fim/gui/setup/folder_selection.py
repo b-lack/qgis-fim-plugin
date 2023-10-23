@@ -68,6 +68,8 @@ class FolderSelection(QtWidgets.QWidget, UI_CLASS):
         QgsProject.instance().write()
 
     def selectFolder(self):
+        '''Select a folder for the LFB data'''
+
         path = self.lfbFolderSelection.filePath()
         if os.path.exists(path):
             self.lfbFolderSelectionError.setText("Thanks!")
