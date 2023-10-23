@@ -249,17 +249,17 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             self.lfbTextFieldError.hide()
             self.lfbTextFieldSuccess.hide()
             self.lfbTextFieldHelp.show()
-            self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid red;\n	border-radius: 10px;\n	padding: 10px;\n}")
+            self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid red;\n	border-radius: 10px;\n	padding: 4px;\n}")
         elif len(self.errors) == 0:
             self.lfbTextFieldError.hide()
             self.lfbTextFieldSuccess.hide()
             self.lfbTextFieldHelp.show()
-            self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid green;\n	border-radius: 10px;\n	padding: 10px;\n}")
+            self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid green;\n	border-radius: 10px;\n	padding: 4px;\n}")
         else:
             self.lfbTextFieldError.show()
             self.lfbTextFieldSuccess.hide()
             self.lfbTextFieldHelp.hide()
-            self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid red;\n	border-radius: 10px;\n	padding: 10px;\n}")
+            self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid red;\n	border-radius: 10px;\n	padding: 4px;\n}")
 
             for error in self.errors:
                 self.lfbTextFieldError.setText(error.message)

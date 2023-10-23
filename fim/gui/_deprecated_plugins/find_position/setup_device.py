@@ -112,7 +112,6 @@ class SetupDevice(QtWidgets.QWidget, UI_CLASS):
 
     def cancelConnection(self):
 
-        QgsMessageLog.logMessage(str(self.gpsCon), 'LFB')
         try:
             if self.gpsCon is not None:
                 self.gpsCon.stateChanged.disconnect(self.status_changed)
@@ -141,7 +140,6 @@ class SetupDevice(QtWidgets.QWidget, UI_CLASS):
         # https://python.hotexamples.com/examples/PyQt5.QtSerialPort/QSerialPort/setDataBits/python-qserialport-setdatabits-method-examples.html
 
         if not isinstance(connection, QgsNmeaConnection):
-            QgsMessageLog.logMessage('is not QgsNmeaConnection', 'LFB')
             import sip
             gpsConnection = sip.cast(connection, QgsGpsConnection)
             self.gpsCon = gpsConnection
@@ -174,9 +172,7 @@ class SetupDevice(QtWidgets.QWidget, UI_CLASS):
         QgsMessageLog.logMessage(str(gpsInfo))
 
     def status_changed(self, gpsInfo):
-        
-        QgsMessageLog.logMessage(str('fff'), 'LFB')
-        
+                
 
         try:
             self.lfbGPSState.setText('Daten wurden erfolgreich ermittelt.')

@@ -396,7 +396,6 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
             self.save()
 
     def _validateTabs(self):
-        QgsMessageLog.logMessage('_validateTabs', 'LFB')
 
         isValidToSave = False
 
@@ -405,9 +404,6 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
         #errors.extend(self.lfbLayers(self.json))
         lfbErrors = self.lfbLayers(self.json)
-
-        for e in errors:
-            QgsMessageLog.logMessage(str(e.message) + ' ' + str(e.relative_schema_path), 'LFB')
 
         for tab in self.tabsArray:
 
@@ -589,9 +585,6 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
                     label_errors.append({
                         "message": 'Falsche Schichtenkombination',
                         "relative_schema_path": ['properties','t_bestockung', 'properties','t_bestockung']
-                    })
-
-        QgsMessageLog.logMessage('rule_errors: ' + str(label_errors), 'LFB')
-        
+                    })        
         
         return label_errors

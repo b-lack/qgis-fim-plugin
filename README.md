@@ -3,6 +3,10 @@
   FIM - Forest Inventory and Monitoring
 </h1>
 
+## Description
+
+The FIM plugin is a QGIS plugin for the Forest Inventory and Monitoring. FIM supports the recording of forest data based on different inventory methods.
+
 ## Installation from Repository
 
 QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``Settings``

@@ -41,6 +41,9 @@ from ..dropdown import DropDown
 from ..array_field import ArrayField
 from ..boolean import Boolean
 
+import math
+
+
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'object_view.ui'))
 
 
@@ -75,6 +78,10 @@ class ObjectView(QtWidgets.QWidget, UI_CLASS):
         
         items = schema['properties'].items()
 
+        row = 0
+        column = 0
+        columnSpan = 1
+
         for attr, value in items:
 
             if attr not in self.json[self.key]:
@@ -85,12 +92,23 @@ class ObjectView(QtWidgets.QWidget, UI_CLASS):
             if 'enum' in value:
                 field = DropDown(interface, self.json, value, attr)
             elif valueType == 'boolean':
-                field = Boolean(interface, self.json, value, attr)
+                field = Boolean(interface, self.json[self.key], value, attr)
                 #field.lfbInfoBox.connect(self.infoBoxClicked)
             else:
                 field = TextField(interface, self.json[self.key], value, attr)
 
-            self.lfbFormObject.addWidget(field)
+            if '$FIMColumn' in value:
+                column = value['$FIMColumn']
+                if column == 0:
+                    row += 1
+                columnSpan = 1
+            else:
+                row += 1
+                column = 0
+                columnSpan = -1
+
+            
+            self.lfbFormObject.addWidget(field, row, column, 1, columnSpan) #row, column
             field.inputChanged.connect(self.onInputChanged)
             
             self.fieldArray.append(field)
@@ -98,15 +116,24 @@ class ObjectView(QtWidgets.QWidget, UI_CLASS):
 
         self.show()
 
-    def onInputChanged(self, newJson, key):
-        
-        self.json[self.key][key] = newJson
+    def setSchemaErrors(self, schemaErrors):
+        self.schemaErrors = schemaErrors
+
+    def onInputChanged(self, newJson, key=None):
+
+
+        #self.json[self.key][key] = newJson
 
         self.validate()
     
     def setJson(self, newJson, setFields = True):
 
+
+
         self.json = newJson
+
+        if self.key not in self.json:
+            self.json[self.key] = {}
 
         for field in self.fieldArray :
             field.setJson(self.json[self.key], setFields)
@@ -116,18 +143,23 @@ class ObjectView(QtWidgets.QWidget, UI_CLASS):
     
     def validate(self):
 
+        self.lfbObjectGroup.setStyleSheet('QGroupBox#lfbObjectGroup{ padding: 10px; background: rgba(0,0,0,0.1);border-radius: 10px; border: 2px solid green;}')
+
         errors = []
         self.inheritedErrors.clear()
         
         v = Draft7Validator(self.schema)
         errors = sorted(v.iter_errors(self.json[self.key]), key=lambda e: e.path)
 
+        for error in errors:
+            QgsMessageLog.logMessage(str(error.message), 'FIM')
+
         if len(errors) == 0 and (self.key == 'kraut' or self.key == 'grass' or self.key == 'farne' or self.key == 'doldengewaechse' or self.key == 'beerenstraucher' or self.key == 'grosstraucher'):
             self.check100(self.key)
+
         
             
         self.updateErrors()
-        self.inputChanged.emit(str(self.json[self.key]), self.key)
     
     def check100(self, key):
         
@@ -135,17 +167,12 @@ class ObjectView(QtWidgets.QWidget, UI_CLASS):
 
         for item in self.json[key].items():
             currentValue += item[1]
-           
+    
         if currentValue > 100:
             self.lfbObjectGroup.setStyleSheet('QGroupBox#lfbObjectGroup{ padding: 10px; background: rgba(0,0,0,0.1);border-radius: 10px; border: 2px solid red;}')
-            #self.errors.append({
-            #    'message': 'Die Summe der Prozentangaben darf nicht größer als 100 sein.',
-            #})
             self.inheritedErrors.append({
                 'message': 'Die Summe der Prozentangaben darf nicht größer als 100 sein.',
             })
-        else:
-            self.lfbObjectGroup.setStyleSheet('QGroupBox#lfbObjectGroup{ padding: 10px; background: rgba(0,0,0,0.1);border-radius: 10px; border: 2px solid green;}')
 
         
 

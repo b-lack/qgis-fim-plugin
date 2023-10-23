@@ -98,6 +98,10 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
         else:
             items = schema['items'].items()
 
+        row = 0
+        column = 0
+        columnSpan = 1
+
         for attr, value in items:
 
             field = None
@@ -163,12 +167,11 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
                                 
                                 #field.aggregatedValuesChanged.connect(self.aggregatedValuesChanged)
 
-
-
                     #else:
                     #    field = SetupDevice(interface, self.json, value, attr, self.inheritedErrors)
-                else:        
+                else:
                     field = ObjectView(interface, self.json, value, attr, self.inheritedErrors)
+
             elif valueType == 'boolean':
                 field = Boolean(interface, self.json, value, attr)
                 field.lfbInfoBox.connect(self.infoBoxClicked)
@@ -181,10 +184,22 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
             else:
                 field = TextField(interface, self.json, value, attr)
                 field.lfbInfoBox.connect(self.infoBoxClicked)
-            
+
             
             if(field is not None):
-                self.lfbTabLayout.addWidget(field)
+
+                if '$FIMColumn' in value:
+                    column = value['$FIMColumn']
+                    if column == 0:
+                        row += 1
+                    columnSpan = 1
+                else:
+                    row += 1
+                    column = 0
+                    columnSpan = -1
+
+                self.lfbTabLayout.addWidget(field, row, column, 1, columnSpan)
+
                 invert_op = getattr(field, "inputChanged", None)
                 if callable(invert_op):
                     field.inputChanged.connect(self.onInputChanged)
@@ -219,7 +234,6 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
 
         self.inputChanged.emit(self.json, self.attr, True)
 
-        #self.onInputChanged(self, self.json)
 
     def tabInfoBoxClicked(self):
 

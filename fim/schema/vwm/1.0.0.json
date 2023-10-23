@@ -107,14 +107,16 @@
                             "type": "string",
                             "description": "Möglichst eindeutige Bezeichnung des Nutzers/Trupps.",
                             "minLength": 2,
-                            "maxLength": 100
+                            "maxLength": 100,
+                            "$FIMColumn": 0
                         },
                         "spaufsucheaufnahmetruppgnss": {
                             "title": "GNSS-Gerätkürzel",
                             "type": "string",
                             "description": "Möglichst eindeutige Bezeichnung des Gerätes.",
                             "minLength": 3,
-                            "maxLength": 100
+                            "maxLength": 100,
+                            "$FIMColumn": 0
                         },
                         "spaufsuchenichtbegehbarursacheid": {
                             "title": "Zugänglichkeit*",
@@ -734,7 +736,8 @@
                                         "description": "Azimut des Baumes vom Stichprobenpunkt",
                                         "minimum": 0,
                                         "maximum": 400,
-                                        "unit": "Gon"
+                                        "unit": "Gon",
+                                        "$FIMColumn": 0
                                     },
                                     "distanz": {
                                         "title": "Distanz",
@@ -742,7 +745,8 @@
                                         "description": "Distanz des Baumes vom Stichprobenpunkt",
                                         "minimum": 0,
                                         "maximum": 9999,
-                                        "unit": "Zentimeter"
+                                        "unit": "Zentimeter",
+                                        "$FIMColumn": 1
                                     },
                                     "bhd": {
                                         "title": "BHD",
@@ -750,7 +754,8 @@
                                         "description": "Brusthöhendurchmesser",
                                         "minimum": 10,
                                         "maximum": 9999,
-                                        "unit": "Millimeter"
+                                        "unit": "Millimeter",
+                                        "$FIMColumn": 0
                                     },
                                     "messhoehebhd": {
                                         "title": "Messhöhe",
@@ -759,19 +764,22 @@
                                         "default": 13,
                                         "minimum": 1,
                                         "maximum": 250,
-                                        "unit": "Dezimeter"
+                                        "unit": "Dezimeter",
+                                        "$FIMColumn": 1
                                     },
                                     "schaele": {
                                         "title": "Schäle",
                                         "type": "boolean",
                                         "description": "Schäle durch Wild",
-                                        "default": false
+                                        "default": false,
+                                        "$FIMColumn": 0
                                     },
                                     "fege": {
                                         "title": "Fege",
                                         "type": "boolean",
                                         "description": "Fege durch Wild",
-                                        "default": false
+                                        "default": false,
+                                        "$FIMColumn": 1
                                     }
                                 }
                             }
@@ -810,14 +818,16 @@
                                         "description": "Azimut der Landmarke vom Stichprobenpunkt",
                                         "minimum": 0,
                                         "maximum": 400,
-                                        "unit": "Gon"
+                                        "unit": "Gon",
+                                        "$FIMColumn": 0
                                     },
                                     "distanz": {
                                         "title": "Distanz",
                                         "type": "integer",
                                         "description": "Baum <-> Stichprobenpunkt",
                                         "minimum": 0,
-                                        "unit": "Zentimeter"
+                                        "unit": "Zentimeter",
+                                        "$FIMColumn": 1
                                     }
                                 }
                             }
@@ -1068,7 +1078,8 @@
                                         "description": "Azimut des Baumes vom Stichprobenpunkt",
                                         "minimum": 0,
                                         "maximum": 400,
-                                        "unit": "Gon"
+                                        "unit": "Gon",
+                                        "$FIMColumn": 0
                                     },
                                     "distanz": {
                                         "title": "Distanz",
@@ -1076,7 +1087,8 @@
                                         "description": "Distanz des Baumes vom Stichprobenpunkt",
                                         "minimum": 0,
                                         "maximum": 9999,
-                                        "unit": "Zentimeter"
+                                        "unit": "Zentimeter",
+                                        "$FIMColumn": 1
                                     },
                                     "bhd": {
                                         "title": "BHD",
@@ -1084,7 +1096,8 @@
                                         "description": "Brusthöhendurchmesser",
                                         "minimum": 10,
                                         "maximum": 9999,
-                                        "unit": "Millimeter"
+                                        "unit": "Millimeter",
+                                        "$FIMColumn": 0
                                     },
                                     "messhoehebhd": {
                                         "title": "Messhöhe",
@@ -1093,19 +1106,22 @@
                                         "default": 13,
                                         "minimum": 1,
                                         "maximum": 250,
-                                        "unit": "Dezimeter"
+                                        "unit": "Dezimeter",
+                                        "$FIMColumn": 1
                                     },
                                     "schaele": {
                                         "title": "Schäle",
                                         "type": "boolean",
                                         "description": "Schäle durch Wild",
-                                        "default": false
+                                        "default": false,
+                                        "$FIMColumn": 0
                                     },
                                     "fege": {
                                         "title": "Fege",
                                         "type": "boolean",
                                         "description": "Fege durch Wild",
-                                        "default": false
+                                        "default": false,
+                                        "$FIMColumn": 1
                                     }
                                 }
                             }
@@ -1143,14 +1159,16 @@
                                         "description": "Azimut der Landmarke vom Stichprobenpunkt",
                                         "minimum": 0,
                                         "maximum": 400,
-                                        "unit": "Gon"
+                                        "unit": "Gon",
+                                        "$FIMColumn": 0
                                     },
                                     "distanz": {
                                         "title": "Distanz",
                                         "type": "integer",
                                         "description": "Baum <-> Stichprobenpunkt",
                                         "minimum": 0,
-                                        "unit": "Zentimeter"
+                                        "unit": "Zentimeter",
+                                        "$FIMColumn": 1
                                     }
                                 }
                             }
@@ -1197,9 +1215,9 @@
                     }
                 },
                 "verjuengungstransekt": {
-                    "title": "Verjüngung",
+                    "title": "Verjüngungstransekt",
                     "type": "object",
-                    "description": "Bäume von 10 cm Höhe bis 7 cm BHD im Verjüngungstransekt. Erfassen Sie den gesamten Transekt oder mindestens 50 Bäume dann Rückmessung.",
+                    "description": "Der Verjüngungstransekt beginnt 2 m entfernt vom Baumplot 1 in Transektrichtung (Baumplot1) und ist in der Regel 2 m breit und 20 m lang. In diesem werden alle Pflanzen mit Baumart, Höhe (und ab 2 m BHD) und Zustand aufgenommen. Ab der 50ten Pflanze darf die Aufnahme abgebrochen werden. Dann muss von der 50ten Pflanze zurückgemessen werden.",
                     "required": [
                         "verjuengungstransektlaenge"
                     ],
@@ -1517,31 +1535,36 @@
                                         "type": "boolean",
                                         "title": "Insektenfraß",
                                         "description": "Triebverlust durch Insektenfraß",
-                                        "default": false
+                                        "default": false,
+                                        "$FIMColumn": 0
                                     },
                                     "verjuengungstransekttriebverlustdurchschalenwildverbiss": {
                                         "type": "boolean",
                                         "title": "Schalenwild Verbiss",
                                         "description": "Triebverlust durch Schalenwildverbiss",
-                                        "default": false
+                                        "default": false,
+                                        "$FIMColumn": 1
                                     },
                                     "verjuengungstransekttriebverlustdurchfrost": {
                                         "type": "boolean",
                                         "title": "Frost",
                                         "description": "Triebverlust durch Frost",
-                                        "default": false
+                                        "default": false,
+                                        "$FIMColumn": 0
                                     },
                                     "verjuengungstransekttriebverlustdurchtrockenheit": {
                                         "type": "boolean",
                                         "title": "Trockenheit",
                                         "description": "Triebverlust durch Trockenheit",
-                                        "default": false
+                                        "default": false,
+                                        "$FIMColumn": 1
                                     },
                                     "verjuengungstransekttriebverlustdurchfege": {
                                         "type": "boolean",
                                         "title": "Fege oder Schäle",
                                         "description": "Triebverlust durch Fege oder Schäle",
-                                        "default": false
+                                        "default": false,
+                                        "$FIMColumn": 0
                                     }
                                 }
                             }
@@ -1550,7 +1573,7 @@
                             "title": "Transektlänge",
                             "type": "integer",
                             "description": "Transektlänge",
-                            "default": 1,
+                            "default": 20,
                             "minimum": 1,
                             "maximum": 250,
                             "unit": "Dezimeter"
@@ -1839,17 +1862,20 @@
                         "transektfrassmaus": {
                             "type": "boolean",
                             "title": "Maus",
-                            "description": "Signifikanter Fraß durch Maus"
+                            "description": "Signifikanter Fraß durch Maus",
+                            "$FIMColumn": 0
                         },
                         "transektfrasshase": {
                             "type": "boolean",
                             "title": "Hase",
-                            "description": "Signifikanter Fraß durch Hase"
+                            "description": "Signifikanter Fraß durch Hase",
+                            "$FIMColumn": 1
                         },
                         "transektfrassbieber": {
                             "type": "boolean",
                             "title": "Biber",
-                            "description": "Signifikanter Fraß durch Biber"
+                            "description": "Signifikanter Fraß durch Biber",
+                            "$FIMColumn": 2
                         }
                     }
                 },
@@ -2518,25 +2544,29 @@
                             "type": "boolean",
                             "title": "Durchforstung",
                             "description": "Durchforstung",
-                            "default": false
+                            "default": false,
+                            "$FIMColumn": 0
                         },
                         "sanitaryStrokes": {
                             "type": "boolean",
                             "title": "Sanitärhiebe",
                             "description": "Sanitärhiebe",
-                            "default": false
+                            "default": false,
+                            "$FIMColumn": 1
                         },
                         "wildfire": {
                             "type": "boolean",
                             "title": "Waldbrand",
                             "description": "Waldbrand",
-                            "default": false
+                            "default": false,
+                            "$FIMColumn": 0
                         },
                         "storm": {
                             "type": "boolean",
                             "title": "Sturm/Windwurf",
                             "description": "Sturm/Windwurf",
-                            "default": false
+                            "default": false,
+                            "$FIMColumn": 1
                         },
                         "soilCultivation": {
                             "type": "boolean",
@@ -3053,7 +3083,8 @@
                     "description": "Azimut des Baumes vom Stichprobenpunkt",
                     "minimum": 0,
                     "maximum": 400,
-                    "unit": "Gon"
+                    "unit": "Gon",
+                    "$FIMColumn": 0
                 },
                 "distanz": {
                     "title": "Distanz",
@@ -3061,7 +3092,8 @@
                     "description": "Distanz des Baumes vom Stichprobenpunkt",
                     "minimum": 0,
                     "maximum": 9999,
-                    "unit": "Zentimeter"
+                    "unit": "Zentimeter",
+                    "$FIMColumn": 1
                 },
                 "bhd": {
                     "title": "BHD",
@@ -3069,7 +3101,8 @@
                     "description": "Brusthöhendurchmesser",
                     "minimum": 10,
                     "maximum": 9999,
-                    "unit": "Millimeter"
+                    "unit": "Millimeter",
+                    "$FIMColumn": 0
                 },
                 "messhoehebhd": {
                     "title": "Messhöhe",
@@ -3078,19 +3111,22 @@
                     "default": 13,
                     "minimum": 1,
                     "maximum": 250,
-                    "unit": "Dezimeter"
+                    "unit": "Dezimeter",
+                    "$FIMColumn": 1
                 },
                 "schaele": {
                     "title": "Schäle",
                     "type": "boolean",
                     "description": "Schäle durch Wild",
-                    "default": false
+                    "default": false,
+                    "$FIMColumn": 0
                 },
                 "fege": {
                     "title": "Fege",
                     "type": "boolean",
                     "description": "Fege durch Wild",
-                    "default": false
+                    "default": false,
+                    "$FIMColumn": 1
                 }
             }
         },
@@ -3112,14 +3148,16 @@
                     "description": "Azimut der Landmarke vom Stichprobenpunkt",
                     "minimum": 0,
                     "maximum": 400,
-                    "unit": "Gon"
+                    "unit": "Gon",
+                    "$FIMColumn": 0
                 },
                 "distanz": {
                     "title": "Distanz",
                     "type": "integer",
                     "description": "Baum <-> Stichprobenpunkt",
                     "minimum": 0,
-                    "unit": "Zentimeter"
+                    "unit": "Zentimeter",
+                    "$FIMColumn": 1
                 }
             }
         },

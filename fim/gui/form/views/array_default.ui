@@ -27,12 +27,9 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <layout class="QFormLayout" name="lfbTabLayout">
-     <property name="horizontalSpacing">
-      <number>0</number>
-     </property>
-     <property name="verticalSpacing">
-      <number>0</number>
+    <layout class="QGridLayout" name="lfbTabLayout">
+     <property name="spacing">
+      <number>20</number>
      </property>
     </layout>
    </item>

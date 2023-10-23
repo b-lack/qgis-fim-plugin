@@ -152,7 +152,7 @@ class TextArea(QtWidgets.QWidget, UI_CLASS):
     def setInputText(self):
         valueStr = self.lfbTextField.toPlainText()
 
-        if valueStr is "":
+        if valueStr == "":
             value = None
 
         elif self.shouldBeNumber() and self.isfloat(valueStr):

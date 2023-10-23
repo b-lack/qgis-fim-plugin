@@ -127,7 +127,6 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         if "default" not in self.schema:
             self.setIndex(0)
         else:
-            QgsMessageLog.logMessage("default not set: " + self.key + ' - ' + str(self.schema['default']), 'LFB')
             self.internJson[self.key] = self.schema['default']
             
             self.validate(False)

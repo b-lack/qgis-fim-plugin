@@ -57,7 +57,7 @@ QgsCollapsibleGroupBoxBasic{
 	background: rgba(0,0,0,0.1);
 	border-radius: 10px;
 padding: 10px;
-}</string>
+} QgsCollapsibleGroupBoxBasic { border: none; }QgsCollapsibleGroupBoxBasic::title, QgsCollapsibleGroupBox::title {  subcontrol-origin: margin;  subcontrol-position: top left;  margin-left: 20px;  margin-right: 5px;  left: 0px;  top: 1px;}</string>
      </property>
      <property name="title">
       <string>Title</string>
@@ -68,6 +68,9 @@ padding: 10px;
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
        <layout class="QGridLayout" name="lfbFormObject">
+        <property name="spacing">
+         <number>10</number>
+        </property>
         <item row="0" column="0">
          <layout class="QVBoxLayout" name="lfbErrorWidget">
           <property name="leftMargin">

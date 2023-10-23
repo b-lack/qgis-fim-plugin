@@ -174,8 +174,6 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         
         # Delete the row from the json
         self.child.setJson(self.defaultValue, True, row)
-        QgsMessageLog.logMessage(str(self.defaultValue), 'LFB')
-
         
 
         self.lfbAddBtn.setText('ÜBERSCHREIBEN')

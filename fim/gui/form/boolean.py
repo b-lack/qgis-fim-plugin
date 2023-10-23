@@ -43,7 +43,8 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'boolean.ui
 
 
 class Boolean(QtWidgets.QWidget, UI_CLASS):
-    inputChanged = QtCore.pyqtSignal(str)
+    #inputChanged = QtCore.pyqtSignal(str)
+    inputChanged = QtCore.pyqtSignal(object, str)
     lfbInfoBox = QtCore.pyqtSignal(object)
 
     def __init__(self, interface, json, schema, key):
@@ -117,7 +118,7 @@ class Boolean(QtWidgets.QWidget, UI_CLASS):
         self.json[self.key] = self.internJson[self.key]
 
         self.validate()
-        self.inputChanged.emit(str(self.json[self.key]))
+        self.inputChanged.emit(str(self.json[self.key]), self.key)
         self.lfbCheckBox.setChecked(self.json[self.key])
 
     def setSchemaErrors(self, schemaErrors):

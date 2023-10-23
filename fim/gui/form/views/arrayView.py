@@ -38,6 +38,7 @@ from ...form.textfield import TextField
 from ..dropdown import DropDown
 from ..array_field import ArrayField
 from ..boolean import Boolean
+from .object_view import ObjectView
 
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'array_default.ui'))
 
@@ -66,6 +67,10 @@ class ArrayView(QtWidgets.QWidget, UI_CLASS):
         
         items = schema['properties'].items()
 
+        row = 0
+        column = 0
+        columnSpan = 1
+
         for attr, value in items:
 
             valueType = value['type']
@@ -75,10 +80,27 @@ class ArrayView(QtWidgets.QWidget, UI_CLASS):
             elif valueType == 'boolean':
                 field = Boolean(interface, self.json, value, attr)
                 #field.lfbInfoBox.connect(self.infoBoxClicked)
+            elif valueType == 'object':
+                field = ObjectView(interface, self.json, value, attr, schemaErrors)
             else:
                 field = TextField(interface, self.json, value, attr, schemaErrors)
 
-            self.lfbTabLayout.addWidget(field)
+
+            if '$FIMColumn' in value:
+                QgsMessageLog.logMessage(str(value), 'FIM')
+                column = value['$FIMColumn']
+                if column == 0:
+                    row += 1
+                columnSpan = 1
+            else:
+                row += 1
+                column = 0
+                columnSpan = -1
+                
+                
+
+
+            self.lfbTabLayout.addWidget(field, row, column, 1, columnSpan)
             field.inputChanged.connect(self.emitText)
             
             self.fieldArray.append(field)
@@ -91,7 +113,7 @@ class ArrayView(QtWidgets.QWidget, UI_CLASS):
         for field in self.fieldArray:
             field.setJson(self.json, setFields)
 
-    def emitText(self, childJson, key = None):
+    def emitText(self, childJson = None, key = None):
         self.inputChanged.emit(self.json, self.editRow)
 
     def triggerErrors(self, errors):

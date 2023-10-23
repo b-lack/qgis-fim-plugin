@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>586</width>
+    <width>764</width>
     <height>755</height>
    </rect>
   </property>
@@ -139,7 +139,7 @@ QToolButton:enabled{
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>142</width>
+        <width>320</width>
         <height>755</height>
        </rect>
       </property>
@@ -205,15 +205,9 @@ background-color: transparent;</string>
         </widget>
        </item>
        <item>
-        <layout class="QFormLayout" name="lfbTabLayout">
+        <layout class="QGridLayout" name="lfbTabLayout">
          <property name="sizeConstraint">
           <enum>QLayout::SetMinimumSize</enum>
-         </property>
-         <property name="horizontalSpacing">
-          <number>0</number>
-         </property>
-         <property name="verticalSpacing">
-          <number>0</number>
          </property>
          <property name="leftMargin">
           <number>10</number>
@@ -226,6 +220,9 @@ background-color: transparent;</string>
          </property>
          <property name="bottomMargin">
           <number>10</number>
+         </property>
+         <property name="spacing">
+          <number>0</number>
          </property>
         </layout>
        </item>
