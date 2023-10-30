@@ -65,7 +65,7 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         self.json = json
         self.schema = schema
         self.key = key
-        self.draftFormErrors = []
+        self.draftFormErrors = schemaErrors
 
         self.headerSet = False
         
@@ -74,7 +74,7 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
 
         self.lfbArrayGroup.setTitle(self.schema['title'])
         
-        self.child = ArrayView(interface, self.defaultValue , schema['items'], key, self.draftFormErrors)
+        self.child = ArrayView(interface, self.defaultValue , schema['items'], key, schemaErrors)
         self.child.inputChanged.connect(self.setInputText)
         self.lfbArrayInput.addWidget(self.child)
 

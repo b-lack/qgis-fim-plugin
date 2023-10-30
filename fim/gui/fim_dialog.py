@@ -348,7 +348,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
     
     def draftSelected(self, newJson, id, feature):
 
-        #self.addPreviousGeneral(newJson)
+        self.addPreviousGeneral(newJson)
 
         self.json = newJson
         

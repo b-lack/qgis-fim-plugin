@@ -152,6 +152,7 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
 
                                 from gnavs.gui.recording.recording import Recording
                                 rec = Recording(self.interface)
+                                rec.toggleButtonsChanged('navigation')
                                 rec.toggleFocus(True)
                                 layout.addWidget(rec)
 

@@ -505,6 +505,7 @@
                             "title": "Baumplot 1",
                             "description": "Baumplot 1",
                             "additionalItems": false,
+                            "uniqueItems": true,
                             "items": {
                                 "title": "Baumplot",
                                 "type": "object",
@@ -800,6 +801,7 @@
                             "title": "Landmarken 1",
                             "description": "Baumplot 1",
                             "additionalItems": false,
+                            "uniqueItems": true,
                             "items": {
                                 "title": "Landmarken",
                                 "type": "object",
@@ -847,6 +849,7 @@
                             "title": "Baumplot 2",
                             "description": "Baumplot 1",
                             "additionalItems": false,
+                            "uniqueItems": true,
                             "items": {
                                 "title": "Baumplot",
                                 "type": "object",
@@ -1141,6 +1144,7 @@
                             "title": "Landmarken 2",
                             "description": "Baumplot 1",
                             "additionalItems": false,
+                            "uniqueItems": true,
                             "items": {
                                 "title": "Landmarken",
                                 "type": "object",
