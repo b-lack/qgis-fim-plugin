@@ -6,7 +6,7 @@
 name=FIM
 qgisMinimumVersion=3.22
 description=Forest Inventory and Monitoring 
-version=1.0.3
+version=1.0.8
 author=Torsten Wiebke (Concept), Gerrit Balindt (Development)
 email=support@grunecho.de
 
