@@ -64,7 +64,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
         self.schema = schema
         self.key = key
         self.defaultValue = self.json[self.key]
-        self.isValid = None
+        self.isValid = False
         self.schemaErrors = schemaErrors
         self.errors = []
         self.validationErrors = []
@@ -225,6 +225,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             self.errors.append(error)
 
     def validate(self):
+
         v = Draft7Validator(self.schema)
         self.validationErrors = sorted(v.iter_errors(self.internJson[self.key]), key=lambda e: e.path)
         
@@ -240,10 +241,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
 
         self.json[self.key] = self.internJson[self.key]
 
-        if len(self.errors) > 0:
-            isValid = False
-        else:
-            isValid = True
+        isValid = False
 
         if self.json[self.key] is None and not Utils.schemaTypeHasNull(self.schema):
             self.lfbTextFieldError.hide()
@@ -255,6 +253,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             self.lfbTextFieldSuccess.hide()
             self.lfbTextFieldHelp.show()
             self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid green;\n	border-radius: 10px;\n	padding: 4px;\n}")
+            isValid = True
         else:
             self.lfbTextFieldError.show()
             self.lfbTextFieldSuccess.hide()
@@ -264,8 +263,8 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             for error in self.errors:
                 self.lfbTextFieldError.setText(error.message)
 
-        
-        if emit:
+        if emit and self.isValid != isValid:
+            QgsMessageLog.logMessage(str('emit'), 'FIM')
             self.inputChanged.emit(self.json[self.key], self.key)
 
         self.isValid = isValid

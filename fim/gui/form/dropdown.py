@@ -59,6 +59,7 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         self.schema = schema
         self.key = key
         self.defaultValue = self.json[self.key]
+        self.isValid = False
 
         
 
@@ -214,17 +215,14 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
 
         self.json[self.key] = self.internJson[self.key]
 
-        #if self.json[self.key] is None:
-        #    self.lfbTextFieldError.hide()
-        #    self.lfbTextFieldSuccess.hide()
-        #    self.lfbTextFieldHelp.show()
+        isValid = False
 
         if len(errors) == 0:
             self.lfbTextFieldError.hide()
             self.lfbTextFieldSuccess.hide()
             self.lfbTextFieldHelp.show()
             self.lfbComboBox.setStyleSheet("QComboBox {\n	border: 2px solid green;\n	border-radius: 10px;\n	padding: 10px;\n}")
-
+            isValid = True
             #if "QTType" in self.schema and self.schema['QTType'] == "tree":
                 #self.lfbTextFieldLabel.setText(Utils.enumLabel(self.json[self.key], self.schema))
                 #self.lfbTextFieldLabel.setText(QCoreApplication.translate("FormFields", Utils.enumLabel(self.json[self.key], self.schema)))
@@ -240,9 +238,12 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
                 else:
                     self.lfbTextFieldError.setText(QCoreApplication.translate("errorMessages", error.message))
         
-        
-        if emit:
+        QgsMessageLog.logMessage(str('try emit DD'), 'FIM')
+        if self.isValid != isValid:
+            QgsMessageLog.logMessage(str('emit DD'), 'FIM')
             self.inputChanged.emit(self.json[self.key], self.key)
+
+        self.isValid = isValid
 
     def setTreeItems(self, tree, items):
 

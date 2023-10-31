@@ -121,10 +121,10 @@ class ObjectView(QtWidgets.QWidget, UI_CLASS):
 
     def onInputChanged(self, newJson, key=None):
 
-
         #self.json[self.key][key] = newJson
 
-        self.validate()
+        #self.validate()
+        pass
     
     def setJson(self, newJson, setFields = True):
 
@@ -151,8 +151,8 @@ class ObjectView(QtWidgets.QWidget, UI_CLASS):
         v = Draft7Validator(self.schema)
         errors = sorted(v.iter_errors(self.json[self.key]), key=lambda e: e.path)
 
-        for error in errors:
-            QgsMessageLog.logMessage(str(error.message), 'FIM')
+        #for error in errors:
+        #    QgsMessageLog.logMessage(str(error.message), 'FIM')
 
         if len(errors) == 0 and (self.key == 'kraut' or self.key == 'grass' or self.key == 'farne' or self.key == 'doldengewaechse' or self.key == 'beerenstraucher' or self.key == 'grosstraucher'):
             self.check100(self.key)

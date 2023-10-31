@@ -396,7 +396,8 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
             self.save()
 
     def _validateTabs(self):
-
+        QgsMessageLog.logMessage('validateTabs', 'FIM')
+        
         isValidToSave = False
 
         v = Draft7Validator(self.schema)
@@ -453,8 +454,10 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         for tab in self.tabsArray:
             self.lfbTabWidget.setTabEnabled(tab['tabNr'], True)
 
-        self.lfbNotAccessable(self.json, accessable)
-        self.lfbCoordinates(self.json, hasCoordinates)
+        
+        isAccessable = self.lfbNotAccessable(self.json, accessable)
+        if isAccessable :
+            hasCoordinates = self.lfbCoordinates(self.json, hasCoordinates)
         
 
 
@@ -462,7 +465,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
 
     def lfbNotAccessable(self, json, taberrors):
-
+       
         if json['general']['spaufsuchenichtbegehbarursacheid'] != 1 or json['general']['spaufsuchenichtwaldursacheid'] != 0 or len(taberrors) > 0:
 
             #for i in self.tabsArray:
@@ -470,8 +473,13 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
             #        if i['attr'] in json:
             #            del self.json[i['attr']]
 
-            for i in range(1, 16):
-                self.lfbTabWidget.setTabEnabled(i, False)
+            #for tab in self.tabsArray:
+                #self.lfbTabWidget.setTabEnabled(tab['tabNr'], False)
+
+            #for i in range(1, 16):
+            #    if self.lfbTabWidget.isTabEnabled(i):
+            #        self.lfbTabWidget.setTabEnabled(i, False)
+
             
             
             return False
@@ -492,12 +500,12 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
     
     def lfbCoordinates(self, json, taberrors):
         if len(taberrors) > 0:
-            for i in range(2, 16):
-                self.lfbTabWidget.setTabEnabled(i, False)
+
+            #for i in range(2, 16):
+                #if self.lfbTabWidget.isTabEnabled(i):
+                    #self.lfbTabWidget.setTabEnabled(i, False)
             return False
-        #else:
-        #    for i in range(2, 16):
-        #        self.lfbTabWidget.setTabEnabled(i, True)
+       
         return True
     
     def lfbLayers(self, json):

@@ -247,7 +247,7 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
             self.lfbAddBtn.setEnabled(False)
             self.lfbArrayFormGroup.setStyleSheet(self.buttonStyle + self.widgetErrorStyle)
 
-        if emit:
-            self.inputChanged.emit(self.json)
+        #if emit:
+           # self.inputChanged.emit(self.json)
 
         return errors

@@ -63,11 +63,11 @@ class ArrayView(QtWidgets.QWidget, UI_CLASS):
         
         items = schema['properties'].items()
 
-        for error in schemaErrors:
-            QgsMessageLog.logMessage(str(error.relative_schema_path), 'FIM')
-            if attr in error.relative_schema_path:
-                QgsMessageLog.logMessage(str(attr), 'FIM')
-                QgsMessageLog.logMessage(str(error.relative_schema_path), 'FIM')
+        #for error in schemaErrors:
+        #    QgsMessageLog.logMessage(str(error.relative_schema_path), 'FIM')
+        #    if attr in error.relative_schema_path:
+        #        QgsMessageLog.logMessage(str(attr), 'FIM')
+        #        QgsMessageLog.logMessage(str(error.relative_schema_path), 'FIM')
 
         row = 0
         column = 0
