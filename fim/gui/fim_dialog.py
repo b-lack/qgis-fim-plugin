@@ -101,7 +101,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         scroll = QScroller.scroller(self.lfbHomeScreen.viewport())
         scroll.grabGesture(self.lfbHomeScreen.viewport(), QScroller.LeftMouseButtonGesture)
         
-        self.addFolderSelection()
+        #self.addFolderSelection()
         self.addDraft()
         #self.addDbConnection()
 
@@ -282,7 +282,8 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
             self.lfbTabWidget.show()
             self.saveBar.show()
             self.draft.hide()
-            self.folderSelection.hide()
+            #self.folderSelection.hide()
+
             #self.lfbHomeBtn.setEnabled(True)
             #self.lfbHomeBtn.show()
             self.lfbHomeScreen.hide()
@@ -292,7 +293,8 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
             self.saveBar.hide()
             self.draft.show()
             self.draft.update()
-            self.folderSelection.show()
+            #self.folderSelection.show()
+
             #self.lfbHomeBtn.setEnabled(False)
             #self.lfbHomeBtn.hide()
             self.lfbHomeScreen.show()
@@ -309,7 +311,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.draft.setDraftPath(folderPath)
         #self.folderSelection.hide()
         
-        self.folderSelection.setFolder(folderPath)
+        #self.folderSelection.setFolder(folderPath)
 
     def addDbConnection(self):
         dbWidget = DBWidget(self.iface)
@@ -405,6 +407,9 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
         #errors.extend(self.lfbLayers(self.json))
         lfbErrors = self.lfbLayers(self.json)
+
+        for error in lfbErrors:
+            QgsMessageLog.logMessage(error['message'], 'FIM')
 
         for tab in self.tabsArray:
 

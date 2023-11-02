@@ -264,7 +264,6 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
                 self.lfbTextFieldError.setText(error.message)
 
         if emit and self.isValid != isValid:
-            QgsMessageLog.logMessage(str('emit'), 'FIM')
             self.inputChanged.emit(self.json[self.key], self.key)
 
         self.isValid = isValid

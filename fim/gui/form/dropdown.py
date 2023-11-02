@@ -238,10 +238,8 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
                 else:
                     self.lfbTextFieldError.setText(QCoreApplication.translate("errorMessages", error.message))
         
-        QgsMessageLog.logMessage(str('try emit DD'), 'FIM')
-        if self.isValid != isValid:
-            QgsMessageLog.logMessage(str('emit DD'), 'FIM')
-            self.inputChanged.emit(self.json[self.key], self.key)
+        #if en(errors) == 0self.isValid != isValid:
+        self.inputChanged.emit(self.json[self.key], self.key)
 
         self.isValid = isValid
 
