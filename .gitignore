@@ -132,3 +132,6 @@ lfb_regeneration_wildlife_impact/pb_tool.cfg
 zip_build
 *_ui.py
 *.qm
+
+**/.DS_Store
+.vscode
