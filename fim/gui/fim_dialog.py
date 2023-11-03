@@ -45,7 +45,7 @@ from .db_connection.db_widget import DBWidget
 from .form.saveBar import SaveBar
 
 from collections import deque
-from jsonschema import Draft7Validator
+from jsonschema import Draft7Validator, exceptions
 
 from ..utils.helper import Utils
 
@@ -156,6 +156,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
                 {
                     'tabNr': tabNr,
                     'setJson': tab.setJson,
+                    'update_errors': tab.update_errors,
                     'attr': attr,
                     'inheritedErrors': self.inheritedErrors[attr]
                 }
@@ -220,6 +221,9 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
                 cpy = copy.deepcopy(self.defaultJson[tab['attr']])
                 tab['setJson'](cpy, setFields)
 
+    def update_tab_errors(self, errors):
+        for tab in self.tabsArray:
+            tab['update_errors'](errors)
 
     def newEntry(self):
         return
@@ -247,9 +251,12 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
         
         self.validateTabs(True)
-            
-    def save(self):
+    
+    def updateSaveBtn(self):
         self.saveBar.validate(self.state.state, self.schemaErrors)
+
+    def save(self):
+        
         self.draft.saveFeature(self.json)
         
         if self.previousGeneral == None:
@@ -393,7 +400,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.validationTimer = threading.Timer(0.5, lambda: self._validateTabs())
         self.validationTimer.start()
-
+    
         if save:
             self.save()
 
@@ -407,9 +414,11 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
         #errors.extend(self.lfbLayers(self.json))
         lfbErrors = self.lfbLayers(self.json)
+        self.lfbUniquePosition(self.json)
 
-        for error in lfbErrors:
-            QgsMessageLog.logMessage(error['message'], 'FIM')
+        #for error in lfbErrors:
+        #    QgsMessageLog.logMessage(error['message'], 'FIM')
+
 
         for tab in self.tabsArray:
 
@@ -424,7 +433,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
                     break
 
             for error in lfbErrors:
-                if attr in error['relative_schema_path']:
+                if attr in error.relative_schema_path:
                     errorFound = True
                     self.lfbTabWidget.setTabIcon(tab['tabNr'], QtGui.QIcon(':icons/red_rect.png'))
                     break
@@ -432,9 +441,9 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
             if not errorFound:
                 self.lfbTabWidget.setTabIcon(tab['tabNr'], QtGui.QIcon(':icons/green_rect.png'))
             
-
         if self.schemaType == 'vwm':
             isValidToSave = self.VWMValidation(errors)
+            
         else:
             isValidToSave = len(errors) == 0
 
@@ -442,7 +451,12 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         for error in errors:
             self.schemaErrors.append(error)
 
+        for error in lfbErrors:
+            self.schemaErrors.append(error)
 
+        
+        self.update_tab_errors(self.schemaErrors)
+        self.updateSaveBtn()
         return isValidToSave
     
     def VWMValidation(self, errors):
@@ -459,11 +473,9 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         for tab in self.tabsArray:
             self.lfbTabWidget.setTabEnabled(tab['tabNr'], True)
 
-        
         isAccessable = self.lfbNotAccessable(self.json, accessable)
         if isAccessable :
-            hasCoordinates = self.lfbCoordinates(self.json, hasCoordinates)
-        
+            self.lfbCoordinates(self.json, hasCoordinates)
 
 
         return len(accessable) == 0 and len(hasCoordinates) == 0
@@ -513,6 +525,20 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
        
         return True
     
+    def lfbUniquePosition(self, json):
+
+        label_errors = []
+
+        findunique = json['baumplot1']['baumplot1']
+
+        
+
+
+        QgsMessageLog.logMessage(str(findunique), 'FIM')
+
+
+        return label_errors
+
     def lfbLayers(self, json):
         label_errors = []
 
@@ -582,10 +608,17 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
         if rules_length.get(schicht_id) != None:
             if (len(elements_unique) < rules_length[schicht_id]['min'] or len(elements_unique) > rules_length[schicht_id]['max']):
-                label_errors.append({
-                    "message": 'Falsche Anzahl an Bestockungsschichten',
-                    "relative_schema_path": ['allOf', 3, 'then', 'properties', 't_bestockung', 'properties', 't_bestockung', 'minItems']
-                })
+                #label_errors.append({
+                #    "message": 'Falsche Anzahl an Bestockungsschichten',
+                #    "relative_schema_path": ['allOf', 3, 'then', 'properties', 't_bestockung', 'properties', 't_bestockung', 'minItems']
+                #})
+                label_errors.append(exceptions.ValidationError(
+                    message='Falsche Anzahl an Bestockungsschichten',
+                    validator='minItems',
+                    validator_value=rules_length[schicht_id]['min'],
+                    instance=elements_unique,
+                    schema_path=['allOf', 3, 'then', 'properties', 't_bestockung', 'properties', 't_bestockung', 'minItems']
+                ))
         
         isSublist = False
         if rules_type.get(schicht_id) != None:
@@ -595,9 +628,16 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
                     break
                 else:
                     isSublist = False
-                    label_errors.append({
-                        "message": 'Falsche Schichtenkombination',
-                        "relative_schema_path": ['properties','t_bestockung', 'properties','t_bestockung']
-                    })        
+                    #label_errors.append({
+                    #    "message": 'Falsche Schichtenkombination',
+                    #    "relative_schema_path": ['properties','t_bestockung', 'properties','t_bestockung']
+                    #})
+                    label_errors.append(exceptions.ValidationError(
+                        message='alsche Schichtenkombination',
+                        validator='minItems',
+                        validator_value=rules_length[schicht_id]['min'],
+                        instance=elements_unique,
+                        schema_path=['allOf', 3, 'then', 'properties', 't_bestockung', 'properties', 't_bestockung', 'minItems']
+                    ))
         
         return label_errors

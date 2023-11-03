@@ -152,7 +152,6 @@
      <property name="styleSheet">
       <string notr="true">QPlainTextEdit {
 	border: 2px solid gray;
-	border-radius: 10px;
 }</string>
      </property>
     </widget>

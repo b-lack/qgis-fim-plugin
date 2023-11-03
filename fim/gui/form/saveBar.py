@@ -76,11 +76,11 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.lfbSchemaBtn.hide()
 
         self.lfbErrorDialogBtn.hide()
-        self.lfbErrorDialogBtn.clicked.connect(self.openErrorDialog)
+        #self.lfbErrorDialogBtn.clicked.connect(self.openErrorDialog)
         #self.errorsWidget = ErrorsWidget(self.interface, self.schema)
         #self.lfbErrorsLayout.addWidget(self.errorsWidget)
         
-
+        self.lfbProgressBar.hide()
         self.lfbProgressBar.setValue(100)
 
         self.lfbActionRow.setContentsMargins(0,0,0,0)
@@ -157,15 +157,15 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
     def getNamedError(self, error):
         return True
 
-    def openErrorDialog(self):
+    #def openErrorDialog(self):
 
-        for error in self.errors:
-            QgsMessageLog.logMessage(str(error.message) + ' ' + str(error.relative_schema_path), 'LFB')
+    #    for error in self.errors:
+    #        QgsMessageLog.logMessage(str(error.message) + ' ' + str(error.relative_schema_path), 'LFB')
 
-        return
-        msgBox = QtWidgets.QMessageBox()
-        msgBox.setText('llll')
-        msgBox.exec()
+    #    return
+    #    msgBox = QtWidgets.QMessageBox()
+    #    msgBox.setText('llll')
+    #    msgBox.exec()
 
     def validate(self, jsonToTest, errors = []):
 
@@ -179,8 +179,8 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
 
         self.currentErrors = len(self.errors)
 
-        if self.maxErrors > 0:
-            self.lfbProgressBar.setValue(int(100 - self.currentErrors * 100 / self.maxErrors))
+        #if self.maxErrors > 0:
+        #    self.lfbProgressBar.setValue(int(100 - self.currentErrors * 100 / self.maxErrors))
 
         if len(self.errors) == 0:
             #self.isValid = True

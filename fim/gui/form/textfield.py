@@ -218,6 +218,9 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
         self.errors = []
 
         for error in self.schemaErrors:
+            if hasattr(error, 'relative_schema_path') == False:
+                continue
+
             if self.key in error.relative_schema_path:
                 self.errors.append(error)
 
@@ -263,7 +266,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             for error in self.errors:
                 self.lfbTextFieldError.setText(error.message)
 
-        if emit and self.isValid != isValid:
+        if emit: # and self.isValid != isValid
             self.inputChanged.emit(self.json[self.key], self.key)
 
         self.isValid = isValid

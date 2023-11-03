@@ -275,6 +275,17 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
             if callable(invert_op):
                 field.setJson(self.json, setFields)
 
+            
+
+    def update_errors(self, errors=[]):
+        """Update the errors"""
+        self.schemaErrors = errors
+
+        for field in self.fieldArray :
+            invert_op = getattr(field, "update_errors", None)
+            if callable(invert_op):
+                field.update_errors(errors)
+
     def onInputChanged(self, json, attr=None, forceUpdate = False):
         """Update the json object"""
         self.inputChanged.emit(self.json, self.attr, forceUpdate)

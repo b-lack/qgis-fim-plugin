@@ -36,7 +36,7 @@ from PyQt5.QtGui import QCursor
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore
 
-from jsonschema import Draft7Validator
+from jsonschema import Draft7Validator, exceptions
 
 from ...utils.helper import Utils
 
@@ -102,8 +102,18 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         for error in errors:
             self.draftFormErrors.append(error)
 
+        self.lfb_array_error_2.hide()
+
         self.show()
 
+    def update_errors(self, message):
+
+        self.lfb_array_error_msg.hide()
+
+        for error in self.draftFormErrors:
+            if self.key in error.relative_schema_path:
+                self.lfb_array_error_msg.setText(error.message)
+                self.lfb_array_error_msg.show()
 
     def setTableHeaders(self, headers, data):
 
@@ -162,6 +172,7 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
     
     def editRow(self, row):
 
+        self.selectedRow = row
         
         # Mark the row as selected
         self.lfbArrayOutput.selectRow(row)
@@ -177,7 +188,7 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         
 
         self.lfbAddBtn.setText('ÜBERSCHREIBEN')
-        self.selectedRow = row
+        
        
     
     def make_removeRow(self, row):
@@ -225,9 +236,7 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
 
         errors = self.validate(False)
         for error in errors:
-            if row is not None:
-                QgsMessageLog.logMessage(str(row), 'LFB')
-            else:
+            if row is None:
                 self.draftFormErrors.append(error)
         
         self.child.triggerErrors(self.draftFormErrors)
@@ -239,6 +248,21 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         errors = sorted(v.iter_errors([self.defaultValue]), key=lambda e: e.path)
 
         
+        default_value_0 = self.defaultValue
+
+        self.lfb_array_error_2.hide()
+        if self.selectedRow is None and 'distanz' in default_value_0 and 'azimut' in default_value_0:
+            if default_value_0['distanz'] is not None and default_value_0['azimut'] is not None:
+                self.lfb_array_error_2.hide()
+                for element in self.json[self.key]:
+                    if element['distanz'] == default_value_0['distanz'] and element['azimut'] == default_value_0['azimut']:
+                        errors.append(exceptions.ValidationError(
+                            message='Es existiert bereits ein Eintrag mit dieser Entfernung und diesem Azimut.',
+                            validator='minItems',
+                            schema_path=['allOf', 3, 'then', 'properties', 't_bestockung', 'properties', 't_bestockung', 'minItems']
+                        ))
+                        self.lfb_array_error_2.show()
+                        self.lfb_array_error_label.setText('Es existiert bereits ein Eintrag mit dieser Entfernung und diesem Azimut.')
 
         if len(errors) == 0:
             self.lfbAddBtn.setEnabled(True)
