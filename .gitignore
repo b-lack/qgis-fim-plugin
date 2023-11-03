@@ -134,4 +134,4 @@ zip_build
 *.qm
 
 **/.DS_Store
-.vscode
+.vscode/*
