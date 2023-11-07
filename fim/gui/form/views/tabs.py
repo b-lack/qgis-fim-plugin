@@ -131,10 +131,19 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
                                 group.setLayout(layout)
 
                                 from gnavs.gui.recording.recording import Recording
-                                rec = Recording(self.interface)
+                                from gnavs.gui.measurement.precision import PrecisionNote
+
+                                
+
+                                rec = Recording(self.interface, True, self.gnavs_default_settings())
                                 rec.aggregatedValuesChanged.connect(self.aggregatedValuesChanged)
 
                                 layout.addWidget(rec)
+
+                                self.precisionNote = PrecisionNote(self.interface)
+                                layout.addWidget(self.precisionNote)
+
+                               
 
                             elif(value['$plugin']['attributes'] == 'navigation'):
 
@@ -211,15 +220,32 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
 
         self.show()
 
+    def gnavs_default_settings(self):
+        return {
+            "meassurementSetting": 100,
+            "bestMeassurementSetting": 70,
+            "aggregationType": 'mean',
+            "sortingValues": [
+                {"name": "Quality", "value": "qualityIndicator", "direction": True, "active": True},
+
+                {"name": "PDOP", "value": "pdop", "direction": True, "active": True},
+                {"name": "HDOP", "value": "hdop", "direction": True, "active": True},
+                
+                {"name": "Satellites Used", "value": "satellitesUsed", "direction": False, "active": True}
+            ],
+        }
+
     def aggregatedValuesChanged(self, gpsInfos):
         """Update the aggregated values"""
         from gnavs.gui.measurement.aggregation import Aggregation
 
-
         from gnavs.utils.utils import Utils as ganvs_utils
 
-        aggregation = Aggregation(self.interface)
+        aggregation = Aggregation(self.interface, self.gnavs_default_settings())
         aggregated = aggregation.aggregate(gpsInfos)
+
+        #self.precisionNote.updateIndicator(gpsInfos)
+        self.precisionNote.update(aggregated)
 
         position = QgsPointXY(QgsPoint(aggregated['longitude'], aggregated['latitude']))
         ganvs_utils.clearLayer('lfb-tmp-position', 'point')
