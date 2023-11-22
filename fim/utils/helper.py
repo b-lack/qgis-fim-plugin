@@ -3,7 +3,7 @@ import json
 import collections.abc
 import re
 
-from qgis.core import QgsProject, QgsWkbTypes, QgsExpressionContextUtils, QgsMapLayer, QgsCoordinateReferenceSystem, QgsCoordinateTransform
+from qgis.core import QgsProject, QgsPointXY, QgsWkbTypes, QgsExpressionContextUtils, QgsMapLayer, QgsCoordinateReferenceSystem, QgsCoordinateTransform
 from qgis.core import QgsMessageLog
 from qgis.utils import *
 
@@ -121,20 +121,26 @@ class Utils(object):
     
     def transformCoordinates(geom):
         crs = Utils.getCrs()
+
+        crsFeature = qgis.utils.iface.activeLayer().crs().authid()
     
-        sourceCrs = QgsCoordinateReferenceSystem.fromEpsgId(4326)
-        destCrs = QgsCoordinateReferenceSystem.fromProj(crs)
-        tr = QgsCoordinateTransform(sourceCrs, destCrs, QgsProject.instance())
+        srcCrsNr = int(crsFeature.split(":")[1])
+        sourceCrs = QgsCoordinateReferenceSystem.fromEpsgId(srcCrsNr)
+        destCrsNr = int(crs.split(":")[1])
+        destCrs = QgsCoordinateReferenceSystem.fromEpsgId(destCrsNr) #fromProj(crs)
+
+        return QgsCoordinateTransform(sourceCrs, destCrs, QgsProject.instance())
         geom.transform(tr)
 
     def focusFeature(interface, feature, select = False, zoom = 150000):
         geom = feature.geometry()
         coordinates = geom.asPoint()
 
-        Utils.transformCoordinates(geom)
+        map_pos = QgsPointXY(coordinates.x(), coordinates.y())
 
-        coordinates = geom.asPoint()
-        interface.mapCanvas().setCenter(coordinates)
+        xform = Utils.transformCoordinates(geom)
+        map_pos = xform.transform(map_pos)
+        interface.mapCanvas().setCenter(map_pos)
         
         current_scale =  interface.mapCanvas().scale()
         interface.mapCanvas().zoomScale(min(zoom, current_scale))

@@ -28,7 +28,7 @@ import datetime
 import uuid
 
 
-from qgis.core import QgsFeature, QgsExpressionContextUtils, QgsPalLayerSettings, QgsTextFormat, QgsTextBufferSettings, QgsVectorLayerSimpleLabeling, QgsMessageLog, QgsProject, QgsVectorLayer, QgsSymbol, QgsRendererRange, QgsGraduatedSymbolRenderer, QgsMarkerSymbol, QgsJsonUtils, QgsMapLayer, QgsField, QgsFields, QgsVectorFileWriter, QgsCoordinateTransformContext
+from qgis.core import QgsFeature, QgsExpressionContextUtils, QgsSimpleMarkerSymbolLayer, QgsPalLayerSettings, QgsTextFormat, QgsTextBufferSettings, QgsVectorLayerSimpleLabeling, QgsMessageLog, QgsProject, QgsVectorLayer, QgsSymbol, QgsRendererRange, QgsGraduatedSymbolRenderer, QgsMarkerSymbol, QgsJsonUtils, QgsMapLayer, QgsField, QgsFields, QgsVectorFileWriter, QgsCoordinateTransformContext
 from qgis.PyQt import QtWidgets, uic, QtGui
 from qgis.PyQt.QtCore import QDateTime, QVariant, QCoreApplication, QSettings, QTranslator
 from PyQt5.QtGui import QColor, QFont
@@ -179,7 +179,9 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         QgsExpressionContextUtils.setLayerVariable(self.vl, 'LFB-VERSION', self.LAYER_VERSION)
 
         #self.vl.setFlags(QgsMapLayer.Private)
+        
         self.setupSymbols()
+
         pr = self.vl.dataProvider()
 
         # add fields
@@ -209,9 +211,30 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                 self.currentFeatureId = feat.id()
                 self.draftSelected.emit(json_object, self.currentFeatureId, feat)
                 break
-            
+    
+    def setupSymbols2(self):
+        symbol = QgsMarkerSymbol.createSimple(
+            {'name': 'circle', 'color': 'grey'})
+
+        # Delete first default symbollayer:
+        symbol.deleteSymbolLayer(0)
+
+        # Create and insert multiple symbollayers (Example):
+        colors = ['red', 'green', 'blue']
+        for i, color in enumerate(colors):
+            new_symbollayer = QgsSimpleMarkerSymbolLayer()
+            new_symbollayer.setSize(40 - i*10)
+            new_symbollayer.setFillColor(QColor(color))
+            # See QgsSimpleMarkerSymbolLayer for more parameters...
+
+            # Add symbollayer to the symbol:
+            symbol.appendSymbolLayer(new_symbollayer)
+        self.vl.renderer().setSymbol(symbol)
+
     def setupSymbols(self):
         """Setup symbols for the layer"""
+
+        # https://gis.stackexchange.com/questions/380571/is-there-a-way-to-create-arrow-subsymbol-on-top-of-geometry-generated-symbol-usi
 
         values = (
             ('Von FU heruntergeladen - offline bei FU', 4, 4, '#decc44'),
@@ -222,20 +245,28 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             ('sonstige', 13, 100, '#1228d1')
         )
         # create a category for each item in values
-        ranges = []
-        for label, lower, upper, color in values:
-            symbol = QgsSymbol.defaultSymbol(self.vl.geometryType())
-            symbol.setColor(QColor(color))
-            rng = QgsRendererRange(lower, upper, symbol, label)
-            ranges.append(rng)
+        #ranges = []
+        #for label, lower, upper, color in values:
+        #    symbol = QgsSymbol.defaultSymbol(self.vl.geometryType())
+        #    symbol.setColor(QColor(color))
+        #    rng = QgsRendererRange(lower, upper, symbol, label)
+        #    ranges.append(rng)
 
         # create the renderer and assign it to a layer
-        expression = 'workflow' # field name
-        renderer = QgsGraduatedSymbolRenderer(expression, ranges)
-        self.vl.setRenderer(renderer)
+        #expression = 'workflow' # field name
+        #renderer = QgsGraduatedSymbolRenderer(expression, ranges)
+        #self.vl.setRenderer(renderer)
+        #self.addLabel(self.vl)
+        
 
+        
 
-        self.addLabel(self.vl)
+        dirname = os.path.dirname(__file__)
+        filename = os.path.realpath(os.path.join(dirname, '../..', 'layerstyles', 'express.qml'))
+
+        self.vl.loadNamedStyle(filename)
+
+        
 
         self.vl.triggerRepaint()
 

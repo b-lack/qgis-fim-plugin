@@ -530,10 +530,6 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         label_errors = []
 
         findunique = json['baumplot1']['baumplot1']
-
-        
-
-
         QgsMessageLog.logMessage(str(findunique), 'FIM')
 
 
