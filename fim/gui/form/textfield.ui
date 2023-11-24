@@ -123,7 +123,6 @@
      <property name="styleSheet">
       <string notr="true">QLineEdit {
 	border: 3px solid grey;
-	
 	padding:0px;
     font-size: 14pt;
 }</string>

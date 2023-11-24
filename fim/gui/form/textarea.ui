@@ -61,6 +61,9 @@
    </item>
    <item row="5" column="2">
     <widget class="QLabel" name="lfbTextFieldSuccess">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="font">
       <font>
        <pointsize>13</pointsize>
@@ -70,7 +73,7 @@
       <string notr="true">color: green;</string>
      </property>
      <property name="text">
-      <string>SuccessLabel</string>
+      <string/>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
@@ -102,6 +105,9 @@
    </item>
    <item row="4" column="2">
     <widget class="QLabel" name="lfbTextFieldError">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="font">
       <font>
        <pointsize>13</pointsize>
@@ -111,7 +117,7 @@
       <string notr="true">color: red;</string>
      </property>
      <property name="text">
-      <string>ErrorLabel</string>
+      <string/>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
@@ -146,7 +152,7 @@
     <widget class="QPlainTextEdit" name="lfbTextField">
      <property name="font">
       <font>
-       <pointsize>20</pointsize>
+       <pointsize>14</pointsize>
       </font>
      </property>
      <property name="styleSheet">

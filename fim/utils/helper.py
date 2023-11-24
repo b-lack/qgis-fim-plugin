@@ -119,10 +119,11 @@ class Utils(object):
     def getCrs():
         return QgsProject.instance().crs().authid()
     
-    def transformCoordinates(geom):
+    def transformCoordinates(layer):
         crs = Utils.getCrs()
 
-        crsFeature = qgis.utils.iface.activeLayer().crs().authid()
+        crsFeature = layer.crs().authid()
+        # GET
     
         srcCrsNr = int(crsFeature.split(":")[1])
         sourceCrs = QgsCoordinateReferenceSystem.fromEpsgId(srcCrsNr)
@@ -130,7 +131,6 @@ class Utils(object):
         destCrs = QgsCoordinateReferenceSystem.fromEpsgId(destCrsNr) #fromProj(crs)
 
         return QgsCoordinateTransform(sourceCrs, destCrs, QgsProject.instance())
-        geom.transform(tr)
 
     def focusFeature(interface, feature, select = False, zoom = 150000):
         geom = feature.geometry()
@@ -138,7 +138,7 @@ class Utils(object):
 
         map_pos = QgsPointXY(coordinates.x(), coordinates.y())
 
-        xform = Utils.transformCoordinates(geom)
+        xform = Utils.transformCoordinates(Utils.getLayerById())
         map_pos = xform.transform(map_pos)
         interface.mapCanvas().setCenter(map_pos)
         

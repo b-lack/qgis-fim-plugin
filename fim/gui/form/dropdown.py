@@ -51,6 +51,8 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
 
         self.setupUi(self)
 
+        
+
         if(key not in json):
             json[key] = None
 
@@ -60,8 +62,6 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         self.key = key
         self.defaultValue = self.json[self.key]
         self.isValid = False
-
-        
 
         self.lfbTextFieldLabel.setText(QCoreApplication.translate("FormFields", self.schema['title']))
         
@@ -82,11 +82,13 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         else:
             self.lfbTextFieldDescriptionBtn.hide()
 
-        self.lfbComboBox.currentIndexChanged.connect(self.setInputText)
+        
+
+        # Changes Value instantely when in wrong order
         self.lfbComboBox.addItems(self.schema['enumLabels'])
+        self.lfbComboBox.currentIndexChanged.connect(self.setInputText)
 
         self.lfbTextFieldDescriptionBtn.clicked.connect(self.triggerInfoBox)
-
         
         if "QTType" in self.schema and self.schema['QTType'] == "tree":
             #self.lfbReplaceWidget.show()
@@ -104,7 +106,8 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
 
         if "default" in self.schema and self.json[self.key] is None:
             self.setDefaultValue()
-            
+        else:
+            self.setIndex(self.schema['enum'].index(self.json[self.key]))
 
         if "qtChips" in self.schema:
             self.chips = Chips(interface, self.schema, self.schema['qtChips'])
@@ -131,6 +134,8 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
             self.internJson[self.key] = self.schema['default']
             
             self.validate(False)
+
+        
         return
         index = self.schema['enum'].index(self.schema['default'])
 
@@ -161,9 +166,6 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
             if index != -1:
                 self.setIndex(index)
                 #self.lfbComboBox.setCurrentIndex(index)
-
-        
-
         
             # self.lfbComboBox.setCurrentIndex(0)
 
@@ -181,11 +183,12 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
         
     #from Chips
     def setIndex(self, value):
+
         if value is None:
             return
         
         self.setInputText(value, False)
-        if value is not None and self.lfbComboBox.currentIndex() != value:
+        if self.lfbComboBox.currentIndex() != value:
             self.lfbComboBox.setCurrentIndex(value)
 
     #from dd
@@ -221,7 +224,7 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
             self.lfbTextFieldError.hide()
             self.lfbTextFieldSuccess.hide()
             self.lfbTextFieldHelp.show()
-            self.lfbComboBox.setStyleSheet("QComboBox {\n	border: 2px solid green;\n	border-radius: 10px;\n	padding: 10px;\n}")
+            self.lfbComboBox.setStyleSheet("QComboBox {\n	border: 2px solid green;\n	padding: 10px;\n}")
             isValid = True
             #if "QTType" in self.schema and self.schema['QTType'] == "tree":
                 #self.lfbTextFieldLabel.setText(Utils.enumLabel(self.json[self.key], self.schema))
@@ -230,7 +233,7 @@ class DropDown(QtWidgets.QWidget, UI_CLASS):
             self.lfbTextFieldError.show()
             self.lfbTextFieldSuccess.hide()
             self.lfbTextFieldHelp.hide()
-            self.lfbComboBox.setStyleSheet("QComboBox {\n	border: 2px solid red;\n	border-radius: 10px;\n	padding: 10px;\n}")
+            self.lfbComboBox.setStyleSheet("QComboBox {\n	border: 2px solid red;\n	padding: 10px;\n}")
 
             for error in errors:
                 if "is not type":

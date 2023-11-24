@@ -413,7 +413,11 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         errors = sorted(v.iter_errors(self.json), key=lambda e: e.path)
 
         #errors.extend(self.lfbLayers(self.json))
+
+
         lfbErrors = self.lfbLayers(self.json)
+
+
         self.lfbUniquePosition(self.json)
 
         #for error in lfbErrors:
@@ -491,11 +495,11 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
             #            del self.json[i['attr']]
 
             #for tab in self.tabsArray:
-                #self.lfbTabWidget.setTabEnabled(tab['tabNr'], False)
+            #    self.lfbTabWidget.setTabEnabled(tab['tabNr'], False)
 
-            #for i in range(1, 16):
-            #    if self.lfbTabWidget.isTabEnabled(i):
-            #        self.lfbTabWidget.setTabEnabled(i, False)
+            for i in range(1, 16):
+                if self.lfbTabWidget.isTabEnabled(i):
+                    self.lfbTabWidget.setTabEnabled(i, False)
 
             
             
@@ -518,9 +522,9 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
     def lfbCoordinates(self, json, taberrors):
         if len(taberrors) > 0:
 
-            #for i in range(2, 16):
-                #if self.lfbTabWidget.isTabEnabled(i):
-                    #self.lfbTabWidget.setTabEnabled(i, False)
+            for i in range(2, 16):
+                if self.lfbTabWidget.isTabEnabled(i):
+                    self.lfbTabWidget.setTabEnabled(i, False)
             return False
        
         return True
@@ -536,6 +540,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         return label_errors
 
     def lfbLayers(self, json):
+
         label_errors = []
 
         rules_type = {

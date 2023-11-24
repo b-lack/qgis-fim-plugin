@@ -105,7 +105,7 @@
                         "spaufsucheaufnahmetruppkuerzel": {
                             "title": "Aufnahmetruppkürzel",
                             "type": "string",
-                            "description": "Möglichst eindeutige Bezeichnung des Nutzers/Trupps.",
+                            "description": "Eindeutige Bezeichnung des Nutzers/Trupps.",
                             "minLength": 2,
                             "maxLength": 100,
                             "$FIMColumn": 0
@@ -113,10 +113,10 @@
                         "spaufsucheaufnahmetruppgnss": {
                             "title": "GNSS-Gerätkürzel",
                             "type": "string",
-                            "description": "Möglichst eindeutige Bezeichnung des Gerätes.",
+                            "description": "Eindeutige Bezeichnung des Gerätes.",
                             "minLength": 3,
                             "maxLength": 100,
-                            "$FIMColumn": 0
+                            "$FIMColumn": 1
                         },
                         "spaufsuchenichtbegehbarursacheid": {
                             "title": "Zugänglichkeit*",
@@ -817,7 +817,7 @@
                                     "azimut": {
                                         "title": "Azimut",
                                         "type": "integer",
-                                        "description": "Azimut der Landmarke vom Stichprobenpunkt",
+                                        "description": "Landmarke <-> Stichprobenpunkt",
                                         "minimum": 0,
                                         "maximum": 400,
                                         "unit": "Gon",
@@ -826,7 +826,7 @@
                                     "distanz": {
                                         "title": "Distanz",
                                         "type": "integer",
-                                        "description": "Baum <-> Stichprobenpunkt",
+                                        "description": "Landmarke <-> Stichprobenpunkt",
                                         "minimum": 0,
                                         "unit": "Zentimeter",
                                         "$FIMColumn": 1
@@ -1160,7 +1160,7 @@
                                     "azimut": {
                                         "title": "Azimut",
                                         "type": "integer",
-                                        "description": "Azimut der Landmarke vom Stichprobenpunkt",
+                                        "description": "Landmarke <-> Stichprobenpunkt",
                                         "minimum": 0,
                                         "maximum": 400,
                                         "unit": "Gon",
@@ -1169,7 +1169,7 @@
                                     "distanz": {
                                         "title": "Distanz",
                                         "type": "integer",
-                                        "description": "Baum <-> Stichprobenpunkt",
+                                        "description": "Landmarke <-> Stichprobenpunkt",
                                         "minimum": 0,
                                         "unit": "Zentimeter",
                                         "$FIMColumn": 1
@@ -3149,7 +3149,7 @@
                 "azimut": {
                     "title": "Azimut",
                     "type": "integer",
-                    "description": "Azimut der Landmarke vom Stichprobenpunkt",
+                    "description": "Landmarke <-> Stichprobenpunkt",
                     "minimum": 0,
                     "maximum": 400,
                     "unit": "Gon",
@@ -3158,7 +3158,7 @@
                 "distanz": {
                     "title": "Distanz",
                     "type": "integer",
-                    "description": "Baum <-> Stichprobenpunkt",
+                    "description": "Landmarke <-> Stichprobenpunkt",
                     "minimum": 0,
                     "unit": "Zentimeter",
                     "$FIMColumn": 1

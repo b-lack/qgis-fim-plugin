@@ -84,7 +84,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
         except:
             pass
 
-        self.lfbTextField.returnPressed.connect(self.onEnter)
+        
         
         
         
@@ -93,9 +93,6 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             self.lfbTextFieldHelp.setText(self.schema['description'])
         else:
             self.lfbTextFieldHelp.setText('')
-
-        self.lfbTextField.textChanged.connect(self.setInputText)
-        self.lfbTextField.editingFinished.connect(self.editingFinished)
 
         self.lfbTextField.undoAvailable = True
 
@@ -120,6 +117,10 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
 
         self.validate()
         self.displayErrors(False)
+
+        self.lfbTextField.returnPressed.connect(self.onEnter)
+        self.lfbTextField.textChanged.connect(self.setInputText)
+        self.lfbTextField.editingFinished.connect(self.editingFinished)
 
         self.show()
 
@@ -250,18 +251,18 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
             self.lfbTextFieldError.hide()
             self.lfbTextFieldSuccess.hide()
             self.lfbTextFieldHelp.show()
-            self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid red;\n	border-radius: 10px;\n	padding: 4px;\n}")
+            self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid red;\n	padding: 4px;\n}")
         elif len(self.errors) == 0:
             self.lfbTextFieldError.hide()
             self.lfbTextFieldSuccess.hide()
             self.lfbTextFieldHelp.show()
-            self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid green;\n	border-radius: 10px;\n	padding: 4px;\n}")
+            self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid green;\n	padding: 4px;\n}")
             isValid = True
         else:
             self.lfbTextFieldError.show()
             self.lfbTextFieldSuccess.hide()
             self.lfbTextFieldHelp.hide()
-            self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid red;\n	border-radius: 10px;\n	padding: 4px;\n}")
+            self.lfbTextField.setStyleSheet("QLineEdit {\n	border: 2px solid red;\n	padding: 4px;\n}")
 
             for error in self.errors:
                 self.lfbTextFieldError.setText(error.message)

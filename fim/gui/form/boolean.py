@@ -63,10 +63,9 @@ class Boolean(QtWidgets.QWidget, UI_CLASS):
         self.key = key
         self.defaultValue = self.json[self.key]
 
-        self.lfbTextFieldLabel.setText(QCoreApplication.translate("FormFields", self.schema['title']))
-        self.lfbCheckBox.stateChanged.connect(self.setInputText)
+        
 
-        self.lfbTextFieldDescriptionBtn.clicked.connect(self.triggerInfoBox)
+        self.lfbTextFieldLabel.setText(QCoreApplication.translate("FormFields", self.schema['title']))
 
         if "helpText" in self.schema:
             self.lfbTextFieldDescriptionBtn.show()
@@ -76,9 +75,13 @@ class Boolean(QtWidgets.QWidget, UI_CLASS):
         if "description" in self.schema:
             self.lfbTextFieldHelp.setText(self.schema['description'])
 
+        if self.json[self.key] is None:
+            self.setDefaultValue()
 
-        self.setDefaultValue()
-        self.validate() 
+        self.validate()
+
+        self.lfbCheckBox.stateChanged.connect(self.setInputText)
+        self.lfbTextFieldDescriptionBtn.clicked.connect(self.triggerInfoBox)
 
         self.show()
 
@@ -98,8 +101,6 @@ class Boolean(QtWidgets.QWidget, UI_CLASS):
         
         self.json = newJson
 
-        
-
         if setFields == False:
             return
         
@@ -108,7 +109,7 @@ class Boolean(QtWidgets.QWidget, UI_CLASS):
         
         if self.json is None or self.key not in self.json or self.json[self.key] is None:
             self.setDefaultValue()
-        
+
         self.lfbCheckBox.setChecked(self.json[self.key])
         #self.validate()
         
@@ -147,4 +148,4 @@ class Boolean(QtWidgets.QWidget, UI_CLASS):
                 self.lfbTextFieldError.setText(error.message)
 
         #if emit == True:
-            # self.inputChanged.emit(str(self.json[self.key]))
+            #self.inputChanged.emit(str(self.json[self.key]))
