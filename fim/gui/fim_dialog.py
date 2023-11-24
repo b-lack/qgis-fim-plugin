@@ -486,7 +486,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
 
     def lfbNotAccessable(self, json, taberrors):
-       
+        return
         if json['general']['spaufsuchenichtbegehbarursacheid'] != 1 or json['general']['spaufsuchenichtwaldursacheid'] != 0 or len(taberrors) > 0:
 
             #for i in self.tabsArray:
@@ -520,6 +520,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         return True
     
     def lfbCoordinates(self, json, taberrors):
+        return
         if len(taberrors) > 0:
 
             for i in range(2, 16):
