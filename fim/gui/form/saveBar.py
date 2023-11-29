@@ -76,7 +76,6 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.lfbSchemaBtn.hide()
 
         self.lfbErrorDialogBtn.hide()
-        #self.lfbErrorDialogBtn.clicked.connect(self.openErrorDialog)
         #self.errorsWidget = ErrorsWidget(self.interface, self.schema)
         #self.lfbErrorsLayout.addWidget(self.errorsWidget)
         
@@ -157,15 +156,6 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
     def getNamedError(self, error):
         return True
 
-    #def openErrorDialog(self):
-
-    #    for error in self.errors:
-    #        QgsMessageLog.logMessage(str(error.message) + ' ' + str(error.relative_schema_path), 'LFB')
-
-    #    return
-    #    msgBox = QtWidgets.QMessageBox()
-    #    msgBox.setText('llll')
-    #    msgBox.exec()
 
     def validate(self, jsonToTest, errors = []):
 

@@ -25,6 +25,7 @@
 import os
 import copy
 import json
+import threading
 
 from qgis.core import QgsMessageLog, QgsProject, QgsVectorLayer, QgsJsonUtils, QgsField, QgsFields, QgsVectorFileWriter, QgsCoordinateTransformContext
 from qgis.PyQt import QtWidgets, uic
@@ -61,6 +62,8 @@ class ObjectView(QtWidgets.QWidget, UI_CLASS):
         self.key = key
         self.schema = schema
         self.inheritedErrors = inheritedErrors
+
+        self.validationTimer = None
 
 
         if self.key not in self.json:
@@ -119,9 +122,11 @@ class ObjectView(QtWidgets.QWidget, UI_CLASS):
     def setSchemaErrors(self, schemaErrors):
         self.schemaErrors = schemaErrors
 
-    def onInputChanged(self, newJson, key=None):
+    def emitInputChanged(self):
+        self.inputChanged.emit(self.json[self.key], self.key)
 
-        QgsMessageLog.logMessage(str(self.json[self.key][key]), 'FIM')
+    def onInputChanged(self, newJson, key=None):
+        """Child input changed."""
         self.inputChanged.emit(self.json[self.key], self.key)
         return
 

@@ -261,10 +261,10 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         
 
-        dirname = os.path.dirname(__file__)
-        filename = os.path.realpath(os.path.join(dirname, '../..', 'layerstyles', 'express.qml'))
+        #dirname = os.path.dirname(__file__)
+        #filename = os.path.realpath(os.path.join(dirname, '../..', 'layerstyles', 'express.qml'))
 
-        self.vl.loadNamedStyle(filename)
+        #self.vl.loadNamedStyle(filename)
 
         
 

@@ -23,6 +23,7 @@
 """
 
 import os
+import threading
 
 from qgis.core import QgsMessageLog, QgsPointXY, QgsPoint
 from qgis.PyQt import QtWidgets, uic
@@ -63,6 +64,8 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
         self.schema = schema
         self.inheritedErrors = inheritedErrors
         self.schemaErrors = schemaErrors
+
+        self.validationTimer = None
 
         self.infoTitle = ""
 
@@ -111,7 +114,7 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
             if valueType == 'array':
                 field = ArrayField(interface, self.json, value, attr, schemaErrors)
             elif valueType == 'object':
-                if '$plugin' in value and value['$plugin']['name'] is not None:
+                if '$plugin' in value and value['$plugin']['name'] is not None and False:
                     
                     if Utils.pluginAvailable(value['$plugin']['name']):
                         # https://gis.stackexchange.com/questions/403501/using-qgis-plugin-from-another-plugin
@@ -180,6 +183,7 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
                     #else:
                     #    field = SetupDevice(interface, self.json, value, attr, self.inheritedErrors)
                 else:
+                    continue
                     field = ObjectView(interface, self.json, value, attr, self.inheritedErrors)
 
             elif valueType == 'boolean':
@@ -293,6 +297,8 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
 
 
     def setJson(self, newJson, setFields = True):
+        """Update the json object"""
+        
         self.json.update(newJson)
         #self.json = newJson
 
@@ -320,3 +326,4 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
     def onInputChanged(self, json, attr=None, forceUpdate = False):
         """Update the json object"""
         self.inputChanged.emit(self.json, self.attr, forceUpdate)
+        

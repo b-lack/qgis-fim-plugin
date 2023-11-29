@@ -764,7 +764,7 @@
                                         "description": "Höhe der Messung des BHD",
                                         "default": 13,
                                         "minimum": 1,
-                                        "maximum": 250,
+                                        "maximum": 22,
                                         "unit": "Dezimeter",
                                         "$FIMColumn": 1
                                     },
@@ -1108,7 +1108,7 @@
                                         "description": "Höhe der Messung des BHD",
                                         "default": 13,
                                         "minimum": 1,
-                                        "maximum": 250,
+                                        "maximum": 22,
                                         "unit": "Dezimeter",
                                         "$FIMColumn": 1
                                     },
@@ -3114,7 +3114,7 @@
                     "description": "Höhe der Messung des BHD",
                     "default": 13,
                     "minimum": 1,
-                    "maximum": 250,
+                    "maximum": 22,
                     "unit": "Dezimeter",
                     "$FIMColumn": 1
                 },

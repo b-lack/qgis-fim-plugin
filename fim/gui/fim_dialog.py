@@ -40,7 +40,7 @@ from .form.views.tabs import Tabs
 
 from .draft.draft_selection import DraftSelection
 from .setup.folder_selection import FolderSelection
-from .db_connection.db_widget import DBWidget
+#from .db_connection.db_widget import DBWidget
 
 from .form.saveBar import SaveBar
 
@@ -103,7 +103,6 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         
         #self.addFolderSelection()
         self.addDraft()
-        #self.addDbConnection()
 
         #self.lfbNewEntry.clicked.connect(self.newEntry)
         self.lfbNewEntry.hide()
@@ -149,8 +148,6 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
             tab = Tabs(self.iface, self.json[attr], self.schema['properties'][attr], attr, self.inheritedErrors[attr], self.schemaErrors)
             tab.nextTab.connect(self.nextTab)
             tab.inputChanged.connect(self.inputChanged)
-            #self.lfbTabWidget.addWidget(tab)
-            #newTab = QWidget(myTabWidget)
             
             self.tabsArray.append(
                 {
@@ -235,7 +232,8 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.lfbTabWidget.setCurrentIndex(0)
         self.tabChange(0)
 
-    def inputChanged(self, save, attr, forceUpdate = False):
+    def inputChanged(self, save, attr, forceUpdate = False):    
+        
 
         if attr in self.json:
             self.json[attr].update(save)
@@ -256,6 +254,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.saveBar.validate(self.state.state, self.schemaErrors)
 
     def save(self):
+        return
         
         self.draft.saveFeature(self.json)
         
@@ -320,13 +319,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         
         #self.folderSelection.setFolder(folderPath)
 
-    def addDbConnection(self):
-        dbWidget = DBWidget(self.iface)
-        #self.lfbMain.addWidget(dbWidget)
 
-    #def imported(self):
-    #    self.draft.readDrafts()
-    #    self.draft.readDone(True)
     
     def importSelected(self, id):
         self.draft.importSelected(id)
@@ -367,7 +360,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
         type = self.json['types'] if 'types' in self.json else 'vwm'
         version = self.json['versions'] if 'versions' in self.json else '1.0.0'
-        self.schema = self.loadSchema(type, version)
+        self.schema = self.loadSchema(type, version) 
 
         self.buildForm()
 
@@ -393,12 +386,11 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
     def validateTabs(self, save = False):
 
-
         if self.validationTimer != None:
             self.validationTimer.cancel()
             self.validationTimer = None
 
-        self.validationTimer = threading.Timer(0.5, lambda: self._validateTabs())
+        self.validationTimer = threading.Timer(1, lambda: self._validateTabs())
         self.validationTimer.start()
     
         if save:
@@ -406,30 +398,26 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
     def _validateTabs(self):
         QgsMessageLog.logMessage('validateTabs', 'FIM')
-        
+       
         isValidToSave = False
 
         v = Draft7Validator(self.schema)
+
         errors = sorted(v.iter_errors(self.json), key=lambda e: e.path)
-
-        #errors.extend(self.lfbLayers(self.json))
-
 
         lfbErrors = self.lfbLayers(self.json)
 
 
-        self.lfbUniquePosition(self.json)
-
-        #for error in lfbErrors:
-        #    QgsMessageLog.logMessage(error['message'], 'FIM')
-
-
+        #self.lfbUniquePosition(self.json)
+       
+        """
         for tab in self.tabsArray:
 
             attr = tab['attr']
 
             errorFound = False
 
+            
             for error in errors:
                 if attr in error.relative_schema_path:
                     errorFound = True
@@ -444,12 +432,14 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
             if not errorFound:
                 self.lfbTabWidget.setTabIcon(tab['tabNr'], QtGui.QIcon(':icons/green_rect.png'))
-            
+        """
+
         if self.schemaType == 'vwm':
             isValidToSave = self.VWMValidation(errors)
-            
         else:
             isValidToSave = len(errors) == 0
+        
+        
 
         self.schemaErrors.clear()
         for error in errors:
@@ -458,9 +448,11 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         for error in lfbErrors:
             self.schemaErrors.append(error)
 
+        # Triggers errors
+        #self.update_tab_errors(self.schemaErrors)
         
-        self.update_tab_errors(self.schemaErrors)
         self.updateSaveBtn()
+
         return isValidToSave
     
     def VWMValidation(self, errors):
@@ -476,17 +468,16 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
         for tab in self.tabsArray:
             self.lfbTabWidget.setTabEnabled(tab['tabNr'], True)
-
+        
         isAccessable = self.lfbNotAccessable(self.json, accessable)
         if isAccessable :
             self.lfbCoordinates(self.json, hasCoordinates)
-
 
         return len(accessable) == 0 and len(hasCoordinates) == 0
 
 
     def lfbNotAccessable(self, json, taberrors):
-        return
+        
         if json['general']['spaufsuchenichtbegehbarursacheid'] != 1 or json['general']['spaufsuchenichtwaldursacheid'] != 0 or len(taberrors) > 0:
 
             #for i in self.tabsArray:
@@ -520,7 +511,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         return True
     
     def lfbCoordinates(self, json, taberrors):
-        return
+        
         if len(taberrors) > 0:
 
             for i in range(2, 16):
@@ -635,7 +626,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
                     #    "relative_schema_path": ['properties','t_bestockung', 'properties','t_bestockung']
                     #})
                     label_errors.append(exceptions.ValidationError(
-                        message='alsche Schichtenkombination',
+                        message='Falsche Schichtenkombination',
                         validator='minItems',
                         validator_value=rules_length[schicht_id]['min'],
                         instance=elements_unique,
