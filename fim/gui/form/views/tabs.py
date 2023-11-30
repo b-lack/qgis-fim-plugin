@@ -114,7 +114,7 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
             if valueType == 'array':
                 field = ArrayField(interface, self.json, value, attr, schemaErrors)
             elif valueType == 'object':
-                if '$plugin' in value and value['$plugin']['name'] is not None and False:
+                if '$plugin' in value and value['$plugin']['name'] is not None:
                     
                     if Utils.pluginAvailable(value['$plugin']['name']):
                         # https://gis.stackexchange.com/questions/403501/using-qgis-plugin-from-another-plugin

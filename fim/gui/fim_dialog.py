@@ -254,7 +254,6 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.saveBar.validate(self.state.state, self.schemaErrors)
 
     def save(self):
-        return
         
         self.draft.saveFeature(self.json)
         
@@ -399,6 +398,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
     def _validateTabs(self):
         QgsMessageLog.logMessage('validateTabs', 'FIM')
        
+       
         isValidToSave = False
 
         v = Draft7Validator(self.schema)
@@ -410,7 +410,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
         #self.lfbUniquePosition(self.json)
        
-        """
+        
         for tab in self.tabsArray:
 
             attr = tab['attr']
@@ -432,15 +432,15 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
             if not errorFound:
                 self.lfbTabWidget.setTabIcon(tab['tabNr'], QtGui.QIcon(':icons/green_rect.png'))
-        """
+        
+
+        
 
         if self.schemaType == 'vwm':
             isValidToSave = self.VWMValidation(errors)
         else:
             isValidToSave = len(errors) == 0
         
-        
-
         self.schemaErrors.clear()
         for error in errors:
             self.schemaErrors.append(error)
@@ -449,9 +449,11 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
             self.schemaErrors.append(error)
 
         # Triggers errors
-        #self.update_tab_errors(self.schemaErrors)
+        self.update_tab_errors(self.schemaErrors)
         
-        self.updateSaveBtn()
+        #self.updateSaveBtn()
+
+        QgsMessageLog.logMessage(str(self.schemaErrors), 'FIM')
 
         return isValidToSave
     
@@ -469,9 +471,10 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         for tab in self.tabsArray:
             self.lfbTabWidget.setTabEnabled(tab['tabNr'], True)
         
-        isAccessable = self.lfbNotAccessable(self.json, accessable)
-        if isAccessable :
-            self.lfbCoordinates(self.json, hasCoordinates)
+        # Due to performance issues
+        #isAccessable = self.lfbNotAccessable(self.json, accessable)
+        #if isAccessable :
+            #self.lfbCoordinates(self.json, hasCoordinates)
 
         return len(accessable) == 0 and len(hasCoordinates) == 0
 
@@ -502,9 +505,6 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
                     newValue = True
                     self.json[i['attr']] = copy.deepcopy(self.defaultJson[i['attr']])
                     i['setJson'](self.json[i['attr']], True)
-
-            #if newValue:
-            #    self.resetForm(True)
 
         
 
