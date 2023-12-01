@@ -107,13 +107,15 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         self.show()
 
     def update_errors(self, message):
+        
 
-        self.lfb_array_error_msg.hide()
+        #self.lfb_array_error_msg.hide()
 
         for error in self.draftFormErrors:
             if self.key in error.relative_schema_path:
                 self.lfb_array_error_msg.setText(error.message)
                 self.lfb_array_error_msg.show()
+                break
 
     def setTableHeaders(self, headers, data):
 
