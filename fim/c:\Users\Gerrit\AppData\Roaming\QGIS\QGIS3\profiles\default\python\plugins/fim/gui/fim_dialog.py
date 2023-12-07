@@ -37,7 +37,6 @@ import copy
 
 
 from .form.views.tabs import Tabs
-from .form.vwm import VWM
 
 from .draft.draft_selection import DraftSelection
 from .setup.folder_selection import FolderSelection
@@ -147,8 +146,8 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
             self.inheritedErrors[attr] = []
 
             tab = Tabs(self.iface, self.json[attr], self.schema['properties'][attr], attr, self.inheritedErrors[attr], self.schemaErrors)
-            #tab.nextTab.connect(self.nextTab)
-            #tab.inputChanged.connect(self.inputChanged)
+            tab.nextTab.connect(self.nextTab)
+            tab.inputChanged.connect(self.inputChanged)
             
             self.tabsArray.append(
                 {
@@ -166,11 +165,6 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         
         self.lfbTabWidget.tabBar().setCursor(QtCore.Qt.PointingHandCursor)
 
-    def buildStaticForm(self):
-        self.lfbTabWidget.hide()
-        vwm = VWM(self.iface, self.json, self.schema)
-        self.lfbVwmLayout.addWidget(vwm)
-
     def nextTab(self, nextTab):
         if nextTab:
             indexToSet = min(self.currentTab + 1, len(self.tabsArray) - 1)
@@ -184,10 +178,6 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.draft.update()
 
     def saveFeature(self, json, status=False):
-        #self.lfbVwmWidget.hide()
-        QgsMessageLog.logMessage(str('SAVE'), 'FIM')
-        QgsMessageLog.logMessage(str(self.json), 'FIM')
-        pass
 
         self.draft.setStatus(status)
         self.openHome()
@@ -243,7 +233,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.tabChange(0)
 
     def inputChanged(self, save, attr, forceUpdate = False):    
-        return
+        
 
         if attr in self.json:
             self.json[attr].update(save)
@@ -371,8 +361,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         version = self.json['versions'] if 'versions' in self.json else '1.0.0'
         self.schema = self.loadSchema(type, version) 
 
-        #self.buildForm()
-        self.buildStaticForm()
+        self.buildForm()
 
         self.resetForm(True)
         self.setPosition(2)

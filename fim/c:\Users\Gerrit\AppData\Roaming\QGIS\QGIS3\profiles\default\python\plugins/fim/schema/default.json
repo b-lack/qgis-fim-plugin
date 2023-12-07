@@ -1,0 +1,50 @@
+{
+    "$schema": "./schema_vwm.json",
+    "geometry": {
+        "coordinates": [
+            0,
+            0
+        ]
+    },
+    "type": "Point",
+    "properties": {
+        "general": {
+            "spaufsucheaufnahmetruppkuerzel": null,
+            "spaufsuchenichtbegehbarursacheid": null,
+            "spaufsucheaufnahmetruppgnss": null
+        },
+        "coordinates": {},
+        "stichprobenpunkt": {},
+        "baumplot1":{
+            "baumplot1": [],
+            "transectLocation": 0
+        },
+        "landmarken1": {
+            "landmarken1": []
+        },
+        "baumplot2":{
+            "baumplot2": []
+        },
+        "landmarken2": {
+            "landmarken2": []
+        },
+        "transekt": {
+            "protectiveMeasure": 0
+        },
+        "verjuengungstransekt": {
+            "verjuengungstransekten": [],
+            "transectLength": null
+        },
+        "weiserpflanzen": {},
+        "transektinfo": {},
+        "bestandsbeschreibung": {},
+        "t_bestockung": {
+            "t_bestockung": []
+        },
+        "t_bodenvegetation": {
+            "t_bodenvegetation": []
+        },
+        "stoerung": {
+        }
+    }
+}
