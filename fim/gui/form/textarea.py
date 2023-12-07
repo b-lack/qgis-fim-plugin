@@ -201,5 +201,5 @@ class TextArea(QtWidgets.QWidget, UI_CLASS):
             for error in errors:
                 self.lfbTextFieldError.setText(error.message)
 
-        if emit:
-            self.inputChanged.emit(self.json[self.key])
+        #if emit:
+            #self.inputChanged.emit(self.json[self.key])

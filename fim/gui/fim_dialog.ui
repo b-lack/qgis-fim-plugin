@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
-    <height>700</height>
+    <width>1009</width>
+    <height>732</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -39,11 +39,21 @@
     <number>0</number>
    </property>
    <property name="bottomMargin">
-    <number>0</number>
+    <number>100</number>
    </property>
    <property name="spacing">
     <number>0</number>
    </property>
+   <item row="1" column="0">
+    <layout class="QVBoxLayout" name="lfbMain">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+    </layout>
+   </item>
    <item row="2" column="0">
     <widget class="QTabWidget" name="lfbTabWidget">
      <property name="sizePolicy">
@@ -141,8 +151,8 @@ padding:0;</string>
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>998</width>
-        <height>347</height>
+        <width>1007</width>
+        <height>311</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -258,15 +268,14 @@ QPushButton:enabled{
      </widget>
     </widget>
    </item>
-   <item row="1" column="0">
-    <layout class="QVBoxLayout" name="lfbMain">
-     <property name="spacing">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-    </layout>
+   <item row="4" column="0">
+    <widget class="QWidget" name="lfbVwmWidget" native="true">
+     <layout class="QGridLayout" name="vwmLayout">
+      <item row="0" column="0">
+       <layout class="QVBoxLayout" name="lfbVwmLayout"/>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>

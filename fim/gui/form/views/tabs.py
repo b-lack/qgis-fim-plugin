@@ -114,7 +114,7 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
             if valueType == 'array':
                 field = ArrayField(interface, self.json, value, attr, schemaErrors)
             elif valueType == 'object':
-                if '$plugin' in value and value['$plugin']['name'] is not None:
+                if '$plugin' in value and value['$plugin']['name'] is not None and False:
                     
                     if Utils.pluginAvailable(value['$plugin']['name']):
                         # https://gis.stackexchange.com/questions/403501/using-qgis-plugin-from-another-plugin
@@ -216,7 +216,8 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
 
                 invert_op = getattr(field, "inputChanged", None)
                 if callable(invert_op):
-                    field.inputChanged.connect(self.onInputChanged)
+                    pass
+                    #field.inputChanged.connect(self.onInputChanged)
 
                 self.fieldArray.append(field)
 
@@ -263,7 +264,7 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
         #self.json['istgeom_pdop'] = aggregated['pdop']
         self.json['istgeom_sat'] = int(aggregated['satellitesUsed'])
 
-        self.inputChanged.emit(self.json, self.attr, True)
+        #self.inputChanged.emit(self.json, self.attr, True)
 
 
     def tabInfoBoxClicked(self):
@@ -277,12 +278,15 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
             self.lfbTabInfoWidget.show()
 
     def on_lfbTabBtnBack_clicked(self):
+        pass
         self.nextTab.emit(False)
 
     def on_lfbTabBtnFwd_clicked(self):
+        pass
         self.nextTab.emit(True)
 
     def infoBoxClicked(self, info):
+        return
 
         if self.infoTitle == info['title']:
             if self.lfbTabInfoWidget.isVisible():
@@ -325,5 +329,5 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
 
     def onInputChanged(self, json, attr=None, forceUpdate = False):
         """Update the json object"""
-        self.inputChanged.emit(self.json, self.attr, forceUpdate)
+        #self.inputChanged.emit(self.json, self.attr, forceUpdate)
         

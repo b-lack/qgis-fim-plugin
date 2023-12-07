@@ -123,12 +123,13 @@ class ObjectView(QtWidgets.QWidget, UI_CLASS):
         self.schemaErrors = schemaErrors
 
     def emitInputChanged(self):
-        self.inputChanged.emit(self.json[self.key], self.key)
+        #self.inputChanged.emit(self.json[self.key], self.key)
+        pass
 
     def onInputChanged(self, newJson, key=None):
         """Child input changed."""
-        self.inputChanged.emit(self.json[self.key], self.key)
-        return
+        #self.inputChanged.emit(self.json[self.key], self.key)
+        pass
 
         self.json[self.key][key] = newJson
 

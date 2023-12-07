@@ -98,9 +98,9 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         self.lfbArrayFormGroup.setTitle('NEUE ZEILE HINZUFÜGEN')
         # .setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         
-        errors = self.validate()
-        for error in errors:
-            self.draftFormErrors.append(error)
+        #errors = self.validate()
+        #for error in errors:
+        #    self.draftFormErrors.append(error)
 
         self.lfb_array_error_2.hide()
 
@@ -244,6 +244,7 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
         self.child.triggerErrors(self.draftFormErrors)
 
     def validate(self, emit = True):
+        return
 
         # https://python-jsonschema.readthedocs.io/en/stable/validate/
         v = Draft7Validator(self.schema)
@@ -273,7 +274,7 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
             self.lfbAddBtn.setEnabled(False)
             self.lfbArrayFormGroup.setStyleSheet(self.buttonStyle + self.widgetErrorStyle)
 
-        #if emit:
-           # self.inputChanged.emit(self.json)
+        if emit:
+            self.inputChanged.emit(self.json)
 
         return errors
