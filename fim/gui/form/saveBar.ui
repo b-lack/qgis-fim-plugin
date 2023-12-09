@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>917</width>
-    <height>492</height>
+    <width>883</width>
+    <height>290</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -23,8 +23,7 @@
    <string notr="true">Qwidget#lfbSaveBar{
 	background-color: #222;
 	color: #fff;
-}
-</string>
+}</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
@@ -211,6 +210,19 @@ background-color: #333;</string>
           <property name="topMargin">
            <number>0</number>
           </property>
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>ID:</string>
+            </property>
+           </widget>
+          </item>
           <item>
            <widget class="QLabel" name="lfbId">
             <property name="font">

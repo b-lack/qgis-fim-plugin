@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1009</width>
-    <height>732</height>
+    <width>937</width>
+    <height>655</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-    <horstretch>1</horstretch>
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
@@ -25,10 +25,16 @@
   <property name="windowTitle">
    <string>FIM - Forest Inventory and Monitoring</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <property name="sizeGripEnabled">
    <bool>false</bool>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -39,12 +45,9 @@
     <number>0</number>
    </property>
    <property name="bottomMargin">
-    <number>100</number>
-   </property>
-   <property name="spacing">
     <number>0</number>
    </property>
-   <item row="1" column="0">
+   <item>
     <layout class="QVBoxLayout" name="lfbMain">
      <property name="spacing">
       <number>0</number>
@@ -54,12 +57,15 @@
      </property>
     </layout>
    </item>
-   <item row="2" column="0">
+   <item>
     <widget class="QTabWidget" name="lfbTabWidget">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
        <horstretch>0</horstretch>
-       <verstretch>2</verstretch>
+       <verstretch>0</verstretch>
       </sizepolicy>
      </property>
      <property name="minimumSize">
@@ -131,8 +137,11 @@ QTabWidget::pane { border: 0; }</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item>
     <widget class="QScrollArea" name="lfbHomeScreen">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
        <horstretch>0</horstretch>
@@ -151,8 +160,8 @@ padding:0;</string>
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>1007</width>
-        <height>311</height>
+        <width>935</width>
+        <height>323</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -268,11 +277,35 @@ QPushButton:enabled{
      </widget>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item>
     <widget class="QWidget" name="lfbVwmWidget" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+       <horstretch>0</horstretch>
+       <verstretch>2</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
      <layout class="QGridLayout" name="vwmLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
       <item row="0" column="0">
-       <layout class="QVBoxLayout" name="lfbVwmLayout"/>
+       <layout class="QGridLayout" name="lfbVwmLayout"/>
       </item>
      </layout>
     </widget>

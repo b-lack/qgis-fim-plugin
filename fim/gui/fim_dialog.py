@@ -110,7 +110,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
         
         self.lfbTabWidget.currentChanged.connect(self.tabChange)
-        
+        self.lfbTabWidget.hide()
         
 
         #self.lfbTabWidget.setProperty("class", "my-label-style")
@@ -167,9 +167,16 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.lfbTabWidget.tabBar().setCursor(QtCore.Qt.PointingHandCursor)
 
     def buildStaticForm(self):
+        return
         self.lfbTabWidget.hide()
-        vwm = VWM(self.iface, self.json, self.schema)
-        self.lfbVwmLayout.addWidget(vwm)
+
+        QgsMessageLog.logMessage(str('BUILD'), 'FIM')
+        self.formWidget = VWM(self.iface, self.json, self.schema)
+        self.lfbVwmLayout.addWidget(self.formWidget)
+
+    def buildVwmForm(self):
+        self.formWidget = VWM(self.iface, self.schema)
+        self.vwmFormWidget.updateJson(self.json)
 
     def nextTab(self, nextTab):
         if nextTab:
@@ -187,7 +194,9 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         #self.lfbVwmWidget.hide()
         QgsMessageLog.logMessage(str('SAVE'), 'FIM')
         QgsMessageLog.logMessage(str(self.json), 'FIM')
-        pass
+        #self.lfbVwmLayout.removeWidget(self.formWidget)
+        #self.formWidget.deleteLater()
+        #self.formWidget = None
 
         self.draft.setStatus(status)
         self.openHome()
