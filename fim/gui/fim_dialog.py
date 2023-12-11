@@ -126,6 +126,8 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.resetForm(False)
         self.setPosition(1)
 
+        self.buildVwmForm()
+
     def loadSchema(self, type='vwm', version='1.0.0'):
         dirname = os.path.dirname(__file__)
         filename = os.path.realpath(os.path.join(dirname, '..', 'schema', type, version+'.json'))
@@ -166,17 +168,20 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         
         self.lfbTabWidget.tabBar().setCursor(QtCore.Qt.PointingHandCursor)
 
-    def buildStaticForm(self):
-        return
-        self.lfbTabWidget.hide()
-
-        QgsMessageLog.logMessage(str('BUILD'), 'FIM')
-        self.formWidget = VWM(self.iface, self.json, self.schema)
-        self.lfbVwmLayout.addWidget(self.formWidget)
 
     def buildVwmForm(self):
-        self.formWidget = VWM(self.iface, self.schema)
+
+        version = self.json['versions'] if 'versions' in self.json else '1.0.0'
+        schema = self.loadSchema('vwm', version)
+
+        self.vwmFormWidget = VWM(self.iface, schema)
+        self.vwmFormWidget.save.connect(self.save)
+        self.lfbVwmLayout.addWidget(self.vwmFormWidget)
+        self.vwmFormWidget.hide()
+
+    def updateVwmForm(self):
         self.vwmFormWidget.updateJson(self.json)
+        self.vwmFormWidget.show()
 
     def nextTab(self, nextTab):
         if nextTab:
@@ -191,9 +196,12 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.draft.update()
 
     def saveFeature(self, json, status=False):
-        #self.lfbVwmWidget.hide()
+        
         QgsMessageLog.logMessage(str('SAVE'), 'FIM')
         QgsMessageLog.logMessage(str(self.json), 'FIM')
+        #self.saveDelay()
+        self.save()
+        
         #self.lfbVwmLayout.removeWidget(self.formWidget)
         #self.formWidget.deleteLater()
         #self.formWidget = None
@@ -273,15 +281,17 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.saveBar.validate(self.state.state, self.schemaErrors)
 
     def save(self):
+
+        QgsMessageLog.logMessage(str('SAVE'), 'FIM')
         
         self.draft.saveFeature(self.json)
         
         if self.previousGeneral == None:
             self.previousGeneral = copy.deepcopy(self.json['general'])
 
-        if self.json['general']['spaufsucheaufnahmetruppkuerzel'] != self.previousGeneral['spaufsucheaufnahmetruppkuerzel']:
+        if self.json['general']['spaufsucheaufnahmetruppkuerzel'] != None and self.json['general']['spaufsucheaufnahmetruppkuerzel'] != self.previousGeneral['spaufsucheaufnahmetruppkuerzel']:
             self.previousGeneral['spaufsucheaufnahmetruppkuerzel'] = self.json['general']['spaufsucheaufnahmetruppkuerzel']
-        if self.json['general']['spaufsucheaufnahmetruppgnss'] != self.previousGeneral['spaufsucheaufnahmetruppgnss']:
+        if self.json['general']['spaufsucheaufnahmetruppgnss'] != None and self.json['general']['spaufsucheaufnahmetruppgnss'] != self.previousGeneral['spaufsucheaufnahmetruppgnss']:
             self.previousGeneral['spaufsucheaufnahmetruppgnss'] = self.json['general']['spaufsucheaufnahmetruppgnss']
 
     def formToDefault(self, setFields = True):
@@ -303,7 +313,8 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
         if self.userPosition == 2:
             self.lfbHeadline.hide()
-            self.lfbTabWidget.show()
+            self.lfbFormWidget.show()
+
             self.saveBar.show()
             self.draft.hide()
             #self.folderSelection.hide()
@@ -313,7 +324,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
             self.lfbHomeScreen.hide()
         else:
             self.lfbHeadline.show()
-            self.lfbTabWidget.hide()
+            self.lfbFormWidget.hide()
             self.saveBar.hide()
             self.draft.show()
             self.draft.update()
@@ -381,7 +392,8 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.schema = self.loadSchema(type, version) 
 
         #self.buildForm()
-        self.buildStaticForm()
+        if self.schemaType == 'vwm':
+            self.updateVwmForm()
 
         self.resetForm(True)
         self.setPosition(2)

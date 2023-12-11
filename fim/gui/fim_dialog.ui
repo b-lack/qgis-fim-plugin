@@ -278,7 +278,7 @@ QPushButton:enabled{
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="lfbVwmWidget" native="true">
+    <widget class="QWidget" name="lfbFormWidget" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
        <horstretch>0</horstretch>

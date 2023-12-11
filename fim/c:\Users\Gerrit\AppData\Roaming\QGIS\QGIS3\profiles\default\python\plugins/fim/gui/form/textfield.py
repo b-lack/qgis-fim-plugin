@@ -76,7 +76,7 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
         self.lfbTextField.setPlaceholderText(placeholderText) 
         self.lfbTextField.setToolTip(placeholderText)
 
-        try:
+        
             self.lfbTextField.returnPressed.disconnect()
             self.lfbTextField.textChanged.disconnect()
             self.lfbTextField.editingFinished.disconnect()
