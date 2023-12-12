@@ -37,7 +37,10 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         self.validationTimer = None
 
         #self.setUp()
-
+        QScroller.grabGesture(self.scrollArea_4, QScroller.LeftMouseButtonGesture)
+        #scroll = QScroller.scroller(self.scrollArea_4.viewport())
+        #scroll.grabGesture(self.scrollArea_4.viewport(), QScroller.LeftMouseButtonGesture)
+        
         self.show()
 
     def updateJson(self, json):
@@ -62,12 +65,40 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         }
     def aggregatedValuesChanged(self, gpsInfos):
         """Update the aggregated values"""
-        pass
+
+        from gnavs.gui.measurement.aggregation import Aggregation
+
+        from gnavs.utils.utils import Utils as ganvs_utils
+
+        aggregation = Aggregation(self.interface, self.gnavs_default_settings())
+        aggregated = aggregation.aggregate(gpsInfos)
+
+        #self.precisionNote.updateIndicator(gpsInfos)
+        self.precisionNote.update(aggregated)
+
+        position = QgsPointXY(QgsPoint(aggregated['longitude'], aggregated['latitude']))
+        ganvs_utils.clearLayer('lfb-tmp-position', 'point')
+        ganvs_utils.drawPosition('lfb-tmp-position', position)
+
+        self.json['coordinates']['istgeom_x'] = aggregated['latitude']
+        self.json['coordinates']['istgeom_y'] = aggregated['longitude']
+        self.json['coordinates']['istgeom_elev'] = aggregated['elevation']
+        self.json['coordinates']['istgeom_hdop'] = aggregated['hdop']
+        self.json['coordinates']['istgeom_vdop'] = aggregated['vdop']
+        #self.json['istgeom_pdop'] = aggregated['pdop']
+        self.json['coordinates']['istgeom_sat'] = int(aggregated['satellitesUsed'])
+
+        #self.inputChanged.emit(self.json, self.attr, True)
+
+        self.setUpTextField('istgeom_y', 'coordinates', 'istgeom_y', None, None, lambda: self.validateTab('coordinates', 1))
+        self.setUpTextField('istgeom_x', 'coordinates', 'istgeom_x', None, None, lambda: self.validateTab('coordinates', 1))
+        self.setUpTextField('istgeom_elev', 'coordinates', 'istgeom_elev', None, None, lambda: self.validateTab('coordinates', 1))
+        self.setUpTextField('istgeom_sat', 'coordinates', 'istgeom_sat', None, None, lambda: self.validateTab('coordinates', 1))
+        self.setUpTextField('istgeom_hdop', 'coordinates', 'istgeom_hdop', None, None, lambda: self.validateTab('coordinates', 1))
+        self.setUpTextField('istgeom_vdop', 'coordinates', 'istgeom_vdop', None, None, lambda: self.validateTab('coordinates', 1))
 
     def setUp(self):
         """Set up the form."""
-
-        
 
         QgsMessageLog.logMessage("--------------setUp new------------", 'FIM')
 
@@ -84,17 +115,17 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         self.setUpTextField('spaufsucheaufnahmetruppkuerzel', 'general', 'spaufsucheaufnahmetruppkuerzel', None, None, lambda: self.validateTab('general', 0))
         self.setUpTextField('spaufsucheaufnahmetruppgnss', 'general', 'spaufsucheaufnahmetruppgnss', None, None, lambda: self.validateTab('general', 0))
         self.setUpGeneralComboBox('spaufsuchenichtbegehbarursacheid', 'general', 'spaufsuchenichtbegehbarursacheid', None, None, lambda: self.generalValidation())
-        self.setUpGeneralComboBox('spaufsuchenichtwaldursacheid', 'general', 'spaufsuchenichtwaldursacheid', None, None, lambda: self.generalValidation())
-
+        self.setTreeWidget('spaufsuchenichtwaldursacheidTreeWidget', 'general', 'spaufsuchenichtwaldursacheid', None, None, lambda: self.generalValidation())
+        self._validateTab('general', 0)
+        
         # Coordinates
-
         rec = Recording(self.interface, True, self.gnavs_default_settings())
         rec.aggregatedValuesChanged.connect(self.aggregatedValuesChanged)
         self.gnavs_recording.addWidget(rec)
-        precisionNote = PrecisionNote(self.interface)
-        self.gnavs_recording.addWidget(precisionNote)
+        self.precisionNote = PrecisionNote(self.interface)
+        self.gnavs_recording.addWidget(self.precisionNote)
 
-        self.setUpGeneralComboBox('spaufsucheverschobenursacheid', 'coordinates', 'spaufsucheverschobenursacheid', None, None, lambda: self.validateTab('coordinates', 1))
+        self.setUpGeneralComboBox('spaufsucheverschobenursacheid', 'coordinates', 'spaufsucheverschobenursacheid', None, None, lambda: self.coordinatesValidation())
         self.setUpGeneralComboBox('s_perma', 'coordinates', 's_perma', None, None, lambda: self.validateTab('coordinates', 1))
         self.setUpTextField('istgeom_y', 'coordinates', 'istgeom_y', None, None, lambda: self.validateTab('coordinates', 1))
         self.setUpTextField('istgeom_x', 'coordinates', 'istgeom_x', None, None, lambda: self.validateTab('coordinates', 1))
@@ -102,6 +133,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         self.setUpTextField('istgeom_sat', 'coordinates', 'istgeom_sat', None, None, lambda: self.validateTab('coordinates', 1))
         self.setUpTextField('istgeom_hdop', 'coordinates', 'istgeom_hdop', None, None, lambda: self.validateTab('coordinates', 1))
         self.setUpTextField('istgeom_vdop', 'coordinates', 'istgeom_vdop', None, None, lambda: self.validateTab('coordinates', 1))
+        self._validateTab('coordinates', 1)
 
         # Baumplot
         self.setUpTextField('azimuttransektploteins', 'baumplot1', 'azimuttransektploteins', None, None, lambda: self.validateTab('baumplot1', 2))
@@ -124,7 +156,13 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
         # Weiserpflanzen
         self.setUpTextField('krautanteil', 'weiserpflanzen', 'krautanteil')
+        self.setUpObject('weiserpflanzen', 'moos')
         self.setUpObject('weiserpflanzen', 'kraut')
+        self.setUpObject('weiserpflanzen', 'grass')
+        self.setUpObject('weiserpflanzen', 'farne')
+        self.setUpObject('weiserpflanzen', 'doldengewaechse')
+        self.setUpObject('weiserpflanzen', 'beerenstraucher')
+        self.setUpObject('weiserpflanzen', 'grosstraucher')
 
         # Transektinfo
         self.setUpCheckBox('transektfrassmaus', 'transektinfo', 'transektfrassmaus')
@@ -167,19 +205,32 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         # next time update values only
         self.isSetup = True
 
+    def coordinatesValidation(self):
+        """Validate the coordinates tab."""
+
+        if self.json['coordinates']['spaufsucheverschobenursacheid'] != None:
+            for i in range(2, 13):
+                if self.vwmTabs.isTabEnabled(i):
+                    self.vwmTabs.setTabEnabled(i, False)
+        else:
+            for i in range(2, 13):
+                    self.vwmTabs.setTabEnabled(i, True)
+        
+        self.validateTab('coordinates', 1)
+
     def generalValidation(self):
         """Validate the general tab."""
-
-        QgsMessageLog.logMessage(str(self.json), 'FIM')
 
         if self.json['general']['spaufsuchenichtbegehbarursacheid'] != 1 or self.json['general']['spaufsuchenichtwaldursacheid'] != 0:
             for i in range(1, 13):
                 if self.vwmTabs.isTabEnabled(i):
                     self.vwmTabs.setTabEnabled(i, False)
         else:
-            for i in range(1, 13):
-                    self.vwmTabs.setTabEnabled(i, True)
-            self.validateTab('general', 0)
+            self.vwmTabs.setTabEnabled(1, True)
+            self.coordinatesValidation()
+
+        
+        self.validateTab('general', 0)
 
     def validateTab(self, parentName, tab):
 
@@ -192,16 +243,12 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
     def _validateTab(self, parentName, tab):     
         
-        
         tabErrors = self._validate(self.schema['properties'][parentName], self.json[parentName])
-
+        
         if len(tabErrors) > 0:
             self.vwmTabs.setTabIcon(tab, QtGui.QIcon(':icons/red_rect.png'))
         else:
             self.vwmTabs.setTabIcon(tab, QtGui.QIcon())
-
-        for error in tabErrors:
-            QgsMessageLog.logMessage(str(error.relative_schema_path), 'FIM')
 
         self.validationTimer = None
 
@@ -264,10 +311,13 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
                 if isinstance(childPercent, int):
                     percentTotal += childPercent
 
-            if percentTotal > 100:
-                self.krautError.show()
-            else:
-                self.krautError.hide()
+            if hasattr(self, childName + 'Error'):
+                if percentTotal > 100:
+                    getattr(self, childName + 'Error').show()
+                    #self.krautError.show()
+                else:
+                    getattr(self, childName + 'Error').hide()
+                    #self.krautError.hide()
         
         self.json[parentName][childName] = {}
         for child in schema['properties']:
@@ -548,9 +598,22 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
         element.addItems(schema['enumLabels'])
         
+        def validate():
+            errors = self._validate(schema, schema['enum'][element.currentIndex()])
+
+            if len(errors) > 0:
+                if hasattr(self, objectName + 'Error'):
+                    getattr(self, objectName + 'Error').setText(str(errors[0].message))
+                element.setStyleSheet("QComboBox {\n border: 2px solid red;}")
+            else:
+                if hasattr(self, objectName + 'Error'):
+                    getattr(self, objectName + 'Error').setText('')
+                element.setStyleSheet("QComboBox {\n border: 2px solid green;}")
 
         def update_json(index):
             value = schema['enum'][index]
+
+            validate()
 
             if objectValues is not None:
                 objectValues[childName] = value
@@ -566,7 +629,95 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
             pass
 
         element.currentIndexChanged.connect(update_json)
+        validate()
 
+    def setTreeWidget(self, objectName, parentName, childName, objectValues = None, schema = None, onUpdate = None):
+        """Set up a combo / Tree Widget."""
+
+        if hasattr(self, objectName):
+            element = getattr(self, objectName)
+        else:
+            QgsMessageLog.logMessage("Element " + childName + " not found in " + parentName, 'FIM')
+            return
+        
+        if schema is None: # if root schema
+            schema = self.schema['properties'][parentName]['properties'][childName]
+
+        if childName not in self.json[parentName] or self.json[parentName][childName] is None:
+            self.json[parentName][childName] = self.getDefault(schema)
+
+
+        if hasattr(self, objectName + 'Label'):
+            getattr(self, objectName + 'Label').setText(schema['title'])
+
+        def refresh_field():
+            idx = schema['enum'].index(self.json[parentName][childName])
+            self.spaufsuchenichtwaldursacheidText.setText(str(schema['enumLabels'][idx]))
+
+        def update_json(item):
+            value = int(item.data(0, 1))
+
+            refresh_field()
+
+            if objectValues is not None:
+                objectValues[childName] = value
+            else:
+                self.json[parentName][childName] = value
+
+            if onUpdate is not None:
+                onUpdate()
+
+        element.itemClicked.connect(update_json)
+        refresh_field()
+
+        element.clear()
+
+        if 'description' in schema:
+            element.setHeaderLabels([schema['description']])
+
+        items = {}
+
+        for idx, item in enumerate(schema['enum']):
+            if item is None or item < 100 :
+                items[str(item)] = {
+                    'name': schema['enumLabels'][idx],
+                    'children': {}
+                }
+
+        for idx, item in enumerate(schema['enum']):
+            if item is not None and item > 100 :
+                if item < 10000:
+                    index = int(str(item)[0])
+                else:
+                    index = int(str(item)[0] + str(item)[1])
+
+                if str(index) in items :
+                    items[str(index)]['children'][str(item)] = {
+                        'name': schema['enumLabels'][idx],
+                        'children': {}
+                    }
+                else:
+                    items[str(item)] = {
+                        'name': schema['enumLabels'][idx],
+                        'children': {}
+                    }
+
+        self.setTreeItems(element, items, parentName, childName)
+
+    def setTreeItems(self, tree, items, parentName, childName):
+
+        for attr, item in items.items():
+
+            child = QtWidgets.QTreeWidgetItem(tree)
+
+            
+            child.setText(0, item['name'])
+            child.setData(0, 1, attr)
+
+            child.setSelected(attr == str(self.json[parentName][childName]))
+
+            if 'children' in item:
+                self.setTreeItems(child, item['children'], parentName, childName)
 
     # TEXTFIELD
     def setUpTextField(self, objectName, parentName, childName, objectValues = None, schema = None, onUpdate = None):
@@ -700,7 +851,6 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
     
     def editTableRow(self, parentName, childName, schema, element):
 
-        QgsMessageLog.logMessage(str(element), 'FIM')
 
         #self.json[parentName][childName].remove(element)
         #self.defaultValue = copy.deepcopy(self.json[self.key][row])

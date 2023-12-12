@@ -2057,7 +2057,7 @@
                         },
                         "bestandheterogenitaetsgradid": {
                             "type": "integer",
-                            "title": "Heteroganitätsgrad",
+                            "title": "Heterogenitätsgrad",
                             "description": "Einschätzung der vertikalen und horizontalen Struktur - 0 (homogen) bis 10 (heterogen)",
                             "default": 0,
                             "minimum": 0,
@@ -2449,10 +2449,8 @@
                                 "additionalProperties": false,
                                 "properties": {
                                     "bodenveggr": {
-                                        "type": [
-                                            "integer",
-                                            "null"
-                                        ],
+                                        "type": "integer",
+                                        "default": null,
                                         "title": "Bodenvegetation",
                                         "description": "Art der Bodenvegitation",
                                         "enum": [
@@ -2526,7 +2524,7 @@
                                         "type": "integer",
                                         "title": "Anteil von Bodenbedeckung",
                                         "description": "Der Anteil der gewählten Bodenvegitation in Prozent",
-                                        "minimum": 0,
+                                        "minimum": 1,
                                         "maximum": 100,
                                         "default": 0,
                                         "unit": "%"
@@ -2584,7 +2582,7 @@
                                 "null"
                             ],
                             "title": "Nichtaufgeführt bitte notieren",
-                            "description": "Bodenbearbeitung",
+                            "description": "",
                             "maxLength": 1500
                         }
                     }
