@@ -1,7 +1,7 @@
 import os
 import copy
 import json
-import threading
+from PyQt5.QtCore import QTimer
 
 from qgis.core import QgsMessageLog, QgsPointXY, QgsPoint
 from qgis.PyQt import QtWidgets, uic
@@ -37,9 +37,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         self.validationTimer = None
 
         #self.setUp()
-        QScroller.grabGesture(self.scrollArea_4, QScroller.LeftMouseButtonGesture)
-        #scroll = QScroller.scroller(self.scrollArea_4.viewport())
-        #scroll.grabGesture(self.scrollArea_4.viewport(), QScroller.LeftMouseButtonGesture)
+        #QScroller.grabGesture(self.scrollArea_4, QScroller.LeftMouseButtonGesture)
         
         self.show()
 
@@ -233,7 +231,9 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         self.validateTab('general', 0)
 
     def validateTab(self, parentName, tab):
-
+        
+        self._validateTab(parentName, tab)
+        return
         if self.validationTimer != None:
 
             self.validationTimer.cancel()
@@ -484,8 +484,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
                 self.fillTable(parentName, childName, schema)
             else:
                 addElementError.show()
-                errorTimer = threading.Timer(3, reset_error)
-                errorTimer.start()
+                QTimer.singleShot(3000, reset_error)
 
         
         def validateArray():
