@@ -150,9 +150,7 @@
                         },
                         "spaufsuchenichtwaldursacheid": {
                             "title": "Stichprobenpunt ist auch nach Verlegung nicht im Wald.",
-                            "type": [
-                                "integer"
-                            ],
+                            "type": "integer",
                             "description": "Geben Sie das tatsächliche Landschaftselement an.",
                             "QTType": "tree",
                             "default": 0,
@@ -811,8 +809,8 @@
                                         "title": "Landmarke",
                                         "type": "string",
                                         "description": "Ein auffälliges, meist weithin sichtbares topographisches Objekt.",
-                                        "minimum": 3,
-                                        "maximum": 10000
+                                        "minLength": 3,
+                                        "maxLength": 1000
                                     },
                                     "azimut": {
                                         "title": "Azimut",
@@ -1154,8 +1152,8 @@
                                         "title": "Landmarke",
                                         "type": "string",
                                         "description": "Ein auffälliges, meist weithin sichtbares topographisches Objekt.",
-                                        "minimum": 3,
-                                        "maximum": 10000
+                                        "minLength": 3,
+                                        "maxLength": 1000
                                     },
                                     "azimut": {
                                         "title": "Azimut",
@@ -1511,9 +1509,9 @@
                                             "integer",
                                             "null"
                                         ],
-                                        "maximum": 75,
-                                        "unit": "Millimeter",
-                                        "default": null
+                                        "minimum": 10,
+                                        "maximum": 1000,
+                                        "unit": "Millimeter"
                                     },
                                     "verjuengungstransektschutzmassnahmen": {
                                         "title": "Schutzmaßnahmen",
@@ -1576,7 +1574,7 @@
                         "verjuengungstransektlaenge": {
                             "title": "Transektlänge",
                             "type": "integer",
-                            "description": "Transektlänge",
+                            "description": "Länge des Transekt in Dezimeter",
                             "default": 20,
                             "minimum": 1,
                             "maximum": 250,
@@ -1919,8 +1917,8 @@
                             "type": "integer",
                             "title": "Kronenschlussgrad*",
                             "description": "Bestandesbeschreibung",
+                            "default": 1,
                             "enum": [
-                                null,
                                 1,
                                 2,
                                 3,
@@ -1929,7 +1927,6 @@
                                 6
                             ],
                             "enumLabels": [
-                                "",
                                 "gedrängt",
                                 "geschlossen",
                                 "locker",
@@ -2420,9 +2417,8 @@
                                         "type": "integer",
                                         "title": "Verteilung",
                                         "description": "Verteilung",
-                                        "minimum": 0,
+                                        "minimum": 1,
                                         "maximum": 100,
-                                        "default": 0,
                                         "unit": "%"
                                     }
                                 },
@@ -2526,7 +2522,6 @@
                                         "description": "Der Anteil der gewählten Bodenvegitation in Prozent",
                                         "minimum": 1,
                                         "maximum": 100,
-                                        "default": 0,
                                         "unit": "%"
                                     }
                                 },
@@ -3141,8 +3136,8 @@
                     "title": "Landmarke",
                     "type": "string",
                     "description": "Ein auffälliges, meist weithin sichtbares topographisches Objekt.",
-                    "minimum": 3,
-                    "maximum": 10000
+                    "minLength": 3,
+                    "maxLength": 1000
                 },
                 "azimut": {
                     "title": "Azimut",

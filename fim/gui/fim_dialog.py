@@ -175,13 +175,14 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         schema = self.loadSchema('vwm', version)
 
         self.vwmFormWidget = VWM(self.iface, schema)
-        self.vwmFormWidget.save.connect(self.save)
+        #self.vwmFormWidget.save.connect(self.save)
         self.lfbVwmLayout.addWidget(self.vwmFormWidget)
         self.vwmFormWidget.hide()
 
     def updateVwmForm(self):
         self.vwmFormWidget.updateJson(self.json)
         self.vwmFormWidget.show()
+
 
     def nextTab(self, nextTab):
         if nextTab:
@@ -281,8 +282,6 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.saveBar.validate(self.state.state, self.schemaErrors)
 
     def save(self):
-
-        QgsMessageLog.logMessage(str('SAVE'), 'FIM')
         
         self.draft.saveFeature(self.json)
         
@@ -379,9 +378,13 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
     
     def draftSelected(self, newJson, id, feature):
 
+        
+
         self.addPreviousGeneral(newJson)
 
         self.json = newJson
+
+        self.updateVwmForm()
         
 
         self.changeState()
@@ -392,8 +395,8 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.schema = self.loadSchema(type, version) 
 
         #self.buildForm()
-        if self.schemaType == 'vwm':
-            self.updateVwmForm()
+        #if self.schemaType == 'vwm':
+        
 
         self.resetForm(True)
         self.setPosition(2)
