@@ -88,7 +88,7 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.lfbFokusFeature.hide()
         self.lfbFokusFeature.clicked.connect(self.focusFeature)
 
-        self.validate(self.json)
+        #self.validate(self.json)
         self.showMetaData()
 
         self.show()
@@ -159,7 +159,7 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
 
     def validate(self, jsonToTest, errors = []):
 
-        self.json = jsonToTest
+        #self.json = jsonToTest
         
         #v = Draft7Validator(self.schema)
         #self.errors = sorted(v.iter_errors(jsonToTest), key=lambda e: e.path)
@@ -180,7 +180,10 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
             self.lfbSaveBtn.setDisabled(True)
             #self.isValid = False
             self.lfbErrorDialogBtn.setText(str(len(self.errors)) + ' verbleibende Fehler.')
-            
+        
+        QgsMessageLog.logMessage(str(self.errors), 'FIM')
+        QgsMessageLog.logMessage("--------------updateSaveBtn------------" + str(len(errors)), 'FIM')
+
        
        
         #self.errorsWidget.updateErrors(self.errors)

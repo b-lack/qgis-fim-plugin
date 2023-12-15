@@ -106,7 +106,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.addDraft()
 
         #self.lfbNewEntry.clicked.connect(self.newEntry)
-        self.lfbNewEntry.hide()
+        #self.lfbNewEntry.hide()
 
         
         self.lfbTabWidget.currentChanged.connect(self.tabChange)
@@ -125,6 +125,9 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.resetForm(False)
         self.setPosition(1)
+
+        self.form_previous_btn.clicked.connect(lambda: self.moveTab(-1))
+        self.form_next_btn.clicked.connect(lambda: self.moveTab(1))
 
         self.buildVwmForm()
 
@@ -175,7 +178,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         schema = self.loadSchema('vwm', version)
 
         self.vwmFormWidget = VWM(self.iface, schema)
-        #self.vwmFormWidget.save.connect(self.save)
+        self.vwmFormWidget.save_data.connect(self.updateSaveBtn)
         self.lfbVwmLayout.addWidget(self.vwmFormWidget)
         self.vwmFormWidget.hide()
 
@@ -183,6 +186,14 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.vwmFormWidget.updateJson(self.json)
         self.vwmFormWidget.show()
 
+    def moveTab(self, direction = 1):
+        if not hasattr(self, 'vwmFormWidget'):
+            return
+        
+        if direction == -1:
+            self.vwmFormWidget.previousTab()
+        else:
+            self.vwmFormWidget.nextTab()
 
     def nextTab(self, nextTab):
         if nextTab:
@@ -194,7 +205,9 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
             self.lfbTabWidget.setCurrentIndex(indexToSet)
 
     def update(self):
-        self.draft.update()
+
+        if hasattr(self, 'draft'):
+            self.draft.update()
 
     def saveFeature(self, json, status=False):
         
@@ -278,8 +291,8 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         
         self.validateTabs(True)
     
-    def updateSaveBtn(self):
-        self.saveBar.validate(self.state.state, self.schemaErrors)
+    def updateSaveBtn(self, errors):
+        self.saveBar.validate(self.state.state, errors)
 
     def save(self):
         
@@ -311,7 +324,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.userPosition = position
 
         if self.userPosition == 2:
-            self.lfbHeadline.hide()
+            #self.lfbHeadline.hide()
             self.lfbFormWidget.show()
 
             self.saveBar.show()
@@ -322,7 +335,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
             #self.lfbHomeBtn.show()
             self.lfbHomeScreen.hide()
         else:
-            self.lfbHeadline.show()
+            #self.lfbHeadline.show()
             self.lfbFormWidget.hide()
             self.saveBar.hide()
             self.draft.show()
@@ -410,8 +423,8 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
        
         #self.resetForm(False)
 
-        if validate and self.schemaErrors != None:
-            self.saveBar.validate(self.state.state, self.schemaErrors)
+        #if validate and self.schemaErrors != None:
+            #self.saveBar.validate(self.state.state, self.schemaErrors)
 
     def openState(self):
         msgBox = QtWidgets.QMessageBox()

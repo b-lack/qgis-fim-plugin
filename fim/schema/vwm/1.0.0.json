@@ -481,6 +481,7 @@
                                 "integer",
                                 "null"
                             ],
+                            "maximum": 500,
                             "description": "Anzhal der genutzten Satelliten"
                         }
                     }

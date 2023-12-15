@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>883</width>
-    <height>290</height>
+    <height>295</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -130,6 +130,22 @@ QProgressBar{
        <number>5</number>
       </property>
       <item>
+       <spacer name="horizontalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>10</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
        <widget class="QToolButton" name="lfbHomeBtn">
         <property name="font">
          <font>
@@ -142,10 +158,9 @@ QProgressBar{
         </property>
         <property name="styleSheet">
          <string notr="true">QToolButton{
-	border-radius: 20px;
 	border: 2px solid #333;
 	color: #555;
-	margin: 5px;
+	margin: 3px;
 }
 QToolButton:enabled{
 	background-color: green;
@@ -156,6 +171,22 @@ QToolButton:enabled{
          <string>&lt;</string>
         </property>
        </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>10</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
       <item>
        <widget class="QPushButton" name="lfbDevBtn">
@@ -179,12 +210,45 @@ background-color: #333;</string>
        </widget>
       </item>
       <item>
+       <widget class="QToolButton" name="lfbFokusFeature">
+        <property name="styleSheet">
+         <string notr="true">QToolButton{
+	border: 2px solid #333;
+	color: #555;
+}
+QToolButton:enabled{
+	background-color: green;
+	color: #fff;
+}</string>
+        </property>
+        <property name="text">
+         <string>Karte auf Punkt zentrieren</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>10</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <property name="spacing">
          <number>0</number>
         </property>
         <property name="leftMargin">
-         <number>15</number>
+         <number>0</number>
         </property>
         <item>
          <spacer name="verticalSpacer_2">
@@ -202,7 +266,7 @@ background-color: #333;</string>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <property name="spacing">
-           <number>20</number>
+           <number>10</number>
           </property>
           <property name="leftMargin">
            <number>0</number>
@@ -213,7 +277,7 @@ background-color: #333;</string>
           <item>
            <widget class="QLabel" name="label">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -221,10 +285,19 @@ background-color: #333;</string>
             <property name="text">
              <string>ID:</string>
             </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
            </widget>
           </item>
           <item>
            <widget class="QLabel" name="lfbId">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="font">
              <font>
               <pointsize>13</pointsize>
@@ -237,17 +310,6 @@ background-color: #333;</string>
             </property>
             <property name="text">
              <string>TextLabel</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QToolButton" name="lfbFokusFeature">
-            <property name="styleSheet">
-             <string notr="true">background: #222222;
-padding: 5px;</string>
-            </property>
-            <property name="text">
-             <string>Karte auf Punkt zentrieren</string>
             </property>
            </widget>
           </item>
@@ -323,45 +385,49 @@ background: transparent;</string>
        </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <property name="leftMargin">
-         <number>10</number>
+       <widget class="QPushButton" name="lfbSaveBtn">
+        <property name="font">
+         <font>
+          <pointsize>15</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
         </property>
-        <property name="rightMargin">
-         <number>10</number>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
         </property>
-        <item>
-         <widget class="QPushButton" name="lfbSaveBtn">
-          <property name="font">
-           <font>
-            <pointsize>15</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="cursor">
-           <cursorShape>PointingHandCursor</cursorShape>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton{
-	border-radius: 20px;
+        <property name="styleSheet">
+         <string notr="true">QPushButton{
 	border: 2px solid #333;
 	color: #555;
 	margin: 2px;
 }
 QPushButton:enabled{
-	border-radius: 20px;
 	border: 2px solid #fff;
 	background-color: green;
 	color: #fff;
 }</string>
-          </property>
-          <property name="text">
-           <string>FERTIG</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+        </property>
+        <property name="text">
+         <string>FERTIG</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_5">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>10</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </widget>

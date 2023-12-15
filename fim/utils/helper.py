@@ -124,10 +124,13 @@ class Utils(object):
 
         crsFeature = layer.crs().authid()
         # GET
-    
+        
         srcCrsNr = int(crsFeature.split(":")[1])
-        sourceCrs = QgsCoordinateReferenceSystem.fromEpsgId(srcCrsNr)
+        QgsMessageLog.logMessage(str(srcCrsNr), 'FIM')
+        sourceCrs = QgsCoordinateReferenceSystem.fromEpsgId(3857) #srcCrsNr
+        
         destCrsNr = int(crs.split(":")[1])
+        QgsMessageLog.logMessage(str(destCrsNr), 'FIM')
         destCrs = QgsCoordinateReferenceSystem.fromEpsgId(destCrsNr) #fromProj(crs)
 
         return QgsCoordinateTransform(sourceCrs, destCrs, QgsProject.instance())
@@ -135,6 +138,7 @@ class Utils(object):
     def focusFeature(interface, feature, select = False, zoom = 150000):
         geom = feature.geometry()
         coordinates = geom.asPoint()
+
 
         map_pos = QgsPointXY(coordinates.x(), coordinates.y())
 

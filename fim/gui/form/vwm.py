@@ -24,7 +24,8 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'vwm.ui'))
 class VWM(QtWidgets.QWidget, UI_CLASS):
     """VWM."""
 
-    validate = pyqtSignal(object)
+    #validate = pyqtSignal(object)
+    save_data = pyqtSignal(object)
 
     def __init__(self, interface, schema):
         """Constructor."""
@@ -65,8 +66,9 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         self.setUp()
 
     def validateAll(self):
-        QgsMessageLog.logMessage("--------------validateALL------------", 'FIM')
+        """Validate the whole json."""
 
+        
 
         v = Draft7Validator(self.schema)
 
@@ -76,10 +78,26 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         for error in lfbErrors:
             self.schemaErrors.append(error)
 
-        for error in self.schemaErrors:
-            QgsMessageLog.logMessage(str(error.message), 'FIM')
+        #for error in self.schemaErrors:
+        #    QgsMessageLog.logMessage("msg: " + str(error.path), 'FIM')
+        #    QgsMessageLog.logMessage("msg: " + str(error.message), 'FIM')
 
+        #QgsMessageLog.logMessage("ERRORS: " + str(len(self.schemaErrors)), 'FIM')
+        self.save_data.emit(self.schemaErrors)
     
+    def nextTab(self):
+        """Go to the next tab."""
+
+        self.vwmTabs.setCurrentIndex(self.vwmTabs.currentIndex() + 1)
+    
+    def previousTab(self):
+        """Go to the previous tab."""
+
+        self.vwmTabs.setCurrentIndex(self.vwmTabs.currentIndex() - 1)
+
+
+
+
     def gnavs_default_settings(self):
         return {
             "meassurementSetting": 100,
@@ -252,6 +270,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         self.setUpTextField('note', 'stoerung', 'note')
 
 
+        self.validateAll()
         # next time update values only
         self.isSetup = True
 
@@ -326,11 +345,11 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         elif schema['type'] == "boolean":
             return False
         elif schema['type'] == "string":
-            return ''
+            return None
         elif schema['type'] == "number":
-            return ''
+            return None
         
-        return ''
+        return None
     
     def shouldBeNumeric(self, schema):
         """Check if the value should be numeric."""
@@ -741,6 +760,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
         
         def refresh_field():
+
             if objectValues is not None:
                 if childName not in objectValues or objectValues[childName] is None:
                     objectValues[childName] = self.getDefault(schema)
@@ -756,9 +776,10 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
             return index
         
-        index = refresh_field()
+        
 
         if self.isSetup == True:
+            index = refresh_field()
             return
 
         if hasattr(self, objectName + 'Label'):
@@ -813,7 +834,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         element.currentIndexChanged.connect(update_value_by_combo)
         validate()
         
-        
+        index = refresh_field()
             
 
         if hasattr(self, parentName + '_' + childName + '_chips'):
@@ -932,19 +953,27 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
             if childName not in objectValues or objectValues[childName] is None:
                 objectValues[childName] = self.getDefault(schema)
 
+            tempValue = objectValues[childName]
+            if tempValue is not None:
+                tempValue = str(tempValue)
+
             if hasattr(element, 'setText'):
-                element.setText(str(objectValues[childName]))
+                element.setText(tempValue)
             elif hasattr(element, 'setPlainText'):
-                element.setPlainText(str(objectValues[childName]))
+                element.setPlainText(tempValue)
 
         else:
             if childName not in self.json[parentName] or self.json[parentName][childName] is None:
                 self.json[parentName][childName] = self.getDefault(schema)
-        
+
+            tempValue = self.json[parentName][childName]
+            if tempValue is not None:
+                tempValue = str(tempValue)
+
             if hasattr(element, 'setText'):
-                element.setText(str(self.json[parentName][childName]))
+                element.setText(tempValue)
             elif hasattr(element, 'setPlainText'):
-                element.setPlainText(str(self.json[parentName][childName]))
+                element.setPlainText(tempValue)
 
         if self.isSetup == True:
             return
@@ -1073,6 +1102,8 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
             self.json[parentName][childName].remove(element)
             self.fillTable(parentName, childName, schema)
 
+            self.validation_t_bestockung()
+
         
     def validation_t_bestockung(self):
         """Show an error if the bestockung is not valid."""
@@ -1087,6 +1118,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
             self.t_bestockungError.hide()
             self.vwmTabs.setTabIcon(11, QtGui.QIcon())
 
+        self.validateAll()
     
     def lfbLayers(self):
 
@@ -1155,6 +1187,9 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         elements = [d['schicht_id'] for d in json['t_bestockung']['t_bestockung']]
         elements_unique = list(set(elements))
         #elements_unique.sort()
+
+        if 'bestandnschichtigid' not in json['bestandsbeschreibung']:
+            return []
         
         schicht_id = json['bestandsbeschreibung']['bestandnschichtigid']
 
