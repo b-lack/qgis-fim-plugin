@@ -211,6 +211,9 @@ background-color: #333;</string>
       </item>
       <item>
        <widget class="QToolButton" name="lfbFokusFeature">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
         <property name="styleSheet">
          <string notr="true">QToolButton{
 	border: 2px solid #333;
@@ -281,6 +284,9 @@ QToolButton:enabled{
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">padding:0;</string>
             </property>
             <property name="text">
              <string>ID:</string>

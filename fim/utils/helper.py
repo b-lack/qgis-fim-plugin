@@ -127,7 +127,7 @@ class Utils(object):
         
         srcCrsNr = int(crsFeature.split(":")[1])
         QgsMessageLog.logMessage(str(srcCrsNr), 'FIM')
-        sourceCrs = QgsCoordinateReferenceSystem.fromEpsgId(3857) #srcCrsNr
+        sourceCrs = QgsCoordinateReferenceSystem.fromEpsgId(srcCrsNr) #srcCrsNr
         
         destCrsNr = int(crs.split(":")[1])
         QgsMessageLog.logMessage(str(destCrsNr), 'FIM')
@@ -139,11 +139,13 @@ class Utils(object):
         geom = feature.geometry()
         coordinates = geom.asPoint()
 
-
+        
         map_pos = QgsPointXY(coordinates.x(), coordinates.y())
 
+        QgsMessageLog.logMessage(str(Utils.getLayerById()), 'FIM')
+
         xform = Utils.transformCoordinates(Utils.getLayerById())
-        map_pos = xform.transform(map_pos)
+        #map_pos = xform.transform(map_pos)
         interface.mapCanvas().setCenter(map_pos)
         
         current_scale =  interface.mapCanvas().scale()

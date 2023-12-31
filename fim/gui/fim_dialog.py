@@ -195,7 +195,8 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.vwmFormWidget = VWM(self.iface, schema)
         self.vwmFormWidget.save_data.connect(self.updateSaveBtn)
         self.vwmFormWidget.vwmTabs.currentChanged.connect(self.hide_info_pane)
-        self.lfbVwmLayout.addWidget(self.vwmFormWidget)
+        #self.lfbVwmLayout.addWidget(self.vwmFormWidget)
+        QgsMessageLog.logMessage('self.vwmFormWidget', 'FIM')
         self.vwmFormWidget.hide()
 
     def updateVwmForm(self):
