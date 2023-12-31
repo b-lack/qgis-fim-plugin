@@ -128,6 +128,8 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.form_previous_btn.clicked.connect(lambda: self.moveTab(-1))
         self.form_next_btn.clicked.connect(lambda: self.moveTab(1))
+        self.lfbInfoButton.clicked.connect(self.tabInfoBoxClicked)
+        self.lfbTabInfoWidget.hide()
 
         self.buildVwmForm()
 
@@ -141,6 +143,19 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
             self.schema = schema['properties']['properties']
 
         return self.schema
+    
+    def tabInfoBoxClicked(self):
+        """Slot documentation goes here."""
+
+        schema = self.vwmFormWidget.getSchemaByCurrentTab()
+
+        self.lfbInfoBoxTitle.setText(schema['title'])
+        self.lfbInfoBox.setText(schema['description'])
+
+        if self.lfbTabInfoWidget.isVisible():
+            self.lfbTabInfoWidget.hide()
+        else:
+            self.lfbTabInfoWidget.show()
 
     def buildForm(self):
         self.lfbTabWidget.clear()
@@ -179,6 +194,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.vwmFormWidget = VWM(self.iface, schema)
         self.vwmFormWidget.save_data.connect(self.updateSaveBtn)
+        self.vwmFormWidget.vwmTabs.currentChanged.connect(self.hide_info_pane)
         self.lfbVwmLayout.addWidget(self.vwmFormWidget)
         self.vwmFormWidget.hide()
 
@@ -186,6 +202,10 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.vwmFormWidget.updateJson(self.json)
         self.vwmFormWidget.show()
 
+    def hide_info_pane(self):
+        """ Hide info pane when tab is changed """
+        self.lfbTabInfoWidget.hide()
+        
     def moveTab(self, direction = 1):
         if not hasattr(self, 'vwmFormWidget'):
             return
@@ -194,6 +214,7 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
             self.vwmFormWidget.previousTab()
         else:
             self.vwmFormWidget.nextTab()
+
 
     def nextTab(self, nextTab):
         if nextTab:

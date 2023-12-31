@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>953</width>
-    <height>701</height>
+    <width>1063</width>
+    <height>487</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Form</string>
@@ -41,7 +47,7 @@
       <string notr="true"/>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>6</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -86,10 +92,10 @@
 }</string>
          </property>
          <property name="verticalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
+          <enum>Qt::ScrollBarAsNeeded</enum>
          </property>
          <property name="horizontalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
+          <enum>Qt::ScrollBarAsNeeded</enum>
          </property>
          <property name="widgetResizable">
           <bool>true</bool>
@@ -99,8 +105,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>947</width>
-            <height>668</height>
+            <width>1089</width>
+            <height>358</height>
            </rect>
           </property>
           <property name="sizePolicy">
@@ -125,7 +131,7 @@
               <enum>Qt::Vertical</enum>
              </property>
              <property name="sizeType">
-              <enum>QSizePolicy::Maximum</enum>
+              <enum>QSizePolicy::Fixed</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -167,7 +173,7 @@
               <enum>Qt::Vertical</enum>
              </property>
              <property name="sizeType">
-              <enum>QSizePolicy::Maximum</enum>
+              <enum>QSizePolicy::Fixed</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -320,8 +326,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>929</width>
-            <height>650</height>
+            <width>1071</width>
+            <height>425</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_22">
@@ -667,7 +673,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>915</width>
+            <width>1071</width>
             <height>780</height>
            </rect>
           </property>
@@ -1126,8 +1132,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>929</width>
-            <height>650</height>
+            <width>1071</width>
+            <height>390</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_20">
@@ -1394,7 +1400,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>915</width>
+            <width>1071</width>
             <height>673</height>
            </rect>
           </property>
@@ -1798,8 +1804,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>929</width>
-            <height>650</height>
+            <width>1071</width>
+            <height>370</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_29">
@@ -2060,67 +2066,86 @@
        <string>Transekt</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_9">
-       <item row="2" column="0">
-        <layout class="QVBoxLayout" name="transekt_schutzmassnahmeid_chips">
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-        </layout>
-       </item>
-       <item row="5" column="0">
-        <widget class="QTextEdit" name="transektstoerungursache">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>2</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="transektstoerungursacheLabel">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0">
-        <widget class="QLabel" name="schutzmassnahmeidLabel">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
+        <widget class="QScrollArea" name="scrollArea">
+         <property name="widgetResizable">
+          <bool>true</bool>
          </property>
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents_13">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>1039</width>
+            <height>436</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_50">
+           <item row="4" column="0">
+            <widget class="QLabel" name="transektstoerungursacheLabel">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="schutzmassnahmeidLabel">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <spacer name="verticalSpacer_23">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="2" column="0">
+            <layout class="QVBoxLayout" name="transekt_schutzmassnahmeid_chips">
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+            </layout>
+           </item>
+           <item row="1" column="0">
+            <widget class="QComboBox" name="schutzmassnahmeid"/>
+           </item>
+           <item row="5" column="0">
+            <widget class="QTextEdit" name="transektstoerungursache">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>2</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QComboBox" name="schutzmassnahmeid"/>
-       </item>
-       <item row="3" column="0">
-        <spacer name="verticalSpacer_23">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
@@ -2139,8 +2164,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>915</width>
-            <height>845</height>
+            <width>1071</width>
+            <height>264</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_42">
@@ -2185,6 +2210,9 @@
             <widget class="QgsCollapsibleGroupBox" name="verjuengungstransekt_collapsable">
              <property name="title">
               <string>Baum hinzufügen</string>
+             </property>
+             <property name="collapsed">
+              <bool>true</bool>
              </property>
              <layout class="QGridLayout" name="gridLayout_43">
               <property name="horizontalSpacing">
@@ -2656,8 +2684,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>947</width>
-            <height>668</height>
+            <width>1089</width>
+            <height>263</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_18">
@@ -3961,150 +3989,86 @@
        <property name="verticalSpacing">
         <number>3</number>
        </property>
-       <item row="1" column="1">
-        <widget class="QCheckBox" name="transektfrassmaus">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_49">
+         <property name="topMargin">
+          <number>0</number>
          </property>
-         <property name="text">
-          <string>CheckBox</string>
-         </property>
-        </widget>
+         <item row="1" column="0">
+          <widget class="QLabel" name="transektfrassmausDescription">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QCheckBox" name="transektfrasshase">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>CheckBox</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLabel" name="transektfrasshaseDescription">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QCheckBox" name="transektfrassmaus">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>CheckBox</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QCheckBox" name="transektfrassbieber">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>CheckBox</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="transektfrassbieberDescription">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
-       <item row="6" column="1">
-        <spacer name="verticalSpacer_25">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="4" column="2">
-        <spacer name="horizontalSpacer_24">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="5" column="1">
-        <widget class="QLabel" name="transektfrasshaseDescription">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QCheckBox" name="transektfrasshase">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>CheckBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLabel" name="transektfrassmausDescription">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="1">
-        <widget class="QLabel" name="transektfrassbieberDescription">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="1">
-        <widget class="QCheckBox" name="transektfrassbieber">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>CheckBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="1">
-        <spacer name="verticalSpacer_29">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="3" column="1">
+       <item row="3" column="0">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="7" column="0">
-        <spacer name="horizontalSpacer_23">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="1">
-        <spacer name="verticalSpacer_26">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::MinimumExpanding</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -4128,7 +4092,7 @@
         <number>3</number>
        </property>
        <item row="0" column="0" colspan="6">
-        <widget class="QScrollArea" name="scrollArea">
+        <widget class="QScrollArea" name="scrollArea_bestandesbeschreibung">
          <property name="widgetResizable">
           <bool>true</bool>
          </property>
@@ -4137,8 +4101,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>929</width>
-            <height>650</height>
+            <width>1071</width>
+            <height>380</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_47">
@@ -4542,8 +4506,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>947</width>
-            <height>668</height>
+            <width>1089</width>
+            <height>481</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_45">
@@ -4933,8 +4897,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>929</width>
-            <height>650</height>
+            <width>1071</width>
+            <height>396</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_34">
@@ -5203,11 +5167,75 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>947</width>
-            <height>668</height>
+            <width>1089</width>
+            <height>276</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_17">
+           <item row="0" column="1">
+            <widget class="QCheckBox" name="sanitaryStrokes">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>CheckBox</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <spacer name="verticalSpacer_30">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="0">
+            <spacer name="verticalSpacer_45">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="7" column="0" colspan="2">
+            <widget class="QPlainTextEdit" name="note"/>
+           </item>
+           <item row="3" column="0">
+            <spacer name="verticalSpacer_46">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
            <item row="2" column="1">
             <widget class="QCheckBox" name="storm">
              <property name="font">
@@ -5234,8 +5262,8 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="0">
-            <widget class="QCheckBox" name="wildfire">
+           <item row="4" column="0">
+            <widget class="QCheckBox" name="soilCultivation">
              <property name="font">
               <font>
                <weight>75</weight>
@@ -5246,25 +5274,6 @@
               <string>CheckBox</string>
              </property>
             </widget>
-           </item>
-           <item row="7" column="0" colspan="2">
-            <widget class="QPlainTextEdit" name="note"/>
-           </item>
-           <item row="5" column="0">
-            <spacer name="verticalSpacer_30">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Fixed</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
            </item>
            <item row="6" column="0" colspan="2">
             <widget class="QLabel" name="noteLabel">
@@ -5279,8 +5288,8 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="0">
-            <widget class="QCheckBox" name="soilCultivation">
+           <item row="2" column="0">
+            <widget class="QCheckBox" name="wildfire">
              <property name="font">
               <font>
                <weight>75</weight>
@@ -5291,51 +5300,6 @@
               <string>CheckBox</string>
              </property>
             </widget>
-           </item>
-           <item row="1" column="0">
-            <spacer name="verticalSpacer_45">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Fixed</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="0" column="1">
-            <widget class="QCheckBox" name="sanitaryStrokes">
-             <property name="font">
-              <font>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>CheckBox</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <spacer name="verticalSpacer_46">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Fixed</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
            </item>
           </layout>
          </widget>

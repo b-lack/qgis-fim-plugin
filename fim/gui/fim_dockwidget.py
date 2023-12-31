@@ -314,26 +314,15 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self.userPosition = position
 
         if self.userPosition == 2:
-            #self.lfbHeadline.hide()
             self.lfbFormWidget.show()
-
             self.saveBar.show()
             self.draft.hide()
-            #self.folderSelection.hide()
-
-            #self.lfbHomeBtn.setEnabled(True)
-            #self.lfbHomeBtn.show()
             self.lfbHomeScreen.hide()
         else:
-            #self.lfbHeadline.show()
             self.lfbFormWidget.hide()
             self.saveBar.hide()
             self.draft.show()
             self.draft.update()
-            #self.folderSelection.show()
-
-            #self.lfbHomeBtn.setEnabled(False)
-            #self.lfbHomeBtn.hide()
             self.lfbHomeScreen.show()
 
         
@@ -389,7 +378,7 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
 
         self.updateVwmForm()
         
-
+        
         self.changeState()
 
 
@@ -397,12 +386,15 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         version = self.json['versions'] if 'versions' in self.json else '1.0.0'
         self.schema = self.loadSchema(type, version) 
 
+        
         #self.buildForm()
         #if self.schemaType == 'vwm':
         
 
         self.resetForm(True)
+        
         self.setPosition(2)
+        
         self.saveBar.setAttributes(feature, 'los_id')
         self.draft.resetCurrentDraft(id)
 

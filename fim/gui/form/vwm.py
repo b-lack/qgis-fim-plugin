@@ -53,6 +53,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         QScroller.grabGesture(self.scrollArea_bestockung, QScroller.LeftMouseButtonGesture)
         QScroller.grabGesture(self.scrollArea_bodenvegetation, QScroller.LeftMouseButtonGesture)
         QScroller.grabGesture(self.scrollArea_stoerung, QScroller.LeftMouseButtonGesture)
+        QScroller.grabGesture(self.scrollArea_bestandesbeschreibung, QScroller.LeftMouseButtonGesture)
 
         self.show()
 
@@ -112,6 +113,16 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
                 {"name": "Satellites Used", "value": "satellitesUsed", "direction": False, "active": True}
             ],
         }
+    
+    def getSchemaByCurrentTab(self):
+        """Get the schema by the current tab."""
+
+        tabNr = self.vwmTabs.currentIndex()
+
+        key = list(self.schema['properties'])[tabNr]
+       
+        return self.schema['properties'][key]
+
     def aggregatedValuesChanged(self, gpsInfos):
         """Update the aggregated values"""
 
@@ -215,9 +226,6 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         #Transekt
         self.setUpTextField('verjuengungstransektlaenge', 'verjuengungstransekt', 'verjuengungstransektlaenge', None, None, lambda: self.validateTab('verjuengungstransekt', 7))
         self.setUpArray('verjuengungstransekt', 'verjuengungstransekten', self.verjuengungstransektAdd, self.verjuengungstransektAddError)
-        #self.setUpGeneralComboBox('verjuengungstransekt_ba_icode', 'verjuengungstransekt', 'ba_icode')
-        #self.setUpGeneralComboBox('verjuengungstransekt_height', 'verjuengungstransekt', 'height')
-        #self.setUpTextField('verjuengungstransektbhd', 'verjuengungstransekt', 'verjuengungstransektbhd')
 
         # Weiserpflanzen
         self.setUpTextField('krautanteil', 'weiserpflanzen', 'krautanteil')

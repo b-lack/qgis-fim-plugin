@@ -28,6 +28,8 @@ from qgis.PyQt.QtWidgets import QAction
 from .resources import *
 import os.path
 
+from qgis.core import QgsMessageLog
+
 # Before continuing, we check if jsonschema can be imported.
 # If not, we will not import the plugin files.
 ERROR = False
@@ -221,6 +223,8 @@ class Fim:
     def run(self):
         """Run method that loads and starts the plugin"""
 
+        QgsMessageLog.logMessage(str(self.pluginIsActive), "Fim")
+
         if not self.pluginIsActive:
             self.pluginIsActive = True
 
@@ -239,4 +243,6 @@ class Fim:
             # show the dockwidget
             # TODO: fix to allow choice of dock location
             self.iface.addDockWidget(Qt.BottomDockWidgetArea, self.dockwidget)
+            self.dockwidget.show()
+        else:
             self.dockwidget.show()
