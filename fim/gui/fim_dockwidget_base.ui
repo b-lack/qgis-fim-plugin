@@ -19,7 +19,7 @@
   <property name="minimumSize">
    <size>
     <width>600</width>
-    <height>195</height>
+    <height>297</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -239,6 +239,18 @@ padding:0;</string>
          <property name="spacing">
           <number>0</number>
          </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_4">
            <property name="topMargin">
@@ -292,7 +304,7 @@ padding:0;</string>
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>750</width>
+              <width>374</width>
               <height>219</height>
              </rect>
             </property>
@@ -323,7 +335,7 @@ padding:0;</string>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
-            <widget class="QToolButton" name="toolButton_3">
+            <widget class="QToolButton" name="info_btn">
              <property name="cursor">
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
@@ -378,6 +390,9 @@ padding:0;</string>
             </widget>
            </item>
           </layout>
+         </item>
+         <item>
+          <widget class="QTextBrowser" name="info_browser"/>
          </item>
         </layout>
        </item>

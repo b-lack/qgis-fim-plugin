@@ -87,7 +87,7 @@ class DraftItem(QtWidgets.QWidget, UI_CLASS):
         return 'VWM' # - Verjüngungs- und Wildeinflussmonitoring
 
     def focusFeature(self):
-        Utils.focusFeature(self.interface, self.feature, False)
+        Utils.focusFeature(self.interface, self.feature, False, None)
 
     def on_lfbDraftIconBtn_clicked(self):
         self.featureSelected.emit(self.feature.id())

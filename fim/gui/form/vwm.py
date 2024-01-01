@@ -27,7 +27,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
     #validate = pyqtSignal(object)
     save_data = pyqtSignal(object)
 
-    def __init__(self, interface, schema):
+    def __init__(self, interface, schema, info_browser):
         """Constructor."""
 
         QDialog.__init__(self, interface.mainWindow())
@@ -36,18 +36,21 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
         self.interface = interface
         self.schema = schema
+        self.info_browser = info_browser
 
         self.isSetup = False
 
         self.validationTimer = None
 
-        #self.setUp()
+        self.vwmTabs.currentChanged.connect(self.update_info)
+        
         QScroller.grabGesture(self.scrollArea_general, QScroller.LeftMouseButtonGesture)
         QScroller.grabGesture(self.scrollArea_coordinates, QScroller.LeftMouseButtonGesture)
         QScroller.grabGesture(self.scrollArea_baumplot1, QScroller.LeftMouseButtonGesture)
         QScroller.grabGesture(self.scrollArea_landmarken1, QScroller.LeftMouseButtonGesture)
         QScroller.grabGesture(self.scrollArea_baumplot2, QScroller.LeftMouseButtonGesture)
         QScroller.grabGesture(self.scrollArea_landmarken2, QScroller.LeftMouseButtonGesture)
+        QScroller.grabGesture(self.scrollArea_transekt, QScroller.LeftMouseButtonGesture)
         QScroller.grabGesture(self.scrollArea_verjuengungstransekt, QScroller.LeftMouseButtonGesture)
         QScroller.grabGesture(self.scrollArea_weiserpflanzen, QScroller.LeftMouseButtonGesture)
         QScroller.grabGesture(self.scrollArea_bestockung, QScroller.LeftMouseButtonGesture)
@@ -56,6 +59,17 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         QScroller.grabGesture(self.scrollArea_bestandesbeschreibung, QScroller.LeftMouseButtonGesture)
 
         self.show()
+
+    def update_info(self):
+        """Update the info browser."""
+
+        self.info_browser.clear()
+
+        current_tab_schema = self.getSchemaByCurrentTab()
+        if current_tab_schema is not None:
+            self.info_browser.append("<h1>" + str(current_tab_schema['title'] + "</h1>"))
+            if 'description' in current_tab_schema:
+                self.info_browser.append("<p>" + str(current_tab_schema['description']) + "</p>")
 
     def updateJson(self, json):
         """Update the json."""
@@ -1082,7 +1096,19 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
             table.insertRow(rowPosition)
 
             for i, child in enumerate(schema['items']['properties']):
-                table.setItem(rowPosition, i, QtWidgets.QTableWidgetItem(str(element[child])))
+                value = ''
+
+                if schema['items']['properties'][child]['type'] == 'boolean':
+                    value = 'Ja' if element[child] else 'Nein'
+                elif 'enumLabels' in schema['items']['properties'][child]:
+                    value = str(schema['items']['properties'][child]['enumLabels'][0])
+                else:
+                    value = str(element[child])
+                
+                if 'unitShort' in schema['items']['properties'][child]:
+                    value = value + ' ' + schema['items']['properties'][child]['unitShort']
+
+                table.setItem(rowPosition, i, QtWidgets.QTableWidgetItem(value))
 
             deleteBtn = QtWidgets.QPushButton('Löschen')
             deleteBtn.clicked.connect(lambda: self.deleteTableRow(parentName, childName, schema, element))

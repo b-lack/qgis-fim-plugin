@@ -98,7 +98,7 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.lfbPluginVersion.setText('Version: ' + str(metaData['version']))
 
     def focusFeature(self):
-        Utils.focusFeature(self.interface, self.currentFeature, True, 15000)
+        Utils.focusFeature(self.interface, self.currentFeature, True, 1000)
 
     def openSchema(self):
         msgBox = QtWidgets.QMessageBox()
@@ -157,7 +157,7 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         return True
 
 
-    def validate(self, jsonToTest, errors = []):
+    def validate(self, errors = []):
 
         #self.json = jsonToTest
         
@@ -180,11 +180,6 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
             self.lfbSaveBtn.setDisabled(True)
             #self.isValid = False
             self.lfbErrorDialogBtn.setText(str(len(self.errors)) + ' verbleibende Fehler.')
-        
-        QgsMessageLog.logMessage(str(self.errors), 'FIM')
-        QgsMessageLog.logMessage("--------------updateSaveBtn------------" + str(len(errors)), 'FIM')
-
-       
        
         #self.errorsWidget.updateErrors(self.errors)
 

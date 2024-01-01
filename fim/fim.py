@@ -223,8 +223,6 @@ class Fim:
     def run(self):
         """Run method that loads and starts the plugin"""
 
-        QgsMessageLog.logMessage(str(self.pluginIsActive), "Fim")
-
         if not self.pluginIsActive:
             self.pluginIsActive = True
 

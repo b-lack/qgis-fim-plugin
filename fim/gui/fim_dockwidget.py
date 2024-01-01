@@ -117,7 +117,14 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self.form_previous_btn.clicked.connect(lambda: self.moveTab(-1))
         self.form_next_btn.clicked.connect(lambda: self.moveTab(1))
 
+        self.info_btn.clicked.connect(self.toggle_info_dialog)
+        self.info_browser.hide()
+
         self.buildVwmForm()
+
+    def toggle_info_dialog(self):
+        '''Toggle the info dialog'''
+        self.info_browser.setVisible(not self.info_browser.isVisible())
 
     def loadSchema(self, type='vwm', version='1.0.0'):
         dirname = os.path.dirname(__file__)
@@ -165,7 +172,7 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         version = self.json['versions'] if 'versions' in self.json else '1.0.0'
         schema = self.loadSchema('vwm', version)
 
-        self.vwmFormWidget = VWM(self.iface, schema)
+        self.vwmFormWidget = VWM(self.iface, schema, self.info_browser)
         self.vwmFormWidget.save_data.connect(self.updateSaveBtn)
         self.lfbVwmLayout.addWidget(self.vwmFormWidget)
         self.vwmFormWidget.hide()
@@ -199,8 +206,6 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
 
     def saveFeature(self, json, status=False):
         
-        QgsMessageLog.logMessage(str('SAVE'), 'FIM')
-        QgsMessageLog.logMessage(str(self.json), 'FIM')
         #self.saveDelay()
         self.save()
         
@@ -280,9 +285,7 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self.validateTabs(True)
     
     def updateSaveBtn(self, errors):
-
-        #self.saveBar.validate(self.state.state, errors)
-        pass
+        self.saveBar.validate(errors)
 
     def save(self):
         
@@ -427,7 +430,6 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
             self.save()
 
     def _validateTabs(self):
-        QgsMessageLog.logMessage('validateTabs', 'FIM')
        
        
         isValidToSave = False
@@ -483,8 +485,6 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self.update_tab_errors(self.schemaErrors)
         
         #self.updateSaveBtn()
-
-        QgsMessageLog.logMessage(str(self.schemaErrors), 'FIM')
 
         return isValidToSave
     
@@ -557,7 +557,6 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         label_errors = []
 
         findunique = json['baumplot1']['baumplot1']
-        QgsMessageLog.logMessage(str(findunique), 'FIM')
 
 
         return label_errors

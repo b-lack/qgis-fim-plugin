@@ -135,9 +135,9 @@ class Utils(object):
 
         return QgsCoordinateTransform(sourceCrs, destCrs, QgsProject.instance())
 
-    def focusFeature(interface, feature, select = False, zoom = 150000):
+    def focusFeature(interface, feature, select = False, zoom = 2000):
         geom = feature.geometry()
-        coordinates = geom.asPoint()
+        coordinates = geom.asPoint() 
 
         
         map_pos = QgsPointXY(coordinates.x(), coordinates.y())
@@ -149,7 +149,8 @@ class Utils(object):
         interface.mapCanvas().setCenter(map_pos)
         
         current_scale =  interface.mapCanvas().scale()
-        interface.mapCanvas().zoomScale(min(zoom, current_scale))
+        if zoom is not None:
+            interface.mapCanvas().zoomScale(min(zoom, current_scale))
 
         if select:
             Utils.deselectFeature()

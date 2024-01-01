@@ -33,7 +33,7 @@ from qgis.PyQt import QtWidgets, uic, QtGui
 from qgis.PyQt.QtCore import QDateTime, QVariant, QCoreApplication, QSettings, QTranslator
 from PyQt5.QtGui import QColor, QFont
 
-from qgis.PyQt.QtWidgets import QDialog, QTableWidgetItem
+from qgis.PyQt.QtWidgets import QDialog, QTableWidgetItem, QScroller
 
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore
@@ -97,6 +97,10 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         self.addIoButton()
 
         self.empty_draft_label.hide()
+
+        QScroller.grabGesture(self.scrollArea, QtWidgets.QScroller.LeftMouseButtonGesture)
+        QScroller.grabGesture(self.scrollArea_2, QtWidgets.QScroller.LeftMouseButtonGesture)
+        QScroller.grabGesture(self.scrollArea_3, QtWidgets.QScroller.LeftMouseButtonGesture)
 
         self.show()
 
