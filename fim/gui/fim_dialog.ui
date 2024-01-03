@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1009</width>
-    <height>732</height>
+    <width>937</width>
+    <height>655</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-    <horstretch>1</horstretch>
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
@@ -25,10 +25,16 @@
   <property name="windowTitle">
    <string>FIM - Forest Inventory and Monitoring</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <property name="sizeGripEnabled">
    <bool>false</bool>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -39,12 +45,9 @@
     <number>0</number>
    </property>
    <property name="bottomMargin">
-    <number>100</number>
-   </property>
-   <property name="spacing">
     <number>0</number>
    </property>
-   <item row="1" column="0">
+   <item>
     <layout class="QVBoxLayout" name="lfbMain">
      <property name="spacing">
       <number>0</number>
@@ -54,12 +57,15 @@
      </property>
     </layout>
    </item>
-   <item row="2" column="0">
+   <item>
     <widget class="QTabWidget" name="lfbTabWidget">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
        <horstretch>0</horstretch>
-       <verstretch>2</verstretch>
+       <verstretch>0</verstretch>
       </sizepolicy>
      </property>
      <property name="minimumSize">
@@ -131,8 +137,11 @@ QTabWidget::pane { border: 0; }</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item>
     <widget class="QScrollArea" name="lfbHomeScreen">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
        <horstretch>0</horstretch>
@@ -151,8 +160,8 @@ padding:0;</string>
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>1007</width>
-        <height>311</height>
+        <width>935</width>
+        <height>323</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -165,98 +174,18 @@ padding:0;</string>
        <property name="spacing">
         <number>0</number>
        </property>
-       <item>
-        <widget class="QWidget" name="lfbHeadline" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <layout class="QVBoxLayout" name="_2">
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>10</number>
-          </property>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <property name="spacing">
-             <number>0</number>
-            </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <spacer name="horizontalSpacer">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QPushButton" name="lfbNewEntry">
-              <property name="font">
-               <font>
-                <pointsize>15</pointsize>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="cursor">
-               <cursorShape>PointingHandCursor</cursorShape>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">QPushButton{
-	border-radius: 20px;
-	border: 2px solid #333;
-	color: #555;
-	margin: 10px 0px 0px;
-	padding: 10px;
-}
-QPushButton:hover{
-	background-color: yellow;
-}
-QPushButton:enabled{
-	border-radius: 20px;
-	border: 2px solid #fff;
-	background-color: green;
-	color: #fff;
-}</string>
-              </property>
-              <property name="text">
-               <string>AUFNAHME STARTEN</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
         <layout class="QVBoxLayout" name="lfbHomeInputs">
          <property name="spacing">
@@ -268,11 +197,194 @@ QPushButton:enabled{
      </widget>
     </widget>
    </item>
-   <item row="4" column="0">
-    <widget class="QWidget" name="lfbVwmWidget" native="true">
+   <item>
+    <widget class="QWidget" name="lfbFormWidget" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+       <horstretch>0</horstretch>
+       <verstretch>2</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
      <layout class="QGridLayout" name="vwmLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
       <item row="0" column="0">
-       <layout class="QVBoxLayout" name="lfbVwmLayout"/>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QWidget" name="verticalWidget_2" native="true">
+          <property name="styleSheet">
+           <string notr="true">background-color:#444</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="QToolButton" name="form_previous_btn">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>20</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QToolButton{
+	margin: 0px;
+	padding: 10px;
+	border-radius: 2px;
+	background-color: grey;
+	width: 10px;
+	height: 10px;
+	background-color: transparent;
+	color:white;
+}</string>
+             </property>
+             <property name="text">
+              <string>&lt;</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <layout class="QGridLayout" name="lfbVwmLayout">
+          <property name="topMargin">
+           <number>5</number>
+          </property>
+         </layout>
+        </item>
+        <item>
+         <widget class="QWidget" name="verticalWidget" native="true">
+          <property name="styleSheet">
+           <string notr="true">background-color:#444</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="QToolButton" name="lfbInfoButton">
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QToolButton{
+	padding: 10px;
+	border-radius: 2px;
+	background-color: grey;
+	width: 10px;
+	height: 10px;
+	background-color: #eee;
+}</string>
+             </property>
+             <property name="text">
+              <string>i</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="form_next_btn">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>20</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QToolButton{
+	padding: 10px;
+	border-radius: 2px;
+	background-color: grey;
+	width: 10px;
+	height: 10px;
+	background-color: transparent;
+	color: white;
+}</string>
+             </property>
+             <property name="text">
+              <string>&gt;</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QWidget" name="lfbTabInfoWidget" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QWidget#lfbTabInfoWidget{
+	background-color:#fff;
+	padding: 10px;
+	border-left: 1px solid grey;
+}</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <item>
+            <widget class="QLabel" name="lfbInfoBoxTitle">
+             <property name="font">
+              <font>
+               <pointsize>16</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">margin:10px;</string>
+             </property>
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTextBrowser" name="lfbInfoBox">
+             <property name="styleSheet">
+              <string notr="true">border:none;
+margin-left: 10px;</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>

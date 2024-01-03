@@ -124,26 +124,33 @@ class Utils(object):
 
         crsFeature = layer.crs().authid()
         # GET
-    
+        
         srcCrsNr = int(crsFeature.split(":")[1])
-        sourceCrs = QgsCoordinateReferenceSystem.fromEpsgId(srcCrsNr)
+        QgsMessageLog.logMessage(str(srcCrsNr), 'FIM')
+        sourceCrs = QgsCoordinateReferenceSystem.fromEpsgId(srcCrsNr) #srcCrsNr
+        
         destCrsNr = int(crs.split(":")[1])
+        QgsMessageLog.logMessage(str(destCrsNr), 'FIM')
         destCrs = QgsCoordinateReferenceSystem.fromEpsgId(destCrsNr) #fromProj(crs)
 
         return QgsCoordinateTransform(sourceCrs, destCrs, QgsProject.instance())
 
-    def focusFeature(interface, feature, select = False, zoom = 150000):
+    def focusFeature(interface, feature, select = False, zoom = 2000):
         geom = feature.geometry()
-        coordinates = geom.asPoint()
+        coordinates = geom.asPoint() 
 
+        
         map_pos = QgsPointXY(coordinates.x(), coordinates.y())
 
+        QgsMessageLog.logMessage(str(Utils.getLayerById()), 'FIM')
+
         xform = Utils.transformCoordinates(Utils.getLayerById())
-        map_pos = xform.transform(map_pos)
+        #map_pos = xform.transform(map_pos)
         interface.mapCanvas().setCenter(map_pos)
         
         current_scale =  interface.mapCanvas().scale()
-        interface.mapCanvas().zoomScale(min(zoom, current_scale))
+        if zoom is not None:
+            interface.mapCanvas().zoomScale(min(zoom, current_scale))
 
         if select:
             Utils.deselectFeature()

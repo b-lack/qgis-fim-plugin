@@ -67,8 +67,8 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         self.interface = interface
 
         #self.defaultJson = defaultJson
-
         self.lfbExportFeedback.setText('')
+        self.lfbExportFeedback.hide()
 
         self.exportOptions = QgsVectorFileWriter.SaveVectorOptions()
         self.exportOptions.driverName = 'GeoJson'

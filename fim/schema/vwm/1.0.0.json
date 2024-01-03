@@ -150,9 +150,7 @@
                         },
                         "spaufsuchenichtwaldursacheid": {
                             "title": "Stichprobenpunt ist auch nach Verlegung nicht im Wald.",
-                            "type": [
-                                "integer"
-                            ],
+                            "type": "integer",
                             "description": "Geben Sie das tatsächliche Landschaftselement an.",
                             "QTType": "tree",
                             "default": 0,
@@ -483,6 +481,7 @@
                                 "integer",
                                 "null"
                             ],
+                            "maximum": 500,
                             "description": "Anzhal der genutzten Satelliten"
                         }
                     }
@@ -738,6 +737,7 @@
                                         "minimum": 0,
                                         "maximum": 400,
                                         "unit": "Gon",
+                                        "unitShort": "gon",
                                         "$FIMColumn": 0
                                     },
                                     "distanz": {
@@ -747,6 +747,7 @@
                                         "minimum": 0,
                                         "maximum": 9999,
                                         "unit": "Zentimeter",
+                                        "unitShort": "cm",
                                         "$FIMColumn": 1
                                     },
                                     "bhd": {
@@ -756,6 +757,7 @@
                                         "minimum": 10,
                                         "maximum": 9999,
                                         "unit": "Millimeter",
+                                        "unitShort": "mm",
                                         "$FIMColumn": 0
                                     },
                                     "messhoehebhd": {
@@ -766,6 +768,7 @@
                                         "minimum": 1,
                                         "maximum": 22,
                                         "unit": "Dezimeter",
+                                        "unitShort": "dm",
                                         "$FIMColumn": 1
                                     },
                                     "schaele": {
@@ -811,8 +814,8 @@
                                         "title": "Landmarke",
                                         "type": "string",
                                         "description": "Ein auffälliges, meist weithin sichtbares topographisches Objekt.",
-                                        "minimum": 3,
-                                        "maximum": 10000
+                                        "minLength": 3,
+                                        "maxLength": 1000
                                     },
                                     "azimut": {
                                         "title": "Azimut",
@@ -1082,6 +1085,7 @@
                                         "minimum": 0,
                                         "maximum": 400,
                                         "unit": "Gon",
+                                        "unitShort": "gon",
                                         "$FIMColumn": 0
                                     },
                                     "distanz": {
@@ -1091,6 +1095,7 @@
                                         "minimum": 0,
                                         "maximum": 9999,
                                         "unit": "Zentimeter",
+                                        "unitShort": "cm",
                                         "$FIMColumn": 1
                                     },
                                     "bhd": {
@@ -1100,6 +1105,7 @@
                                         "minimum": 10,
                                         "maximum": 9999,
                                         "unit": "Millimeter",
+                                        "unitShort": "mm",
                                         "$FIMColumn": 0
                                     },
                                     "messhoehebhd": {
@@ -1110,6 +1116,7 @@
                                         "minimum": 1,
                                         "maximum": 22,
                                         "unit": "Dezimeter",
+                                        "unitShort": "dm",
                                         "$FIMColumn": 1
                                     },
                                     "schaele": {
@@ -1154,8 +1161,8 @@
                                         "title": "Landmarke",
                                         "type": "string",
                                         "description": "Ein auffälliges, meist weithin sichtbares topographisches Objekt.",
-                                        "minimum": 3,
-                                        "maximum": 10000
+                                        "minLength": 3,
+                                        "maxLength": 1000
                                     },
                                     "azimut": {
                                         "title": "Azimut",
@@ -1511,9 +1518,9 @@
                                             "integer",
                                             "null"
                                         ],
-                                        "maximum": 75,
-                                        "unit": "Millimeter",
-                                        "default": null
+                                        "minimum": 10,
+                                        "maximum": 1000,
+                                        "unit": "Millimeter"
                                     },
                                     "verjuengungstransektschutzmassnahmen": {
                                         "title": "Schutzmaßnahmen",
@@ -1576,7 +1583,7 @@
                         "verjuengungstransektlaenge": {
                             "title": "Transektlänge",
                             "type": "integer",
-                            "description": "Transektlänge",
+                            "description": "Länge des Transekt in Dezimeter",
                             "default": 20,
                             "minimum": 1,
                             "maximum": 250,
@@ -1604,7 +1611,7 @@
                             "properties": {
                                 "weiserpflanzenmoos": {
                                     "title": "Moos",
-                                    "description": "Bedeckungsgrad mit Moos",
+                                    "description": "Bedeckungsgrad",
                                     "type": "integer",
                                     "default": 0,
                                     "minimum": 0,
@@ -1619,7 +1626,7 @@
                             "properties": {
                                 "weiserpflanzenbrennessel": {
                                     "title": "Brennessel",
-                                    "description": "Bedeckungsgrad mit Brennessel",
+                                    "description": "Bedeckungsgrad",
                                     "type": "integer",
                                     "default": 0,
                                     "minimum": 0,
@@ -1628,7 +1635,7 @@
                                 },
                                 "weiserpflanzengoldnessel": {
                                     "title": "Goldnessel",
-                                    "description": "Bedeckungsgrad mit Goldnessel",
+                                    "description": "Bedeckungsgrad",
                                     "type": "integer",
                                     "default": 0,
                                     "minimum": 0,
@@ -1637,7 +1644,7 @@
                                 },
                                 "weiserpflanzenheidekraut": {
                                     "title": "Heidekraut",
-                                    "description": "Bedeckungsgrad mit Heidekraut",
+                                    "description": "Bedeckungsgrad",
                                     "type": "integer",
                                     "default": 0,
                                     "minimum": 0,
@@ -1646,7 +1653,7 @@
                                 },
                                 "weiserpflanzenspringkraut": {
                                     "title": "Kleinblütiges Springkraut",
-                                    "description": "Bedeckungsgrad mit Kleinblütiges Springkraut",
+                                    "description": "Bedeckungsgrad",
                                     "type": "integer",
                                     "default": 0,
                                     "minimum": 0,
@@ -1655,7 +1662,7 @@
                                 },
                                 "weiserpflanzenmaigloeckchen": {
                                     "title": "Maiglöckchen",
-                                    "description": "Bedeckungsgrad mit Maiglöckchen",
+                                    "description": "Bedeckungsgrad",
                                     "type": "integer",
                                     "default": 0,
                                     "minimum": 0,
@@ -1664,7 +1671,7 @@
                                 },
                                 "weiserpflanzenweidenroesschen": {
                                     "title": "Schmalblättriges Weidenröschen",
-                                    "description": "Bedeckungsgrad mit Schmalblättriges Weidenröschen",
+                                    "description": "Bedeckungsgrad",
                                     "type": "integer",
                                     "default": 0,
                                     "minimum": 0,
@@ -1673,7 +1680,7 @@
                                 },
                                 "weiserpflanzenwaldmeister": {
                                     "title": "Waldmeister",
-                                    "description": "Bedeckungsgrad mit Waldmeister",
+                                    "description": "Bedeckungsgrad",
                                     "type": "integer",
                                     "default": 0,
                                     "minimum": 0,
@@ -1682,7 +1689,7 @@
                                 },
                                 "weiserpflanzenwaldsauerklee": {
                                     "title": "Waldsauerklee",
-                                    "description": "Bedeckungsgrad mit Waldsauerklee",
+                                    "description": "Bedeckungsgrad",
                                     "type": "integer",
                                     "default": 0,
                                     "minimum": 0,
@@ -1691,7 +1698,7 @@
                                 },
                                 "weiserpflanzenwegerich": {
                                     "title": "Wegerich",
-                                    "description": "Bedeckungsgrad mit Wegerich",
+                                    "description": "Bedeckungsgrad",
                                     "type": "integer",
                                     "default": 0,
                                     "minimum": 0,
@@ -1707,7 +1714,7 @@
                                 "weiserpflanzendrahtschmiele": {
                                     "title": "Drahtschmiede",
                                     "type": "integer",
-                                    "description": "Bedeckungsgrad mit Drahtschmiede",
+                                    "description": "Bedeckungsgrad",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1716,7 +1723,7 @@
                                 "weiserpflanzenflaterbinse": {
                                     "title": "Flatterbinse",
                                     "type": "integer",
-                                    "description": "Bedeckungsgrad mit Flatterbinse",
+                                    "description": "Bedeckungsgrad",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1725,7 +1732,7 @@
                                 "weiserpflanzenhainrispengras": {
                                     "title": "Hainrispengras",
                                     "type": "integer",
-                                    "description": "Bedeckungsgrad mit Hainrispengras",
+                                    "description": "Bedeckungsgrad",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1734,7 +1741,7 @@
                                 "weiserpflanzenperlgras": {
                                     "title": "Perlgras",
                                     "type": "integer",
-                                    "description": "Bedeckungsgrad mit Perlgras",
+                                    "description": "Bedeckungsgrad",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1743,7 +1750,7 @@
                                 "weiserpflanzenpfeifengras": {
                                     "title": "Pfeiffengras",
                                     "type": "integer",
-                                    "description": "Bedeckungsgrad mit Pfeiffengras",
+                                    "description": "Bedeckungsgrad",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1752,7 +1759,7 @@
                                 "weiserpflanzensandrohr": {
                                     "title": "Sandrohr",
                                     "type": "integer",
-                                    "description": "Bedeckungsgrad mit Sandrohr/Calamagrostis",
+                                    "description": "Bedeckungsgrad",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1761,7 +1768,7 @@
                                 "weiserpflanzenwaldzwenke": {
                                     "title": "Waldzwenke",
                                     "type": "integer",
-                                    "description": "Bedeckungsgrad mit Waldzwenke",
+                                    "description": "Bedeckungsgrad",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1770,7 +1777,7 @@
                                 "weiserpflanzenwinkelsegge": {
                                     "title": "Winkelsegge",
                                     "type": "integer",
-                                    "description": "Bedeckungsgrad mit Winkelsegge",
+                                    "description": "Bedeckungsgrad",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1785,7 +1792,7 @@
                                 "weiserpflanzenadlerfarn": {
                                     "title": "Adlerfarn",
                                     "type": "integer",
-                                    "description": "Bedeckungsgrad mit Adlerfarn",
+                                    "description": "Bedeckungsgrad",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1800,7 +1807,7 @@
                                 "weiserpflanzengiersch": {
                                     "title": "Girsch",
                                     "type": "integer",
-                                    "description": "Bedeckungsgrad mit Girsch",
+                                    "description": "Bedeckungsgrad",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1815,7 +1822,7 @@
                                 "weiserpflanzenheidelbeere": {
                                     "title": "Heidelbeere",
                                     "type": "integer",
-                                    "description": "Bedeckungsgrad mit Heidelbeere",
+                                    "description": "Bedeckungsgrad",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1824,7 +1831,7 @@
                                 "weiserpflanzenpreiselbeere": {
                                     "title": "Preiselbeere",
                                     "type": "integer",
-                                    "description": "Bedeckungsgrad mit Preiselbeere",
+                                    "description": "Bedeckungsgrad",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1839,7 +1846,7 @@
                                 "weiserpflanzenhimbeere": {
                                     "title": "Himbeere",
                                     "type": "integer",
-                                    "description": "Bedeckungsgrad mit Himbeere",
+                                    "description": "Bedeckungsgrad",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1848,7 +1855,7 @@
                                 "weiserpflanzenbrombeere": {
                                     "title": "Brombeere",
                                     "type": "integer",
-                                    "description": "Bedeckungsgrad mit Brombeere",
+                                    "description": "Bedeckungsgrad",
                                     "default": 0,
                                     "minimum": 0,
                                     "maximum": 100,
@@ -1919,8 +1926,8 @@
                             "type": "integer",
                             "title": "Kronenschlussgrad*",
                             "description": "Bestandesbeschreibung",
+                            "default": 1,
                             "enum": [
-                                null,
                                 1,
                                 2,
                                 3,
@@ -1929,7 +1936,6 @@
                                 6
                             ],
                             "enumLabels": [
-                                "",
                                 "gedrängt",
                                 "geschlossen",
                                 "locker",
@@ -2057,7 +2063,7 @@
                         },
                         "bestandheterogenitaetsgradid": {
                             "type": "integer",
-                            "title": "Heteroganitätsgrad",
+                            "title": "Heterogenitätsgrad",
                             "description": "Einschätzung der vertikalen und horizontalen Struktur - 0 (homogen) bis 10 (heterogen)",
                             "default": 0,
                             "minimum": 0,
@@ -2420,9 +2426,8 @@
                                         "type": "integer",
                                         "title": "Verteilung",
                                         "description": "Verteilung",
-                                        "minimum": 0,
+                                        "minimum": 1,
                                         "maximum": 100,
-                                        "default": 0,
                                         "unit": "%"
                                     }
                                 },
@@ -2449,10 +2454,8 @@
                                 "additionalProperties": false,
                                 "properties": {
                                     "bodenveggr": {
-                                        "type": [
-                                            "integer",
-                                            "null"
-                                        ],
+                                        "type": "integer",
+                                        "default": null,
                                         "title": "Bodenvegetation",
                                         "description": "Art der Bodenvegitation",
                                         "enum": [
@@ -2526,9 +2529,8 @@
                                         "type": "integer",
                                         "title": "Anteil von Bodenbedeckung",
                                         "description": "Der Anteil der gewählten Bodenvegitation in Prozent",
-                                        "minimum": 0,
+                                        "minimum": 1,
                                         "maximum": 100,
-                                        "default": 0,
                                         "unit": "%"
                                     }
                                 },
@@ -2584,7 +2586,7 @@
                                 "null"
                             ],
                             "title": "Nichtaufgeführt bitte notieren",
-                            "description": "Bodenbearbeitung",
+                            "description": "",
                             "maxLength": 1500
                         }
                     }
@@ -3088,6 +3090,7 @@
                     "minimum": 0,
                     "maximum": 400,
                     "unit": "Gon",
+                    "unitShort": "gon",
                     "$FIMColumn": 0
                 },
                 "distanz": {
@@ -3097,6 +3100,7 @@
                     "minimum": 0,
                     "maximum": 9999,
                     "unit": "Zentimeter",
+                    "unitShort": "cm",
                     "$FIMColumn": 1
                 },
                 "bhd": {
@@ -3106,6 +3110,7 @@
                     "minimum": 10,
                     "maximum": 9999,
                     "unit": "Millimeter",
+                    "unitShort": "mm",
                     "$FIMColumn": 0
                 },
                 "messhoehebhd": {
@@ -3116,6 +3121,7 @@
                     "minimum": 1,
                     "maximum": 22,
                     "unit": "Dezimeter",
+                    "unitShort": "dm",
                     "$FIMColumn": 1
                 },
                 "schaele": {
@@ -3143,8 +3149,8 @@
                     "title": "Landmarke",
                     "type": "string",
                     "description": "Ein auffälliges, meist weithin sichtbares topographisches Objekt.",
-                    "minimum": 3,
-                    "maximum": 10000
+                    "minLength": 3,
+                    "maxLength": 1000
                 },
                 "azimut": {
                     "title": "Azimut",

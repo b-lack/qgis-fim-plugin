@@ -88,7 +88,7 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.lfbFokusFeature.hide()
         self.lfbFokusFeature.clicked.connect(self.focusFeature)
 
-        self.validate(self.json)
+        #self.validate(self.json)
         self.showMetaData()
 
         self.show()
@@ -98,7 +98,7 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.lfbPluginVersion.setText('Version: ' + str(metaData['version']))
 
     def focusFeature(self):
-        Utils.focusFeature(self.interface, self.currentFeature, True, 15000)
+        Utils.focusFeature(self.interface, self.currentFeature, True, 1000)
 
     def openSchema(self):
         msgBox = QtWidgets.QMessageBox()
@@ -157,9 +157,9 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         return True
 
 
-    def validate(self, jsonToTest, errors = []):
+    def validate(self, errors = []):
 
-        self.json = jsonToTest
+        #self.json = jsonToTest
         
         #v = Draft7Validator(self.schema)
         #self.errors = sorted(v.iter_errors(jsonToTest), key=lambda e: e.path)
@@ -180,8 +180,6 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
             self.lfbSaveBtn.setDisabled(True)
             #self.isValid = False
             self.lfbErrorDialogBtn.setText(str(len(self.errors)) + ' verbleibende Fehler.')
-            
-       
        
         #self.errorsWidget.updateErrors(self.errors)
 

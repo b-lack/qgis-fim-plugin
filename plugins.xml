@@ -1,14 +1,14 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <plugins>
-    <pyqgis_plugin name="FIM - Forest Inventory and Monitoring" version="1.0.11">
+    <pyqgis_plugin name="FIM - Forest Inventory and Monitoring" version="1.0.12">
         <description><![CDATA[FIM - Forest Inventory and Monitoring]]></description>
-        <version>1.0.11</version>
+        <version>1.0.12</version>
         <qgis_minimum_version>3.22</qgis_minimum_version>
         <homepage>https://github.com/b-lack/qgis-fim-plugin</homepage>
         <file_name>fim.zip</file_name>
         <icon>fim/icon.png</icon>
         <author_name>Torsten Wiebke (Concept), Gerrit Balindt (Development)</author_name>
-        <download_url>https://github.com/b-lack/qgis-fim-plugin/releases/download/v1.0.11/fim.zip</download_url>
+        <download_url>https://github.com/b-lack/qgis-fim-plugin/releases/download/v1.0.12/fim.zip</download_url>
         <uploaded_by>Grünecho</uploaded_by>
         <create_date>2023-05-30</create_date>
         <update_date>2023-11-1</update_date>

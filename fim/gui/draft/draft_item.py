@@ -67,6 +67,7 @@ class DraftItem(QtWidgets.QWidget, UI_CLASS):
 
         if 'general' in self.properties:
             self.lfbDraftAufnahmetruppLabel.setText(self.properties['general']['spaufsucheaufnahmetruppkuerzel'] if self.properties['general']['spaufsucheaufnahmetruppkuerzel'] is not None else '-')
+            self.lfbDraftAufnahmegeraetLabel.setText(self.properties['general']['spaufsucheaufnahmetruppgnss'] if self.properties['general']['spaufsucheaufnahmetruppgnss'] is not None else '-')
         #if 'general' in self.properties:
         #    workflowId = Utils.getFeatureAttribute(feature, 'workflow')
         #    workflowStr = Utils.enumLabel(workflowId, schema['properties']['general']['properties']['workflow'])
@@ -86,7 +87,7 @@ class DraftItem(QtWidgets.QWidget, UI_CLASS):
         return 'VWM' # - Verjüngungs- und Wildeinflussmonitoring
 
     def focusFeature(self):
-        Utils.focusFeature(self.interface, self.feature, False)
+        Utils.focusFeature(self.interface, self.feature, False, None)
 
     def on_lfbDraftIconBtn_clicked(self):
         self.featureSelected.emit(self.feature.id())

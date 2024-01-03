@@ -106,11 +106,11 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.addDraft()
 
         #self.lfbNewEntry.clicked.connect(self.newEntry)
-        self.lfbNewEntry.hide()
+        #self.lfbNewEntry.hide()
 
         
         self.lfbTabWidget.currentChanged.connect(self.tabChange)
-        
+        self.lfbTabWidget.hide()
         
 
         #self.lfbTabWidget.setProperty("class", "my-label-style")
@@ -126,6 +126,13 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.resetForm(False)
         self.setPosition(1)
 
+        self.form_previous_btn.clicked.connect(lambda: self.moveTab(-1))
+        self.form_next_btn.clicked.connect(lambda: self.moveTab(1))
+        self.lfbInfoButton.clicked.connect(self.tabInfoBoxClicked)
+        self.lfbTabInfoWidget.hide()
+
+        self.buildVwmForm()
+
     def loadSchema(self, type='vwm', version='1.0.0'):
         dirname = os.path.dirname(__file__)
         filename = os.path.realpath(os.path.join(dirname, '..', 'schema', type, version+'.json'))
@@ -136,6 +143,19 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
             self.schema = schema['properties']['properties']
 
         return self.schema
+    
+    def tabInfoBoxClicked(self):
+        """Slot documentation goes here."""
+
+        schema = self.vwmFormWidget.getSchemaByCurrentTab()
+
+        self.lfbInfoBoxTitle.setText(schema['title'])
+        self.lfbInfoBox.setText(schema['description'])
+
+        if self.lfbTabInfoWidget.isVisible():
+            self.lfbTabInfoWidget.hide()
+        else:
+            self.lfbTabInfoWidget.show()
 
     def buildForm(self):
         self.lfbTabWidget.clear()
@@ -166,10 +186,36 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         
         self.lfbTabWidget.tabBar().setCursor(QtCore.Qt.PointingHandCursor)
 
-    def buildStaticForm(self):
-        self.lfbTabWidget.hide()
-        vwm = VWM(self.iface, self.json, self.schema)
-        self.lfbVwmLayout.addWidget(vwm)
+
+    def buildVwmForm(self):
+
+        version = self.json['versions'] if 'versions' in self.json else '1.0.0'
+        schema = self.loadSchema('vwm', version)
+
+        self.vwmFormWidget = VWM(self.iface, schema)
+        self.vwmFormWidget.save_data.connect(self.updateSaveBtn)
+        self.vwmFormWidget.vwmTabs.currentChanged.connect(self.hide_info_pane)
+        #self.lfbVwmLayout.addWidget(self.vwmFormWidget)
+        QgsMessageLog.logMessage('self.vwmFormWidget', 'FIM')
+        self.vwmFormWidget.hide()
+
+    def updateVwmForm(self):
+        self.vwmFormWidget.updateJson(self.json)
+        self.vwmFormWidget.show()
+
+    def hide_info_pane(self):
+        """ Hide info pane when tab is changed """
+        self.lfbTabInfoWidget.hide()
+        
+    def moveTab(self, direction = 1):
+        if not hasattr(self, 'vwmFormWidget'):
+            return
+        
+        if direction == -1:
+            self.vwmFormWidget.previousTab()
+        else:
+            self.vwmFormWidget.nextTab()
+
 
     def nextTab(self, nextTab):
         if nextTab:
@@ -181,13 +227,20 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
             self.lfbTabWidget.setCurrentIndex(indexToSet)
 
     def update(self):
-        self.draft.update()
+
+        if hasattr(self, 'draft'):
+            self.draft.update()
 
     def saveFeature(self, json, status=False):
-        #self.lfbVwmWidget.hide()
+        
         QgsMessageLog.logMessage(str('SAVE'), 'FIM')
         QgsMessageLog.logMessage(str(self.json), 'FIM')
-        pass
+        #self.saveDelay()
+        self.save()
+        
+        #self.lfbVwmLayout.removeWidget(self.formWidget)
+        #self.formWidget.deleteLater()
+        #self.formWidget = None
 
         self.draft.setStatus(status)
         self.openHome()
@@ -260,8 +313,8 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         
         self.validateTabs(True)
     
-    def updateSaveBtn(self):
-        self.saveBar.validate(self.state.state, self.schemaErrors)
+    def updateSaveBtn(self, errors):
+        self.saveBar.validate(self.state.state, errors)
 
     def save(self):
         
@@ -270,9 +323,9 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         if self.previousGeneral == None:
             self.previousGeneral = copy.deepcopy(self.json['general'])
 
-        if self.json['general']['spaufsucheaufnahmetruppkuerzel'] != self.previousGeneral['spaufsucheaufnahmetruppkuerzel']:
+        if self.json['general']['spaufsucheaufnahmetruppkuerzel'] != None and self.json['general']['spaufsucheaufnahmetruppkuerzel'] != self.previousGeneral['spaufsucheaufnahmetruppkuerzel']:
             self.previousGeneral['spaufsucheaufnahmetruppkuerzel'] = self.json['general']['spaufsucheaufnahmetruppkuerzel']
-        if self.json['general']['spaufsucheaufnahmetruppgnss'] != self.previousGeneral['spaufsucheaufnahmetruppgnss']:
+        if self.json['general']['spaufsucheaufnahmetruppgnss'] != None and self.json['general']['spaufsucheaufnahmetruppgnss'] != self.previousGeneral['spaufsucheaufnahmetruppgnss']:
             self.previousGeneral['spaufsucheaufnahmetruppgnss'] = self.json['general']['spaufsucheaufnahmetruppgnss']
 
     def formToDefault(self, setFields = True):
@@ -293,8 +346,9 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.userPosition = position
 
         if self.userPosition == 2:
-            self.lfbHeadline.hide()
-            self.lfbTabWidget.show()
+            #self.lfbHeadline.hide()
+            self.lfbFormWidget.show()
+
             self.saveBar.show()
             self.draft.hide()
             #self.folderSelection.hide()
@@ -303,8 +357,8 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
             #self.lfbHomeBtn.show()
             self.lfbHomeScreen.hide()
         else:
-            self.lfbHeadline.show()
-            self.lfbTabWidget.hide()
+            #self.lfbHeadline.show()
+            self.lfbFormWidget.hide()
             self.saveBar.hide()
             self.draft.show()
             self.draft.update()
@@ -359,9 +413,13 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
     
     def draftSelected(self, newJson, id, feature):
 
+        
+
         self.addPreviousGeneral(newJson)
 
         self.json = newJson
+
+        self.updateVwmForm()
         
 
         self.changeState()
@@ -372,7 +430,8 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
         self.schema = self.loadSchema(type, version) 
 
         #self.buildForm()
-        self.buildStaticForm()
+        #if self.schemaType == 'vwm':
+        
 
         self.resetForm(True)
         self.setPosition(2)
@@ -386,8 +445,8 @@ class FimDialog(QtWidgets.QDialog, FORM_CLASS):
        
         #self.resetForm(False)
 
-        if validate and self.schemaErrors != None:
-            self.saveBar.validate(self.state.state, self.schemaErrors)
+        #if validate and self.schemaErrors != None:
+            #self.saveBar.validate(self.state.state, self.schemaErrors)
 
     def openState(self):
         msgBox = QtWidgets.QMessageBox()

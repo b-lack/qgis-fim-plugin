@@ -53,7 +53,7 @@ class Chips(QtWidgets.QWidget, UI_CLASS):
         self.schema = schema
         self.buttons = []
 
-        self.flowLayout = FlowLayout(round(maxNumber / 5))
+        self.flowLayout = FlowLayout(round(maxNumber / 7))
 
         length = min(len(schema['enum']), maxNumber)
         for i in range(0, length):
@@ -62,12 +62,12 @@ class Chips(QtWidgets.QWidget, UI_CLASS):
             button.setStyleSheet('''
                 QPushButton {   
                     color:white;
-                    padding: 10px;
+                    padding: 3px;
                     border: 2px solid grey;
                     background-color: #ddd;
                     color: black;
-                    border-radius: 10px;
-                    margin: 5px;
+                    border-radius: 2px;
+                    margin: 3px;
                 }
                 QPushButton:checked{
                     background-color: rgb(80, 80, 80);
@@ -78,7 +78,7 @@ class Chips(QtWidgets.QWidget, UI_CLASS):
                     background-color: grey;
                     border-style: outset;
                 }
-            ''');
+            ''')
             button.setCursor(QtCore.Qt.PointingHandCursor)
             button.clicked.connect(self.selectedChip)
             self.flowLayout.addWidget(button)
@@ -91,6 +91,7 @@ class Chips(QtWidgets.QWidget, UI_CLASS):
 
     def setValue(self, value):
         #buttons = self.flowLayout.children()
+        
         
         for i in self.buttons:
             i.setChecked(i.text() == value)
