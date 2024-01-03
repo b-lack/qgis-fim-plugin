@@ -46,7 +46,7 @@ except ModuleNotFoundError:
     
 if not ERROR:
     # Main dialog window
-    from .gui.fim_dialog import FimDialog
+    from .gui._deprecated_fim_dialog import FimDialog
     # Further dialog windows and helpers
     from .gui.gnssWidget import GnssPluginWidget
     from .state.currentState import CurrentState

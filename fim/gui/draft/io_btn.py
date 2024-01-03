@@ -26,16 +26,13 @@ import os
 import uuid
 import json
 
-from qgis.core import QgsMessageLog, QgsProject, QgsWkbTypes, QgsVectorFileWriter, QgsFeature, QgsGeometry, QgsPointXY, QgsPoint
+from qgis.core import QgsMessageLog, QgsProject, QgsWkbTypes, QgsVectorFileWriter, QgsFeature, QgsGeometry, QgsPointXY
 from qgis.PyQt import QtWidgets, uic
 from qgis.PyQt.QtWidgets import QDialog
 from qgis.PyQt.QtCore import QDateTime
 
-from PyQt5.uic import loadUi
+#from PyQt5.uic import loadUi
 from PyQt5 import QtCore
-
-from osgeo import ogr
-
 
 from ...utils.helper import Utils
 
@@ -44,6 +41,7 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'io_btn.ui'
 
 
 class IoBtn(QtWidgets.QWidget, UI_CLASS):
+    """Implementation of the IoBtn widget."""
 
     exported = QtCore.pyqtSignal(bool)
     imported = QtCore.pyqtSignal(bool)
@@ -66,7 +64,6 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
 
         self.interface = interface
 
-        #self.defaultJson = defaultJson
         self.lfbExportFeedback.setText('')
         self.lfbExportFeedback.hide()
 
@@ -74,12 +71,14 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         self.exportOptions.driverName = 'GeoJson'
         self.exportOptions.includeZ = False
         self.exportOptions.overrideGeometryType = QgsWkbTypes.Point
-        self.exportOptions.layerName = 'LFB-Regeneration-Wildlife-Impact-Monitoring'
+        self.exportOptions.layerName = 'FIM - Forest Inventory and Monitoring'
 
         self.show()
 
     def update(self):
-        selectedFeatures  = Utils.getSelectedFeatures(self.interface, 'LFB-Regeneration-Wildlife-Impact-Monitoring')
+        """Update the widget."""
+        
+        selectedFeatures  = Utils.getSelectedFeatures(self.interface, 'FIM - Forest Inventory and Monitoring')
 
         if len(selectedFeatures) > 0:
             self.lfbImportSelectedBtn.setEnabled(True)
@@ -91,6 +90,7 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         return selectedFeatures
 
     def setExportLength(self, length):
+        """Set the export length."""
         self.exportLength = length
 
         if self.exportLength > 0:
@@ -99,6 +99,7 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
             self.lfbExportBtn.setEnabled(False)
 
     def setFeedback(self, feedback, error=False):
+        """show feedback text."""
 
         self.lfbExportFeedback.setText(feedback)
 
@@ -106,10 +107,11 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
             self.lfbExportFeedback.setStyleSheet('color: red;')
 
     def importSelectedBtnClicked(self):
+        """Import on click."""
 
         currentDateTime = QDateTime.currentDateTime()
 
-        selectedFeatures  = Utils.getSelectedFeatures(self.interface, 'LFB-Regeneration-Wildlife-Impact-Monitoring', True)
+        selectedFeatures  = Utils.getSelectedFeatures(self.interface, 'FIM - Forest Inventory and Monitoring', True)
         self.update()
 
         layer = Utils.getLayerById()
@@ -119,10 +121,8 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
 
         layer.startEditing()
 
-
         defaultJson = Utils.loadDefaultJson()
         
-
         for selectedLayer in selectedFeatures:
             for feature in selectedLayer['features']:
 
@@ -161,11 +161,6 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
                     qgsFeature.setAttribute('id', qgsFeature['los_id'])
                 else:
                     qgsFeature.setAttribute('id', defaultAttributes['los_id'])
-                #qgsFeature.setAttribute('created', currentDateTime)
-                #qgsFeature.setAttribute('modified', currentDateTime)
-                #qgsFeature.setAttribute('workflow', 4)
-                #qgsFeature.setAttribute('status', False)
-                #qgsFeature.setAttribute('form', json.dumps(defaultJson['properties']))
 
 
                 layer.addFeature(qgsFeature)
@@ -177,78 +172,82 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         self.imported.emit(True)
 
     def importBtnClicked(self):
+        """Open the file dialog and import the GeoJSON file to the layer."""
+
         fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Select File')
 
         if fileName:
             self.importFromFile(fileName)
 
     def importFromFile(self, fileName):
+        """Import the GeoJSON file to the layer."""
 
-            with open(fileName, 'r') as f:
-                data = json.load(f)
-    
-            if not data:
-                self.setFeedback('Fehler beim Import', True)
-                return
-    
-            if not 'features' in data:
-                self.setFeedback('Fehler beim Import', True)
-                return
-    
-            layer = Utils.getLayerById()
-    
-            if not layer:
-                self.setFeedback('Layer nicht gefunden', True)
-                return
-    
-            layer.startEditing()
+        with open(fileName, 'r') as f:
+            data = json.load(f)
 
-            currentDateTime = QDateTime.currentDateTime()
-    
-            fields = layer.fields()
+        if not data:
+            self.setFeedback('Fehler beim Import', True)
+            return
 
-            newFeaturesCount = 0
-            for feature in data['features']:
-                
+        if not 'features' in data:
+            self.setFeedback('Fehler beim Import', True)
+            return
 
-                qgsFeature = QgsFeature()
-                qgsFeature.setFields(fields)
-                geometry = QgsGeometry.fromPointXY(QgsPointXY(
-                    feature['geometry']['coordinates'][0], 
-                    feature['geometry']['coordinates'][1]
-                ))
-                qgsFeature.setGeometry(geometry)
-                qgsFeature.setAttribute('created', currentDateTime)
-                qgsFeature.setAttribute('modified', currentDateTime)
+        layer = Utils.getLayerById()
 
+        if not layer:
+            self.setFeedback('Layer nicht gefunden', True)
+            return
 
+        layer.startEditing()
+
+        currentDateTime = QDateTime.currentDateTime()
+
+        fields = layer.fields()
+
+        newFeaturesCount = 0
+        for feature in data['features']:
+            
+
+            qgsFeature = QgsFeature()
+            qgsFeature.setFields(fields)
+            geometry = QgsGeometry.fromPointXY(QgsPointXY(
+                feature['geometry']['coordinates'][0], 
+                feature['geometry']['coordinates'][1]
+            ))
+            qgsFeature.setGeometry(geometry)
+            qgsFeature.setAttribute('created', currentDateTime)
+            qgsFeature.setAttribute('modified', currentDateTime)
 
 
-                for field in fields:
-                    name = field.displayName()
-                    if name in feature['properties']:
-                        qgsFeature.setAttribute(name, feature['properties'][name])
+            for field in fields:
+                name = field.displayName()
+                if name in feature['properties']:
+                    qgsFeature.setAttribute(name, feature['properties'][name])
 
-                if 'properties' in feature:
-                    if 'form' in feature['properties']:
-                        qgsFeature.setAttribute('form', json.dumps(feature['properties']['form']))
+            if 'properties' in feature:
+                if 'form' in feature['properties']:
+                    qgsFeature.setAttribute('form', json.dumps(feature['properties']['form']))
 
-                layer.addFeature(qgsFeature)
-                newFeaturesCount += 1
-    
-            layer.commitChanges()
-    
-            self.setFeedback(str(newFeaturesCount) + ' Punkt(e) hinzugefügt')
-    
-            self.imported.emit(True)
+            layer.addFeature(qgsFeature)
+            newFeaturesCount += 1
+
+        layer.commitChanges()
+
+        self.setFeedback(str(newFeaturesCount) + ' Punkt(e) hinzugefügt')
+
+        self.imported.emit(True)
 
     def exportBtnClicked(self):
+        """Check if folder exists and export the layer to a GeoJSON file."""
+
         folder = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder')
         
         if folder:
             self.exportToFolder(folder)
 
     def exportToFolder(self, folder):
+        """Export the layer to a GeoJSON file."""
 
         currentDateTime = QDateTime.currentDateTime()
         fileName = folder + '/FIM-' + currentDateTime.toString("yyyy-M-d_hh-mm") + '.geojson'

@@ -40,6 +40,8 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'draft_item
 
 
 class DraftItem(QtWidgets.QWidget, UI_CLASS):
+    """Implementation of the DraftItem widget."""
+
     featureSelected = QtCore.pyqtSignal(int)
     removeFeature = QtCore.pyqtSignal(int)
 
@@ -68,10 +70,6 @@ class DraftItem(QtWidgets.QWidget, UI_CLASS):
         if 'general' in self.properties:
             self.lfbDraftAufnahmetruppLabel.setText(self.properties['general']['spaufsucheaufnahmetruppkuerzel'] if self.properties['general']['spaufsucheaufnahmetruppkuerzel'] is not None else '-')
             self.lfbDraftAufnahmegeraetLabel.setText(self.properties['general']['spaufsucheaufnahmetruppgnss'] if self.properties['general']['spaufsucheaufnahmetruppgnss'] is not None else '-')
-        #if 'general' in self.properties:
-        #    workflowId = Utils.getFeatureAttribute(feature, 'workflow')
-        #    workflowStr = Utils.enumLabel(workflowId, schema['properties']['general']['properties']['workflow'])
-        #    self.lfbDraftWorkflowLabel.setText(workflowStr)
 
         self.lfbItemTypeLabel.setText(self.typeMap(type))
 
@@ -80,6 +78,7 @@ class DraftItem(QtWidgets.QWidget, UI_CLASS):
         self.show()
     
     def typeMap(self, type):
+        """Map the type to a human readable string."""
 
         if(type == 'wze'):
             return 'WZE' # - Waldzustandserhebung
@@ -87,15 +86,17 @@ class DraftItem(QtWidgets.QWidget, UI_CLASS):
         return 'VWM' # - Verjüngungs- und Wildeinflussmonitoring
 
     def focusFeature(self):
+        """Focus the feature in the map canvas."""
         Utils.focusFeature(self.interface, self.feature, False, None)
 
     def on_lfbDraftIconBtn_clicked(self):
+        """Emit the featureSelected signal."""
         self.featureSelected.emit(self.feature.id())
     
     def on_lfbDraftIconRemoveBtn_clicked(self):
+        """Remove the feature from the layer."""
 
         msgBox = QMessageBox()
-        #msgBox.setIcon(QMessageBox.Information)
         msgBox.setText("Möchtest du den Stichprobenpunkt einschließlich der aufgenommenen Daten wirklich löschen?")
         msgBox.setWindowTitle("Stichprobenpunkt löschen")
         msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)

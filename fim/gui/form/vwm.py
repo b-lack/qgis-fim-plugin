@@ -1,11 +1,10 @@
 import os
 import copy
-import json
 from PyQt5.QtCore import QTimer
 
 from qgis.core import QgsMessageLog, QgsPointXY, QgsPoint
 from qgis.PyQt import QtWidgets, uic
-from qgis.PyQt.QtWidgets import QDialog, QScroller, QWidget, QFormLayout, QVBoxLayout, QGroupBox
+from qgis.PyQt.QtWidgets import QDialog, QScroller
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5 import QtGui
 

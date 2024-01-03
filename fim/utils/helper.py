@@ -9,7 +9,6 @@ from qgis.utils import *
 
 from PyQt5.QtWidgets import QMessageBox
 
-# GNSS plugin
 from qgis import qgis
 
 FIM_LAYER_NAME = 'FIM'
@@ -24,33 +23,32 @@ class Utils(object):
         return str(b['enumLabels'][idx])
     
     def getLayerName():
+        """Get the layer name."""
         return FIM_LAYER_NAME
     
     def getLayerVersion():
+        """Get the layer version."""
         return FIM_LAYER_VERSION
     
-    def pluginAvailable(pluginName):
-        if pluginName in available_plugins:
-            return True
-        return False
-    
     def confirmDialog(interface, title, message):
+        """Show a confirmation dialog."""
+
         msg = QMessageBox()
         msg.setStyleSheet("text-color: rgb(0, 0, 0);")
         msg.setStyleSheet("background-color: rgb(255, 255, 255);")
         msg.setStyleSheet("QLabel{ color: white}")
         msg.setStyleSheet("background-color:  rgb(255, 255, 255);color: rgb(0, 0, 0);")
-
-
         return msg.question(interface, title, message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
-
     def getMetaData():
+        """Get the meta data."""
+
         return {
-            'version': '1.0.12'
+            'version': '1.0.13'
         }
 
     def schemaTypeHasNull(schema):
+        """Check if the schema type (array) has null."""
 
         if schema is None:
             return False
@@ -70,6 +68,8 @@ class Utils(object):
             return True
 
     def translateRelativeSchemaPath(schema, relative_schema_path):
+        """Translate the relative schema path to the title."""
+
         isProperties = False
         tab = None
         tabCount = None
@@ -94,6 +94,7 @@ class Utils(object):
         return ''
     
     def getFeatureAttribute(feature, key):
+        """Get the feature attribute by key."""
 
         layer = Utils.getLayerById()
         fields = layer.fields()
@@ -101,6 +102,8 @@ class Utils(object):
         return feature.attributes()[idx]
 
     def deepUpdate(d, u):
+        """Deep update dictionary."""
+
         for k, v in u.items():
             if isinstance(v, collections.abc.Mapping):
                 d[k] = Utils.deepUpdate(d.get(k, {}), v)
@@ -108,22 +111,22 @@ class Utils(object):
                 d[k] = v
         return d
     
-    def loadDefaultJson():
+    def loadDefaultJson(_fileName = 'default.json'):
+        """Load the default JSON schema."""
+
         dirname = os.path.dirname(__file__)
-        filename = os.path.realpath(os.path.join(dirname, '..', 'schema', 'default.json'))
+        filename = os.path.realpath(os.path.join(dirname, '..', 'schema', _fileName))
         fd = open(filename, 'r')
         jsonObj = json.load(fd)
         fd.close()
         return jsonObj
     
-    def getCrs():
-        return QgsProject.instance().crs().authid()
-    
     def transformCoordinates(layer):
-        crs = Utils.getCrs()
+        """Get the coordinate transform for the layer."""
+
+        crs = QgsProject.instance().crs().authid()
 
         crsFeature = layer.crs().authid()
-        # GET
         
         srcCrsNr = int(crsFeature.split(":")[1])
         QgsMessageLog.logMessage(str(srcCrsNr), 'FIM')
@@ -136,6 +139,8 @@ class Utils(object):
         return QgsCoordinateTransform(sourceCrs, destCrs, QgsProject.instance())
 
     def focusFeature(interface, feature, select = False, zoom = 2000):
+        """Center/Zoom the feature"""
+
         geom = feature.geometry()
         coordinates = geom.asPoint() 
 
@@ -157,11 +162,14 @@ class Utils(object):
             Utils.selectFeature(feature)
 
     def selectFeature(feature):
+        """Select the feature by ID."""
         layer = Utils.getLayerById()
         if layer is not None:
             layer.selectByIds([feature.id()])
     
     def deselectFeature(feature = None):
+        """Deselect the feature."""
+
         layer = Utils.getLayerById()
         if layer is not None:
             if feature is None:
@@ -178,7 +186,6 @@ class Utils(object):
         layers = QgsProject.instance().mapLayers().values()
 
         layerId1 = re.sub('[^a-zA-Z0-9 ]', '_', layerId)
-        #layerId2 = layerId.replace('-', '_')
 
         for layer in layers:
             if layer.id().startswith(layerId1) :
@@ -187,6 +194,7 @@ class Utils(object):
         return None
     
     def getLayerByName(lfbName = None, lfbVersion = None):
+        """Get the layer by name."""
 
         if lfbName is None:
             lfbName = FIM_LAYER_ID
@@ -214,8 +222,6 @@ class Utils(object):
 
             layer.selectionChanged.connect(updateTocFn)
 
-        #Utils.getSelections()
-
     def selectLayerByType(geometryType):
         """List all layers with geometry type."""
 
@@ -234,6 +240,8 @@ class Utils(object):
         return layerList
     
     def getSelectedFeaturesFim():
+        """Get the selected features."""
+
         for layer in QgsProject.instance().mapLayers().values():
 
             layerId1 = re.sub('[^a-zA-Z0-9 ]', '_', FIM_LAYER_ID)
@@ -244,6 +252,7 @@ class Utils(object):
         return []
 
     def getSelectedFeatures(interface, lfbName, removeSelection = False):
+        """Get the selected features."""
 
         selected_features = []
         selected_layers = []
@@ -276,18 +285,18 @@ class Utils(object):
                 'features': selected_features
             })
 
-                # Now we have a layer without geometry
-
         return selected_layers
-
-        layer = interface.activeLayer()
-
-        selected_features = layer.selectedFeatures()
-        return selected_features
     
-    #GNSS PLUGIN
     def getPluginByName(plugin_name):
+        """Get the plugin by name."""
         return qgis.utils.plugins[plugin_name]
 
     def checkPluginExists(plugin_name):
+        """Check if the plugin exists."""
         return plugin_name in qgis.utils.plugins
+    
+    def pluginAvailable(pluginName):
+        """Check if the plugin is available."""
+        if pluginName in available_plugins:
+            return True
+        return False

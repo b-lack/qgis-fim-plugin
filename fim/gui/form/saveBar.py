@@ -23,26 +23,21 @@
 """
 
 import os
-
 import json
 
-from qgis.core import QgsMessageLog, QgsProject, QgsVectorLayer, QgsJsonUtils, QgsField, QgsFields, QgsVectorFileWriter, QgsCoordinateTransformContext
 from qgis.PyQt import QtWidgets, uic
-from qgis.PyQt.QtCore import QCoreApplication, QSettings, QTranslator
 from qgis.PyQt.QtWidgets import QDialog
-
-from PyQt5.uic import loadUi
 from PyQt5 import QtCore
 
-
 from ...utils.helper import Utils
-from ..setup.errors import ErrorsWidget
 
 
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'saveBar.ui'))
 
 
 class SaveBar(QtWidgets.QWidget, UI_CLASS):
+    """Implementation of the SaveBar widget."""
+
     saveFeature = QtCore.pyqtSignal(object, bool)
     toHome = QtCore.pyqtSignal(bool)
     devButton = QtCore.pyqtSignal(bool)
@@ -68,16 +63,12 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.lfbSaveBtn.setDisabled(True)
         self.lfbSaveBtn.clicked.connect(self.saveBtnClicked)
 
-        self.lfbDevBtn.clicked.connect(self.openState)
         self.lfbDevBtn.hide()
         
         self.lfbHomeBtn.clicked.connect(self.openHome)
-        self.lfbSchemaBtn.clicked.connect(self.openSchema)
-        self.lfbSchemaBtn.hide()
 
+        self.lfbSchemaBtn.hide()
         self.lfbErrorDialogBtn.hide()
-        #self.errorsWidget = ErrorsWidget(self.interface, self.schema)
-        #self.lfbErrorsLayout.addWidget(self.errorsWidget)
         
         self.lfbProgressBar.hide()
         self.lfbProgressBar.setValue(100)
@@ -88,34 +79,36 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.lfbFokusFeature.hide()
         self.lfbFokusFeature.clicked.connect(self.focusFeature)
 
-        #self.validate(self.json)
         self.showMetaData()
 
         self.show()
 
     def showMetaData(self):
+        """Show/set the plugin version."""
         metaData = Utils.getMetaData()
         self.lfbPluginVersion.setText('Version: ' + str(metaData['version']))
 
     def focusFeature(self):
+        """Focus the current feature."""
         Utils.focusFeature(self.interface, self.currentFeature, True, 1000)
 
-    def openSchema(self):
-        msgBox = QtWidgets.QMessageBox()
-        msgBox.setText(json.dumps(self.json, indent=4))
-        msgBox.exec()
-
-    def openState(self):
-        #self.toHome.emit(True)
-        self.devButton.emit(True)
         
     def openHome(self):
+        """Open the home widget."""
+
         self.saveFeature.emit(self.json, False)
 
     def saveBtnClicked(self):
-        self.saveFeature.emit(self.json, True)
+        """Save the feature."""
 
-    def setFeatureAttributes(self, feature, key):
+        self.saveFeature.emit(self.json, True)
+        self.lfbFokusFeature.show()
+
+    def setAttributes(self,feature, key):
+        """Set feature ID."""
+
+        self.currentFeature = feature
+
         layer = Utils.getLayerById()
         fields = layer.fields()
         idx = fields.indexFromName(key)
@@ -123,82 +116,20 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
 
         self.lfbFokusFeature.show()
 
-    def setAttributes(self,feature, key):
-        self.currentFeature = feature
-        self.setFeatureAttributes(feature, key)
-
-    def checkMinimumSet(self, jsonToTest, errorLen):
-        return True
-    
-        if errorLen == 0:
-            self.lfbProgressBar.setStyleSheet("QProgressBar::chunk "
-                  "{"
-                    "background-color: green;"
-                  "}")
-            self.lfbProcessInfo.setText("Daten können jetzt gespeicher werden.")
-            return True
-        elif jsonToTest['coordinates']['latitude'] != None and jsonToTest['coordinates']['longitude'] != None and jsonToTest['general']['aufnahmetrupp'] != None and jsonToTest['general']['GNSSDevice'] != None:
-            self.lfbProgressBar.setStyleSheet("QProgressBar::chunk "
-                  "{"
-                    "background-color: orange;"
-                  "}")
-            self.lfbProcessInfo.setText("Deine Daten werden automatisch als Entwurf gespeichert.")
-            return True
-        else:
-            self.lfbProgressBar.setStyleSheet("QProgressBar::chunk "
-                  "{"
-                    "background-color: red;"
-                  "}")
-            self.lfbProcessInfo.setText("Fülle mindestens die rot markierten Felder aus um die Daten als Entwurf zu speichern.")
-            return False
-            
-    
-    def getNamedError(self, error):
-        return True
-
 
     def validate(self, errors = []):
+        """En- or disable the save button."""
 
-        #self.json = jsonToTest
-        
-        #v = Draft7Validator(self.schema)
-        #self.errors = sorted(v.iter_errors(jsonToTest), key=lambda e: e.path)
-        self.errors = errors
+        self.maxErrors = max(self.maxErrors, len(errors))
+        self.currentErrors = len(errors)
 
-        self.maxErrors = max(self.maxErrors, len(self.errors))
 
-        self.currentErrors = len(self.errors)
-
-        #if self.maxErrors > 0:
-        #    self.lfbProgressBar.setValue(int(100 - self.currentErrors * 100 / self.maxErrors))
-
-        if len(self.errors) == 0:
-            #self.isValid = True
+        if len(errors) == 0:
             self.lfbErrorDialogBtn.setText('')
             self.lfbSaveBtn.setDisabled(False)
         else:
             self.lfbSaveBtn.setDisabled(True)
-            #self.isValid = False
-            self.lfbErrorDialogBtn.setText(str(len(self.errors)) + ' verbleibende Fehler.')
+            self.lfbErrorDialogBtn.setText(str(len(errors)) + ' verbleibende Fehler.')
        
-        #self.errorsWidget.updateErrors(self.errors)
 
-        return len(self.errors) == 0
-
-
-    def checkIsForest(self, jsonToTest):
-        messages = []
-
-
-        if jsonToTest['general']['spaufsuchenichtbegehbarursacheid'] is None or jsonToTest['general']['spaufsuchenichtbegehbarursacheid'] == 2: # begehbar
-            messages += [
-                {
-                    'message': 'Der Waldtyp ist nicht gesetzt.',
-                    'path': ['general', 'waldtyp'],
-                    'level': 'error'
-                }
-            ]
-        else:
-            return messages
-        
-        return messages
+        return len(errors) == 0
