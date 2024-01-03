@@ -7,11 +7,9 @@ from qgis.core import QgsMessageLog, QgsPointXY, QgsPoint
 from qgis.PyQt import QtWidgets, uic
 from qgis.PyQt.QtWidgets import QDialog, QScroller, QWidget, QFormLayout, QVBoxLayout, QGroupBox
 from PyQt5.QtCore import Qt, pyqtSignal
-
+from PyQt5 import QtGui
 
 from jsonschema import Draft7Validator, exceptions
-
-from PyQt5 import QtGui
 
 from ...utils.helper import Utils
 from .chips import Chips
@@ -24,7 +22,7 @@ UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'vwm.ui'))
 class VWM(QtWidgets.QWidget, UI_CLASS):
     """VWM."""
 
-    #validate = pyqtSignal(object)
+    save = pyqtSignal(object)
     save_data = pyqtSignal(object)
 
     def __init__(self, interface, schema, info_browser):
@@ -42,7 +40,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
         self.validationTimer = None
 
-        self.vwmTabs.currentChanged.connect(self.update_info)
+        self.vwmTabs.currentChanged.connect(self.change_tab)
         
         QScroller.grabGesture(self.scrollArea_general, QScroller.LeftMouseButtonGesture)
         QScroller.grabGesture(self.scrollArea_coordinates, QScroller.LeftMouseButtonGesture)
@@ -60,6 +58,19 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
         self.show()
 
+    def change_tab(self, tab):
+        """Change the tab."""
+
+        self.update_info()
+        self.cancelConnections()
+
+    def cancelConnections(self):
+        """Cancel connections."""
+
+        if hasattr(self, 'nav'):
+            self.nav.cancelConnection(True)
+            QgsMessageLog.logMessage("cancelConnections", 'FIM')
+            
     def update_info(self):
         """Update the info browser."""
 
@@ -83,8 +94,6 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
     def validateAll(self):
         """Validate the whole json."""
 
-        
-
         v = Draft7Validator(self.schema)
 
         self.schemaErrors = sorted(v.iter_errors(self.json), key=lambda e: e.path)
@@ -93,13 +102,16 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         for error in lfbErrors:
             self.schemaErrors.append(error)
 
-        #for error in self.schemaErrors:
-        #    QgsMessageLog.logMessage("msg: " + str(error.path), 'FIM')
-        #    QgsMessageLog.logMessage("msg: " + str(error.message), 'FIM')
-
-        #QgsMessageLog.logMessage("ERRORS: " + str(len(self.schemaErrors)), 'FIM')
+        self.cancelConnections()
         self.save_data.emit(self.schemaErrors)
-    
+        QgsMessageLog.logMessage("validateAll", 'FIM')
+        self.save_json()
+
+    def save_json(self):
+        """Save the json."""
+
+        self.save.emit(self.json)
+
     def nextTab(self):
         """Go to the next tab."""
 
@@ -109,8 +121,6 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         """Go to the previous tab."""
 
         self.vwmTabs.setCurrentIndex(self.vwmTabs.currentIndex() - 1)
-
-
 
 
     def gnavs_default_settings(self):
@@ -184,14 +194,14 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
                 # General
 
-                nav = Recording(self.interface)
-                nav.toggleButtonsChanged('navigation')
-                nav.toggleFocus(True)
+                self.nav = Recording(self.interface)
+                self.nav.toggleButtonsChanged('navigation')
+                self.nav.toggleFocus(True)
                 
-                self.gnavs_navigation.addWidget(nav)
+                self.gnavs_navigation.addWidget(self.nav)
                 selection = Selection(self.interface, True)
                 self.gnavs_navigation.addWidget(selection)
-                nav.currentPositionChanged.connect(selection.updateCoordinates)
+                self.nav.currentPositionChanged.connect(selection.updateCoordinates)
 
                 rec = Recording(self.interface, True, self.gnavs_default_settings())
                 rec.aggregatedValuesChanged.connect(self.aggregatedValuesChanged)
@@ -427,6 +437,8 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
                 child,
                 self.json[parentName][childName],
                 schema['properties'][child], onUpdate)
+            
+        onUpdate()
 
     # ARRAYS
     def setUpArrayBestockung(self, parentName, childName):
@@ -570,15 +582,15 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
             validateArray
         )
         self.setUpTextField(
-            'verjuengungstransektbhd',
-            'verjuengungstransekt',
+            parentName+'_verjuengungstransektbhd',
+            parentName,
             'verjuengungstransektbhd',
             objectValues,
             schema['items']['properties']['verjuengungstransektbhd'],
             validateArray
         )
         self.setUpGeneralComboBox(
-            'verjuengungstransektschutzmassnahmen',
+            parentName+'_verjuengungstransektschutzmassnahmen',
             parentName,
             'verjuengungstransektschutzmassnahmen',
             objectValues,
@@ -587,47 +599,47 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         )
 
         self.setUpCheckBox(
-            'verjuengungstransekttriebverlustdurchinsektenfrass',
+            parentName+'_verjuengungstransekttriebverlustdurchinsektenfrass',
             parentName,
             'verjuengungstransekttriebverlustdurchinsektenfrass',
             objectValues,
             schema['items']['properties']['verjuengungstransekttriebverlustdurchinsektenfrass']
         )
         self.setUpCheckBox(
-            'verjuengungstransekttriebverlustdurchschalenwildverbiss',
+            parentName+'_verjuengungstransekttriebverlustdurchschalenwildverbiss',
             parentName,
             'verjuengungstransekttriebverlustdurchschalenwildverbiss',
             objectValues,
             schema['items']['properties']['verjuengungstransekttriebverlustdurchschalenwildverbiss']
         )
         self.setUpCheckBox(
-            'verjuengungstransekttriebverlustdurchfrost',
+            parentName+'_verjuengungstransekttriebverlustdurchfrost',
             parentName,
             'verjuengungstransekttriebverlustdurchfrost',
             objectValues,
             schema['items']['properties']['verjuengungstransekttriebverlustdurchfrost']
         )
         self.setUpCheckBox(
-            'verjuengungstransekttriebverlustdurchtrockenheit',
+            parentName+'_verjuengungstransekttriebverlustdurchtrockenheit',
             parentName,
             'verjuengungstransekttriebverlustdurchtrockenheit',
             objectValues,
             schema['items']['properties']['verjuengungstransekttriebverlustdurchtrockenheit']
         )
         self.setUpCheckBox(
-            'verjuengungstransekttriebverlustdurchfege',
+            parentName+'_verjuengungstransekttriebverlustdurchfege',
             parentName,
             'verjuengungstransekttriebverlustdurchfege',
             objectValues,
             schema['items']['properties']['verjuengungstransekttriebverlustdurchfege']
         )
     def refresh_t_bestockung(self, parentName, objectValues, schema, validateArray):
-        self.setUpGeneralComboBox('schicht_id', 't_bestockung', 'schicht_id', objectValues, schema['items']['properties']['schicht_id'])
-        self.setUpGeneralComboBox('icode_ba', 't_bestockung', 'icode_ba', objectValues, schema['items']['properties']['icode_ba'])
-        self.setUpGeneralComboBox('nas_id', 't_bestockung', 'nas_id', objectValues, schema['items']['properties']['nas_id'])
-        self.setUpGeneralComboBox('entsart_id', 't_bestockung', 'entsart_id', objectValues, schema['items']['properties']['entsart_id'])
-        self.setUpGeneralComboBox('vert_id', 't_bestockung', 'vert_id', objectValues, schema['items']['properties']['vert_id'])
-        self.setUpTextField('ba_anteil', 't_bestockung', 'ba_anteil', objectValues, schema['items']['properties']['ba_anteil'])
+        self.setUpGeneralComboBox(parentName+'_schicht_id', 't_bestockung', 'schicht_id', objectValues, schema['items']['properties']['schicht_id'])
+        self.setUpGeneralComboBox(parentName+'_icode_ba', 't_bestockung', 'icode_ba', objectValues, schema['items']['properties']['icode_ba'])
+        self.setUpGeneralComboBox(parentName+'_nas_id', 't_bestockung', 'nas_id', objectValues, schema['items']['properties']['nas_id'])
+        self.setUpGeneralComboBox(parentName+'_entsart_id', 't_bestockung', 'entsart_id', objectValues, schema['items']['properties']['entsart_id'])
+        self.setUpGeneralComboBox(parentName+'_vert_id', 't_bestockung', 'vert_id', objectValues, schema['items']['properties']['vert_id'])
+        self.setUpTextField(parentName+'_ba_anteil', 't_bestockung', 'ba_anteil', objectValues, schema['items']['properties']['ba_anteil'])
 
 
     def setUpArray(self, parentName, childName, addElementBtn, addElementError, onUpdate=None):
@@ -687,6 +699,8 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
                     addElementError.show()
                 else:
                     addElementError.hide()
+
+            self.save_json()
 
         def refresh_fields():
             if parentName == 'baumplot1' or parentName == 'baumplot2':
@@ -1064,7 +1078,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         for attr, value in schema['items']['properties'].items():
             headers.append(value['title'])
 
-        #headers.append('')
+        headers.append('')
         headers.append('')
 
         element.setColumnCount(len(headers))
@@ -1101,7 +1115,8 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
                 if schema['items']['properties'][child]['type'] == 'boolean':
                     value = 'Ja' if element[child] else 'Nein'
                 elif 'enumLabels' in schema['items']['properties'][child]:
-                    value = str(schema['items']['properties'][child]['enumLabels'][0])
+                    index = schema['items']['properties'][child]['enum'].index(element[child])
+                    value = str(schema['items']['properties'][child]['enumLabels'][index])
                 else:
                     value = str(element[child])
                 
@@ -1111,31 +1126,60 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
                 table.setItem(rowPosition, i, QtWidgets.QTableWidgetItem(value))
 
             deleteBtn = QtWidgets.QPushButton('Löschen')
-            deleteBtn.clicked.connect(lambda: self.deleteTableRow(parentName, childName, schema, element))
+            deleteBtn.clicked.connect(self.deleteTableRow(parentName, childName, schema, element))
             table.setCellWidget(rowPosition, len(schema['items']['properties']), deleteBtn)
 
             editBtn = QtWidgets.QPushButton('Bearbeiten')
-            editBtn.clicked.connect(lambda: self.editTableRow(parentName, childName, schema, element))
-            #table.setCellWidget(rowPosition, len(schema['items']['properties']) +1, editBtn)
+            editBtn.clicked.connect(self.editTableRow(parentName, childName, schema, element))
+            table.setCellWidget(rowPosition, len(schema['items']['properties']) +1, editBtn)
     
     def editTableRow(self, parentName, childName, schema, element):
+        def editRow():
+            self.editRow(parentName, childName, schema, element)
+        return editRow
+    
+    def editRow(self, parentName, childName, schema, element):
+        
+        self.defaultValue = copy.deepcopy(element)
 
+        if hasattr(self, parentName+'_collapsable'):
+            getattr(self, parentName+'_collapsable').setCollapsed(False)
 
-        #self.json[parentName][childName].remove(element)
-        #self.defaultValue = copy.deepcopy(self.json[self.key][row])
-        pass
+        QgsMessageLog.logMessage(str(self.defaultValue), 'FIM')
+        for child in schema['items']['properties']:
+            if child in element and element[child] is not None:
 
+                QgsMessageLog.logMessage(str(parentName+'_'+child), 'FIM')
+
+                if 'enumLabels' in schema['items']['properties'][child]:
+                    index = schema['items']['properties'][child]['enum'].index(element[child])
+                    getattr(self, parentName+'_'+child).setCurrentIndex(index)
+                elif schema['items']['properties'][child]['type'] == 'boolean':
+                    getattr(self, parentName+'_'+child).setChecked(element[child])
+                elif self.shouldBeNumeric(schema['items']['properties'][child]):
+                    getattr(self, parentName+'_'+child).setText(str(element[child]))
+                elif self.shouldBeInteger(schema['items']['properties'][child]):
+                    getattr(self, parentName+'_'+child).setText(str(element[child]))
+                else:
+                    getattr(self, parentName+'_'+child).setText(element[child])
+        
+        self.json[parentName][childName].remove(element)
+        self.fillTable(parentName, childName, schema)
+        self.validation_t_bestockung()
+    
     def deleteTableRow(self, parentName, childName, schema, element):
+        def removeRow():
+            self.removeRow(parentName, childName, schema, element)
+        return removeRow
+    
+    def removeRow(self, parentName, childName, schema, element):
 
         res = Utils.confirmDialog(self, 'Zeile löschen', 'Möchtest du die Zeile wirklich löschen?')
         if res == QtWidgets.QMessageBox.Yes:
-            #del self.json[self.key][row]
-            #self.setTableData(self.json[self.key])
-            #self.inputChanged.emit(self.json)
 
             self.json[parentName][childName].remove(element)
-            self.fillTable(parentName, childName, schema)
 
+            self.fillTable(parentName, childName, schema)
             self.validation_t_bestockung()
 
         

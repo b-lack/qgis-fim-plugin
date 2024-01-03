@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1063</width>
-    <height>632</height>
+    <width>716</width>
+    <height>619</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -59,7 +59,7 @@
       <string notr="true"/>
      </property>
      <property name="currentIndex">
-      <number>6</number>
+      <number>11</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -114,8 +114,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>1039</width>
-            <height>581</height>
+            <width>692</width>
+            <height>568</height>
            </rect>
           </property>
           <property name="sizePolicy">
@@ -335,8 +335,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>1039</width>
-            <height>581</height>
+            <width>692</width>
+            <height>568</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_22">
@@ -682,7 +682,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>1025</width>
+            <width>678</width>
             <height>780</height>
            </rect>
           </property>
@@ -1141,8 +1141,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>1039</width>
-            <height>581</height>
+            <width>692</width>
+            <height>568</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_20">
@@ -1409,7 +1409,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>1025</width>
+            <width>678</width>
             <height>673</height>
            </rect>
           </property>
@@ -1813,8 +1813,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>1039</width>
-            <height>581</height>
+            <width>692</width>
+            <height>568</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_29">
@@ -2085,8 +2085,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>1039</width>
-            <height>581</height>
+            <width>692</width>
+            <height>568</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_50">
@@ -2172,9 +2172,9 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>0</y>
-            <width>1039</width>
-            <height>581</height>
+            <y>-58</y>
+            <width>678</width>
+            <height>845</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_42">
@@ -2221,7 +2221,7 @@
               <string>Baum hinzufügen</string>
              </property>
              <property name="collapsed">
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
              <layout class="QGridLayout" name="gridLayout_43">
               <property name="horizontalSpacing">
@@ -2332,7 +2332,7 @@
                  <number>3</number>
                 </property>
                 <item row="0" column="0">
-                 <widget class="QCheckBox" name="verjuengungstransekttriebverlustdurchinsektenfrass">
+                 <widget class="QCheckBox" name="verjuengungstransekt_verjuengungstransekttriebverlustdurchinsektenfrass">
                   <property name="font">
                    <font>
                     <weight>75</weight>
@@ -2352,7 +2352,7 @@
                  </widget>
                 </item>
                 <item row="0" column="2">
-                 <widget class="QCheckBox" name="verjuengungstransekttriebverlustdurchfrost">
+                 <widget class="QCheckBox" name="verjuengungstransekt_verjuengungstransekttriebverlustdurchfrost">
                   <property name="font">
                    <font>
                     <weight>75</weight>
@@ -2365,7 +2365,7 @@
                  </widget>
                 </item>
                 <item row="3" column="0">
-                 <widget class="QCheckBox" name="verjuengungstransekttriebverlustdurchtrockenheit">
+                 <widget class="QCheckBox" name="verjuengungstransekt_verjuengungstransekttriebverlustdurchtrockenheit">
                   <property name="font">
                    <font>
                     <weight>75</weight>
@@ -2378,7 +2378,7 @@
                  </widget>
                 </item>
                 <item row="0" column="1">
-                 <widget class="QCheckBox" name="verjuengungstransekttriebverlustdurchschalenwildverbiss">
+                 <widget class="QCheckBox" name="verjuengungstransekt_verjuengungstransekttriebverlustdurchschalenwildverbiss">
                   <property name="font">
                    <font>
                     <weight>75</weight>
@@ -2421,7 +2421,7 @@
                  </widget>
                 </item>
                 <item row="3" column="1">
-                 <widget class="QCheckBox" name="verjuengungstransekttriebverlustdurchfege">
+                 <widget class="QCheckBox" name="verjuengungstransekt_verjuengungstransekttriebverlustdurchfege">
                   <property name="font">
                    <font>
                     <weight>75</weight>
@@ -2518,7 +2518,7 @@
                </layout>
               </item>
               <item row="6" column="2">
-               <widget class="QLabel" name="verjuengungstransektbhdError">
+               <widget class="QLabel" name="verjuengungstransekt_verjuengungstransektbhdError">
                 <property name="styleSheet">
                  <string notr="true">color:red</string>
                 </property>
@@ -2541,7 +2541,7 @@
                </layout>
               </item>
               <item row="8" column="0" colspan="5">
-               <widget class="QComboBox" name="verjuengungstransektschutzmassnahmen"/>
+               <widget class="QComboBox" name="verjuengungstransekt_verjuengungstransektschutzmassnahmen"/>
               </item>
               <item row="4" column="2">
                <widget class="QLabel" name="verjuengungstransektbhdLabel">
@@ -2570,7 +2570,7 @@
                </widget>
               </item>
               <item row="5" column="2" colspan="2">
-               <widget class="QLineEdit" name="verjuengungstransektbhd">
+               <widget class="QLineEdit" name="verjuengungstransekt_verjuengungstransektbhd">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -2693,8 +2693,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>1057</width>
-            <height>599</height>
+            <width>710</width>
+            <height>586</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_18">
@@ -4110,8 +4110,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>1039</width>
-            <height>581</height>
+            <width>692</width>
+            <height>568</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_47">
@@ -4124,23 +4124,7 @@
            <property name="verticalSpacing">
             <number>3</number>
            </property>
-           <item row="12" column="3">
-            <widget class="QLabel" name="bestandbiotopidLabel">
-             <property name="font">
-              <font>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>TextLabel</string>
-             </property>
-            </widget>
-           </item>
-           <item row="9" column="0" colspan="4">
-            <widget class="QComboBox" name="bestandschutzmassnahmenid"/>
-           </item>
-           <item row="14" column="0">
+           <item row="11" column="0">
             <spacer name="verticalSpacer_14">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -4156,20 +4140,56 @@
              </property>
             </spacer>
            </item>
-           <item row="16" column="0">
-            <spacer name="verticalSpacer_58">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
+           <item row="9" column="0">
+            <widget class="QLabel" name="bestandnschichtigidLabel">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
              </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
+             <property name="text">
+              <string>TextLabel</string>
              </property>
-            </spacer>
+            </widget>
            </item>
-           <item row="0" column="0" colspan="4">
+           <item row="5" column="0" colspan="3">
+            <layout class="QVBoxLayout" name="bestandsbeschreibung_bestandkronenschlussgradid_chips">
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+            </layout>
+           </item>
+           <item row="2" column="0" colspan="3">
+            <layout class="QVBoxLayout" name="bestandsbeschreibung_bestandbetriebsartid_chips">
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+            </layout>
+           </item>
+           <item row="10" column="2">
+            <widget class="QComboBox" name="bestandbiotopid"/>
+           </item>
+           <item row="4" column="0" colspan="3">
+            <widget class="QComboBox" name="bestandkronenschlussgradid"/>
+           </item>
+           <item row="9" column="2">
+            <widget class="QLabel" name="bestandbiotopidLabel">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0" colspan="3">
             <widget class="QLabel" name="bestandbetriebsartidLabel">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
@@ -4188,8 +4208,14 @@
              </property>
             </widget>
            </item>
-           <item row="12" column="0">
-            <widget class="QLabel" name="bestandnschichtigidLabel">
+           <item row="6" column="0" colspan="3">
+            <widget class="QLabel" name="bestandschutzmassnahmenidLabel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="font">
               <font>
                <weight>75</weight>
@@ -4201,7 +4227,23 @@
              </property>
             </widget>
            </item>
-           <item row="13" column="2">
+           <item row="10" column="0">
+            <widget class="QComboBox" name="bestandnschichtigid"/>
+           </item>
+           <item row="13" column="0" colspan="3">
+            <spacer name="verticalSpacer_58">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="10" column="1">
             <spacer name="horizontalSpacer_25">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -4217,42 +4259,14 @@
              </property>
             </spacer>
            </item>
-           <item row="13" column="3">
-            <widget class="QComboBox" name="bestandbiotopid"/>
+           <item row="8" column="0" colspan="3">
+            <layout class="QVBoxLayout" name="bestandsbeschreibung_bestandschutzmassnahmenid_chips">
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+            </layout>
            </item>
-           <item row="3" column="0">
-            <spacer name="verticalSpacer_12">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Maximum</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="11" column="0" colspan="4">
-            <spacer name="verticalSpacer_11">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Fixed</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="4" column="0" colspan="4">
+           <item row="3" column="0" colspan="3">
             <widget class="QLabel" name="bestandkronenschlussgradidLabel">
              <property name="font">
               <font>
@@ -4265,7 +4279,7 @@
              </property>
             </widget>
            </item>
-           <item row="15" column="0" colspan="4">
+           <item row="12" column="0" colspan="3">
             <layout class="QGridLayout" name="gridLayout_48">
              <property name="topMargin">
               <number>20</number>
@@ -4276,6 +4290,57 @@
              <property name="verticalSpacing">
               <number>3</number>
              </property>
+             <item row="2" column="0">
+              <widget class="QLabel" name="bestandbedeckungsgradunterstandError">
+               <property name="styleSheet">
+                <string notr="true">color:red</string>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="0">
+              <widget class="QLineEdit" name="bestandheterogenitaetsgradid"/>
+             </item>
+             <item row="1" column="2">
+              <spacer name="horizontalSpacer_18">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLineEdit" name="bestandbedeckungsgradunterstand"/>
+             </item>
+             <item row="0" column="3">
+              <widget class="QLabel" name="bestandbedeckungsgradgraeserLabel">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
              <item row="2" column="3">
               <widget class="QLabel" name="bestandbedeckungsgradgraeserError">
                <property name="styleSheet">
@@ -4296,8 +4361,8 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="bestandbedeckungsgradunterstandLabel">
+             <item row="4" column="0">
+              <widget class="QLabel" name="bestandheterogenitaetsgradidLabel">
                <property name="font">
                 <font>
                  <weight>75</weight>
@@ -4305,7 +4370,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>Bedeckungsgrad</string>
+                <string>Heterogenitätsgrad</string>
                </property>
               </widget>
              </item>
@@ -4319,39 +4384,10 @@
                </property>
               </widget>
              </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="bestandbedeckungsgradunterstandError">
-               <property name="styleSheet">
-                <string notr="true">color:red</string>
-               </property>
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLineEdit" name="bestandbedeckungsgradunterstand"/>
-             </item>
-             <item row="0" column="3">
-              <widget class="QLabel" name="bestandbedeckungsgradgraeserLabel">
-               <property name="font">
-                <font>
-                 <weight>75</weight>
-                 <bold>true</bold>
-                </font>
-               </property>
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="5">
-              <spacer name="horizontalSpacer_17">
+             <item row="3" column="0">
+              <spacer name="verticalSpacer_13">
                <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Qt::Vertical</enum>
                </property>
                <property name="sizeType">
                 <enum>QSizePolicy::Fixed</enum>
@@ -4364,39 +4400,7 @@
                </property>
               </spacer>
              </item>
-             <item row="1" column="2">
-              <spacer name="horizontalSpacer_18">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Fixed</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item row="1" column="6">
-              <widget class="QLineEdit" name="bestandheterogenitaetsgradid"/>
-             </item>
-             <item row="0" column="6">
-              <widget class="QLabel" name="bestandheterogenitaetsgradidLabel">
-               <property name="font">
-                <font>
-                 <weight>75</weight>
-                 <bold>true</bold>
-                </font>
-               </property>
-               <property name="text">
-                <string>Heterogenitätsgrad</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="6">
+             <item row="6" column="0">
               <widget class="QLabel" name="bestandheterogenitaetsgradidError">
                <property name="styleSheet">
                 <string notr="true">color:red</string>
@@ -4409,75 +4413,29 @@
                </property>
               </widget>
              </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="bestandbedeckungsgradunterstandLabel">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Bedeckungsgrad</string>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
             </layout>
            </item>
-           <item row="6" column="0" colspan="4">
-            <layout class="QVBoxLayout" name="bestandsbeschreibung_bestandkronenschlussgradid_chips">
-             <property name="topMargin">
-              <number>10</number>
-             </property>
-            </layout>
-           </item>
-           <item row="7" column="0">
-            <spacer name="verticalSpacer_50">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Fixed</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="5" column="0" colspan="4">
-            <widget class="QComboBox" name="bestandkronenschlussgradid"/>
-           </item>
-           <item row="13" column="0" colspan="2">
-            <widget class="QComboBox" name="bestandnschichtigid"/>
-           </item>
-           <item row="1" column="0" colspan="4">
+           <item row="1" column="0" colspan="3">
             <widget class="QComboBox" name="bestandbetriebsartid"/>
            </item>
-           <item row="8" column="0" colspan="4">
-            <widget class="QLabel" name="bestandschutzmassnahmenidLabel">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="font">
-              <font>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>TextLabel</string>
-             </property>
-            </widget>
-           </item>
-           <item row="10" column="0" colspan="4">
-            <layout class="QVBoxLayout" name="bestandsbeschreibung_bestandschutzmassnahmenid_chips">
-             <property name="topMargin">
-              <number>10</number>
-             </property>
-            </layout>
-           </item>
-           <item row="2" column="0" colspan="4">
-            <layout class="QVBoxLayout" name="bestandsbeschreibung_bestandbetriebsartid_chips">
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
-              <number>0</number>
-             </property>
-            </layout>
+           <item row="7" column="0" colspan="3">
+            <widget class="QComboBox" name="bestandschutzmassnahmenid"/>
            </item>
           </layout>
          </widget>
@@ -4515,8 +4473,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>1057</width>
-            <height>599</height>
+            <width>710</width>
+            <height>586</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_45">
@@ -4599,7 +4557,7 @@
                <number>6</number>
               </property>
               <item row="1" column="0">
-               <widget class="QComboBox" name="schicht_id">
+               <widget class="QComboBox" name="t_bestockung_schicht_id">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
                   <horstretch>0</horstretch>
@@ -4625,7 +4583,7 @@
                </spacer>
               </item>
               <item row="1" column="1" colspan="2">
-               <widget class="QComboBox" name="nas_id">
+               <widget class="QComboBox" name="t_bestockung_nas_id">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -4678,7 +4636,7 @@
                </spacer>
               </item>
               <item row="4" column="0" colspan="3">
-               <widget class="QComboBox" name="icode_ba"/>
+               <widget class="QComboBox" name="t_bestockung_icode_ba"/>
               </item>
               <item row="0" column="1">
                <widget class="QLabel" name="nas_idLabel">
@@ -4760,7 +4718,7 @@
                  </widget>
                 </item>
                 <item row="1" column="0">
-                 <widget class="QComboBox" name="entsart_id">
+                 <widget class="QComboBox" name="t_bestockung_entsart_id">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -4770,7 +4728,7 @@
                  </widget>
                 </item>
                 <item row="1" column="2">
-                 <widget class="QLineEdit" name="ba_anteil">
+                 <widget class="QLineEdit" name="t_bestockung_ba_anteil">
                   <property name="alignment">
                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                   </property>
@@ -4790,7 +4748,7 @@
                  </widget>
                 </item>
                 <item row="1" column="1">
-                 <widget class="QComboBox" name="vert_id">
+                 <widget class="QComboBox" name="t_bestockung_vert_id">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -4813,7 +4771,7 @@
                  </widget>
                 </item>
                 <item row="2" column="2">
-                 <widget class="QLabel" name="ba_anteilError">
+                 <widget class="QLabel" name="t_bestockung_ba_anteilError">
                   <property name="styleSheet">
                    <string notr="true">color:red</string>
                   </property>
@@ -4906,8 +4864,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>1039</width>
-            <height>581</height>
+            <width>692</width>
+            <height>568</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_34">
@@ -5176,8 +5134,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>1057</width>
-            <height>599</height>
+            <width>710</width>
+            <height>586</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_17">

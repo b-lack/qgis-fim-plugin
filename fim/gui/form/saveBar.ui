@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>954</width>
-    <height>115</height>
+    <height>64</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -130,22 +130,6 @@ QProgressBar{
        <number>5</number>
       </property>
       <item>
-       <spacer name="horizontalSpacer_4">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>10</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
        <widget class="QToolButton" name="lfbHomeBtn">
         <property name="font">
          <font>
@@ -160,7 +144,8 @@ QProgressBar{
          <string notr="true">QToolButton{
 	border: 2px solid #333;
 	color: #555;
-	margin: 3px;
+	margin: 0 5px;
+	padding: 5px;
 }
 QToolButton:enabled{
 	background-color: green;
@@ -171,22 +156,6 @@ QToolButton:enabled{
          <string>&lt;</string>
         </property>
        </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_3">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>10</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
       </item>
       <item>
        <widget class="QPushButton" name="lfbDevBtn">
@@ -218,6 +187,8 @@ background-color: #333;</string>
          <string notr="true">QToolButton{
 	border: 2px solid #333;
 	color: #555;
+	margin: 0 5px;
+	padding: 5px;
 }
 QToolButton:enabled{
 	background-color: green;
@@ -258,10 +229,13 @@ QToolButton:enabled{
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
-            <height>40</height>
+            <height>3</height>
            </size>
           </property>
          </spacer>
@@ -306,7 +280,7 @@ QToolButton:enabled{
             </property>
             <property name="font">
              <font>
-              <pointsize>13</pointsize>
+              <pointsize>11</pointsize>
               <weight>75</weight>
               <bold>true</bold>
              </font>
@@ -329,6 +303,11 @@ QToolButton:enabled{
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
           <property name="styleSheet">
            <string notr="true">padding:0;</string>
           </property>
@@ -342,10 +321,13 @@ QToolButton:enabled{
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
-            <height>40</height>
+            <height>3</height>
            </size>
           </property>
          </spacer>
@@ -394,7 +376,7 @@ background: transparent;</string>
        <widget class="QPushButton" name="lfbSaveBtn">
         <property name="font">
          <font>
-          <pointsize>15</pointsize>
+          <pointsize>13</pointsize>
           <weight>75</weight>
           <bold>true</bold>
          </font>
@@ -406,7 +388,8 @@ background: transparent;</string>
          <string notr="true">QPushButton{
 	border: 2px solid #333;
 	color: #555;
-	margin: 2px;
+	margin: 0 5px;
+	padding: 5px;
 }
 QPushButton:enabled{
 	border: 2px solid #fff;

@@ -18,7 +18,7 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>600</width>
+    <width>400</width>
     <height>297</height>
    </size>
   </property>
@@ -304,7 +304,7 @@ padding:0;</string>
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>374</width>
+              <width>500</width>
               <height>219</height>
              </rect>
             </property>
@@ -392,7 +392,20 @@ padding:0;</string>
           </layout>
          </item>
          <item>
-          <widget class="QTextBrowser" name="info_browser"/>
+          <widget class="QTextBrowser" name="info_browser">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>250</width>
+             <height>16777215</height>
+            </size>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>

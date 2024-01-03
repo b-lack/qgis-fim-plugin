@@ -32,16 +32,16 @@
    <item row="0" column="0">
     <layout class="QGridLayout" name="lfbIoWidget">
      <property name="leftMargin">
-      <number>10</number>
+      <number>0</number>
      </property>
      <property name="topMargin">
-      <number>10</number>
+      <number>0</number>
      </property>
      <property name="rightMargin">
-      <number>10</number>
+      <number>0</number>
      </property>
      <property name="bottomMargin">
-      <number>10</number>
+      <number>0</number>
      </property>
     </layout>
    </item>
@@ -57,7 +57,7 @@
       <number>10</number>
      </property>
      <property name="bottomMargin">
-      <number>10</number>
+      <number>0</number>
      </property>
      <item row="0" column="0">
       <widget class="QLabel" name="empty_draft_label">
@@ -79,14 +79,14 @@
       <widget class="QTabWidget" name="tabWidget">
        <property name="font">
         <font>
-         <pointsize>13</pointsize>
+         <pointsize>11</pointsize>
         </font>
        </property>
        <property name="styleSheet">
         <string notr="true"/>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="tab_3">
         <attribute name="title">
@@ -120,7 +120,7 @@ background:transparent;</string>
               <x>0</x>
               <y>0</y>
               <width>957</width>
-              <height>630</height>
+              <height>662</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -188,7 +188,7 @@ background:transparent;</string>
               <x>0</x>
               <y>0</y>
               <width>957</width>
-              <height>630</height>
+              <height>662</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout">
@@ -257,7 +257,7 @@ background:transparent;</string>
               <x>0</x>
               <y>0</y>
               <width>957</width>
-              <height>630</height>
+              <height>665</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -304,7 +304,7 @@ background:transparent;</string>
        <property name="sizeHint" stdset="0">
         <size>
          <width>20</width>
-         <height>10</height>
+         <height>5</height>
         </size>
        </property>
       </spacer>

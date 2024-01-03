@@ -174,6 +174,7 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
 
         self.vwmFormWidget = VWM(self.iface, schema, self.info_browser)
         self.vwmFormWidget.save_data.connect(self.updateSaveBtn)
+        self.vwmFormWidget.save.connect(self.save_json)
         self.lfbVwmLayout.addWidget(self.vwmFormWidget)
         self.vwmFormWidget.hide()
 
@@ -204,8 +205,14 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         if hasattr(self, 'draft'):
             self.draft.update()
 
+    def save_json(self):
+        '''Save the json to the database'''
+
+        self.save()
+
+
     def saveFeature(self, json, status=False):
-        
+        QgsMessageLog.logMessage('Save Feature', 'FIM')
         #self.saveDelay()
         self.save()
         
