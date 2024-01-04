@@ -36,6 +36,11 @@ Feedback to the developer: [support@gruenecho.de](mailto:support@gruenecho.de)
 
 Feedback to the person responsible for the VWM procedure: [landeswaldinventur@lfb.brandenburg.de](mailto:landeswaldinventur@lfb.brandenburg.de)
 
+## Demo
+See the plugin [in action](https://www.youtube.com/watch?v=A9_t3wYmEDY).
+
+[![FIM - Forest Inventory and Monitoring](https://img.youtube.com/vi/A9_t3wYmEDY/0.jpg)](https://www.youtube.com/watch?v=A9_t3wYmEDY)
+
 ## Installation from Repository
 
 QGIS: ``Plugins`` -> ``Manage and Install Plugins...`` -> ``Settings``
