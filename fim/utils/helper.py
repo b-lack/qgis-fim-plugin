@@ -44,7 +44,7 @@ class Utils(object):
         """Get the meta data."""
 
         return {
-            'version': '1.0.13'
+            'version': '1.0.14'
         }
 
     def schemaTypeHasNull(schema):
@@ -129,11 +129,9 @@ class Utils(object):
         crsFeature = layer.crs().authid()
         
         srcCrsNr = int(crsFeature.split(":")[1])
-        QgsMessageLog.logMessage(str(srcCrsNr), 'FIM')
         sourceCrs = QgsCoordinateReferenceSystem.fromEpsgId(srcCrsNr) #srcCrsNr
         
         destCrsNr = int(crs.split(":")[1])
-        QgsMessageLog.logMessage(str(destCrsNr), 'FIM')
         destCrs = QgsCoordinateReferenceSystem.fromEpsgId(destCrsNr) #fromProj(crs)
 
         return QgsCoordinateTransform(sourceCrs, destCrs, QgsProject.instance())
@@ -146,8 +144,6 @@ class Utils(object):
 
         
         map_pos = QgsPointXY(coordinates.x(), coordinates.y())
-
-        QgsMessageLog.logMessage(str(Utils.getLayerById()), 'FIM')
 
         xform = Utils.transformCoordinates(Utils.getLayerById())
         #map_pos = xform.transform(map_pos)

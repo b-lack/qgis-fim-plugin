@@ -273,6 +273,8 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
     def update(self):
         """Update the feature lists"""
 
+        QgsMessageLog.logMessage("update draft list", 'FIM')
+
         visibleFeatures = 0
         if self.vl is not None:
 
@@ -302,10 +304,10 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             
             self.ioBtn.update()
 
-        if visibleFeatures == 0:
-            self.empty_draft_label.show()
-        else:
-            self.empty_draft_label.hide()
+        #if visibleFeatures == 0:
+        #    self.empty_draft_label.show()
+        #else:
+        #    self.empty_draft_label.hide()
 
     def imported(self, path):
         """Imported a draft from a file"""
@@ -546,15 +548,20 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
     def saveFeature(self, jsonObj):
         """Save a feature"""
 
+        QgsMessageLog.logMessage("saveFeature start", 'FIM')
+
         if jsonObj is None:
             return
         
         currentDateTime = QDateTime.currentDateTime()
 
+        QgsMessageLog.logMessage("self.vl.startEditing", 'FIM')
         self.vl.startEditing()
 
-        if self.currentFeatureId is not None:
 
+        
+        if self.currentFeatureId is not None:
+            QgsMessageLog.logMessage("update Feature: " + str(self.currentFeatureId), 'FIM')
             for tFeature in self.vl.getFeatures():
 
                 if tFeature.id() == self.currentFeatureId:
@@ -563,6 +570,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                     feature = tFeature
                     
         else:
+            QgsMessageLog.logMessage("create Feature: ", 'FIM')
             feature = QgsFeature()
 
             feature.setFields(self.vl.fields())
@@ -573,7 +581,8 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             feature.setAttribute('status', 0)
             
             self.vl.addFeature(feature)
-                
+        
+        QgsMessageLog.logMessage("Feature Saved/Updated", 'FIM')
 
         feature.setAttribute('form', json.dumps(jsonObj))
 
@@ -588,7 +597,8 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             if feature['modified'] == currentDateTime:
                 self.currentFeatureId = feature.id()
 
-        self.update()
+        #self.update()
+        QgsMessageLog.logMessage("saveFeature success", 'FIM')
 
 
         
