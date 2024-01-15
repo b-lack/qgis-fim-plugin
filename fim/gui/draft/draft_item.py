@@ -73,7 +73,11 @@ class DraftItem(QtWidgets.QWidget, UI_CLASS):
 
         self.lfbItemTypeLabel.setText(self.typeMap(type))
 
-        self.lfbItemIdLabel.setText(feature['id'])
+        losId = feature['id']
+        if feature['los_id'] is not None:
+            losId =feature['los_id']
+
+        self.lfbItemIdLabel.setText(losId)
 
         self.show()
     

@@ -32,6 +32,8 @@ from qgis.PyQt.QtCore import pyqtSignal
 from qgis.PyQt.QtWidgets import QScroller
 from qgis.core import QgsMessageLog
 
+from PyQt5.QtCore import QTimer
+
 from .form.vwm import VWM
 from .draft.draft_selection import DraftSelection
 from .form.saveBar import SaveBar
@@ -58,12 +60,15 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         # QGIS interface
         self.iface = interface
 
-        Utils.updateToC(self.update)
+        
 
         self.tabsArray = []
         self.currentTab = 0
         self.inheritedErrors = {}
         self.schemaErrors = []
+        self.saveTimer = None
+
+        self.userPosition = 0
 
         self.previousGeneral  = None
 
@@ -93,6 +98,8 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self.addDraft()
         self.buildVwmForm()
         self.setPosition(1)
+
+        Utils.updateToC(self.update)
 
     def toggle_info_dialog(self):
         '''Toggle the info dialog on press info Btn'''
@@ -156,7 +163,7 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self.vwmFormWidget.hide()
 
     def updateVwmForm(self):
-        self.vwmFormWidget.updateJson(self.json)
+        self.vwmFormWidget.updateJson(self.json)        
         self.vwmFormWidget.show()
 
 
@@ -169,45 +176,57 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         else:
             self.vwmFormWidget.nextTab()
 
+    # deprecated
     def update(self):
         '''Update feature list on select/deselect feature'''
+
+        #if hasattr(self, 'userPosition') and self.userPosition == 2:
+        #    return
 
         if hasattr(self, 'draft'):
             self.draft.update()
 
-    def save_json(self):
+    def save_json(self, json):
         '''Save the json to the database'''
 
-        self.save()
+        if self.saveTimer is not None and self.saveTimer.isActive(): 
+            self.saveTimer.stop()
+
+        self.saveTimer = QTimer(self)
+        self.saveTimer.timeout.connect(lambda: self.save(json))
+        self.saveTimer.setSingleShot(True)
+        self.saveTimer.start(2000)
 
 
     def saveFeature(self, json, status=False):
         '''Save the json to the database and set the status'''
         
-        self.save_json()
+        self.save_json(self.json)
 
         self.draft.setStatus(status)
         self.openHome()
-        self.draft.readDrafts()
-        self.draft.readDone(True)
+        #self.draft.readDrafts()
+        #self.draft.readDone(True)
 
     def updateSaveBtn(self, errors):
         """En-/Disable Save Button"""
 
         self.saveBar.validate(errors)
 
-    def save(self):
+    def save(self, json):
         """Save the json to the database and temp save trupp-id und gnss"""
-        
-        self.draft.saveFeature(self.json)
+
+        QgsMessageLog.logMessage('Save', 'FIM')
+
+        self.draft.saveFeature(json)
         
         if self.previousGeneral == None:
-            self.previousGeneral = copy.deepcopy(self.json['general'])
+            self.previousGeneral = copy.deepcopy(json['general'])
 
-        if self.json['general']['spaufsucheaufnahmetruppkuerzel'] != None and self.json['general']['spaufsucheaufnahmetruppkuerzel'] != self.previousGeneral['spaufsucheaufnahmetruppkuerzel']:
-            self.previousGeneral['spaufsucheaufnahmetruppkuerzel'] = self.json['general']['spaufsucheaufnahmetruppkuerzel']
-        if self.json['general']['spaufsucheaufnahmetruppgnss'] != None and self.json['general']['spaufsucheaufnahmetruppgnss'] != self.previousGeneral['spaufsucheaufnahmetruppgnss']:
-            self.previousGeneral['spaufsucheaufnahmetruppgnss'] = self.json['general']['spaufsucheaufnahmetruppgnss']
+        if json['general']['spaufsucheaufnahmetruppkuerzel'] != None and json['general']['spaufsucheaufnahmetruppkuerzel'] != self.previousGeneral['spaufsucheaufnahmetruppkuerzel']:
+            self.previousGeneral['spaufsucheaufnahmetruppkuerzel'] = json['general']['spaufsucheaufnahmetruppkuerzel']
+        if json['general']['spaufsucheaufnahmetruppgnss'] != None and json['general']['spaufsucheaufnahmetruppgnss'] != self.previousGeneral['spaufsucheaufnahmetruppgnss']:
+            self.previousGeneral['spaufsucheaufnahmetruppgnss'] = json['general']['spaufsucheaufnahmetruppgnss']
         
     def addPreviousGeneral(self, newJson):
         """Add previous temp saved general data to new json"""
@@ -229,6 +248,9 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
 
     def setPosition(self, position):
         """Set state of home screen"""
+
+        if self.userPosition == position:
+            return
 
         self.userPosition = position
 
@@ -268,7 +290,9 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
 
         self.json = newJson
 
+        
         self.updateVwmForm()
+        
 
         type = self.json['types'] if 'types' in self.json else 'vwm'
         version = self.json['versions'] if 'versions' in self.json else '1.0.0'
@@ -281,14 +305,14 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
 
         Utils.focusFeature(self.iface, feature, True, 15000)
 
-
-    def validateTabs(self, save = False):
-        """Validate the tabs & Save"""
-
-        self._validateTabs()
-    
-        if save:
-            self.save()
+    # Deprecated
+    #def validateTabs(self, save = False):
+    #    """Validate the tabs & Save"""
+    #
+    #    self._validateTabs()
+    #
+    #    if save:
+    #        self.save()
 
     def _validateTabs(self):
         """Validate the tabs and set errors of dynamic tabs"""

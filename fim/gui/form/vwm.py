@@ -68,7 +68,6 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
         if hasattr(self, 'nav'):
             self.nav.cancelConnection(True)
-            QgsMessageLog.logMessage("cancelConnections", 'FIM')
             
     def update_info(self):
         """Update the info browser."""
@@ -92,7 +91,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
     def validateAll(self):
         """Validate the whole json."""
-
+        
         v = Draft7Validator(self.schema)
 
         self.schemaErrors = sorted(v.iter_errors(self.json), key=lambda e: e.path)
@@ -103,7 +102,6 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
         self.cancelConnections()
         self.save_data.emit(self.schemaErrors)
-        QgsMessageLog.logMessage("validateAll", 'FIM')
         self.save_json()
 
     def save_json(self):
@@ -183,8 +181,6 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
     def setUp(self):
         """Set up the form."""
 
-        QgsMessageLog.logMessage("--------------setUp new------------", 'FIM')
-
         if self.isSetup == False:
             if Utils.pluginAvailable('gnavs'):
                 from gnavs.gui.recording.recording import Recording
@@ -210,6 +206,8 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
             else:
                 # PLACEHOLDER
                 pass
+        
+        
 
         self.setUpTextField('spaufsucheaufnahmetruppkuerzel', 'general', 'spaufsucheaufnahmetruppkuerzel', None, None, lambda: self.validateTab('general', 0))
         self.setUpTextField('spaufsucheaufnahmetruppgnss', 'general', 'spaufsucheaufnahmetruppgnss', None, None, lambda: self.validateTab('general', 0))
@@ -343,7 +341,8 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         self.validationTimer = threading.Timer(0.5, lambda: self._validateTab(parentName, tab))
         self.validationTimer.start()
 
-    def _validateTab(self, parentName, tab):     
+    def _validateTab(self, parentName, tab):
+        
         
         tabErrors = self._validate(self.schema['properties'][parentName], self.json[parentName])
         
@@ -1144,11 +1143,8 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         if hasattr(self, parentName+'_collapsable'):
             getattr(self, parentName+'_collapsable').setCollapsed(False)
 
-        QgsMessageLog.logMessage(str(self.defaultValue), 'FIM')
         for child in schema['items']['properties']:
             if child in element and element[child] is not None:
-
-                QgsMessageLog.logMessage(str(parentName+'_'+child), 'FIM')
 
                 if 'enumLabels' in schema['items']['properties'][child]:
                     index = schema['items']['properties'][child]['enum'].index(element[child])

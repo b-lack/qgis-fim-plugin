@@ -232,8 +232,6 @@ class TextField(QtWidgets.QWidget, UI_CLASS):
 
         v = Draft7Validator(self.schema)
         self.validationErrors = sorted(v.iter_errors(self.internJson[self.key]), key=lambda e: e.path)
-        QgsMessageLog.logMessage(str(self.schema), 'FIM')
-        QgsMessageLog.logMessage(str(self.internJson[self.key]), 'FIM')
         
 
     def displayErrors(self, emit = False):

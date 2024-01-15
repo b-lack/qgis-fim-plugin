@@ -27,11 +27,11 @@ import json
 import uuid
 
 
-from qgis.core import QgsFeature, QgsExpressionContextUtils, QgsProject, QgsVectorLayer, QgsField, QgsFields
+from qgis.core import QgsFeature, QgsExpressionContextUtils, QgsProject, QgsVectorLayer, QgsField, QgsFields, QgsMessageLog
 from qgis.PyQt import QtWidgets, uic
 from qgis.PyQt.QtCore import QDateTime, QVariant
-
-from qgis.PyQt.QtWidgets import QDialog, QScroller
+from qgis.PyQt.QtWidgets import QDialog, QScroller, QPushButton, QMessageBox, QAbstractItemView
+from PyQt5.QtGui import QCursor
 
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore
@@ -92,23 +92,211 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         QScroller.grabGesture(self.scrollArea_2, QtWidgets.QScroller.LeftMouseButtonGesture)
         QScroller.grabGesture(self.scrollArea_3, QtWidgets.QScroller.LeftMouseButtonGesture)
 
+        QScroller.grabGesture(self.lfbDraftTableWidget, QtWidgets.QScroller.LeftMouseButtonGesture)
+
+        self.tabWidget.hide()
+
+        #self.setup_table_widget()
+
         self.show()
+
+    def createButton(self, parent, label, type = 'raised'):
+        btn = QPushButton(parent)
+
+        if type == 'text':
+            btn.setStyleSheet("color: red; background: transparent; border: none;")
+        else:
+            btn.setStyleSheet("color: green;")
+
+        btn.setText(label)
+        btn.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+        return btn
+    
+    def focusFeature(self, feature, select = False):
+        """Focus the feature in the map canvas."""
+        Utils.focusFeature(self.iface, feature, select, None)
+
+    def _row_selected(self):
+        """Select the row in the table widget"""
+
+        item = self.lfbDraftTableWidget.currentRow()
+
+        self.vl = Utils.getLayerById()
+        
+        if self.vl is None:
+            return
+        featureList = self.vl.getFeatures()
+        feature = list(featureList)[item]
+
+        self.focusFeature(feature, True)
+
+
+    def setup_table_widget(self):
+        """Setup the table widget"""
+        #self.lfbDraftTableWidget.itemSelectionChanged.connect(self._row_selected)
+        self.lfbDraftTableWidget.cellClicked.connect(self._row_selected)
+
+    def set_selected_rows(self):
+        """Set the selected rows in the table widget"""
+        self.vl = Utils.getLayerById()
+        if self.vl is None:
+            return
+        featureList = self.vl.getFeatures()
+        selectedFeatures = Utils.getSelectedFeaturesFim()
+        self.lfbDraftTableWidget.setSelectionMode(QAbstractItemView.MultiSelection)
+
+
+        self.lfbDraftTableWidget.selectRow(0)
+        self.lfbDraftTableWidget.selectRow(1)
+
+        return
+
+        for idx, feature in enumerate(featureList):
+            isSelected = feature in selectedFeatures
+            if isSelected:
+                QgsMessageLog.logMessage(str(idx), 'FIM')
+                self.lfbDraftTableWidget.selectRow(idx)
+                #self.lfbDraftTableWidget.scrollToItem(self.lfbDraftTableWidget.item(idx, 0))
+                #self.lfbDraftTableWidget.setFocus()
+
+
+    def updateTableWidget(self):
+        """Read the layer and lists features"""
+
+        self.vl = Utils.getLayerById()
+        
+
+        if self.vl is None:
+            return
+
+        featureList = self.vl.getFeatures()
+
+        headers = []
+        headers.append('Bearbeitet')
+        headers.append('id')
+        headers.append('Trupp')
+        headers.append('GNSS-Gerät')
+        headers.append('Status')
+        headers.append('Edit')
+        #headers.append('FOKUS')
+        headers.append('Erstellt')
+        
+        headers.append('Typ')
+        headers.append('Löschen')
+
+        self.lfbDraftTableWidget.setRowCount(self.vl.featureCount())
+        self.lfbDraftTableWidget.setColumnCount(len(headers))
+        self.lfbDraftTableWidget.setHorizontalHeaderLabels(headers)
+
+        self.lfbDraftTableWidget.horizontalHeader().setSectionResizeMode(5, QtWidgets.QHeaderView.ResizeToContents)
+        self.lfbDraftTableWidget.horizontalHeader().setSectionResizeMode(6, QtWidgets.QHeaderView.ResizeToContents)
+        self.lfbDraftTableWidget.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
+        self.lfbDraftTableWidget.setStyleSheet("QTableWidget::item { margin: 2px }")
+
+        #self.lfbDraftTableWidget.verticalHeader().setDefaultSectionSize(20)
+
+        self.set_selected_rows()
+        
+        for idx, feature in enumerate(featureList):
+
+
+            losId = feature['id']
+            if feature['los_id'] is not None:
+                losId = feature['los_id']
+            
+            self.lfbDraftTableWidget.setItem(idx, 1, QtWidgets.QTableWidgetItem(losId))
+            
+            done = feature['status']
+            if done == False:
+                doneText = 'Abgeschlossen'
+            else:
+                doneText = 'ToDO'
+            self.lfbDraftTableWidget.setItem(idx, 2, QtWidgets.QTableWidgetItem(doneText))
+
+            properties = json.loads(feature['form'])
+            trupp_text = properties['general']['spaufsucheaufnahmetruppkuerzel'] if properties['general']['spaufsucheaufnahmetruppkuerzel'] is not None else '-'
+            self.lfbDraftTableWidget.setItem(idx, 3, QtWidgets.QTableWidgetItem(trupp_text))
+            gnss_text = properties['general']['spaufsucheaufnahmetruppgnss'] if properties['general']['spaufsucheaufnahmetruppgnss'] is not None else '-'
+            self.lfbDraftTableWidget.setItem(idx, 4, QtWidgets.QTableWidgetItem(gnss_text))
+
+            btn = self.createButton(self.lfbDraftTableWidget, 'BEARBEITEN')
+            btn.clicked.connect(self._listWidgetClicked(feature))
+            self.lfbDraftTableWidget.setCellWidget(idx, 0, btn)
+
+            #btn = self.createButton(self.lfbDraftTableWidget, 'FOCUS')
+            #btn.clicked.connect(self._focusFeature(feature))
+            #self.lfbDraftTableWidget.setCellWidget(idx, 3, btn)
+
+            self.lfbDraftTableWidget.setItem(idx, 5, QtWidgets.QTableWidgetItem(feature['created'].toString() if feature['created'] else '-'))
+            self.lfbDraftTableWidget.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
+
+            self.lfbDraftTableWidget.setItem(idx, 6, QtWidgets.QTableWidgetItem(feature['modified'].toString() if feature['modified'] else '-'))
+            self.lfbDraftTableWidget.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
+            type = feature['type']
+            if type is None:
+                type = 'VWM'
+            self.lfbDraftTableWidget.setItem(idx, 7, QtWidgets.QTableWidgetItem(type))
+
+            btn = self.createButton(self.lfbDraftTableWidget, 'LÖSCHEN', 'text')
+            btn.clicked.connect(self._removeFeature(feature))
+            self.lfbDraftTableWidget.setCellWidget(idx, 8, btn)
+
+        
+
+    def _focusFeature(self, feature):
+        def focusFeature():
+            self.focusFeature(feature)
+        return focusFeature
+    
+    def _listWidgetClicked(self, feature):
+        def listWidgetClicked():
+            self.listWidgetClicked(feature)
+        return listWidgetClicked
+    
+    def _removeFeature(self, feature):
+        def removeFeature():
+            self.removeRow(feature)
+        return removeFeature
+    
+    def removeRow(self, feature):
+        """Remove the feature from the layer."""
+
+        msgBox = QMessageBox()
+        msgBox.setText("Möchtest du den Stichprobenpunkt einschließlich der aufgenommenen Daten wirklich löschen?")
+        msgBox.setWindowTitle("Stichprobenpunkt löschen")
+        msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+
+        returnValue = msgBox.exec()
+        if returnValue == QMessageBox.Ok:
+            self.removeFeature(feature.id())
 
     def update(self):
         """Update the feature lists"""
 
         visibleFeatures = 0
         if self.vl is not None:
+
+            self.updateTableWidget()
+            return
+
             draftCount = self.readDrafts()
+
+            if draftCount is None:
+                draftCount = 0
+
             visibleFeatures += draftCount
             self.tabWidget.setTabText(1, 'Entwürfe (' + str(draftCount) + ')')
             
             
             selectedCount = self.readSelected()
+            if selectedCount is None:
+                selectedCount = 0
             visibleFeatures += selectedCount
             self.tabWidget.setTabText(0, 'Ausgewählt (' + str(selectedCount) + ')')
 
             doneCount = self.readDone(True)
+            if doneCount is None:
+                doneCount = 0
             visibleFeatures += doneCount
             self.tabWidget.setTabText(2, 'Abgeschlossen (' + str(doneCount) + ')')
             
@@ -123,7 +311,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         """Imported a draft from a file"""
 
         self.update()
-        self.tabWidget.setCurrentIndex(1)
+        #self.tabWidget.setCurrentIndex(1)
 
     def addIoButton(self):
         """Add the import/export button"""
@@ -166,13 +354,19 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         QgsProject.instance().addMapLayer(self.vl)
 
     
-    def listWidgetClicked(self, item):
+    def listWidgetClicked(self, feature):
         """on widget clicked"""
+
+        json_object = json.loads(feature['form'])
+        self.currentFeatureId = feature.id()
+        self.draftSelected.emit(json_object, self.currentFeatureId, feature)
+        return
 
         featureList = self.vl.getFeatures()
         for feat in featureList:
-            
+            QgsMessageLog.logMessage(str(feat.id()), 'FIM')
             if(feat.id() == item):
+                QgsMessageLog.logMessage("--------------listWidgetClicked------------"+ str(item), 'FIM')
                 json_object = json.loads(feat['form'])
                 self.currentFeatureId = feat.id()
                 self.draftSelected.emit(json_object, self.currentFeatureId, feat)
