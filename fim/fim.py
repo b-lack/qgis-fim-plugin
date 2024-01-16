@@ -242,5 +242,6 @@ class Fim:
             # TODO: fix to allow choice of dock location
             self.iface.addDockWidget(Qt.BottomDockWidgetArea, self.dockwidget)
             self.dockwidget.show()
-        else:
+        elif self.dockwidget != None:
             self.dockwidget.show()
+        
