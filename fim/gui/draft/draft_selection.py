@@ -590,8 +590,8 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         self.vl.commitChanges()
         self.vl.endEditCommand()
-        QgsProject.instance().write()
-        self.vl.updateExtents()
+        #QgsProject.instance().write()
+        #self.vl.updateExtents()
 
         for feature in self.vl.getFeatures():
             if feature['modified'] == currentDateTime:
