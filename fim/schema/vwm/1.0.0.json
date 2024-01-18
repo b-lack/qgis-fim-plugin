@@ -1512,7 +1512,7 @@
                                         ]
                                     },
                                     "verjuengungstransektbhd": {
-                                        "title": "BHD bei Bäuen > 2 Meter",
+                                        "title": "BHD bei Bäumen > 2 Meter",
                                         "description": "BHD bei Bäumen > 2 Meter Höhe, gemessen in mm mit Umfangsmaßband",
                                         "type": [
                                             "integer",
