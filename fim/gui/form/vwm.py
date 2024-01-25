@@ -157,6 +157,9 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         #self.precisionNote.updateIndicator(gpsInfos)
         self.precisionNote.update(aggregated)
 
+        if aggregated['longitude'] == 0 or aggregated['latitude'] == 0:
+            return
+
         position = QgsPointXY(QgsPoint(aggregated['longitude'], aggregated['latitude']))
         ganvs_utils.clearLayer('lfb-tmp-position', 'point')
         ganvs_utils.drawPosition('lfb-tmp-position', position)
@@ -265,16 +268,16 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
         # Bestandsbeschreibung
         self.setUpGeneralComboBox('bestandbetriebsartid', 'bestandsbeschreibung', 'bestandbetriebsartid')
-        self.setUpGeneralComboBox('bestandkronenschlussgradid', 'bestandsbeschreibung', 'bestandkronenschlussgradid', None, None, lambda: self.validateTab('bestandsbeschreibung', 10))
+        self.setUpGeneralComboBox('bestandkronenschlussgradid', 'bestandsbeschreibung', 'bestandkronenschlussgradid') #, None, None, lambda: self.validateTab('bestandsbeschreibung', 10)
         self.setUpGeneralComboBox('bestandschutzmassnahmenid', 'bestandsbeschreibung', 'bestandschutzmassnahmenid')
-        self.setUpGeneralComboBox('bestandnschichtigid', 'bestandsbeschreibung', 'bestandnschichtigid')
+        self.setUpGeneralComboBox('bestandnschichtigid', 'bestandsbeschreibung', 'bestandnschichtigid', None, None, lambda: self.validate_best_besch())
         
-        try:
-            self.bestandnschichtigid.currentIndexChanged.disconnect()
-        except:
-            pass
+        #try:
+        #    self.bestandnschichtigid.currentIndexChanged.disconnect()
+        #except:
+        #    pass
 
-        self.bestandnschichtigid.currentIndexChanged.connect(self.validation_t_bestockung)
+        #self.bestandnschichtigid.currentIndexChanged.connect(self.validation_t_bestockung)
         self.validation_t_bestockung()
 
         self.setUpGeneralComboBox('bestandbiotopid', 'bestandsbeschreibung', 'bestandbiotopid')
@@ -302,6 +305,10 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         self.validateAll()
         # next time update values only
         self.isSetup = True
+
+    def validate_best_besch(self):
+        self.validateTab('bestandsbeschreibung', 10)
+        self.validation_t_bestockung()
 
     def coordinatesValidation(self):
         """Validate the coordinates tab."""
@@ -854,6 +861,8 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         def update_value_by_combo(indexFromCombo):
             """Set DD value by combo."""
 
+            QgsMessageLog.logMessage(str(indexFromCombo), 'FIM')
+
             if 'chips' in locals():
                 chips.setValue(schema['enumLabels'][indexFromCombo])
 
@@ -1078,6 +1087,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
         headers.append('')
         headers.append('')
+        headers.append('')
 
         element.setColumnCount(len(headers))
         element.setRowCount(len(data))
@@ -1130,12 +1140,50 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
             editBtn = QtWidgets.QPushButton('Bearbeiten')
             editBtn.clicked.connect(self.editTableRow(parentName, childName, schema, element))
             table.setCellWidget(rowPosition, len(schema['items']['properties']) +1, editBtn)
+
+            copyBtn = QtWidgets.QPushButton('Duplizieren')
+            copyBtn.clicked.connect(self.copyTableRow(parentName, childName, schema, element))
+            table.setCellWidget(rowPosition, len(schema['items']['properties']) +2, copyBtn)
+    
+    def copyTableRow(self, parentName, childName, schema, element):
+        def copyRow():
+            self.copyRow(parentName, childName, schema, element)
+        return copyRow
     
     def editTableRow(self, parentName, childName, schema, element):
         def editRow():
             self.editRow(parentName, childName, schema, element)
         return editRow
     
+    def copyRow(self, parentName, childName, schema, element):
+            
+        self.defaultValue = copy.deepcopy(element)
+
+        if hasattr(self, parentName+'_collapsable'):
+            getattr(self, parentName+'_collapsable').setCollapsed(False)
+
+        for child in schema['items']['properties']:
+
+            if child == 'azimut' or child == 'distanz':
+                continue
+
+            if child in element and element[child] is not None:
+
+                if 'enumLabels' in schema['items']['properties'][child]:
+                    index = schema['items']['properties'][child]['enum'].index(element[child])
+                    getattr(self, parentName+'_'+child).setCurrentIndex(index)
+                elif schema['items']['properties'][child]['type'] == 'boolean':
+                    getattr(self, parentName+'_'+child).setChecked(element[child])
+                elif self.shouldBeNumeric(schema['items']['properties'][child]):
+                    getattr(self, parentName+'_'+child).setText(str(element[child]))
+                elif self.shouldBeInteger(schema['items']['properties'][child]):
+                    getattr(self, parentName+'_'+child).setText(str(element[child]))
+                else:
+                    getattr(self, parentName+'_'+child).setText(element[child])
+        
+        self.fillTable(parentName, childName, schema)
+        self.validation_t_bestockung()
+
     def editRow(self, parentName, childName, schema, element):
         
         self.defaultValue = copy.deepcopy(element)
@@ -1195,33 +1243,40 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
     
     def lfbLayers(self):
 
+        # https://github.com/b-lack/qgis-fim-plugin/issues/25
+
+        # 0 = Plenter
+        # 1 = Hauptbestand
+        # 2 = Unterstand
+        # 3 = Oberstand
+
         json = self.json
 
         label_errors = []
 
         rules_type = {
             1: [ # es
-                [3, 36, 9],
+                [3, 1, 36, 9],
                 [31, 36, 9]
             ],
             2: [ # zs
-                [3, 2, 4, 36, 9],
+                [3, 1, 2, 4, 36, 9],
                 [2, 4, 31, 36, 9]
             ],
             3: [ # ms
-                [3, 25, 2, 4, 31, 36, 9]
+                [3, 1, 25, 2, 4, 31, 36, 9]
             ],
             4: [ # zsv
-                [3, 2, 4, 36, 9]
+                [3, 1, 2, 4, 36, 9]
             ],
             5: [ # zsu
-                [3, 2, 4, 36, 9]
+                [3, 1, 2, 4, 36, 9]
             ],
             6: [ # pl
                 [0]
             ],
             7: [ # 3
-                [3, 25, 2, 4, 36, 9],
+                [3, 1, 25, 2, 4, 36, 9],
                 [3, 2, 4, 31, 36, 9]
             ]
         }
@@ -1266,7 +1321,12 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         
         schicht_id = json['bestandsbeschreibung']['bestandnschichtigid']
 
+        QgsMessageLog.logMessage('schicht_id: '+ str(json['bestandsbeschreibung']), 'FIM')
+
         if rules_length.get(schicht_id) != None:
+
+            
+
             if (len(elements_unique) < rules_length[schicht_id]['min'] or len(elements_unique) > rules_length[schicht_id]['max']):
                 label_errors.append(exceptions.ValidationError(
                     message='Anzahl an Bestockungsschichten entspricht nicht der n-Schichtigkeit der Bestandesbeschreibung.',
@@ -1276,14 +1336,12 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
                     schema_path=['allOf', 3, 'then', 'properties', 't_bestockung', 'properties', 't_bestockung', 'minItems']
                 ))
         
-        isSublist = False
         if rules_type.get(schicht_id) != None:
             for i in rules_type[schicht_id]:
+                
                 if(all(x in i for x in elements)):
-                    isSublist = True
                     break
                 else:
-                    isSublist = False
                     label_errors.append(exceptions.ValidationError(
                         message='Falsche Schichtenkombination',
                         validator='minItems',

@@ -218,15 +218,10 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
     def save(self, json):
         """Save the json to the database and temp save trupp-id und gnss"""
 
-        QgsMessageLog.logMessage('----> Parent: Starting save process', 'FIM')
-
         self.draft.saveFeature(json)
-
-        QgsMessageLog.logMessage('Parent: saveFeature success', 'FIM')
         
         if self.previousGeneral == None:
             self.previousGeneral = copy.deepcopy(json['general'])
-            QgsMessageLog.logMessage('Parent: deepcopy success', 'FIM')
 
         if json['general']['spaufsucheaufnahmetruppkuerzel'] != None and json['general']['spaufsucheaufnahmetruppkuerzel'] != self.previousGeneral['spaufsucheaufnahmetruppkuerzel']:
             self.previousGeneral['spaufsucheaufnahmetruppkuerzel'] = json['general']['spaufsucheaufnahmetruppkuerzel']

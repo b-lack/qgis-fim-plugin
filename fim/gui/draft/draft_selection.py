@@ -210,7 +210,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             if done == False:
                 doneText = 'Abgeschlossen'
             else:
-                doneText = 'ToDO'
+                doneText = 'ToDo'
             self.lfbDraftTableWidget.setItem(idx, 2, QtWidgets.QTableWidgetItem(doneText))
 
             properties = json.loads(feature['form'])
@@ -390,7 +390,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         )
         
         dirname = os.path.dirname(__file__)
-        filename = os.path.realpath(os.path.join(dirname, '../..', 'layerstyles', 'express_2.qml'))
+        filename = os.path.realpath(os.path.join(dirname, '../..', 'layerstyles', 'express_3.qml'))
 
         self.vl.loadNamedStyle(filename)
 
@@ -548,20 +548,14 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
     def saveFeature(self, jsonObj):
         """Save a feature"""
 
-        QgsMessageLog.logMessage("saveFeature start", 'FIM')
-
         if jsonObj is None:
             return
         
         currentDateTime = QDateTime.currentDateTime()
 
-        QgsMessageLog.logMessage("self.vl.startEditing", 'FIM')
         self.vl.startEditing()
-
-
         
         if self.currentFeatureId is not None:
-            QgsMessageLog.logMessage("update Feature: " + str(self.currentFeatureId), 'FIM')
             for tFeature in self.vl.getFeatures():
 
                 if tFeature.id() == self.currentFeatureId:
@@ -570,7 +564,6 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                     feature = tFeature
                     
         else:
-            QgsMessageLog.logMessage("create Feature: ", 'FIM')
             feature = QgsFeature()
 
             feature.setFields(self.vl.fields())
@@ -582,8 +575,6 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             
             self.vl.addFeature(feature)
         
-        QgsMessageLog.logMessage("Feature Saved/Updated", 'FIM')
-
         feature.setAttribute('form', json.dumps(jsonObj))
 
         self.vl.updateFeature(feature)
@@ -598,7 +589,6 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                 self.currentFeatureId = feature.id()
 
         #self.update()
-        QgsMessageLog.logMessage("saveFeature success", 'FIM')
 
 
         
