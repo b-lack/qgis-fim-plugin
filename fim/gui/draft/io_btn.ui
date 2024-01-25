@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>905</width>
-    <height>84</height>
+    <height>92</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -132,6 +132,9 @@ QPushButton:enabled{
       </item>
       <item row="1" column="3">
        <widget class="QPushButton" name="lfbImportSelectedBtn">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="font">
          <font>
           <pointsize>13</pointsize>
@@ -162,6 +165,13 @@ QPushButton:enabled{
       </item>
       <item row="1" column="1">
        <widget class="QLabel" name="label">
+        <property name="font">
+         <font>
+          <pointsize>15</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">padding:0</string>
         </property>

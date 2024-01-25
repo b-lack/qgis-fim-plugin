@@ -3,8 +3,7 @@ import json
 import collections.abc
 import re
 
-from qgis.core import QgsProject, QgsPointXY, QgsWkbTypes, QgsExpressionContextUtils, QgsMapLayer, QgsCoordinateReferenceSystem, QgsCoordinateTransform
-from qgis.core import QgsMessageLog
+from qgis.core import QgsMessageLog, QgsProject, QgsPointXY, QgsWkbTypes, QgsExpressionContextUtils, QgsMapLayer, QgsCoordinateReferenceSystem, QgsCoordinateTransform
 from qgis.utils import *
 
 from PyQt5.QtWidgets import QMessageBox
@@ -44,7 +43,7 @@ class Utils(object):
         """Get the meta data."""
 
         return {
-            'version': '1.0.14'
+            'version': '1.0.15'
         }
 
     def schemaTypeHasNull(schema):
@@ -217,6 +216,10 @@ class Utils(object):
                 pass
 
             layer.selectionChanged.connect(updateTocFn)
+
+        
+
+        
 
     def selectLayerByType(geometryType):
         """List all layers with geometry type."""

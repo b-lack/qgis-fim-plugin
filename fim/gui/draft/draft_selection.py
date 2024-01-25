@@ -146,8 +146,8 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         self.lfbDraftTableWidget.setSelectionMode(QAbstractItemView.MultiSelection)
 
 
-        self.lfbDraftTableWidget.selectRow(0)
-        self.lfbDraftTableWidget.selectRow(1)
+        #self.lfbDraftTableWidget.selectRow(0)
+        #self.lfbDraftTableWidget.selectRow(1)
 
         return
 
@@ -174,10 +174,12 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         headers = []
         headers.append('Bearbeitet')
         headers.append('id')
+        headers.append('Status')
+
         headers.append('Trupp')
         headers.append('GNSS-Gerät')
-        headers.append('Status')
-        headers.append('Edit')
+        
+        headers.append('Geändert')
         #headers.append('FOKUS')
         headers.append('Erstellt')
         
@@ -232,10 +234,8 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
             self.lfbDraftTableWidget.setItem(idx, 6, QtWidgets.QTableWidgetItem(feature['modified'].toString() if feature['modified'] else '-'))
             self.lfbDraftTableWidget.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
-            type = feature['type']
-            if type is None:
-                type = 'VWM'
-            self.lfbDraftTableWidget.setItem(idx, 7, QtWidgets.QTableWidgetItem(type))
+
+            self.lfbDraftTableWidget.setItem(idx, 7, QtWidgets.QTableWidgetItem(feature['type'].toString() if feature['type'] else 'VWM'))
 
             btn = self.createButton(self.lfbDraftTableWidget, 'LÖSCHEN', 'text')
             btn.clicked.connect(self._removeFeature(feature))
@@ -279,6 +279,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         if self.vl is not None:
 
             self.updateTableWidget()
+            self.ioBtn.update()
             return
 
             draftCount = self.readDrafts()
@@ -302,7 +303,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             visibleFeatures += doneCount
             self.tabWidget.setTabText(2, 'Abgeschlossen (' + str(doneCount) + ')')
             
-            self.ioBtn.update()
+            
 
         #if visibleFeatures == 0:
         #    self.empty_draft_label.show()

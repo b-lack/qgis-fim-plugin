@@ -30,8 +30,7 @@ from jsonschema import Draft7Validator
 from qgis.PyQt import QtWidgets, uic
 from qgis.PyQt.QtCore import pyqtSignal
 from qgis.PyQt.QtWidgets import QScroller
-from qgis.core import QgsMessageLog
-
+from qgis.core import QgsMessageLog, QgsProject
 from PyQt5.QtCore import QTimer
 
 from .form.vwm import VWM
@@ -99,7 +98,32 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self.buildVwmForm()
         self.setPosition(1)
 
+        self.create_FIM_layer_widget.hide()
+        self.create_fim_layer_btn.clicked.connect(self.create_new_FIM_layer)
+
+        QgsProject.instance().layerWasAdded.connect(self.update_toc)
+        QgsProject.instance().layerRemoved.connect(self.check_fim_layer_exists)
+        self.update_toc()
+
+    def check_fim_layer_exists(self):
+        """Check if the FIM layer was removed"""
+
+        if not Utils.getLayerById():
+            self.setPosition(0)
+            QgsMessageLog.logMessage('Check FIM Layer 0', 'FIM')
+        elif self.userPosition == 0:
+            self.setPosition(1)
+            QgsMessageLog.logMessage('Check FIM Layer 1', 'FIM')
+
+        
+
+    def update_toc(self):
+        """Update the TOC"""
+
+        QgsMessageLog.logMessage('Update TOC', 'FIM')
+
         Utils.updateToC(self.update)
+        self.check_fim_layer_exists()
 
     def toggle_info_dialog(self):
         '''Toggle the info dialog on press info Btn'''
@@ -254,17 +278,32 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
 
         self.userPosition = position
 
-        if self.userPosition == 2:
+        if self.userPosition == 2: # Form
             self.lfbFormWidget.show()
             self.saveBar.show()
             self.draft.hide()
             self.lfbHomeScreen.hide()
-        else:
+            self.create_FIM_layer_widget.hide()
+        elif self.userPosition == 1: # Home Screen
             self.lfbFormWidget.hide()
             self.saveBar.hide()
             self.draft.show()
             self.draft.update()
             self.lfbHomeScreen.show()
+            self.create_FIM_layer_widget.hide()
+        else: # FIM Layer not found
+            self.lfbFormWidget.hide()
+            self.saveBar.hide()
+            self.draft.hide()
+            self.lfbHomeScreen.hide()
+            self.create_FIM_layer_widget.show()
+
+
+    def create_new_FIM_layer(self):
+        """Create the FIM layer"""
+
+        self.draft.setupDraftLayer()
+        self.check_fim_layer_exists()
 
 
     def addDraft(self):
@@ -280,7 +319,7 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self.draft.draftSelected.connect(self.draftSelected)
         self.lfbHomeInputs.addWidget(self.draft)
 
-        self.draft.setupDraftLayer()
+        self.create_new_FIM_layer()
 
     
     def draftSelected(self, newJson, id, feature):

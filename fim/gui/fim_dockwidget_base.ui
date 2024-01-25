@@ -18,8 +18,8 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>400</width>
-    <height>297</height>
+    <width>416</width>
+    <height>401</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -171,7 +171,7 @@ padding:0;</string>
          <x>0</x>
          <y>0</y>
          <width>846</width>
-         <height>222</height>
+         <height>165</height>
         </rect>
        </property>
        <property name="sizePolicy">
@@ -201,6 +201,9 @@ padding:0;</string>
           <property name="spacing">
            <number>0</number>
           </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
          </layout>
         </item>
        </layout>
@@ -223,7 +226,7 @@ padding:0;</string>
         <number>0</number>
        </property>
        <property name="topMargin">
-        <number>0</number>
+        <number>30</number>
        </property>
        <property name="rightMargin">
         <number>0</number>
@@ -305,7 +308,7 @@ padding:0;</string>
               <x>0</x>
               <y>0</y>
               <width>500</width>
-              <height>219</height>
+              <height>190</height>
              </rect>
             </property>
             <property name="styleSheet">
@@ -406,6 +409,70 @@ padding:0;</string>
             </size>
            </property>
           </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="create_FIM_layer_widget" native="true">
+      <layout class="QGridLayout" name="create_FIM_layer">
+       <property name="topMargin">
+        <number>10</number>
+       </property>
+       <property name="bottomMargin">
+        <number>10</number>
+       </property>
+       <item row="0" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <property name="topMargin">
+          <number>10</number>
+         </property>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="create_fim_layer_btn">
+           <property name="styleSheet">
+            <string notr="true">QToolButton{
+	border: 2px solid #333;
+	color: #555;
+	margin: 0 5px;
+	padding: 5px;
+}
+QToolButton:enabled{
+	background-color: green;
+	color: #fff;
+}</string>
+           </property>
+           <property name="text">
+            <string>FIM Layer erstellen</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </item>
