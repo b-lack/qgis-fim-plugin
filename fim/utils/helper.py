@@ -156,6 +156,18 @@ class Utils(object):
             Utils.deselectFeature()
             Utils.selectFeature(feature)
 
+    def selectFeatureById(id):
+        """Select the feature by ID."""
+        layer = Utils.getLayerById()
+        if layer is not None:
+            layer.selectByIds([id])
+
+    def selectFeatures(features = []):
+        """Select the feature by ID."""
+        layer = Utils.getLayerById()
+        if layer is not None:
+            layer.selectByIds([feature.id() for feature in features])
+            
     def selectFeature(feature):
         """Select the feature by ID."""
         layer = Utils.getLayerById()

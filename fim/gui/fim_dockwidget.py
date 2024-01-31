@@ -213,6 +213,8 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
     def save_json(self, json):
         '''Save the json to the database'''
 
+        
+
         if self.saveTimer is not None and self.saveTimer.isActive(): 
             self.saveTimer.stop()
 
@@ -225,14 +227,12 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
     def saveFeature(self, json, status=False):
         '''Save the json to the database and set the status'''
 
-        QgsMessageLog.logMessage('Save Feature', 'FIM')
-        
         self.save_json(self.json)
 
+        #Temporaty disabled
         self.draft.setStatus(status)
+
         self.openHome()
-        #self.draft.readDrafts()
-        #self.draft.readDone(True)
 
     def updateSaveBtn(self, errors):
         """En-/Disable Save Button"""
@@ -243,7 +243,7 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         """Save the json to the database and temp save trupp-id und gnss"""
 
         self.draft.saveFeature(json)
-        
+
         if self.previousGeneral == None:
             self.previousGeneral = copy.deepcopy(json['general'])
 

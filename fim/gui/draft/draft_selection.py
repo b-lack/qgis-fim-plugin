@@ -29,7 +29,7 @@ import uuid
 
 from qgis.core import QgsFeature, QgsExpressionContextUtils, QgsProject, QgsVectorLayer, QgsField, QgsFields, QgsMessageLog
 from qgis.PyQt import QtWidgets, uic
-from qgis.PyQt.QtCore import QDateTime, QVariant
+from qgis.PyQt.QtCore import QDateTime, QVariant, QItemSelection, QItemSelectionModel, Qt
 from qgis.PyQt.QtWidgets import QDialog, QScroller, QPushButton, QMessageBox, QAbstractItemView
 from PyQt5.QtGui import QCursor
 
@@ -96,7 +96,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         self.tabWidget.hide()
 
-        #self.setup_table_widget()
+        self.setup_table_widget()
 
         self.show()
 
@@ -119,12 +119,32 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
     def _row_selected(self):
         """Select the row in the table widget"""
 
-        item = self.lfbDraftTableWidget.currentRow()
-
         self.vl = Utils.getLayerById()
-        
         if self.vl is None:
             return
+        
+        featureList = self.vl.getFeatures()
+        
+        _selected_rows = self.lfbDraftTableWidget.selectionModel().selectedRows()
+
+        features = []
+        
+        for idx, row in enumerate(_selected_rows):
+            id_from_item = self.lfbDraftTableWidget.item(row.row(), 1).text()
+
+            for feature in featureList:
+                if feature['id'] == id_from_item:
+                    features.append(feature)
+                    self.focusFeature(feature, True)
+                    break
+        
+        Utils.selectFeatures(features)
+            
+        return
+        item = self.lfbDraftTableWidget.currentRow()
+        id_from_item = self.lfbDraftTableWidget.item(item, 1).text()
+        QgsMessageLog.logMessage(id_from_item, 'FIM')
+        
         featureList = self.vl.getFeatures()
         feature = list(featureList)[item]
 
@@ -141,23 +161,20 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         self.vl = Utils.getLayerById()
         if self.vl is None:
             return
+        
         featureList = self.vl.getFeatures()
         selectedFeatures = Utils.getSelectedFeaturesFim()
         self.lfbDraftTableWidget.setSelectionMode(QAbstractItemView.MultiSelection)
+        
+        self.lfbDraftTableWidget.clearSelection()
+                
 
-
-        #self.lfbDraftTableWidget.selectRow(0)
-        #self.lfbDraftTableWidget.selectRow(1)
-
-        return
-
-        for idx, feature in enumerate(featureList):
-            isSelected = feature in selectedFeatures
-            if isSelected:
-                QgsMessageLog.logMessage(str(idx), 'FIM')
-                self.lfbDraftTableWidget.selectRow(idx)
-                #self.lfbDraftTableWidget.scrollToItem(self.lfbDraftTableWidget.item(idx, 0))
-                #self.lfbDraftTableWidget.setFocus()
+        for idx, feature in enumerate(selectedFeatures):
+            for row in range(self.lfbDraftTableWidget.rowCount()):
+                _item = self.lfbDraftTableWidget.item(row, 1)
+                if _item and _item.text() == feature['id']:
+                    index = self.lfbDraftTableWidget.model().index(row, 1)
+                    self.lfbDraftTableWidget.selectionModel().select(index, QItemSelectionModel.Select | QItemSelectionModel.Rows)
 
 
     def updateTableWidget(self):
@@ -172,7 +189,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         featureList = self.vl.getFeatures()
 
         headers = []
-        headers.append('Bearbeitet')
+        headers.append('')
         headers.append('id')
         headers.append('Status')
 
@@ -184,7 +201,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         headers.append('Erstellt')
         
         headers.append('Typ')
-        headers.append('Löschen')
+        headers.append('')
 
         self.lfbDraftTableWidget.setRowCount(self.vl.featureCount())
         self.lfbDraftTableWidget.setColumnCount(len(headers))
@@ -208,11 +225,11 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             
             self.lfbDraftTableWidget.setItem(idx, 1, QtWidgets.QTableWidgetItem(losId))
             
-            done = feature['status']
+            done = feature['status'] # False
             if done == False:
-                doneText = 'Abgeschlossen'
-            else:
                 doneText = 'ToDo'
+            else:
+                doneText = 'Abgeschlossen'
             self.lfbDraftTableWidget.setItem(idx, 2, QtWidgets.QTableWidgetItem(doneText))
 
             properties = json.loads(feature['form'])

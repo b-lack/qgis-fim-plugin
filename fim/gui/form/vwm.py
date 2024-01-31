@@ -13,10 +13,7 @@ from jsonschema import Draft7Validator, exceptions
 from ...utils.helper import Utils
 from .chips import Chips
 
-
-
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'vwm.ui'))
-
 
 class VWM(QtWidgets.QWidget, UI_CLASS):
     """VWM."""
