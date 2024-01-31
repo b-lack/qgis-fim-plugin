@@ -38,7 +38,7 @@ deprecated=False
 # Since QGIS 3.8, a comma separated list of plugins to be installed
 # (or upgraded) can be specified.
 # Check the documentation for more information.
-plugin_dependencies=GNAVS==1.0.9
+plugin_dependencies=GNAVS==1.0.10
 
 # Category of the plugin: Raster, Vector, Database or Web
 category=Vector
