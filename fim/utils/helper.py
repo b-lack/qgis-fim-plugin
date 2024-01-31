@@ -43,7 +43,7 @@ class Utils(object):
         """Get the meta data."""
 
         return {
-            'version': '1.0.15'
+            'version': '1.0.16'
         }
 
     def schemaTypeHasNull(schema):
@@ -167,7 +167,7 @@ class Utils(object):
         layer = Utils.getLayerById()
         if layer is not None:
             layer.selectByIds([feature.id() for feature in features])
-            
+
     def selectFeature(feature):
         """Select the feature by ID."""
         layer = Utils.getLayerById()
