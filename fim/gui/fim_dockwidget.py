@@ -110,17 +110,13 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
 
         if not Utils.getLayerById():
             self.setPosition(0)
-            QgsMessageLog.logMessage('Check FIM Layer 0', 'FIM')
         elif self.userPosition == 0:
             self.setPosition(1)
-            QgsMessageLog.logMessage('Check FIM Layer 1', 'FIM')
 
         
 
     def update_toc(self):
         """Update the TOC"""
-
-        QgsMessageLog.logMessage('Update TOC', 'FIM')
 
         Utils.updateToC(self.update)
         self.check_fim_layer_exists()
@@ -211,9 +207,7 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
             self.draft.update()
 
     def save_json(self, json):
-        '''Save the json to the database'''
-
-        
+        '''Save the json to the database'''        
 
         if self.saveTimer is not None and self.saveTimer.isActive(): 
             self.saveTimer.stop()
@@ -221,7 +215,7 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self.saveTimer = QTimer(self)
         self.saveTimer.timeout.connect(lambda: self.save(json))
         self.saveTimer.setSingleShot(True)
-        self.saveTimer.start(2000)
+        self.saveTimer.start(1000)
 
 
     def saveFeature(self, json, status=False):

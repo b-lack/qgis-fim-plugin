@@ -28,6 +28,8 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
         self.setupUi(self)
 
+        self.updating = False
+
         self.interface = interface
         self.schema = schema
         self.info_browser = info_browser
@@ -80,11 +82,15 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
     def updateJson(self, json):
         """Update the json."""
 
+        self.updating = True
+
         # Focus Tab 0
         self.vwmTabs.setCurrentIndex(0)
 
         self.json = json
         self.setUp()
+
+        self.updating = False
 
     def validateAll(self):
         """Validate the whole json."""
@@ -98,13 +104,15 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
             self.schemaErrors.append(error)
 
         self.cancelConnections()
+
         self.save_data.emit(self.schemaErrors)
         self.save_json()
 
     def save_json(self):
         """Save the json."""
 
-        self.save.emit(self.json)
+        if self.updating == False:
+            self.save.emit(self.json)
 
     def nextTab(self):
         """Go to the next tab."""
@@ -249,7 +257,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         self.setUpArray('verjuengungstransekt', 'verjuengungstransekten', self.verjuengungstransektAdd, self.verjuengungstransektAddError)
 
         # Weiserpflanzen
-        self.setUpTextField('krautanteil', 'weiserpflanzen', 'krautanteil')
+        self.setUpTextField('krautanteil', 'weiserpflanzen', 'krautanteil', None, None, lambda: self.validateTab('weiserpflanzen', 8))
         self.setUpObject('weiserpflanzen', 'moos')
         self.setUpObject('weiserpflanzen', 'kraut')
         self.setUpObject('weiserpflanzen', 'grass')
@@ -259,14 +267,14 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         self.setUpObject('weiserpflanzen', 'grosstraucher')
 
         # Transektinfo
-        self.setUpCheckBox('transektfrassmaus', 'transektinfo', 'transektfrassmaus')
-        self.setUpCheckBox('transektfrasshase', 'transektinfo', 'transektfrasshase')
-        self.setUpCheckBox('transektfrassbieber', 'transektinfo', 'transektfrassbieber')
+        self.setUpCheckBox('transektfrassmaus', 'transektinfo', 'transektfrassmaus', None, None, lambda: self.validateTab('transektinfo', 9))
+        self.setUpCheckBox('transektfrasshase', 'transektinfo', 'transektfrasshase', None, None, lambda: self.validateTab('transektinfo', 9))
+        self.setUpCheckBox('transektfrassbieber', 'transektinfo', 'transektfrassbieber', None, None, lambda: self.validateTab('transektinfo', 9))
 
         # Bestandsbeschreibung
-        self.setUpGeneralComboBox('bestandbetriebsartid', 'bestandsbeschreibung', 'bestandbetriebsartid')
-        self.setUpGeneralComboBox('bestandkronenschlussgradid', 'bestandsbeschreibung', 'bestandkronenschlussgradid') #, None, None, lambda: self.validateTab('bestandsbeschreibung', 10)
-        self.setUpGeneralComboBox('bestandschutzmassnahmenid', 'bestandsbeschreibung', 'bestandschutzmassnahmenid')
+        self.setUpGeneralComboBox('bestandbetriebsartid', 'bestandsbeschreibung', 'bestandbetriebsartid', None, None, self.save_json)
+        self.setUpGeneralComboBox('bestandkronenschlussgradid', 'bestandsbeschreibung', 'bestandkronenschlussgradid', None, None, self.save_json) #, None, None, lambda: self.validateTab('bestandsbeschreibung', 10)
+        self.setUpGeneralComboBox('bestandschutzmassnahmenid', 'bestandsbeschreibung', 'bestandschutzmassnahmenid', None, None, self.save_json)
         self.setUpGeneralComboBox('bestandnschichtigid', 'bestandsbeschreibung', 'bestandnschichtigid', None, None, lambda: self.validate_best_besch())
         
         #try:
@@ -291,12 +299,12 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
 
         # Störung
-        self.setUpCheckBox('thinning', 'stoerung', 'thinning')
-        self.setUpCheckBox('sanitaryStrokes', 'stoerung', 'sanitaryStrokes')
-        self.setUpCheckBox('wildfire', 'stoerung', 'wildfire')
-        self.setUpCheckBox('storm', 'stoerung', 'storm')
-        self.setUpCheckBox('soilCultivation', 'stoerung', 'soilCultivation')
-        self.setUpTextField('note', 'stoerung', 'note')
+        self.setUpCheckBox('thinning', 'stoerung', 'thinning', None, None, self.save_json)
+        self.setUpCheckBox('sanitaryStrokes', 'stoerung', 'sanitaryStrokes', None, None, self.save_json)
+        self.setUpCheckBox('wildfire', 'stoerung', 'wildfire', None, None, self.save_json)
+        self.setUpCheckBox('storm', 'stoerung', 'storm', None, None, self.save_json)
+        self.setUpCheckBox('soilCultivation', 'stoerung', 'soilCultivation', None, None)
+        self.setUpTextField('note', 'stoerung', 'note', None, None)
 
 
         self.validateAll()
@@ -427,18 +435,24 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
                 else:
                     getattr(self, childName + 'Error').hide()
                     #self.krautError.hide()
+
+            self.save_json()
         
-        self.json[parentName][childName] = {}
+        if self.json[parentName][childName] == None:
+            self.json[parentName][childName] = {}
+
         for child in schema['properties']:
 
-            self.json[parentName][childName][child] = 0
+            #self.json[parentName][childName][child] = 0
             
             self.setUpTextField(
                 child,
                 parentName,
                 child,
                 self.json[parentName][childName],
-                schema['properties'][child], onUpdate)
+                schema['properties'][child],
+                onUpdate
+            )
             
         onUpdate()
 
@@ -858,8 +872,6 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         def update_value_by_combo(indexFromCombo):
             """Set DD value by combo."""
 
-            QgsMessageLog.logMessage(str(indexFromCombo), 'FIM')
-
             if 'chips' in locals():
                 chips.setValue(schema['enumLabels'][indexFromCombo])
 
@@ -992,7 +1004,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         if objectValues is not None:
             if childName not in objectValues or objectValues[childName] is None:
                 objectValues[childName] = self.getDefault(schema)
-
+                
             tempValue = objectValues[childName]
             if tempValue is not None:
                 tempValue = str(tempValue)
@@ -1061,6 +1073,8 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
             if onUpdate is not None:
                 onUpdate()
+            else:
+                self.save_json()
             
         try:
             element.textChanged.disconnect()
@@ -1317,8 +1331,6 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
             return []
         
         schicht_id = json['bestandsbeschreibung']['bestandnschichtigid']
-
-        QgsMessageLog.logMessage('schicht_id: '+ str(json['bestandsbeschreibung']), 'FIM')
 
         if rules_length.get(schicht_id) != None:
 

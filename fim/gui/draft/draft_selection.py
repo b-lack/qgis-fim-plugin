@@ -290,8 +290,6 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
     def update(self):
         """Update the feature lists"""
 
-        QgsMessageLog.logMessage("update draft list", 'FIM')
-
         visibleFeatures = 0
         if self.vl is not None:
 
@@ -408,7 +406,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         )
         
         dirname = os.path.dirname(__file__)
-        filename = os.path.realpath(os.path.join(dirname, '../..', 'layerstyles', 'express_3.qml'))
+        filename = os.path.realpath(os.path.join(dirname, '../..', 'layerstyles', 'express_4.qml'))
 
         self.vl.loadNamedStyle(filename)
 
