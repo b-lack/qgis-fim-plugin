@@ -59,7 +59,7 @@
       <string notr="true"/>
      </property>
      <property name="currentIndex">
-      <number>10</number>
+      <number>12</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -2194,7 +2194,7 @@
             <x>0</x>
             <y>0</y>
             <width>926</width>
-            <height>845</height>
+            <height>855</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_42">
@@ -2419,7 +2419,7 @@
                  </widget>
                 </item>
                 <item row="1" column="0">
-                 <widget class="QLabel" name="verjuengungstransekttriebverlustdurchinsektenfrassDescription">
+                 <widget class="QLabel" name="verjuengungstransekt_verjuengungstransekttriebverlustdurchinsektenfrassDescription">
                   <property name="text">
                    <string>TextLabel</string>
                   </property>
@@ -2481,14 +2481,14 @@
                  </spacer>
                 </item>
                 <item row="4" column="0">
-                 <widget class="QLabel" name="verjuengungstransekttriebverlustdurchtrockenheitDescription">
+                 <widget class="QLabel" name="verjuengungstransekt_verjuengungstransekttriebverlustdurchtrockenheitDescription">
                   <property name="text">
                    <string>TextLabel</string>
                   </property>
                  </widget>
                 </item>
                 <item row="4" column="1">
-                 <widget class="QLabel" name="verjuengungstransekttriebverlustdurchfegeDescription">
+                 <widget class="QLabel" name="verjuengungstransekt_verjuengungstransekttriebverlustdurchfegeDescription">
                   <property name="text">
                    <string>TextLabel</string>
                   </property>
@@ -2508,14 +2508,14 @@
                  </widget>
                 </item>
                 <item row="1" column="1">
-                 <widget class="QLabel" name="verjuengungstransekttriebverlustdurchschalenwildverbissDescription">
+                 <widget class="QLabel" name="verjuengungstransekt_verjuengungstransekttriebverlustdurchschalenwildverbissDescription">
                   <property name="text">
                    <string>TextLabel</string>
                   </property>
                  </widget>
                 </item>
                 <item row="1" column="2">
-                 <widget class="QLabel" name="verjuengungstransekttriebverlustdurchfrostDescription">
+                 <widget class="QLabel" name="verjuengungstransekt_verjuengungstransekttriebverlustdurchfrostDescription">
                   <property name="text">
                    <string>TextLabel</string>
                   </property>
@@ -2833,11 +2833,14 @@
            </item>
            <item row="4" column="0" colspan="2">
             <widget class="QgsCollapsibleGroupBox" name="mGroupBox_2">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
              <property name="title">
               <string>Kraut</string>
              </property>
              <property name="collapsed">
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
              <layout class="QGridLayout" name="gridLayout_12">
               <property name="horizontalSpacing">
@@ -5118,7 +5121,7 @@
                  <string notr="true">color:red;</string>
                 </property>
                 <property name="text">
-                 <string>TextLabel</string>
+                 <string/>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

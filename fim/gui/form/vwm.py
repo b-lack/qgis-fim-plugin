@@ -127,6 +127,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
     def gnavs_default_settings(self):
         return {
+            "degUnits": "gon",
             "meassurementSetting": 100,
             "bestMeassurementSetting": 70,
             "aggregationType": 'mean',
@@ -197,12 +198,12 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
                 # General
 
-                self.nav = Recording(self.interface)
+                self.nav = Recording(self.interface, False, self.gnavs_default_settings())
                 self.nav.toggleButtonsChanged('navigation')
                 self.nav.toggleFocus(True)
                 
                 self.gnavs_navigation.addWidget(self.nav)
-                selection = Selection(self.interface, True)
+                selection = Selection(self.interface, True, "gon")
                 self.gnavs_navigation.addWidget(selection)
                 self.nav.currentPositionChanged.connect(selection.updateCoordinates)
 
@@ -421,6 +422,10 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         if childName not in self.json[parentName]:
             self.json[parentName][childName] = self.getDefault(schema)
 
+        
+        if hasattr(self, childName + 'Error'):
+            getattr(self, childName + 'Error').hide()
+
         def onUpdate():
             percentTotal = 0
             for child in self.json[parentName][childName]:
@@ -431,9 +436,11 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
             if hasattr(self, childName + 'Error'):
                 if percentTotal > 100:
                     getattr(self, childName + 'Error').show()
+                    getattr(self, childName + 'Error').setText('Die Summe der Prozentwerte darf nicht größer als 100 sein.')
                     #self.krautError.show()
                 else:
                     getattr(self, childName + 'Error').hide()
+                    getattr(self, childName + 'Error').setText('')
                     #self.krautError.hide()
 
             self.save_json()

@@ -7,7 +7,7 @@ name=FIM
 about=Das Plugin „Forest Inventory Monitoring“ (FIM) dient der Aufnahme in Brandenburg als Waldinventur nach § 30 LWaldG durchgeführten Waldinventur „Verjüngungszustands- und Wildeinflussmonitoring“ (VWM).
 qgisMinimumVersion=3.22
 description=Forest Inventory and Monitoring
-version=1.0.17
+version=1.0.18
 author=Torsten Wiebke (Concept), Gerrit Balindt (Development)
 email=support@grunecho.de
 
@@ -38,7 +38,7 @@ deprecated=False
 # Since QGIS 3.8, a comma separated list of plugins to be installed
 # (or upgraded) can be specified.
 # Check the documentation for more information.
-plugin_dependencies=GNAVS==1.0.10
+plugin_dependencies=GNAVS==1.0.13
 
 # Category of the plugin: Raster, Vector, Database or Web
 category=Vector
