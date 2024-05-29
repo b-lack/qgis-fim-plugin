@@ -1309,23 +1309,23 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
             },
             3: {
                 "min": 3,
-                "max": 3
+                "max": 10
             },
             4: {
-                "min": 3,
-                "max": 3
+                "min": 2,
+                "max": 2
             },
             5: {
-                "min": 3,
-                "max": 3
+                "min": 2,
+                "max": 2
             },
             6: {
                 "min": 1,
-                "max": 100
+                "max": 10
             },
             7: {
                 "min": 1,
-                "max": 100
+                "max": 10
             }
         }
 

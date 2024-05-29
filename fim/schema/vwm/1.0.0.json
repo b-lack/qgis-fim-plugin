@@ -1584,7 +1584,7 @@
                             "title": "Transektlänge",
                             "type": "integer",
                             "description": "Länge des Transekt in Dezimeter",
-                            "default": 20,
+                            "default": 200,
                             "minimum": 1,
                             "maximum": 250,
                             "unit": "Dezimeter"
