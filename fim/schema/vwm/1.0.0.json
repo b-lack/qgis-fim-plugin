@@ -1581,13 +1581,14 @@
                             }
                         },
                         "verjuengungstransektlaenge": {
-                            "title": "Transektlänge",
+                            "title": "Transektlänge in Dezimeter",
                             "type": "integer",
                             "description": "Länge des Transekt in Dezimeter",
                             "default": 200,
                             "minimum": 1,
                             "maximum": 250,
-                            "unit": "Dezimeter"
+                            "unit": "Dezimeter",
+                            "unitShort": "dm"
                         }
                     }
                 },
