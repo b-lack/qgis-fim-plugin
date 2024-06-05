@@ -1201,10 +1201,7 @@
                             "qtChips": 10,
                             "enum": [
                                 0,
-                                2,
-                                11,
-                                12,
-                                1
+                                2
                             ],
                             "enumLabels": [
                                 "ohne Schutz",
@@ -1530,15 +1527,11 @@
                                         "enum": [
                                             0,
                                             2,
-                                            11,
-                                            12,
                                             1
                                         ],
                                         "enumLabels": [
                                             "ohne Schutz",
                                             "Zaunschutz",
-                                            "Wuchshülle",
-                                            "Äste, Stäbe",
                                             "Einzelschutz"
                                         ]
                                     },
@@ -1598,7 +1591,7 @@
                     "description": "Bedeckungsgrad mit Weiserpflanzen im Verjüngungstransekt",
                     "properties": {
                         "krautanteil": {
-                            "title": "Anteil der Kraut- und Strauchschicht",
+                            "title": "Bodenbedeckung mit Gräser, Kräutern und Sträuchern im Transekt",
                             "type": "integer",
                             "description": "Wie viel Prozent des Transektes ist mit Bodenpflanzen bedeckt? (Nicht die Summe der Weiserpflanzen.)",
                             "default": 0,
@@ -1611,7 +1604,7 @@
                             "type": "object",
                             "properties": {
                                 "weiserpflanzenmoos": {
-                                    "title": "Moos",
+                                    "title": "Bodenbedeckung mit Moosen im Transekt",
                                     "description": "Bedeckungsgrad",
                                     "type": "integer",
                                     "default": 0,
@@ -1962,15 +1955,11 @@
                             "enum": [
                                 0,
                                 2,
-                                11,
-                                12,
                                 1
                             ],
                             "enumLabels": [
                                 "ohne Schutz",
                                 "Zaunschutz",
-                                "Wuchshülle",
-                                "Äste, Stäbe",
                                 "Einzelschutz"
                             ]
                         },
@@ -2046,7 +2035,7 @@
                         },
                         "bestandbedeckungsgradunterstand": {
                             "type": "integer",
-                            "title": "Bedeckungsgrad Unterstand",
+                            "title": "Bedeckungsanteil Unterstand",
                             "description": "Bestandesbeschreibung",
                             "default": 0,
                             "minimum": 0,
@@ -2055,7 +2044,7 @@
                         },
                         "bestandbedeckungsgradgraeser": {
                             "type": "integer",
-                            "title": "Bodenbeckung mit Gräsern, Kräutern und Sträuchern",
+                            "title": "Bodenbedeckung mit Gräsern, Kräutern und Sträuchern im Bestand",
                             "description": "Bestandesbeschreibung",
                             "default": 0,
                             "minimum": 0,
@@ -2107,11 +2096,11 @@
                                             "Angabe fehlt",
                                             "keine Zuordnung möglich (Plenterwald)",
                                             "Hauptbestand - wirtschaftliches Hauptgewicht",
-                                            "Unterstand - halbe Höhe des Oberstandes oder keinen Derbholzvorrat aufweisen",
+                                            "Unterstand - halbe Höhe des Obestandes nicht erreicht oder keinen Derbholzvorrat aufweisend",
                                             "Oberstand",
-                                            "Verjüngung unter Schirm",
+                                            "Verjüngung unter Schirm - absehbar den Oberstand ablösend/ Folgebestand",
                                             "liegender Baum / sehr schräg stehend",
-                                            "Zwischenstand, Mittelholz - mindestens halbe Höhe des Oberstandes und Derbholzvorrat aufweisen",
+                                            "Zwischenstand, Mittelholz - mindestens halbe Höhe des Oberstandes und Derbholzvorrat aufweisend",
                                             "Überhalt - Reste des Vorbestandes mit annährnd gleichmäßiger Verteilung auf der Fläche",
                                             "Altbäume - alte Einzelbäume, die nicht der Schichtart UeH zugeorndet werden können - Restvorrat"
                                         ]
@@ -2425,8 +2414,8 @@
                                     },
                                     "ba_anteil": {
                                         "type": "integer",
-                                        "title": "Verteilung",
-                                        "description": "Verteilung",
+                                        "title": "Schichtanteil",
+                                        "description": "Schichtanteil",
                                         "minimum": 1,
                                         "maximum": 100,
                                         "unit": "%"
@@ -2528,7 +2517,7 @@
                                     },
                                     "anteil": {
                                         "type": "integer",
-                                        "title": "Anteil von Bodenbedeckung",
+                                        "title": "Anteil der gewählten Bodenvegetation an der Kraut- und Strauchschicht",
                                         "description": "Der Anteil der gewählten Bodenvegitation in Prozent",
                                         "minimum": 1,
                                         "maximum": 100,

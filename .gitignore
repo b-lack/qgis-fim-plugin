@@ -136,3 +136,5 @@ zip_build
 
 **/.DS_Store
 .vscode/*
+
+pb_tool.cfg

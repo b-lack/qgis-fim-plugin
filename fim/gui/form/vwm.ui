@@ -3618,7 +3618,7 @@
            <item row="5" column="0" colspan="2">
             <widget class="QgsCollapsibleGroupBox" name="mGroupBox_3">
              <property name="title">
-              <string>Grass</string>
+              <string>Gras</string>
              </property>
              <property name="collapsed">
               <bool>true</bool>
