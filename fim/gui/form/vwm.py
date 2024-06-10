@@ -319,13 +319,13 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
     def coordinatesValidation(self):
         """Validate the coordinates tab."""
 
-        if self.json['coordinates']['spaufsucheverschobenursacheid'] != None:
-            for i in range(2, 13):
-                if self.vwmTabs.isTabEnabled(i):
-                    self.vwmTabs.setTabEnabled(i, False)
-        else:
-            for i in range(2, 13):
-                    self.vwmTabs.setTabEnabled(i, True)
+        #if self.json['coordinates']['spaufsucheverschobenursacheid'] != None:
+        #    for i in range(2, 13):
+        #        if self.vwmTabs.isTabEnabled(i):
+        #            self.vwmTabs.setTabEnabled(i, False)
+        #else:
+        for i in range(2, 13):
+            self.vwmTabs.setTabEnabled(i, True)
         
         self.validateTab('coordinates', 1)
 
@@ -657,12 +657,12 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
             schema['items']['properties']['verjuengungstransekttriebverlustdurchfege']
         )
     def refresh_t_bestockung(self, parentName, objectValues, schema, validateArray):
-        self.setUpGeneralComboBox(parentName+'_schicht_id', 't_bestockung', 'schicht_id', objectValues, schema['items']['properties']['schicht_id'])
-        self.setUpGeneralComboBox(parentName+'_icode_ba', 't_bestockung', 'icode_ba', objectValues, schema['items']['properties']['icode_ba'])
-        self.setUpGeneralComboBox(parentName+'_nas_id', 't_bestockung', 'nas_id', objectValues, schema['items']['properties']['nas_id'])
-        self.setUpGeneralComboBox(parentName+'_entsart_id', 't_bestockung', 'entsart_id', objectValues, schema['items']['properties']['entsart_id'])
-        self.setUpGeneralComboBox(parentName+'_vert_id', 't_bestockung', 'vert_id', objectValues, schema['items']['properties']['vert_id'])
-        self.setUpTextField(parentName+'_ba_anteil', 't_bestockung', 'ba_anteil', objectValues, schema['items']['properties']['ba_anteil'])
+        self.setUpGeneralComboBox(parentName+'_schicht_id', 't_bestockung', 'schicht_id', objectValues, schema['items']['properties']['schicht_id'], validateArray)
+        self.setUpGeneralComboBox(parentName+'_icode_ba', 't_bestockung', 'icode_ba', objectValues, schema['items']['properties']['icode_ba'], validateArray)
+        self.setUpGeneralComboBox(parentName+'_nas_id', 't_bestockung', 'nas_id', objectValues, schema['items']['properties']['nas_id'], validateArray)
+        self.setUpGeneralComboBox(parentName+'_entsart_id', 't_bestockung', 'entsart_id', objectValues, schema['items']['properties']['entsart_id'], validateArray)
+        self.setUpGeneralComboBox(parentName+'_vert_id', 't_bestockung', 'vert_id', objectValues, schema['items']['properties']['vert_id'], validateArray)
+        self.setUpTextField(parentName+'_ba_anteil', 't_bestockung', 'ba_anteil', objectValues, schema['items']['properties']['ba_anteil'], validateArray)
 
 
     def setUpArray(self, parentName, childName, addElementBtn, addElementError, onUpdate=None):
@@ -709,8 +709,10 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
         
         def validateArray():
-            errors = self._validate(schema['items'], objectValues)            
-
+            errors = self._validate(schema['items'], objectValues)     
+            QgsMessageLog.logMessage(str(childName), 'FIM')
+            QgsMessageLog.logMessage(str(errors), 'FIM')
+            
             if len(errors) > 0:
                 addElementBtn.setEnabled(False)
             else:

@@ -230,7 +230,7 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
 
     def updateSaveBtn(self, errors):
         """En-/Disable Save Button"""
-
+        
         self.saveBar.validate(errors)
 
     def save(self, json):
