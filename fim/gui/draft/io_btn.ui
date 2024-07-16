@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>905</width>
-    <height>92</height>
+    <height>94</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -49,20 +49,7 @@
       <property name="topMargin">
        <number>6</number>
       </property>
-      <item row="1" column="2">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="4">
+      <item row="1" column="6">
        <widget class="QPushButton" name="lfbImportBtn">
         <property name="font">
          <font>
@@ -91,7 +78,31 @@ QPushButton:enabled{
         </property>
        </widget>
       </item>
-      <item row="0" column="0" colspan="6">
+      <item row="1" column="3">
+       <widget class="QPushButton" name="lfb_auth_btn">
+        <property name="text">
+         <string>PushButton</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="label">
+        <property name="font">
+         <font>
+          <pointsize>15</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">padding:0</string>
+        </property>
+        <property name="text">
+         <string>FIM</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="8">
        <widget class="QLabel" name="lfbExportFeedback">
         <property name="text">
          <string>trzrtzrtzrtz</string>
@@ -101,7 +112,7 @@ QPushButton:enabled{
         </property>
        </widget>
       </item>
-      <item row="1" column="5">
+      <item row="1" column="7">
        <widget class="QPushButton" name="lfbExportBtn">
         <property name="font">
          <font>
@@ -130,7 +141,7 @@ QPushButton:enabled{
         </property>
        </widget>
       </item>
-      <item row="1" column="3">
+      <item row="1" column="5">
        <widget class="QPushButton" name="lfbImportSelectedBtn">
         <property name="enabled">
          <bool>false</bool>
@@ -163,20 +174,23 @@ QPushButton:enabled{
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QLabel" name="label">
-        <property name="font">
-         <font>
-          <pointsize>15</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
+      <item row="1" column="2">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
-        <property name="styleSheet">
-         <string notr="true">padding:0</string>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
         </property>
+       </spacer>
+      </item>
+      <item row="1" column="4">
+       <widget class="QPushButton" name="lfb_sync_btn">
         <property name="text">
-         <string>FIM</string>
+         <string>sync</string>
         </property>
        </widget>
       </item>

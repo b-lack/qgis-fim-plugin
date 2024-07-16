@@ -25,6 +25,7 @@
 import os
 import uuid
 import json
+import tempfile
 
 from qgis.core import QgsMessageLog, QgsProject, QgsWkbTypes, QgsVectorFileWriter, QgsFeature, QgsGeometry, QgsPointXY
 from qgis.PyQt import QtWidgets, uic
@@ -35,6 +36,8 @@ from qgis.PyQt.QtCore import QDateTime
 from PyQt5 import QtCore
 
 from ...utils.helper import Utils
+from ..authentication import Authentication
+from ..synchronization import Synchronization
 
 
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'io_btn.ui'))
@@ -54,11 +57,16 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
 
         self.setupUi(self)
 
+        self.token = None
+
         self.fieldsToBeMapped = ['los_id', 'created', 'modified', 'workflow', 'status', 'form', 'losnr']
 
         self.lfbExportBtn.clicked.connect(self.exportBtnClicked)
         self.lfbImportBtn.clicked.connect(self.importBtnClicked)
         self.lfbImportSelectedBtn.clicked.connect(self.importSelectedBtnClicked)
+
+        self.lfb_auth_btn.clicked.connect(self.authBtnClicked)
+        self.lfb_sync_btn.clicked.connect(self.sync)
 
         self.exportLength = 0
 
@@ -74,6 +82,9 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         self.exportOptions.layerName = 'FIM - Forest Inventory and Monitoring'
 
         self.show()
+
+        self.synchronization = Synchronization( self.interface )
+        self.synchronization.geojson_received.connect(self.add_geojson_to_layer)
 
     def update(self):
         """Update the widget."""
@@ -192,7 +203,10 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         if not 'features' in data:
             self.setFeedback('Fehler beim Import', True)
             return
-
+        
+        self.add_geojson_to_layer(data)
+            
+    def add_geojson_to_layer(self, data):
         layer = Utils.getLayerById()
 
         if not layer:
@@ -237,6 +251,55 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         self.setFeedback(str(newFeaturesCount) + ' Punkt(e) hinzugefügt')
 
         self.imported.emit(True)
+
+
+    # Authentication AND SYNC
+    def set_token(self, token):
+        """Set the token."""
+
+        self.token = token
+
+        if self.token is not None:
+            self.lfb_auth_btn.setText('Synchronisieren')
+        else:
+            self.lfb_auth_btn.setText('Authentifizieren')
+
+    def sync(self):
+        layer = Utils.getLayerById()
+
+        geojson = self.synchronization.add_geojson_from_host(layer, self.token)
+        return
+
+        # Step 3: Export the layer to a temporary GeoJSON file
+        with tempfile.NamedTemporaryFile(delete=False) as tmp:
+            tmp_file = tmp.name
+             
+        errors = QgsVectorFileWriter.writeAsVectorFormatV3(
+            layer=layer,
+            fileName= tmp_file,
+            transformContext=QgsProject.instance().transformContext(),
+            options=self.exportOptions
+        )
+
+        # Step 4: Read the temporary GeoJSON file
+        with open(tmp_file, 'r', encoding="UTF-8") as file:
+            geojson = json.load(file)
+        
+        # Clean up the temporary file
+        os.remove(tmp_file)
+        
+        QgsMessageLog.logMessage(json.dumps(geojson))
+
+    def authBtnClicked(self):
+        """Open the authentication dialog."""
+
+        dialog = Authentication()
+        dialog.token_changed.connect(self.set_token)
+
+        #dialog.ui = Authentication()
+        #dialog.ui.setupUi(dialog)
+        #dialog.setAttribute(QtCore.Qt.WA_DeleteOnClose)
+        dialog.exec_()
 
     def exportBtnClicked(self):
         """Check if folder exists and export the layer to a GeoJSON file."""

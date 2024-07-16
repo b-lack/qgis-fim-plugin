@@ -43,7 +43,7 @@ class Utils(object):
         """Get the meta data."""
 
         return {
-            'version': '1.0.21'
+            'version': '1.0.22'
         }
 
     def schemaTypeHasNull(schema):
@@ -311,3 +311,4 @@ class Utils(object):
         if pluginName in available_plugins:
             return True
         return False
+    
