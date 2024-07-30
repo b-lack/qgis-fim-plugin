@@ -55,7 +55,6 @@
                         "required": [
                             "general",
                             "coordinates",
-                            "stichprobenpunkt",
                             "baumplot1",
                             "baumplot2",
                             "landmarken1",

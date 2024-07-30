@@ -30,7 +30,7 @@ import uuid
 from qgis.core import QgsFeature, QgsExpressionContextUtils, QgsProject, QgsVectorLayer, QgsField, QgsFields, QgsMessageLog
 from qgis.PyQt import QtWidgets, uic
 from qgis.PyQt.QtCore import QDateTime, QVariant, QItemSelection, QItemSelectionModel, Qt
-from qgis.PyQt.QtWidgets import QDialog, QScroller, QPushButton, QMessageBox, QAbstractItemView
+from qgis.PyQt.QtWidgets import QDialog, QScroller, QPushButton, QLabel, QMessageBox, QAbstractItemView
 from PyQt5.QtGui import QCursor
 
 from PyQt5.uic import loadUi
@@ -67,20 +67,20 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         self.vl = None
 
         self.fields = QgsFields()
-        self.fields.append(QgsField("id", QVariant.String))
-        self.fields.append(QgsField("los_id", QVariant.String))
-        self.fields.append(QgsField("status", QVariant.Bool))
+        self.fields.append(QgsField(name="id", type=QVariant.String))
+        self.fields.append(QgsField(name="los_id", type=QVariant.String))
+        self.fields.append(QgsField(name="status", type=QVariant.Bool))
 
-        self.fields.append(QgsField("type", QVariant.String))
-        self.fields.append(QgsField("version", QVariant.String))
+        self.fields.append(QgsField(name="type", type=QVariant.String))
+        self.fields.append(QgsField(name="version", type=QVariant.String))
         
-        self.fields.append(QgsField("created", QVariant.DateTime))
-        self.fields.append(QgsField("modified", QVariant.DateTime))
-        self.fields.append(QgsField("workflow", QVariant.Int))
-        self.fields.append(QgsField("losnr", QVariant.String))
+        self.fields.append(QgsField(name="created", type=QVariant.DateTime))
+        self.fields.append(QgsField(name="modified", type=QVariant.DateTime))
+        self.fields.append(QgsField(name="workflow", type=QVariant.Int))
+        self.fields.append(QgsField(name="losnr", type=QVariant.String))
 
-        self.fields.append(QgsField("form", QVariant.String))
-        self.fields.append(QgsField("valid", QVariant.Bool))
+        self.fields.append(QgsField(name="form", type=QVariant.String))
+        self.fields.append(QgsField(name="valid", type=QVariant.Bool))
         
         self.currentFeatureId = None
 
@@ -226,7 +226,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             self.lfbDraftTableWidget.setItem(idx, 1, QtWidgets.QTableWidgetItem(losId))
             
             done = feature['status'] # False
-            if done == False:
+            if done == None or done == False:
                 doneText = 'ToDo'
             else:
                 doneText = 'Abgeschlossen'
@@ -238,9 +238,16 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             gnss_text = properties['general']['spaufsucheaufnahmetruppgnss'] if properties['general']['spaufsucheaufnahmetruppgnss'] is not None else '-'
             self.lfbDraftTableWidget.setItem(idx, 4, QtWidgets.QTableWidgetItem(gnss_text))
 
-            btn = self.createButton(self.lfbDraftTableWidget, 'BEARBEITEN')
-            btn.clicked.connect(self._listWidgetClicked(feature))
-            self.lfbDraftTableWidget.setCellWidget(idx, 0, btn)
+            
+            if feature['workflow'] == 5 or feature['workflow'] == 12:
+                label = QLabel('✓')
+                label.setStyleSheet("color: green;")
+                label.setAlignment(Qt.AlignCenter)
+                self.lfbDraftTableWidget.setCellWidget(idx, 0, label)
+            else:
+                btn = self.createButton(self.lfbDraftTableWidget, 'BEARBEITEN')
+                btn.clicked.connect(self._listWidgetClicked(feature))
+                self.lfbDraftTableWidget.setCellWidget(idx, 0, btn)
 
             #btn = self.createButton(self.lfbDraftTableWidget, 'FOCUS')
             #btn.clicked.connect(self._focusFeature(feature))
@@ -255,6 +262,8 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             self.lfbDraftTableWidget.setItem(idx, 7, QtWidgets.QTableWidgetItem(feature['type'].toString() if feature['type'] else 'VWM'))
 
             btn = self.createButton(self.lfbDraftTableWidget, 'LÖSCHEN', 'text')
+            if feature['workflow'] == 5 or feature['workflow'] == 12:
+                btn.setStyleSheet("color: green; background: transparent; border: none;")
             btn.clicked.connect(self._removeFeature(feature))
             self.lfbDraftTableWidget.setCellWidget(idx, 8, btn)
 
@@ -548,8 +557,12 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             for tFeature in self.vl.getFeatures():
                 if tFeature.id() == self.currentFeatureId:
                     currentWorkflow = Utils.getFeatureAttribute(tFeature, 'workflow')
-                    if currentWorkflow == 4 or currentWorkflow == 12:
-                        currentWorkflow = currentWorkflow +1
+                    #if currentWorkflow == 4 or currentWorkflow == 12:
+                    #    currentWorkflow = currentWorkflow +1
+                    if currentWorkflow < 4:
+                        currentWorkflow = 4
+                    elif currentWorkflow > 5 and currentWorkflow < 12:
+                        currentWorkflow = 12
 
                     self.vl.startEditing()
                     

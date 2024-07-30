@@ -309,11 +309,6 @@ class Tabs(QtWidgets.QWidget, UI_CLASS):
         for field in self.fieldArray :
             invert_op = getattr(field, "setJson", None)
             if callable(invert_op):
-
-                #if self.attr == 'general':
-                #    QgsMessageLog.logMessage("obj: " + str(self.json), 'FIM')
-                #    QgsMessageLog.logMessage("obj: " + str(setFields), 'FIM')
-                #else:
                 field.setJson(self.json, setFields)
 
             

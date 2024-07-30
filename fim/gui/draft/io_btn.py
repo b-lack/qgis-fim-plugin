@@ -67,6 +67,7 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
 
         self.lfb_auth_btn.clicked.connect(self.authBtnClicked)
         self.lfb_sync_btn.clicked.connect(self.sync)
+        self.lfb_sync_btn.hide()
 
         self.exportLength = 0
 
@@ -207,6 +208,15 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         self.add_geojson_to_layer(data)
             
     def add_geojson_to_layer(self, data):
+
+        if not data:
+            QgsMessageLog.logMessage('No data to import', 'FIM')
+            return
+
+        if data['features'] is None or len(data['features']) == 0:
+            QgsMessageLog.logMessage('No features in data: ' + json.dumps(data['features']), 'FIM')
+            return
+
         layer = Utils.getLayerById()
 
         if not layer:
@@ -221,8 +231,11 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
 
         newFeaturesCount = 0
         for feature in data['features']:
-            
 
+            
+            if Utils.idNotUnique(layer, feature['properties']['los_id']):
+                continue
+            
             qgsFeature = QgsFeature()
             qgsFeature.setFields(fields)
             geometry = QgsGeometry.fromPointXY(QgsPointXY(
@@ -259,18 +272,20 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
 
         self.token = token
 
-        if self.token is not None:
-            self.lfb_auth_btn.setText('Synchronisieren')
-        else:
-            self.lfb_auth_btn.setText('Authentifizieren')
+        self.sync()
+
+        #if self.token is not None:
+        #    self.lfb_auth_btn.setText('Synchronisieren')
+        #else:
+        #    self.lfb_auth_btn.setText('Authentifizieren')
 
     def sync(self):
         layer = Utils.getLayerById()
 
-        geojson = self.synchronization.add_geojson_from_host(layer, self.token)
-        return
-
-        # Step 3: Export the layer to a temporary GeoJSON file
+        # DOWNLOAD DATA FROM REMOTE HOST
+        self.synchronization.add_geojson_from_host(layer, self.token)
+        
+        # UPLOAD
         with tempfile.NamedTemporaryFile(delete=False) as tmp:
             tmp_file = tmp.name
              
@@ -280,15 +295,20 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
             transformContext=QgsProject.instance().transformContext(),
             options=self.exportOptions
         )
+        QgsMessageLog.logMessage(f'Errors: {errors}', 'FIM')
 
         # Step 4: Read the temporary GeoJSON file
         with open(tmp_file, 'r', encoding="UTF-8") as file:
             geojson = json.load(file)
+            for feature in geojson['features']:
+                # remove feature with attribute workflow != 4 or != 12
+                if feature['properties']['workflow'] != 4 and feature['properties']['workflow'] != 12:
+                    geojson['features'].remove(feature)
         
         # Clean up the temporary file
         os.remove(tmp_file)
-        
-        QgsMessageLog.logMessage(json.dumps(geojson))
+
+        self.synchronization.send_geojson_to_host(geojson, self.token)
 
     def authBtnClicked(self):
         """Open the authentication dialog."""

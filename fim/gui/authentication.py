@@ -66,10 +66,8 @@ class Authentication(QDialog, UI_CLASS):
         self.auth_error_label.setStyleSheet("color: red")
 
 
-
     def set_token(self, token=None):
         self.token = token
-        QgsMessageLog.logMessage(f'Token set to {self.token}')
         self.token_changed.emit(self.token)
 
     def enable_send_btn(self, reset=False):
@@ -79,23 +77,22 @@ class Authentication(QDialog, UI_CLASS):
 
         if reset:
             self.auth_input_pass.setText("")
-            self.auth_input_email.setText("")
         
     def handleResponse(self, reply):
         """
         Handle the response from the server.
         """
+        
+        if reply.error():
+            self.auth_error_label.setText(f'Login failed: {reply.errorString}')
+            self.enable_send_btn(True)
+            return
+        
         response = json.loads(reply.readAll().data().decode())
-        QgsMessageLog.logMessage(f'Response from server: {response}')
         if 'message' in response.keys():
             self.auth_error_label.setText(response['message'])
             self.enable_send_btn(True)
             return
-        elif reply.error():
-            self.auth_error_label.setText(f'Login failed: {reply.errorString}')
-            self.enable_send_btn(True)
-            return
-
 
         if 'token' in response.keys():
             self.set_token(response['token'])
@@ -129,7 +126,6 @@ class Authentication(QDialog, UI_CLASS):
             json = {'email': email, 'pass': password}
             document = QJsonDocument(json)
 
-            QgsMessageLog.logMessage(f'Making a request to {LOGIN_ENDPOINT}')
             request = QNetworkRequest(QUrl(LOGIN_ENDPOINT))
             request.setHeader(QNetworkRequest.ContentTypeHeader, "application/json")
 
@@ -148,7 +144,7 @@ class Authentication(QDialog, UI_CLASS):
         """
 
         response = json.loads(reply.readAll().data().decode())
-        QgsMessageLog.logMessage(f'Response from server: {response}')
+
 
         if reply.error():
             QgsMessageLog.logMessage(f'Error: {reply.errorString()}')
@@ -166,7 +162,6 @@ class Authentication(QDialog, UI_CLASS):
             }
             document = QJsonDocument(json)
 
-            QgsMessageLog.logMessage(f'Making a request to {EXPORT_HOST}')
             request = QNetworkRequest(QUrl(EXPORT_HOST))
             request.setHeader(QNetworkRequest.ContentTypeHeader, "application/json")
 
@@ -177,5 +172,4 @@ class Authentication(QDialog, UI_CLASS):
 
         except Exception as e:
             QgsMessageLog.logMessage(e)
-            QgsMessageLog.logMessage("An request error occurred")
     

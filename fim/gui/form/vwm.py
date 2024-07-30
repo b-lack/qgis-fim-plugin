@@ -710,8 +710,6 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         
         def validateArray():
             errors = self._validate(schema['items'], objectValues)     
-            QgsMessageLog.logMessage(str(childName), 'FIM')
-            QgsMessageLog.logMessage(str(errors), 'FIM')
             
             if len(errors) > 0:
                 addElementBtn.setEnabled(False)

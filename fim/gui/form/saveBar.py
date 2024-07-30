@@ -28,6 +28,7 @@ import json
 from qgis.PyQt import QtWidgets, uic
 from qgis.PyQt.QtWidgets import QDialog
 from PyQt5 import QtCore
+from qgis.core import QgsMessageLog
 
 from ...utils.helper import Utils
 
@@ -119,10 +120,13 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
 
     def validate(self, errors = []):
         """En- or disable the save button."""
+        QgsMessageLog.logMessage('Validating...', 'FIM')
 
         self.maxErrors = max(self.maxErrors, len(errors))
         self.currentErrors = len(errors)
 
+        for error in errors:
+            QgsMessageLog.logMessage(str(error), 'FIM')
 
         if len(errors) == 0:
             self.lfbErrorDialogBtn.setText('')
