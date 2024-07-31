@@ -1935,7 +1935,7 @@
                                 "zweischichtig mit Vorausverjüngung",
                                 "zweischichtig mit Unterbau",
                                 "mehrschichtig oder plenterartig",
-                                "zweischichtig  mit Überhälter/Nachhiebsrest"
+                                "mehrschichtig  mit Überhälter/Nachhiebsrest"
                             ]
                         },
                         "bestandbiotopid": {
@@ -2015,7 +2015,7 @@
                 "t_bestockung": {
                     "type": "object",
                     "title": "Bestockung",
-                    "description": "Der erste Baumplot",
+                    "description": "Bestockung der einzelnen Schichten",
                     "properties": {
                         "t_bestockung": {
                             "type": "array",
@@ -2034,14 +2034,14 @@
                                         "enum": [
                                             null,
                                             0,
-                                            1,
-                                            4,
                                             3,
-                                            31,
+                                            2,
                                             25,
-                                            36,
                                             9,
-                                            2
+                                            31,
+                                            36,
+                                            4,
+                                            1
                                         ],
                                         "enumLabels": [
                                             "Angabe fehlt",
@@ -2366,7 +2366,7 @@
                 "t_bodenvegetation": {
                     "type": "object",
                     "title": "Bodenvegetation",
-                    "description": "Der erste Baumplot",
+                    "description": "Vegetationsbeschreibung der Kraut und Strauchschicht im Bestand",
                     "properties": {
                         "t_bodenvegetation": {
                             "type": "array",
