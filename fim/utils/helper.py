@@ -43,7 +43,7 @@ class Utils(object):
         """Get the meta data."""
 
         return {
-            'version': '1.0.23'
+            'version': '1.0.24'
         }
 
     def schemaTypeHasNull(schema):
@@ -319,23 +319,36 @@ class Utils(object):
                 return True
         return False
     
-    def set_workflow():
-        """Set the workflow."""
+    def set_workflow(type):
+        """Set the workflow AFTER upload."""
 
         vl = Utils.getLayerById()
         for tFeature in vl.getFeatures():
             currentWorkflow = Utils.getFeatureAttribute(tFeature, 'workflow')
 
-            if currentWorkflow == 4:
-                currentWorkflow = 5
-            elif currentWorkflow == 12:
-                currentWorkflow = 13
+            status = 0
+            
+            if type == 'upload':
+                if currentWorkflow == 5:
+                    currentWorkflow = 6
+                #elif currentWorkflow == 12:
+                #    currentWorkflow = 13
+                else:
+                    continue
+            elif type == 'download':
+                if currentWorkflow == 3:
+                    currentWorkflow = 4
+                #elif currentWorkflow == 13:
+                #    currentWorkflow = 12
+                else:
+                    continue
             else:
                 continue
 
             vl.startEditing()
             
             tFeature.setAttribute('workflow', currentWorkflow)
+            tFeature.setAttribute('status', status)
 
             vl.updateFeature(tFeature)
             vl.commitChanges()

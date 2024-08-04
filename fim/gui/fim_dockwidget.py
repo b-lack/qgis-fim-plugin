@@ -186,6 +186,10 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self.vwmFormWidget.updateJson(self.json)        
         self.vwmFormWidget.show()
 
+    def updateSelectionList(self):
+        """Update the selection"""
+
+        self.draft.update()
 
     def moveTab(self, direction = 1):
         if not hasattr(self, 'vwmFormWidget'):
@@ -227,6 +231,8 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self.draft.setStatus(status)
 
         self.openHome()
+
+        self.draft.update()
 
     def updateSaveBtn(self, errors):
         """En-/Disable Save Button"""

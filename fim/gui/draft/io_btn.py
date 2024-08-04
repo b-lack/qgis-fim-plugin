@@ -58,6 +58,7 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         self.setupUi(self)
 
         self.token = None
+        self.email = ""
 
         self.fieldsToBeMapped = ['los_id', 'created', 'modified', 'workflow', 'status', 'form', 'losnr']
 
@@ -86,6 +87,12 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
 
         self.synchronization = Synchronization( self.interface )
         self.synchronization.geojson_received.connect(self.add_geojson_to_layer)
+        self.synchronization.geojson_sent.connect(self.setFeedback)
+        self.synchronization.update_list.connect(self.done_imported)
+
+    def done_imported(self):
+        """Done imported."""
+        self.imported.emit(True)
 
     def update(self):
         """Update the widget."""
@@ -295,14 +302,14 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
             transformContext=QgsProject.instance().transformContext(),
             options=self.exportOptions
         )
-        QgsMessageLog.logMessage(f'Errors: {errors}', 'FIM')
 
         # Step 4: Read the temporary GeoJSON file
         with open(tmp_file, 'r', encoding="UTF-8") as file:
             geojson = json.load(file)
             for feature in geojson['features']:
-                # remove feature with attribute workflow != 4 or != 12
-                if feature['properties']['workflow'] != 4 and feature['properties']['workflow'] != 12:
+                if feature['properties']['status'] == False:
+                    geojson['features'].remove(feature)
+                elif feature['properties']['workflow'] != 5 and feature['properties']['workflow'] != 12:
                     geojson['features'].remove(feature)
         
         # Clean up the temporary file
@@ -310,11 +317,17 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
 
         self.synchronization.send_geojson_to_host(geojson, self.token)
 
+    def set_email(self, email):
+        """Set the email."""
+
+        self.email = email
+
     def authBtnClicked(self):
         """Open the authentication dialog."""
 
-        dialog = Authentication()
+        dialog = Authentication(None, self.email)
         dialog.token_changed.connect(self.set_token)
+        dialog.set_email.connect(self.set_email)
 
         #dialog.ui = Authentication()
         #dialog.ui.setupUi(dialog)
@@ -354,4 +367,4 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
 
         self.lfbExportFeedback.setText('letzte Export: ' + fileName)
 
-        self.exported.emit(True)
+        #self.exported.emit(True)

@@ -48,8 +48,9 @@ EXPORT_HOST = "http://localhost:3000/rpc/import_geojson"
 class Authentication(QDialog, UI_CLASS):
 
     token_changed = QtCore.pyqtSignal(str)
+    set_email = QtCore.pyqtSignal(str)
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, email=None, password=None):
         """Constructor."""
 
         QDialog.__init__(self, parent)
@@ -61,6 +62,7 @@ class Authentication(QDialog, UI_CLASS):
         self.auth_input_pass.setEchoMode(QtWidgets.QLineEdit.Password)
         self.auth_input_pass.setPlaceholderText("Password")
         self.auth_input_email.setPlaceholderText("Username")
+        self.auth_input_email.setText(email)
 
         self.auth_error_label.setText("")
         self.auth_error_label.setStyleSheet("color: red")
@@ -133,6 +135,8 @@ class Authentication(QDialog, UI_CLASS):
             self.nam = QNetworkAccessManager()
             self.nam.finished.connect(self.handleResponse)
             self.nam.post(request, document.toJson())
+
+            self.set_email.emit(email)
 
         except Exception as e:
             self.auth_error_label.setText("An request error occurred")

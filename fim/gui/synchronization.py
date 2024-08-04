@@ -52,6 +52,9 @@ IMPORT_HOST = "https://db01.simplex4data.de/projekte/lfb/postgrest/rpc/import_ge
 class Synchronization(QtWidgets.QWidget, UI_CLASS):
 
     geojson_received = QtCore.pyqtSignal(object)
+    geojson_sent = QtCore.pyqtSignal(object)
+
+    update_list = QtCore.pyqtSignal()
 
     def __init__(self, interface):
         """Constructor."""
@@ -80,8 +83,9 @@ class Synchronization(QtWidgets.QWidget, UI_CLASS):
         else:
             try:
                 # Parse the string as JSON
-                json_data = json.loads(data_str)
-                Utils.set_workflow()
+                Utils.set_workflow('upload')
+                self.geojson_sent.emit("Erfolgreich gesendet")
+                self.update_list.emit()
             except json.JSONDecodeError as e:
                 QgsMessageLog.logMessage(f"Failed to decode JSON: {e}")
                 return None
@@ -135,6 +139,8 @@ class Synchronization(QtWidgets.QWidget, UI_CLASS):
                 # Parse the string as JSON
                 json_data = json.loads(data_str)
                 self.geojson_received.emit(json_data)
+                Utils.set_workflow('download')
+                self.update_list.emit()
             except json.JSONDecodeError as e:
                 QgsMessageLog.logMessage(f"Failed to decode JSON: {str(e)}", 'FIM')
                 return None

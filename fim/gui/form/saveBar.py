@@ -120,7 +120,6 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
 
     def validate(self, errors = []):
         """En- or disable the save button."""
-        QgsMessageLog.logMessage('Validating...', 'FIM')
 
         self.maxErrors = max(self.maxErrors, len(errors))
         self.currentErrors = len(errors)

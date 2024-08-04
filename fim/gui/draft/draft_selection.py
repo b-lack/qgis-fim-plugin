@@ -239,8 +239,8 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             self.lfbDraftTableWidget.setItem(idx, 4, QtWidgets.QTableWidgetItem(gnss_text))
 
             
-            if feature['workflow'] == 5 or feature['workflow'] == 12:
-                label = QLabel('✓')
+            if feature['workflow'] == 6 or feature['workflow'] == 12:
+                label = QLabel('hochgeladen') #QLabel('✓')
                 label.setStyleSheet("color: green;")
                 label.setAlignment(Qt.AlignCenter)
                 self.lfbDraftTableWidget.setCellWidget(idx, 0, label)
@@ -262,7 +262,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             self.lfbDraftTableWidget.setItem(idx, 7, QtWidgets.QTableWidgetItem(feature['type'].toString() if feature['type'] else 'VWM'))
 
             btn = self.createButton(self.lfbDraftTableWidget, 'LÖSCHEN', 'text')
-            if feature['workflow'] == 5 or feature['workflow'] == 12:
+            if feature['workflow'] == 6 or feature['workflow'] == 12:
                 btn.setStyleSheet("color: green; background: transparent; border: none;")
             btn.clicked.connect(self._removeFeature(feature))
             self.lfbDraftTableWidget.setCellWidget(idx, 8, btn)
@@ -345,6 +345,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         self.ioBtn = IoBtn(self.iface)
         self.ioBtn.imported.connect(self.imported)
+        self.ioBtn.exported.connect(self.update)
         self.lfbIoWidget.addWidget(self.ioBtn)
 
     def resetCurrentDraft(self, featureId):
@@ -559,14 +560,18 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                     currentWorkflow = Utils.getFeatureAttribute(tFeature, 'workflow')
                     #if currentWorkflow == 4 or currentWorkflow == 12:
                     #    currentWorkflow = currentWorkflow +1
-                    if currentWorkflow < 4:
-                        currentWorkflow = 4
-                    elif currentWorkflow > 5 and currentWorkflow < 12:
+                    if currentWorkflow < 5:
+                        if newState == True:
+                            currentWorkflow = 5
+                        elif newState == False:
+                            currentWorkflow = 4
+                    elif currentWorkflow > 6 and currentWorkflow < 12:
                         currentWorkflow = 12
 
                     self.vl.startEditing()
                     
                     tFeature.setAttribute('workflow', currentWorkflow)
+                    QgsMessageLog.logMessage('Status: ' + str(newState))
                     tFeature.setAttribute('status', newState)
 
                     self.vl.updateFeature(tFeature)
