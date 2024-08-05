@@ -116,8 +116,26 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         """Focus the feature in the map canvas."""
         Utils.focusFeature(self.iface, feature, select, None)
 
-    def _row_selected(self):
+    def _row_selected(self, row,  column):
         """Select the row in the table widget"""
+
+        _selected_rows = self.lfbDraftTableWidget.selectionModel().selectedRows()
+        feature_id_str = self.lfbDraftTableWidget.item(row, 1).text()
+        
+
+        # self.listWidgetClicked(feature)
+        ##ä Search for the feature in the layer
+        self.vl = Utils.getLayerById()
+        if self.vl is None:
+            return
+        
+        featureList = self.vl.getFeatures()
+
+        for feature in featureList:
+            if feature['id'] == feature_id_str or feature['los_id'] == feature_id_str:
+                self.listWidgetClicked(feature)
+                break
+        return
 
         self.vl = Utils.getLayerById()
         if self.vl is None:
@@ -154,7 +172,9 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
     def setup_table_widget(self):
         """Setup the table widget"""
         #self.lfbDraftTableWidget.itemSelectionChanged.connect(self._row_selected)
-        self.lfbDraftTableWidget.cellClicked.connect(self._row_selected)
+        
+        #self.lfbDraftTableWidget.cellClicked.connect(self._row_selected)
+        self.create_header()
 
     def set_selected_rows(self):
         """Set the selected rows in the table widget"""
@@ -177,17 +197,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                     self.lfbDraftTableWidget.selectionModel().select(index, QItemSelectionModel.Select | QItemSelectionModel.Rows)
 
 
-    def updateTableWidget(self):
-        """Read the layer and lists features"""
-
-        self.vl = Utils.getLayerById()
-        
-
-        if self.vl is None:
-            return
-
-        featureList = self.vl.getFeatures()
-
+    def create_header(self):
         headers = []
         headers.append('')
         headers.append('id')
@@ -203,9 +213,30 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         headers.append('Typ')
         headers.append('')
 
-        self.lfbDraftTableWidget.setRowCount(self.vl.featureCount())
         self.lfbDraftTableWidget.setColumnCount(len(headers))
         self.lfbDraftTableWidget.setHorizontalHeaderLabels(headers)
+
+    def updateTableWidget(self):
+        """Read the layer and lists features"""
+
+        self.vl = Utils.getLayerById()
+        
+
+        if self.vl is None:
+            return
+
+        featureList = self.vl.getFeatures()
+
+       
+
+        #self.lfbDraftTableWidget.clear()
+        #self.lfbDraftTableWidget.setRowCount(0)
+
+        # Disable sorting
+        self.lfbDraftTableWidget.setSortingEnabled(False)
+            
+        self.lfbDraftTableWidget.setRowCount(self.vl.featureCount())
+        
 
         self.lfbDraftTableWidget.horizontalHeader().setSectionResizeMode(5, QtWidgets.QHeaderView.ResizeToContents)
         self.lfbDraftTableWidget.horizontalHeader().setSectionResizeMode(6, QtWidgets.QHeaderView.ResizeToContents)
@@ -216,6 +247,8 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         self.set_selected_rows()
         
+        # https://stackoverflow.com/questions/7960505/strange-qtablewidget-behavior-not-all-cells-populated-after-sorting-followed-b
+
         for idx, feature in enumerate(featureList):
 
 
@@ -247,6 +280,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             else:
                 btn = self.createButton(self.lfbDraftTableWidget, 'BEARBEITEN')
                 btn.clicked.connect(self._listWidgetClicked(feature))
+                #btn.clicked.connect(self._row_selected)
                 self.lfbDraftTableWidget.setCellWidget(idx, 0, btn)
 
             #btn = self.createButton(self.lfbDraftTableWidget, 'FOCUS')
@@ -254,10 +288,10 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             #self.lfbDraftTableWidget.setCellWidget(idx, 3, btn)
 
             self.lfbDraftTableWidget.setItem(idx, 5, QtWidgets.QTableWidgetItem(feature['created'].toString() if feature['created'] else '-'))
-            self.lfbDraftTableWidget.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
+            #self.lfbDraftTableWidget.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
 
             self.lfbDraftTableWidget.setItem(idx, 6, QtWidgets.QTableWidgetItem(feature['modified'].toString() if feature['modified'] else '-'))
-            self.lfbDraftTableWidget.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
+            #self.lfbDraftTableWidget.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
 
             self.lfbDraftTableWidget.setItem(idx, 7, QtWidgets.QTableWidgetItem(feature['type'].toString() if feature['type'] else 'VWM'))
 
@@ -267,7 +301,8 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             btn.clicked.connect(self._removeFeature(feature))
             self.lfbDraftTableWidget.setCellWidget(idx, 8, btn)
 
-        
+        # Re-enable sorting
+        self.lfbDraftTableWidget.setSortingEnabled(True)
 
     def _focusFeature(self, feature):
         def focusFeature():
@@ -387,6 +422,10 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         json_object = json.loads(feature['form'])
         self.currentFeatureId = feature.id()
+
+        QgsMessageLog.logMessage(str(feature.id()), 'FIM')
+        QgsMessageLog.logMessage(str(feature['los_id']), 'FIM')
+
         self.draftSelected.emit(json_object, self.currentFeatureId, feature)
         return
 

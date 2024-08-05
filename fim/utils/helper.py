@@ -43,7 +43,7 @@ class Utils(object):
         """Get the meta data."""
 
         return {
-            'version': '1.0.24'
+            'version': '1.0.25'
         }
 
     def schemaTypeHasNull(schema):

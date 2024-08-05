@@ -186,11 +186,11 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self.vwmFormWidget.updateJson(self.json)        
         self.vwmFormWidget.show()
 
-    def updateSelectionList(self):
-        """Update the selection"""
-
-        self.draft.update()
-
+    #def updateSelectionList(self):
+    #    """Update the selection"""
+#
+    #    self.draft.update()
+#
     def moveTab(self, direction = 1):
         if not hasattr(self, 'vwmFormWidget'):
             return
@@ -201,14 +201,14 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
             self.vwmFormWidget.nextTab()
 
     # deprecated
-    def update(self):
-        '''Update feature list on select/deselect feature'''
-
-        #if hasattr(self, 'userPosition') and self.userPosition == 2:
-        #    return
-
-        if hasattr(self, 'draft'):
-            self.draft.update()
+    #def update(self):
+    #    '''Update feature list on select/deselect feature'''
+#
+    #    #if hasattr(self, 'userPosition') and self.userPosition == 2:
+    #    #    return
+#
+    #    if hasattr(self, 'draft'):
+    #        self.draft.update()
 
     def save_json(self, json):
         '''Save the json to the database'''        
@@ -232,7 +232,7 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
 
         self.openHome()
 
-        self.draft.update()
+        #self.draft.update()
 
     def updateSaveBtn(self, errors):
         """En-/Disable Save Button"""
@@ -327,8 +327,10 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
 
         self.addPreviousGeneral(newJson)
 
-        self.json = newJson
+        self.json = newJson # Form Only
 
+        #QgsMessageLog.logMessage(str(self.currentFeatureId), 'FIM')
+        
         
         self.updateVwmForm()
         

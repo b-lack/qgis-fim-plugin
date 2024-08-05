@@ -124,8 +124,8 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.maxErrors = max(self.maxErrors, len(errors))
         self.currentErrors = len(errors)
 
-        for error in errors:
-            QgsMessageLog.logMessage(str(error), 'FIM')
+        #for error in errors:
+        #    QgsMessageLog.logMessage(str(error), 'FIM')
 
         if len(errors) == 0:
             self.lfbErrorDialogBtn.setText('')
