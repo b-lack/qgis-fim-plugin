@@ -272,7 +272,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             self.lfbDraftTableWidget.setItem(idx, 4, QtWidgets.QTableWidgetItem(gnss_text))
 
             
-            if feature['workflow'] == 6 or feature['workflow'] == 12:
+            if feature['workflow'] == 6 or feature['workflow'] == 17:
                 label = QLabel('hochgeladen') #QLabel('✓')
                 label.setStyleSheet("color: green;")
                 label.setAlignment(Qt.AlignCenter)
@@ -296,7 +296,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             self.lfbDraftTableWidget.setItem(idx, 7, QtWidgets.QTableWidgetItem(feature['type'].toString() if feature['type'] else 'VWM'))
 
             btn = self.createButton(self.lfbDraftTableWidget, 'LÖSCHEN', 'text')
-            if feature['workflow'] == 6 or feature['workflow'] == 12:
+            if feature['workflow'] == 6 or feature['workflow'] == 17:
                 btn.setStyleSheet("color: green; background: transparent; border: none;")
             btn.clicked.connect(self._removeFeature(feature))
             self.lfbDraftTableWidget.setCellWidget(idx, 8, btn)
@@ -604,8 +604,11 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                             currentWorkflow = 5
                         elif newState == False:
                             currentWorkflow = 4
-                    elif currentWorkflow > 6 and currentWorkflow < 12:
-                        currentWorkflow = 12
+                    elif currentWorkflow > 6 and currentWorkflow < 9:
+                        if newState == True:
+                            currentWorkflow = 9
+                        elif newState == False:
+                            currentWorkflow = 8
 
                     self.vl.startEditing()
                     

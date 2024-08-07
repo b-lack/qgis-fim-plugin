@@ -24,11 +24,14 @@
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, Qt
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
+
+# https://gis.stackexchange.com/questions/352787/providing-qgis-expression-within-a-plugin
+from qgis.core import QgsExpression
+from .layerstyles.functions import lfb_baumplot, color_by_workflow, lfb_transect, meters_to_map_units, azimuttransektploteins_to_degree, azimuttransektploteins, lfb_label_baumart, lfb_tree_size, lfb_tree_generated_color, lfb_tree_color, lfb_label_landmarke, lfb_landmarken, lfb_tree_diameter, lfb_tree_color2, lfb_baumplot_length, trees_by_azimuth_distance
+
 # Initialize Qt resources from file resources.py
 from .resources import *
 import os.path
-
-from qgis.core import QgsMessageLog
 
 # Before continuing, we check if jsonschema can be imported.
 # If not, we will not import the plugin files.
@@ -179,6 +182,26 @@ class Fim:
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
+
+        # Register the custom functions
+        QgsExpression.registerFunction(lfb_baumplot)
+        QgsExpression.registerFunction(color_by_workflow)
+        QgsExpression.registerFunction(lfb_transect)
+        QgsExpression.registerFunction(meters_to_map_units)
+        QgsExpression.registerFunction(azimuttransektploteins_to_degree)
+        QgsExpression.registerFunction(azimuttransektploteins)
+        QgsExpression.registerFunction(lfb_label_baumart)
+        QgsExpression.registerFunction(lfb_tree_size)
+        QgsExpression.registerFunction(lfb_tree_generated_color)
+        QgsExpression.registerFunction(lfb_tree_color)
+        QgsExpression.registerFunction(lfb_label_landmarke)
+        QgsExpression.registerFunction(lfb_landmarken)
+        QgsExpression.registerFunction(lfb_tree_diameter)
+        QgsExpression.registerFunction(lfb_tree_color2)
+        QgsExpression.registerFunction(lfb_baumplot_length)
+        QgsExpression.registerFunction(trees_by_azimuth_distance)
+
+
         icon_path = ':/plugins/fim/icon.png'
         self.add_action(
             icon_path,
@@ -207,6 +230,24 @@ class Fim:
 
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
+
+        QgsExpression.unregisterFunction(lfb_baumplot.name())
+        QgsExpression.unregisterFunction(color_by_workflow.name())
+        QgsExpression.unregisterFunction(lfb_transect.name())
+        QgsExpression.unregisterFunction(meters_to_map_units.name())
+        QgsExpression.unregisterFunction(azimuttransektploteins_to_degree.name())
+        QgsExpression.unregisterFunction(azimuttransektploteins.name())
+        QgsExpression.unregisterFunction(lfb_label_baumart.name())
+        QgsExpression.unregisterFunction(lfb_tree_size.name())
+        QgsExpression.unregisterFunction(lfb_tree_generated_color.name())
+        QgsExpression.unregisterFunction(lfb_tree_color.name())
+        QgsExpression.unregisterFunction(lfb_label_landmarke.name())
+        QgsExpression.unregisterFunction(lfb_landmarken.name())
+        QgsExpression.unregisterFunction(lfb_tree_diameter.name())
+        QgsExpression.unregisterFunction(lfb_tree_color2.name())
+        QgsExpression.unregisterFunction(lfb_baumplot_length.name())
+        QgsExpression.unregisterFunction(trees_by_azimuth_distance.name())
+        
 
         #print "** UNLOAD Fim"
 
