@@ -309,7 +309,7 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
             for feature in geojson['features']:
                 if feature['properties']['status'] == False:
                     geojson['features'].remove(feature)
-                elif feature['properties']['workflow'] != 5 and feature['properties']['workflow'] != 9:
+                elif feature['properties']['workflow'] != 5 and feature['properties']['workflow'] != 9 and feature['properties']['workflow'] != 22:
                     geojson['features'].remove(feature)
         
         # Clean up the temporary file

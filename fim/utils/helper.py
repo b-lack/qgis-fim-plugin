@@ -43,7 +43,7 @@ class Utils(object):
         """Get the meta data."""
 
         return {
-            'version': '1.0.26'
+            'version': '1.0.27'
         }
 
     def schemaTypeHasNull(schema):
@@ -329,17 +329,21 @@ class Utils(object):
             status = 0
             
             if type == 'upload':
-                if currentWorkflow == 5:
+                if currentWorkflow == 5: # Aufnahmetrupp
                     currentWorkflow = 6
-                elif currentWorkflow == 9:
+                elif currentWorkflow == 9: # Kontrolltrupp
                     currentWorkflow = 17
+                elif currentWorkflow == 22: # Inventurleiter
+                    currentWorkflow = 23
                 else:
                     continue
             elif type == 'download':
-                if currentWorkflow == 3:
+                if currentWorkflow == 3: # Aufnahmetrupp
                     currentWorkflow = 4
-                elif currentWorkflow == 7:
+                elif currentWorkflow == 7: # Kontrolltrupp
                     currentWorkflow = 8
+                elif currentWorkflow == 20: # Inventurleiter
+                    currentWorkflow = 21
                 else:
                     continue
             else:
