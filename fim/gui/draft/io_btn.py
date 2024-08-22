@@ -60,7 +60,7 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         self.token = None
         self.email = ""
 
-        self.fieldsToBeMapped = ['los_id', 'created', 'modified', 'workflow', 'status', 'form', 'losnr']
+        self.fieldsToBeMapped = ['los_id', 'created', 'modified', 'workflow', 'status', 'form', 'losnr', 'los_id_impex', 'unterlosnr']
 
         self.lfbExportBtn.clicked.connect(self.exportBtnClicked)
         self.lfbImportBtn.clicked.connect(self.importBtnClicked)
@@ -158,7 +158,8 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
                     'workflow': 4,
                     'status': False,
                     'form': json.dumps(defaultJson['properties']),
-                    'losnr': ''
+                    'losnr': '',
+                    'unterlosnr': None
                 }
 
                 ## SAVE FEATURES

@@ -79,6 +79,9 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         self.fields.append(QgsField(name="workflow", type=QVariant.Int))
         self.fields.append(QgsField(name="losnr", type=QVariant.String))
 
+        self.fields.append(QgsField(name="unterlosnr", type=QVariant.String))
+        self.fields.append(QgsField(name="los_id_impex", type=QVariant.Int))
+
         self.fields.append(QgsField(name="form", type=QVariant.String))
         self.fields.append(QgsField(name="valid", type=QVariant.Bool))
         
@@ -201,6 +204,9 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         headers = []
         headers.append('')
         headers.append('id')
+
+        headers.append('Unterlosnr.')
+
         headers.append('Status')
 
         headers.append('Trupp')
@@ -257,19 +263,23 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                 losId = feature['los_id']
             
             self.lfbDraftTableWidget.setItem(idx, 1, QtWidgets.QTableWidgetItem(losId))
+
+            unterlos_nr = str(feature['unterlosnr'])
+            self.lfbDraftTableWidget.setItem(idx, 2, QtWidgets.QTableWidgetItem('' if unterlos_nr == 'NULL' else unterlos_nr))
+            
             
             done = feature['status'] # False
             if done == None or done == False:
                 doneText = 'ToDo'
             else:
                 doneText = 'Abgeschlossen'
-            self.lfbDraftTableWidget.setItem(idx, 2, QtWidgets.QTableWidgetItem(doneText))
+            self.lfbDraftTableWidget.setItem(idx, 3, QtWidgets.QTableWidgetItem(doneText))
 
             properties = json.loads(feature['form'])
             trupp_text = properties['general']['spaufsucheaufnahmetruppkuerzel'] if properties['general']['spaufsucheaufnahmetruppkuerzel'] is not None else '-'
-            self.lfbDraftTableWidget.setItem(idx, 3, QtWidgets.QTableWidgetItem(trupp_text))
+            self.lfbDraftTableWidget.setItem(idx, 4, QtWidgets.QTableWidgetItem(trupp_text))
             gnss_text = properties['general']['spaufsucheaufnahmetruppgnss'] if properties['general']['spaufsucheaufnahmetruppgnss'] is not None else '-'
-            self.lfbDraftTableWidget.setItem(idx, 4, QtWidgets.QTableWidgetItem(gnss_text))
+            self.lfbDraftTableWidget.setItem(idx, 5, QtWidgets.QTableWidgetItem(gnss_text))
 
             
             if feature['workflow'] == 6 or feature['workflow'] == 17 or feature['workflow'] == 23:
@@ -287,19 +297,19 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             #btn.clicked.connect(self._focusFeature(feature))
             #self.lfbDraftTableWidget.setCellWidget(idx, 3, btn)
 
-            self.lfbDraftTableWidget.setItem(idx, 5, QtWidgets.QTableWidgetItem(feature['created'].toString() if feature['created'] else '-'))
+            self.lfbDraftTableWidget.setItem(idx, 6, QtWidgets.QTableWidgetItem(feature['created'].toString() if feature['created'] else '-'))
             #self.lfbDraftTableWidget.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
 
-            self.lfbDraftTableWidget.setItem(idx, 6, QtWidgets.QTableWidgetItem(feature['modified'].toString() if feature['modified'] else '-'))
+            self.lfbDraftTableWidget.setItem(idx, 7, QtWidgets.QTableWidgetItem(feature['modified'].toString() if feature['modified'] else '-'))
             #self.lfbDraftTableWidget.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
 
-            self.lfbDraftTableWidget.setItem(idx, 7, QtWidgets.QTableWidgetItem(feature['type'].toString() if feature['type'] else 'VWM'))
+            self.lfbDraftTableWidget.setItem(idx, 8, QtWidgets.QTableWidgetItem(feature['type'].toString() if feature['type'] else 'VWM'))
 
             btn = self.createButton(self.lfbDraftTableWidget, 'LÖSCHEN', 'text')
             if feature['workflow'] == 6 or feature['workflow'] == 17 or feature['workflow'] == 23:
                 btn.setStyleSheet("color: green; background: transparent; border: none;")
             btn.clicked.connect(self._removeFeature(feature))
-            self.lfbDraftTableWidget.setCellWidget(idx, 8, btn)
+            self.lfbDraftTableWidget.setCellWidget(idx, 9, btn)
 
         # Re-enable sorting
         self.lfbDraftTableWidget.setSortingEnabled(True)
@@ -604,7 +614,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                             currentWorkflow = 5
                         elif newState == False:
                             currentWorkflow = 4
-                    elif currentWorkflow > 6 and currentWorkflow < 9:
+                    elif currentWorkflow == 18 or currentWorkflow == 8 or currentWorkflow == 9:
                         if newState == True:
                             currentWorkflow = 9
                         elif newState == False:

@@ -236,8 +236,11 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
 
     def updateSaveBtn(self, errors):
         """En-/Disable Save Button"""
-        
-        self.saveBar.validate(errors)
+
+        if self.json['general']['spaufsuchenichtbegehbarursacheid'] != 1 or self.json['general']['spaufsuchenichtwaldursacheid'] != 0:
+            self.saveBar.validate([])
+        else:
+            self.saveBar.validate(errors)
 
     def save(self, json):
         """Save the json to the database and temp save trupp-id und gnss"""
