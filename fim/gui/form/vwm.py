@@ -237,16 +237,20 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
         # Baumplot
         self.setUpTextField('azimuttransektploteins', 'baumplot1', 'azimuttransektploteins', None, None, lambda: self.validateTab('baumplot1', 2))
-        self.setUpArray('baumplot1', 'baumplot1', self.baumplotAdd, self.baumplotAddError)
+        self.setUpArray('baumplot1', 'baumplot1', self.baumplotAdd, self.baumplotAddError, lambda: self.validateTab('baumplot1', 2))
+        self._validateTab('baumplot1', 2)
 
         # Landmarken
-        self.setUpArray('landmarken1', 'landmarken1', self.landmarken1Add, self.landmarken1AddError)
+        self.setUpArray('landmarken1', 'landmarken1', self.landmarken1Add, self.landmarken1AddError, lambda: self.validateTab('landmarken1', 3))
+        self._validateTab('landmarken1', 3)
 
         # Baumplot
-        self.setUpArray('baumplot2', 'baumplot2', self.baumplot2Add, self.baumplot2AddError)
+        self.setUpArray('baumplot2', 'baumplot2', self.baumplot2Add, self.baumplot2AddError, lambda: self.validateTab('baumplot2', 4))
+        self._validateTab('baumplot2', 4)
 
         # Landmarken
-        self.setUpArray('landmarken2', 'landmarken2', self.landmarken2Add, self.landmarken2AddError)
+        self.setUpArray('landmarken2', 'landmarken2', self.landmarken2Add, self.landmarken2AddError, lambda: self.validateTab('landmarken2', 5))
+        self._validateTab('landmarken2', 5)
 
 
         #Transekt
@@ -255,7 +259,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
         #Transekt
         self.setUpTextField('verjuengungstransektlaenge', 'verjuengungstransekt', 'verjuengungstransektlaenge', None, None, lambda: self.validateTab('verjuengungstransekt', 7))
-        self.setUpArray('verjuengungstransekt', 'verjuengungstransekten', self.verjuengungstransektAdd, self.verjuengungstransektAddError)
+        self.setUpArray('verjuengungstransekt', 'verjuengungstransekten', self.verjuengungstransektAdd, self.verjuengungstransektAddError, lambda: self.validateTab('verjuengungstransekt', 7))
 
         # Weiserpflanzen
         self.setUpTextField('krautanteil', 'weiserpflanzen', 'krautanteil', None, None, lambda: self.validateTab('weiserpflanzen', 8))
@@ -284,7 +288,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         #    pass
 
         #self.bestandnschichtigid.currentIndexChanged.connect(self.validation_t_bestockung)
-        self.validation_t_bestockung()
+        
 
         self.setUpGeneralComboBox('bestandbiotopid', 'bestandsbeschreibung', 'bestandbiotopid')
 
@@ -294,6 +298,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
         # Bestockung
         self.setUpArray('t_bestockung', 't_bestockung', self.t_bestockungAdd, self.t_bestockungAddError, lambda: self.validation_t_bestockung())
+        self.validation_t_bestockung()
 
         # Bodenvegetation
         self.setUpArray('t_bodenvegetation', 't_bodenvegetation', self.t_bodenvegetationAdd, self.t_bodenvegetationAddError)
@@ -355,7 +360,6 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         self.validationTimer.start()
 
     def _validateTab(self, parentName, tab):
-        
         
         tabErrors = self._validate(self.schema['properties'][parentName], self.json[parentName])
         
@@ -451,14 +455,16 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         for child in schema['properties']:
 
             #self.json[parentName][childName][child] = 0
-            
+
+            # self.setUpTextField('istgeom_elev', 'coordinates', 'istgeom_elev', None, None, lambda: self.validateTab('coordinates', 1))
             self.setUpTextField(
                 child,
                 parentName,
                 child,
                 self.json[parentName][childName],
                 schema['properties'][child],
-                onUpdate
+                onUpdate,
+                childName
             )
             
         onUpdate()
@@ -694,7 +700,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
                 objectValues.clear()
                 refresh_fields()
 
-                self.fillTable(parentName, childName, schema)
+                self.fillTable(parentName, childName, schema, onUpdate)
 
                 if hasattr(self, parentName+'_collapsable'):
                     getattr(self, parentName+'_collapsable').setCollapsed(True)
@@ -739,7 +745,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         
         
         refresh_fields()
-        self.fillTable(parentName, childName, schema)
+        self.fillTable(parentName, childName, schema, onUpdate)
 
         if self.isSetup == True:
             
@@ -996,7 +1002,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
                 self.setTreeItems(child, item['children'], parentName, childName)
 
     # TEXTFIELD
-    def setUpTextField(self, objectName, parentName, childName, objectValues = None, schema = None, onUpdate = None):
+    def setUpTextField(self, objectName, parentName, childName, objectValues = None, schema = None, onUpdate = None, tmpName = None):
         """Set up a text field."""
 
         if hasattr(self, objectName):
@@ -1075,9 +1081,12 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
             if objectValues is not None:
                 objectValues[childName] = value
+                if tmpName is not None:
+                    self.json[parentName][tmpName][childName] = value
             else:
                 self.json[parentName][childName] = value
-
+               
+            
             if onUpdate is not None:
                 onUpdate()
             else:
@@ -1121,7 +1130,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         element.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         #element.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
 
-    def fillTable(self, parentName, childName, schema):
+    def fillTable(self, parentName, childName, schema, onUpdate = None):
         """Fill a table."""
 
         table = getattr(self, childName + 'Table')
@@ -1139,7 +1148,12 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
                 value = ''
 
                 if schema['items']['properties'][child]['type'] == 'boolean':
-                    value = 'Ja' if element[child] else 'Nein'
+                    if element[child] is None:
+                        value = 'NULL'
+                    else:
+                        value = 'Ja' if element[child] else 'Nein'
+
+                    #value = 'Ja' if element[child] else 'Nein'
                 elif 'enumLabels' in schema['items']['properties'][child]:
                     index = schema['items']['properties'][child]['enum'].index(element[child])
                     value = str(schema['items']['properties'][child]['enumLabels'][index])
@@ -1152,28 +1166,30 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
                 table.setItem(rowPosition, i, QtWidgets.QTableWidgetItem(value))
 
             deleteBtn = QtWidgets.QPushButton('Löschen')
-            deleteBtn.clicked.connect(self.deleteTableRow(parentName, childName, schema, element))
+            deleteBtn.clicked.connect(self.deleteTableRow(parentName, childName, schema, element, onUpdate))
             table.setCellWidget(rowPosition, len(schema['items']['properties']), deleteBtn)
 
             editBtn = QtWidgets.QPushButton('Bearbeiten')
-            editBtn.clicked.connect(self.editTableRow(parentName, childName, schema, element))
+            editBtn.clicked.connect(self.editTableRow(parentName, childName, schema, element, onUpdate))
             table.setCellWidget(rowPosition, len(schema['items']['properties']) +1, editBtn)
 
             copyBtn = QtWidgets.QPushButton('Duplizieren')
-            copyBtn.clicked.connect(self.copyTableRow(parentName, childName, schema, element))
+            copyBtn.clicked.connect(self.copyTableRow(parentName, childName, schema, element, onUpdate))
             table.setCellWidget(rowPosition, len(schema['items']['properties']) +2, copyBtn)
     
-    def copyTableRow(self, parentName, childName, schema, element):
+    def copyTableRow(self, parentName, childName, schema, element, onUpdate=None):
         def copyRow():
-            self.copyRow(parentName, childName, schema, element)
+            self.copyRow(parentName, childName, schema, element, onUpdate)
         return copyRow
     
-    def editTableRow(self, parentName, childName, schema, element):
+    def editTableRow(self, parentName, childName, schema, element, onUpdate=None):
         def editRow():
-            self.editRow(parentName, childName, schema, element)
+            self.editRow(parentName, childName, schema, element, onUpdate)
+            if onUpdate is not None:
+                onUpdate()
         return editRow
     
-    def copyRow(self, parentName, childName, schema, element):
+    def copyRow(self, parentName, childName, schema, element, onUpdate=None):
             
         self.defaultValue = copy.deepcopy(element)
 
@@ -1199,10 +1215,12 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
                 else:
                     getattr(self, parentName+'_'+child).setText(element[child])
         
-        self.fillTable(parentName, childName, schema)
+        self.fillTable(parentName, childName, schema, onUpdate)
+        if(onUpdate is not None):
+            onUpdate()
         self.validation_t_bestockung()
 
-    def editRow(self, parentName, childName, schema, element):
+    def editRow(self, parentName, childName, schema, element, onUpdate=None):
         
         self.defaultValue = copy.deepcopy(element)
 
@@ -1225,29 +1243,36 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
                     getattr(self, parentName+'_'+child).setText(element[child])
         
         self.json[parentName][childName].remove(element)
-        self.fillTable(parentName, childName, schema)
+        self.fillTable(parentName, childName, schema, onUpdate)
+        if(onUpdate is not None):
+            onUpdate()
         self.validation_t_bestockung()
     
-    def deleteTableRow(self, parentName, childName, schema, element):
+    def deleteTableRow(self, parentName, childName, schema, element, onUpdate=None):
         def removeRow():
-            self.removeRow(parentName, childName, schema, element)
+            self.removeRow(parentName, childName, schema, element, onUpdate)
         return removeRow
     
-    def removeRow(self, parentName, childName, schema, element):
+    def removeRow(self, parentName, childName, schema, element, onUpdate):
 
-        res = Utils.confirmDialog(self, 'Zeile löschen', 'Möchtest du die Zeile wirklich löschen?')
+        res = Utils.confirmDialog(self, 'Zeile löschen', 'Möchtest du die Zeile wirklich löschen? 1')
         if res == QtWidgets.QMessageBox.Yes:
 
             self.json[parentName][childName].remove(element)
 
-            self.fillTable(parentName, childName, schema)
+            self.fillTable(parentName, childName, schema, onUpdate)
             self.validation_t_bestockung()
+
+            if onUpdate is not None:
+                onUpdate()
 
         
     def validation_t_bestockung(self):
         """Show an error if the bestockung is not valid."""
 
         label_errors = self.lfbLayers()
+
+        QgsMessageLog.logMessage('validation_t_bestockung', 'FIM')
 
         if len(label_errors) > 0:
             self.t_bestockungError.show()

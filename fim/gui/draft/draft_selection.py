@@ -49,6 +49,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
     draftSelected = QtCore.pyqtSignal(object, int, object)
     folderSelected = QtCore.pyqtSignal(str)
+    unterlosSelected = QtCore.pyqtSignal(object)
 
     def __init__(self, interface):
         """Constructor."""
@@ -264,8 +265,12 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             
             self.lfbDraftTableWidget.setItem(idx, 1, QtWidgets.QTableWidgetItem(losId))
 
-            unterlos_nr = str(feature['unterlosnr'])
+            unterlos_nr = str(feature['unterlosnr'])     
             self.lfbDraftTableWidget.setItem(idx, 2, QtWidgets.QTableWidgetItem('' if unterlos_nr == 'NULL' else unterlos_nr))
+                    
+            #btn_unterlosnr = self.createButton(self.lfbDraftTableWidget, '' if unterlos_nr == 'NULL' else unterlos_nr)
+            #btn_unterlosnr.clicked.connect(lambda: self._open_unterlosnr_dialog(feature))
+            #self.lfbDraftTableWidget.setCellWidget(idx, 2, btn_unterlosnr)
             
             
             done = feature['status'] # False
@@ -313,6 +318,16 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         # Re-enable sorting
         self.lfbDraftTableWidget.setSortingEnabled(True)
+
+    def _open_unterlosnr_dialog(self, feature=None):
+        '''Open the unterlosnr dialog'''
+
+        if feature is None:
+            return
+        
+        QgsMessageLog.logMessage(str(feature['unterlosnr']), 'FIM')
+
+        self.unterlosSelected.emit(feature)
 
     def _focusFeature(self, feature):
         def focusFeature():
@@ -432,9 +447,6 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         json_object = json.loads(feature['form'])
         self.currentFeatureId = feature.id()
-
-        QgsMessageLog.logMessage(str(feature.id()), 'FIM')
-        QgsMessageLog.logMessage(str(feature['los_id']), 'FIM')
 
         self.draftSelected.emit(json_object, self.currentFeatureId, feature)
         return

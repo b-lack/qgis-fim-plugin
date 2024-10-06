@@ -136,9 +136,12 @@ class ArrayField(QtWidgets.QWidget, UI_CLASS):
 
         self.setTableHeaders(self.tableHeaders, data)
 
+        #QgsMessageLog.logMessage(str(data), 'FIM')
+
         for row in range(0, len(data)):
             idx = 0
             for attr, column in self.schema['items']['properties'].items():
+
                 if attr in data[row]:
                     output = str(data[row][attr])
                 else:

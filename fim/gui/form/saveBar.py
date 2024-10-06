@@ -26,7 +26,8 @@ import os
 import json
 
 from qgis.PyQt import QtWidgets, uic
-from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.QtWidgets import QDialog, QScrollArea, QWidget, QFormLayout, QGridLayout, QVBoxLayout, QGroupBox, QLabel, QSizePolicy
+
 from PyQt5 import QtCore
 from qgis.core import QgsMessageLog
 
@@ -57,12 +58,15 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.isValid = False
 
         self.maxErrors = 0
-        self.currentErrors = 0
+        self.currentErrors = []
 
         self.currentFeature = None
 
         self.lfbSaveBtn.setDisabled(True)
         self.lfbSaveBtn.clicked.connect(self.saveBtnClicked)
+
+        self.lfb_error_btn.hide()
+        self.lfb_error_btn.clicked.connect(self.openErrorDialog)
 
         self.lfbDevBtn.hide()
         
@@ -105,6 +109,54 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         self.saveFeature.emit(self.json, True)
         self.lfbFokusFeature.show()
 
+    def openErrorDialog(self):
+        """Open the error dialog."""
+
+        QgsMessageLog.logMessage('Open Error Dialog', 'FIM')
+        #https://www.pythonguis.com/tutorials/pyqt-dialogs/
+
+        dlg = QDialog(self)
+        dlg.setWindowTitle("Fehler")
+        main_layout = QVBoxLayout()
+
+        dlg.setLayout(main_layout)
+
+        ## Add scroll area
+        scrollArea = QScrollArea()
+        scrollArea.setMinimumSize(400, 400)
+        #scroll.grabGesture(dlg)
+        main_layout.addWidget(scrollArea)
+
+
+        layout = QVBoxLayout()
+        scrollArea.setLayout(layout)
+
+        ## List currentErrors
+        for error in self.currentErrors:
+
+            ## Add error validator_value
+            #QgsMessageLog.logMessage(str(error.relative_schema_path), 'FIM')
+            #validator_value = QLabel(' '.join(error.relative_schema_path))
+            #layout.addWidget(validator_value)
+
+            ## Add error message
+            message = QLabel(error.message)
+            message.sizePolicy().setVerticalPolicy(QSizePolicy.Fixed)
+            layout.addWidget(message)
+
+            ## Add horizontal line
+            line = QtWidgets.QFrame()
+            line.setFrameShape(QtWidgets.QFrame.HLine)
+            line.setFrameShadow(QtWidgets.QFrame.Sunken)
+            layout.addWidget(line)
+
+
+        
+
+        dlg.exec()
+
+        #self.interface.openErrorDialog()
+
     def setAttributes(self,feature, key):
         """Set feature ID."""
 
@@ -122,16 +174,19 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
         """En- or disable the save button."""
 
         self.maxErrors = max(self.maxErrors, len(errors))
-        self.currentErrors = len(errors)
-
-        #for error in errors:
-        #    QgsMessageLog.logMessage(str(error), 'FIM')
+        self.currentErrors = errors
+        
+        
+        for error in errors:
+            QgsMessageLog.logMessage(str(error), 'FIM')
 
         if len(errors) == 0:
             self.lfbErrorDialogBtn.setText('')
             self.lfbSaveBtn.setDisabled(False)
+            self.lfb_error_btn.hide()
         else:
             self.lfbSaveBtn.setDisabled(True)
+            self.lfb_error_btn.hide() # CHANGE
             self.lfbErrorDialogBtn.setText(str(len(errors)) + ' verbleibende Fehler.')
        
 

@@ -158,6 +158,9 @@ class Authentication(QDialog, UI_CLASS):
         """
         Get the geojson data from the host.
         """
+
+        QgsMessageLog.logMessage('SHOULD NOT BE USED ', 'FIM')
+        return
         
         try:
 

@@ -4527,7 +4527,11 @@
             <number>3</number>
            </property>
            <item row="5" column="0">
-            <widget class="QTableWidget" name="t_bestockungTable"/>
+            <widget class="QTableWidget" name="t_bestockungTable">
+                <property name="editTriggers">
+                    <set>QAbstractItemView::NoEditTriggers</set>
+                </property>
+            </widget>    
            </item>
            <item row="0" column="0">
             <widget class="QLabel" name="t_bestockungError">
@@ -4933,7 +4937,11 @@
             </widget>
            </item>
            <item row="3" column="0">
-            <widget class="QTableWidget" name="t_bodenvegetationTable"/>
+            <widget class="QTableWidget" name="t_bodenvegetationTable">
+                <property name="editTriggers">
+                    <set>QAbstractItemView::NoEditTriggers</set>
+                </property>
+            </widget>
            </item>
            <item row="0" column="0">
             <widget class="QgsCollapsibleGroupBox" name="mGroupBox_8">

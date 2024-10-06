@@ -403,6 +403,37 @@ QPushButton:enabled{
        </widget>
       </item>
       <item>
+        <widget class="QPushButton" name="lfb_error_btn">
+         <property name="font">
+          <font>
+           <pointsize>13</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+         border: 2px solid #333;
+         color: #555;
+         margin: 0 5px;
+         padding: 5px;
+ }
+ QPushButton:enabled{
+         border: 2px solid #fff;
+         background-color: green;
+         color: #fff;
+ }</string>
+         </property>
+         <property name="text">
+          <string>Fehler</string>
+         </property>
+        </widget>
+       </item>
+
+      <item>
        <spacer name="horizontalSpacer_5">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>

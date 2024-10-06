@@ -39,6 +39,8 @@ from .form.saveBar import SaveBar
 from .form.views.tabs import Tabs
 from ..utils.helper import Utils
 
+from .unterlosnr_dialog import UnterlosnrDialog
+
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'fim_dockwidget_base.ui'))
 
@@ -316,24 +318,37 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
 
         try:
             self.draft.draftSelected.disconnect()
+            self.draft.unterlosSelected.disconnect()
         except:
             pass
 
         self.draft.draftSelected.connect(self.draftSelected)
+        self.draft.unterlosSelected.connect(self.unterlosSelected)
         self.lfbHomeInputs.addWidget(self.draft)
 
         self.create_new_FIM_layer()
 
-    
+    def unterlosSelected(self, feature):
+        """Open the unterlos form dialog"""
+
+        QgsMessageLog.logMessage(str(feature['unterlosnr']), 'FIM')
+        
+        dialog = UnterlosnrDialog(None, feature)
+        #dialog.token_changed.connect(self.set_token)
+        #dialog.set_email.connect(self.set_email)
+
+        #dialog.ui = Authentication()
+        #dialog.ui.setupUi(dialog)
+        #dialog.setAttribute(QtCore.Qt.WA_DeleteOnClose)
+        dialog.exec_()
+
+
     def draftSelected(self, newJson, id, feature):
         """Load the selected feature"""
 
         self.addPreviousGeneral(newJson)
 
-        self.json = newJson # Form Only
-
-        #QgsMessageLog.logMessage(str(self.currentFeatureId), 'FIM')
-        
+        self.json = newJson # Form Only        
         
         self.updateVwmForm()
         
