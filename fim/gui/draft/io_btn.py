@@ -262,7 +262,10 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
 
             if 'properties' in feature:
                 if 'form' in feature['properties']:
-                    qgsFeature.setAttribute('form', json.dumps(feature['properties']['form']))
+                    form_data = feature['properties']['form']
+                    if isinstance(form_data, str):
+                        form_data = json.loads(form_data)
+                    qgsFeature.setAttribute('form', json.dumps(form_data))
 
             layer.addFeature(qgsFeature)
             newFeaturesCount += 1
