@@ -777,10 +777,18 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
             if childName not in objectValues:
                 objectValues[childName] = self.getDefault(schema)
 
+            if not isinstance(objectValues[childName], bool):
+                objectValues[childName] = False
+
             element.setChecked(objectValues[childName])
         else:
             if childName not in self.json[parentName]:
                 self.json[parentName][childName] = self.getDefault(schema)
+
+            # Set false if self.json[parentName][childName] not boolean
+            if not isinstance(self.json[parentName][childName], bool):
+                self.json[parentName][childName] = False
+
 
             element.setChecked(self.json[parentName][childName])
 

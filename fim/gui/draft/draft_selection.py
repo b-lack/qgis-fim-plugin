@@ -257,7 +257,17 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         # https://stackoverflow.com/questions/7960505/strange-qtablewidget-behavior-not-all-cells-populated-after-sorting-followed-b
 
         for idx, feature in enumerate(featureList):
+            
+            FormIsValid = False
 
+            try:
+                properties = json.loads(feature['form'])
+                trupp_text = properties['general']['spaufsucheaufnahmetruppkuerzel'] if properties['general']['spaufsucheaufnahmetruppkuerzel'] is not None else '-'
+                gnss_text = properties['general']['spaufsucheaufnahmetruppgnss'] if properties['general']['spaufsucheaufnahmetruppgnss'] is not None else '-'
+                FormIsValid = True
+            except:
+                trupp_text = '-'
+                gnss_text = '-'
 
             losId = feature['id']
             if feature['los_id'] is not None:
@@ -279,15 +289,19 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             else:
                 doneText = 'Abgeschlossen'
             self.lfbDraftTableWidget.setItem(idx, 3, QtWidgets.QTableWidgetItem(doneText))
+            
+            
+            
 
-            properties = json.loads(feature['form'])
-            trupp_text = properties['general']['spaufsucheaufnahmetruppkuerzel'] if properties['general']['spaufsucheaufnahmetruppkuerzel'] is not None else '-'
             self.lfbDraftTableWidget.setItem(idx, 4, QtWidgets.QTableWidgetItem(trupp_text))
-            gnss_text = properties['general']['spaufsucheaufnahmetruppgnss'] if properties['general']['spaufsucheaufnahmetruppgnss'] is not None else '-'
             self.lfbDraftTableWidget.setItem(idx, 5, QtWidgets.QTableWidgetItem(gnss_text))
 
-            
-            if feature['workflow'] == 6 or feature['workflow'] == 17 or feature['workflow'] == 23:
+            if FormIsValid == False:
+                label = QLabel('ungültig')
+                label.setStyleSheet("color: red;")
+                label.setAlignment(Qt.AlignCenter)
+                self.lfbDraftTableWidget.setCellWidget(idx, 0, label)
+            elif feature['workflow'] == 6 or feature['workflow'] == 17 or feature['workflow'] == 23:
                 label = QLabel('hochgeladen') #QLabel('✓')
                 label.setStyleSheet("color: green;")
                 label.setAlignment(Qt.AlignCenter)
