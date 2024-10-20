@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>905</width>
-    <height>94</height>
+    <width>910</width>
+    <height>97</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -49,7 +49,7 @@
       <property name="topMargin">
        <number>6</number>
       </property>
-      <item row="1" column="1">
+      <item row="3" column="1">
        <widget class="QLabel" name="label">
         <property name="font">
          <font>
@@ -65,8 +65,15 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="7">
-       <widget class="QPushButton" name="lfbExportBtn">
+      <item row="3" column="4">
+       <widget class="QPushButton" name="lfb_sync_btn">
+        <property name="text">
+         <string>sync</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="6">
+       <widget class="QPushButton" name="lfbImportBtn">
         <property name="font">
          <font>
           <pointsize>13</pointsize>
@@ -89,41 +96,11 @@ QPushButton:enabled{
 }</string>
         </property>
         <property name="text">
-         <string>export .FIM</string>
+         <string>import .FIM</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="0" colspan="8">
-       <widget class="QLabel" name="lfbExportFeedback">
-        <property name="text">
-         <string>trzrtzrtzrtz</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="4">
-       <widget class="QPushButton" name="lfb_sync_btn">
-        <property name="text">
-         <string>sync</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="5">
+      <item row="3" column="5">
        <widget class="QPushButton" name="lfbImportSelectedBtn">
         <property name="enabled">
          <bool>false</bool>
@@ -155,8 +132,8 @@ QPushButton:enabled{
         </property>
        </widget>
       </item>
-      <item row="1" column="6">
-       <widget class="QPushButton" name="lfbImportBtn">
+      <item row="3" column="7">
+       <widget class="QPushButton" name="lfbExportBtn">
         <property name="font">
          <font>
           <pointsize>13</pointsize>
@@ -179,11 +156,11 @@ QPushButton:enabled{
 }</string>
         </property>
         <property name="text">
-         <string>import .FIM</string>
+         <string>export .FIM</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="8">
+      <item row="3" column="8">
        <widget class="QPushButton" name="lfb_auth_btn">
         <property name="styleSheet">
          <string notr="true">QPushButton{
@@ -200,6 +177,48 @@ QPushButton:enabled{
         <property name="text">
          <string>LFB sync</string>
         </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="1" colspan="8">
+       <widget class="QWidget" name="lfb_error_wrapper" native="true">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="lfbExportFeedback">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="alignment">
+                <set>Qt::AlignLeft|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="lfb_error_hide_btn">
+           <property name="text">
+            <string>x</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
      </layout>

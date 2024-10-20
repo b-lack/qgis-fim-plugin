@@ -70,12 +70,14 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         self.lfb_sync_btn.clicked.connect(self.sync)
         self.lfb_sync_btn.hide()
 
+        self.lfb_error_hide_btn.clicked.connect(self.lfb_error_wrapper.hide)
+
         self.exportLength = 0
 
         self.interface = interface
 
         self.lfbExportFeedback.setText('')
-        self.lfbExportFeedback.hide()
+        self.lfb_error_wrapper.hide()
 
         self.exportOptions = QgsVectorFileWriter.SaveVectorOptions()
         self.exportOptions.driverName = 'GeoJson'
@@ -124,6 +126,10 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
 
         if error:
             self.lfbExportFeedback.setStyleSheet('color: red;')
+        else:
+            self.lfbExportFeedback.setStyleSheet('')
+
+        self.lfb_error_wrapper.show()
 
     def importSelectedBtnClicked(self):
         """Import on click."""
@@ -208,21 +214,23 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         if not data:
             self.setFeedback('Fehler beim Import', True)
             return
-
-        if not 'features' in data:
+        elif not 'features' in data:
             self.setFeedback('Fehler beim Import', True)
             return
-        
-        self.add_geojson_to_layer(data)
+        else:
+            QgsMessageLog.logMessage('Importing data: ', 'FIM')
+            self.add_geojson_to_layer(data)
             
     def add_geojson_to_layer(self, data):
 
-        if not data:
-            QgsMessageLog.logMessage('No data to import', 'FIM')
-            return
+        #if not data:
+        #    QgsMessageLog.logMessage('No data to import', 'FIM')
+        #    return
 
-        if data['features'] is None or len(data['features']) == 0:
-            QgsMessageLog.logMessage('No features in data: ' + json.dumps(data['features']), 'FIM')
+        if not data or 'features' not in data or data['features'] is None or len(data['features']) == 0:
+            QgsMessageLog.logMessage(json.dumps(data), 'FIM')
+            if len(data['features']) == 0:
+                self.setFeedback('Keine zugewiesenen Punkte gefunden.', False)
             return
 
         layer = Utils.getLayerById()
@@ -369,6 +377,6 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
             self.setFeedback('Fehler beim Export', True)
             return
 
-        self.lfbExportFeedback.setText('letzte Export: ' + fileName)
-
+        #self.lfbExportFeedback.setText('letzte Export: ' + fileName)
+        self.setFeedback('Erfolgreich Exportiert: ' + fileName, False)
         #self.exported.emit(True)

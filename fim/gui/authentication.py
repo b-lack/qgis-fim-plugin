@@ -43,7 +43,7 @@ from PyQt5 import QtCore, QtGui
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'authentication.ui'))
 
 LOGIN_ENDPOINT = "https://db01.simplex4data.de/projekte/lfb/postgrest/rpc/login"
-EXPORT_HOST = "http://localhost:3000/rpc/import_geojson"
+#EXPORT_HOST = "http://localhost:3000/rpc/import_geojson"
 
 class Authentication(QDialog, UI_CLASS):
 
@@ -86,7 +86,8 @@ class Authentication(QDialog, UI_CLASS):
         """
         
         if reply.error():
-            self.auth_error_label.setText(f'Login failed: {reply.errorString}')
+            self.auth_error_label.setText(f'Login failed!')
+            QgsMessageLog.logMessage(f'Login failed: {reply.errorString()}')
             self.enable_send_btn(True)
             return
         
@@ -96,14 +97,14 @@ class Authentication(QDialog, UI_CLASS):
             self.enable_send_btn(True)
             return
 
-        if 'token' in response.keys():
+        elif 'token' in response.keys():
             self.set_token(response['token'])
 
             self.auth_error_label.setText("")
             self.enable_send_btn(True)
-            self.close()
+            self.close() # Close Dialog
         else:
-            self.auth_error_label.setText("Login failed")
+            self.auth_error_label.setText("Login failed. No Token received.")
             self.enable_send_btn(True)
 
 

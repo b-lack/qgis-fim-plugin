@@ -71,18 +71,19 @@ class Synchronization(QtWidgets.QWidget, UI_CLASS):
 
     def handle_set_response(self, reply):
         """
-        Handle the response from the server.
+        Handle the response from the server when SENDING data.
         """
         data = reply.readAll()
         data_str = bytes(data).decode('utf-8')
         #response = json.loads(reply.readAll().data().decode())
 
         if reply.error():
-            QgsMessageLog.logMessage(f'Error: {reply.errorString()}')
+            self.geojson_sent.emit(f'Error: {reply.errorString()}')
             return
         else:
             try:
                 # Parse the string as JSON
+                QgsMessageLog.logMessage('no ERROR when sending')
                 Utils.set_workflow('upload')
                 self.geojson_sent.emit("Erfolgreich gesendet")
                 self.update_list.emit()
@@ -93,7 +94,7 @@ class Synchronization(QtWidgets.QWidget, UI_CLASS):
 
     def add_geojson_from_host(self, host = None, token = None):
         """
-        Get the geojson data from the host.
+        Get the geojson data from the host when receiving data.
         """
         
         try:
@@ -102,8 +103,6 @@ class Synchronization(QtWidgets.QWidget, UI_CLASS):
                 #"los_ids":[68]
             }
             document = QJsonDocument(json)
-
-            QgsMessageLog.logMessage('GET: ' + token)
 
             request = QNetworkRequest(QUrl(EXPORT_HOST))
             request.setHeader(QNetworkRequest.ContentTypeHeader, "application/json")
@@ -129,14 +128,16 @@ class Synchronization(QtWidgets.QWidget, UI_CLASS):
         data = reply.readAll()
         data_str = bytes(data).decode('utf-8')
 
+        QgsMessageLog.logMessage(data_str, 'FIM')
         #response = json.loads(reply.readAll().data().decode())
 
         if reply.error():
-            QgsMessageLog.logMessage(f'Import Error: {reply.errorString()}', 'FIM')
+            self.geojson_received.emit(f'Import Error: {reply.errorString()}')
             return
         else:
             try:
                 # Parse the string as JSON
+                QgsMessageLog.logMessage('no ERROR when receiving')
                 json_data = json.loads(data_str)
                 self.geojson_received.emit(json_data)
                 Utils.set_workflow('download')

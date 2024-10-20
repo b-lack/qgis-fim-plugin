@@ -261,7 +261,11 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             FormIsValid = False
 
             try:
-                properties = json.loads(feature['form'])
+                if isinstance(feature['form'], str):
+                    properties = json.loads(feature['form'])
+                else:
+                    properties = feature['form']
+                    
                 trupp_text = properties['general']['spaufsucheaufnahmetruppkuerzel'] if properties['general']['spaufsucheaufnahmetruppkuerzel'] is not None else '-'
                 gnss_text = properties['general']['spaufsucheaufnahmetruppgnss'] if properties['general']['spaufsucheaufnahmetruppgnss'] is not None else '-'
                 FormIsValid = True
@@ -297,18 +301,20 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             self.lfbDraftTableWidget.setItem(idx, 5, QtWidgets.QTableWidgetItem(gnss_text))
 
             if FormIsValid == False:
-                label = QLabel('ungültig')
-                label.setStyleSheet("color: red;")
-                label.setAlignment(Qt.AlignCenter)
-                self.lfbDraftTableWidget.setCellWidget(idx, 0, label)
-            elif feature['workflow'] == 6 or feature['workflow'] == 17 or feature['workflow'] == 23:
+                btn = self.createButton(self.lfbDraftTableWidget, 'UNGÜLTIG')
+                # error style
+                btn.setStyleSheet("color: red;")
+                btn.clicked.connect(self._listWidgetClicked(feature))
+                #btn.clicked.connect(self._row_selected)
+                self.lfbDraftTableWidget.setCellWidget(idx, 0, btn)
+            if feature['workflow'] == 6 or feature['workflow'] == 17 or feature['workflow'] == 23:
                 label = QLabel('hochgeladen') #QLabel('✓')
                 label.setStyleSheet("color: green;")
                 label.setAlignment(Qt.AlignCenter)
                 self.lfbDraftTableWidget.setCellWidget(idx, 0, label)
             else:
                 btn = self.createButton(self.lfbDraftTableWidget, 'BEARBEITEN')
-                btn.clicked.connect(self._listWidgetClicked(feature))
+                btn.clicked.connect(lambda: self.listWidgetClickedById(feature.id()))
                 #btn.clicked.connect(self._row_selected)
                 self.lfbDraftTableWidget.setCellWidget(idx, 0, btn)
 
@@ -455,11 +461,31 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         QgsProject.instance().addMapLayer(self.vl)
 
-    
-    def listWidgetClicked(self, feature):
+    def listWidgetClickedById(self, id):
+        """on widget clicked"""
+        QgsMessageLog.logMessage("--------------listWidgetClickedById------------"+ str(id), 'FIM')
+
+        featureList = self.vl.getFeatures()
+        for feat in featureList:
+            if(feat.id() == id):
+
+                try:
+                    json_object = json.loads(feat['form'])
+                    self.currentFeatureId = feat.id()
+                    self.draftSelected.emit(json_object, self.currentFeatureId, feat)
+                except:
+                    QgsMessageLog.logMessage(feat['form'], 'FIM')
+
+                break
+    def listWidgetClicked(self, feature, ):
         """on widget clicked"""
 
-        json_object = json.loads(feature['form'])
+        try:
+            json_object = json.loads(feature['form'])
+        except:
+            QgsMessageLog.logMessage(feature['form'], 'FIM')
+            return
+        
         self.currentFeatureId = feature.id()
 
         self.draftSelected.emit(json_object, self.currentFeatureId, feature)
