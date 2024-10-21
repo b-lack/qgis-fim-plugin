@@ -3,6 +3,8 @@ import json
 import collections.abc
 import re
 
+from jsonschema import Draft7Validator, exceptions
+
 from qgis.core import QgsMessageLog, QgsProject, QgsPointXY, QgsWkbTypes, QgsExpressionContextUtils, QgsMapLayer, QgsCoordinateReferenceSystem, QgsCoordinateTransform
 from qgis.utils import *
 
@@ -352,8 +354,128 @@ class Utils(object):
             vl.startEditing()
             
             tFeature.setAttribute('workflow', currentWorkflow)
-            tFeature.setAttribute('status', status)
+            # tFeature.setAttribute('status', status)
 
             vl.updateFeature(tFeature)
             vl.commitChanges()
             vl.endEditCommand()
+
+    def validateAll(schema, json):
+        """Validate all features."""
+
+        v = Draft7Validator(schema)
+
+        schemaErrors = sorted(v.iter_errors(json), key=lambda e: e.path)
+        lfbErrors = Utils.lfbLayers(json)
+
+        for error in lfbErrors:
+            schemaErrors.append(error)
+
+        return schemaErrors
+    
+    def lfbLayers(self, json):
+
+        # https://github.com/b-lack/qgis-fim-plugin/issues/25
+
+        # 0 = Plenter
+        # 1 = Hauptbestand
+        # 2 = Unterstand
+        # 3 = Oberstand
+
+        label_errors = []
+
+        rules_type = {
+            1: [ # es
+                [3, 1, 36, 9],
+                [31, 36, 9]
+            ],
+            2: [ # zs
+                [3, 1, 2, 4, 36, 9],
+                [2, 4, 31, 36, 9]
+            ],
+            3: [ # ms
+                [3, 1, 25, 2, 4, 31, 36, 9]
+            ],
+            4: [ # zsv
+                [3, 1, 2, 4, 36, 9]
+            ],
+            5: [ # zsu
+                [3, 1, 2, 4, 36, 9]
+            ],
+            6: [ # pl
+                [0]
+            ],
+            7: [ # 3
+                [3, 1, 25, 2, 4, 36, 9],
+                [3, 2, 4, 31, 36, 9]
+            ]
+        }
+        rules_length = {
+            1: {
+                "min": 1,
+                "max": 1
+            },
+            2: {
+                "min": 2,
+                "max": 2
+            },
+            3: {
+                "min": 3,
+                "max": 10
+            },
+            4: {
+                "min": 2,
+                "max": 2
+            },
+            5: {
+                "min": 2,
+                "max": 2
+            },
+            6: {
+                "min": 1,
+                "max": 10
+            },
+            7: {
+                "min": 1,
+                "max": 10
+            }
+        }
+
+
+        elements = [d['schicht_id'] for d in json['t_bestockung']['t_bestockung']]
+        elements_unique = list(set(elements))
+        #elements_unique.sort()
+
+        if 'bestandnschichtigid' not in json['bestandsbeschreibung']:
+            return []
+        
+        schicht_id = json['bestandsbeschreibung']['bestandnschichtigid']
+
+        if rules_length.get(schicht_id) != None:
+
+            
+
+            if (len(elements_unique) < rules_length[schicht_id]['min'] or len(elements_unique) > rules_length[schicht_id]['max']):
+                label_errors.append(exceptions.ValidationError(
+                    message='Anzahl an Bestockungsschichten entspricht nicht der n-Schichtigkeit der Bestandesbeschreibung.',
+                    validator='minItems',
+                    validator_value=rules_length[schicht_id]['min'],
+                    instance=elements_unique,
+                    schema_path=['allOf', 3, 'then', 'properties', 't_bestockung', 'properties', 't_bestockung', 'minItems']
+                ))
+        
+        if rules_type.get(schicht_id) != None:
+            for i in rules_type[schicht_id]:
+                
+                if(all(x in i for x in elements)):
+                    break
+                else:
+                    label_errors.append(exceptions.ValidationError(
+                        message='Falsche Schichtenkombination',
+                        validator='minItems',
+                        validator_value=rules_length[schicht_id]['min'],
+                        instance=elements_unique,
+                        schema_path=['allOf', 3, 'then', 'properties', 't_bestockung', 'properties', 't_bestockung', 'minItems']
+                    ))
+        
+        return label_errors

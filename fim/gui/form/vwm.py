@@ -94,6 +94,8 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
     def validateAll(self):
         """Validate the whole json."""
+
+        QgsMessageLog.logMessage("Validate all", 'FIM')
         
         v = Draft7Validator(self.schema)
 
@@ -223,6 +225,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         self.setUpGeneralComboBox('spaufsuchenichtbegehbarursacheid', 'general', 'spaufsuchenichtbegehbarursacheid', None, None, lambda: self.generalValidation())
         self.setTreeWidget('spaufsuchenichtwaldursacheidTreeWidget', 'general', 'spaufsuchenichtwaldursacheid', None, None, lambda: self.generalValidation())
         self._validateTab('general', 0)
+        self.generalValidation()
         
         # Coordinates
         self.setUpGeneralComboBox('spaufsucheverschobenursacheid', 'coordinates', 'spaufsucheverschobenursacheid', None, None, lambda: self.coordinatesValidation())
@@ -337,8 +340,10 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
     def generalValidation(self):
         """Validate the general tab."""
 
+        QgsMessageLog.logMessage("General Validation", 'FIM')
+
         if self.json['general']['spaufsuchenichtbegehbarursacheid'] != 1 or self.json['general']['spaufsuchenichtwaldursacheid'] != 0:
-            for i in range(1, 13):
+            for i in range(1, 14):
                 if self.vwmTabs.isTabEnabled(i):
                     self.vwmTabs.setTabEnabled(i, False)
         else:
@@ -1279,8 +1284,6 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         """Show an error if the bestockung is not valid."""
 
         label_errors = self.lfbLayers()
-
-        QgsMessageLog.logMessage('validation_t_bestockung', 'FIM')
 
         if len(label_errors) > 0:
             self.t_bestockungError.show()

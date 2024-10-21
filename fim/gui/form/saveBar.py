@@ -173,12 +173,14 @@ class SaveBar(QtWidgets.QWidget, UI_CLASS):
     def validate(self, errors = []):
         """En- or disable the save button."""
 
+        QgsMessageLog.logMessage("Update saveBar: " + str(len(errors)), 'FIM')
+
         self.maxErrors = max(self.maxErrors, len(errors))
         self.currentErrors = errors
         
         
         for error in errors:
-            QgsMessageLog.logMessage(str(error), 'FIM')
+            QgsMessageLog.logMessage(str(error), 'FIM - validation')
 
         if len(errors) == 0:
             self.lfbErrorDialogBtn.setText('')

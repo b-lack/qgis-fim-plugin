@@ -98,6 +98,9 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         QScroller.grabGesture(self.lfbDraftTableWidget, QtWidgets.QScroller.LeftMouseButtonGesture)
 
+        self.lfbDraftTableWidget.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
+        self.lfbDraftTableWidget.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+
         self.tabWidget.hide()
 
         self.setup_table_widget()
@@ -188,7 +191,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         
         featureList = self.vl.getFeatures()
         selectedFeatures = Utils.getSelectedFeaturesFim()
-        self.lfbDraftTableWidget.setSelectionMode(QAbstractItemView.MultiSelection)
+        #self.lfbDraftTableWidget.setSelectionMode(QAbstractItemView.MultiSelection)
         
         self.lfbDraftTableWidget.clearSelection()
                 
@@ -314,7 +317,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                 self.lfbDraftTableWidget.setCellWidget(idx, 0, label)
             else:
                 btn = self.createButton(self.lfbDraftTableWidget, 'BEARBEITEN')
-                btn.clicked.connect(lambda: self.listWidgetClickedById(feature.id()))
+                btn.clicked.connect(self._listWidgetClickedById(feature.id()))
                 #btn.clicked.connect(self._row_selected)
                 self.lfbDraftTableWidget.setCellWidget(idx, 0, btn)
 
@@ -363,6 +366,11 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         def removeFeature():
             self.removeRow(feature)
         return removeFeature
+    
+    def _listWidgetClickedById(self, featureId):
+        def listWidgetClickedById():
+            self.listWidgetClickedById(featureId)
+        return listWidgetClickedById
     
     def removeRow(self, feature):
         """Remove the feature from the layer."""
@@ -463,7 +471,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
     def listWidgetClickedById(self, id):
         """on widget clicked"""
-        QgsMessageLog.logMessage("--------------listWidgetClickedById------------"+ str(id), 'FIM')
+        QgsMessageLog.logMessage("--------------listWidgetClickedById------------"+ str(id), 'FIMM')
 
         featureList = self.vl.getFeatures()
         for feat in featureList:
