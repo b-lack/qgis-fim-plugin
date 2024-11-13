@@ -49,6 +49,7 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
     exported = QtCore.pyqtSignal(bool)
     imported = QtCore.pyqtSignal(bool)
     importSelected = QtCore.pyqtSignal(bool)
+    token_changed = QtCore.pyqtSignal(str)
 
     def __init__(self, interface):
         """Constructor."""
@@ -67,7 +68,7 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         self.lfbImportSelectedBtn.clicked.connect(self.importSelectedBtnClicked)
 
         self.lfb_auth_btn.clicked.connect(self.authBtnClicked)
-        self.lfb_sync_btn.clicked.connect(self.sync)
+        self.lfb_sync_btn.clicked.connect(self.upload_data)
         self.lfb_sync_btn.hide()
 
         self.lfb_error_hide_btn.clicked.connect(self.lfb_error_wrapper.hide)
@@ -91,6 +92,7 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         self.synchronization.geojson_received.connect(self.add_geojson_to_layer)
         self.synchronization.geojson_sent.connect(self.setFeedback)
         self.synchronization.update_list.connect(self.done_imported)
+        self.synchronization.upload_success.connect(self.download_data)
 
     def done_imported(self):
         """Done imported."""
@@ -228,6 +230,7 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         #    return
 
         if not data or 'features' not in data or data['features'] is None or len(data['features']) == 0:
+            QgsMessageLog.logMessage('NO DATA', 'FIM')
             QgsMessageLog.logMessage(json.dumps(data), 'FIM')
             if len(data['features']) == 0:
                 self.setFeedback('Keine zugewiesenen Punkte gefunden.', False)
@@ -248,8 +251,14 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         newFeaturesCount = 0
         for feature in data['features']:
 
-            
-            if Utils.idNotUnique(layer, feature['properties']['los_id']):
+            existingFeature = Utils.idNotUnique(layer, feature['properties']['los_id'])
+            if existingFeature is not None:
+                QgsMessageLog.logMessage('Feature already exists: ' + str(feature['properties']['los_id']), 'FIM')
+                # Overwrite attribute 'unterlosnr' if it is not unique
+                if 'unterlosnr' in feature['properties']:
+                    existingFeature.setAttribute('unterlosnr', feature['properties']['unterlosnr'])
+                    layer.updateFeature(existingFeature)
+
                 continue
             
             qgsFeature = QgsFeature()
@@ -290,19 +299,28 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         """Set the token."""
 
         self.token = token
+        self.token_changed.emit(token)
 
-        self.sync()
+        self.upload_data()
 
-        #if self.token is not None:
-        #    self.lfb_auth_btn.setText('Synchronisieren')
-        #else:
-        #    self.lfb_auth_btn.setText('Authentifizieren')
+    def download_data(self, success = True):
+        """Download data from the remote host."""
+        if success == False:
+            return
+        
+        QgsMessageLog.logMessage('DOWNLOAD data', 'FIM')
+        
+        layer = Utils.getLayerById()
+        self.synchronization.add_geojson_from_host(layer, self.token)
 
-    def sync(self):
+    def upload_data(self):
+        
+            
         layer = Utils.getLayerById()
 
         # DOWNLOAD DATA FROM REMOTE HOST
-        self.synchronization.add_geojson_from_host(layer, self.token)
+        #self.synchronization.add_geojson_from_host(layer, self.token)
+        #QgsMessageLog.logMessage('DOWNLOAD data', 'FIM')
         
         # UPLOAD
         with tempfile.NamedTemporaryFile(delete=False) as tmp:
@@ -327,6 +345,8 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         # Clean up the temporary file
         os.remove(tmp_file)
 
+        # UPLOAD DATA TO REMOTE HOST
+        QgsMessageLog.logMessage('UPLOAD data', 'FIM')
         self.synchronization.send_geojson_to_host(geojson, self.token)
 
     def set_email(self, email):

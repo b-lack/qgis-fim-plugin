@@ -318,12 +318,12 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
 
         try:
             self.draft.draftSelected.disconnect()
-            self.draft.unterlosSelected.disconnect()
+            #self.draft.unterlosSelected.disconnect()
         except:
             pass
 
         self.draft.draftSelected.connect(self.draftSelected)
-        self.draft.unterlosSelected.connect(self.unterlosSelected)
+        #self.draft.unterlosSelected.connect(self.unterlosSelected)
         self.lfbHomeInputs.addWidget(self.draft)
 
         self.create_new_FIM_layer()
@@ -331,7 +331,6 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
     def unterlosSelected(self, feature):
         """Open the unterlos form dialog"""
 
-        QgsMessageLog.logMessage(str(feature['unterlosnr']), 'FIM')
         
         dialog = UnterlosnrDialog(None, feature)
         #dialog.token_changed.connect(self.set_token)

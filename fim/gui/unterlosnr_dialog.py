@@ -37,17 +37,17 @@ from PyQt5.QtCore import QCoreApplication, QUrl
 #from PyQt5.uic import loadUi
 from PyQt5 import QtCore, QtGui
 
-#from ...utils.helper import Utils
+from ..utils.helper import Utils
 
 
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'unterlosnr_dialog.ui'))
 
-CHANGE_UNTERLOSNR = "https://db01.simplex4data.de/projekte/lfb/postgrest/rpc/import_unterlosnr"
+CHANGE_UNTERLOSNR = "https://db01.simplex4data.de/projekte/lfb/postgrest/rpc/update_unterlosnummer"
 
 class UnterlosnrDialog(QDialog, UI_CLASS):
 
     token_changed = QtCore.pyqtSignal(str)
-    set_email = QtCore.pyqtSignal(str)
+    set_unterlosnummer = QtCore.pyqtSignal(str)
 
     def __init__(self, parent=None, feature=None, token=None):
         """Constructor."""
@@ -56,36 +56,50 @@ class UnterlosnrDialog(QDialog, UI_CLASS):
         self.setupUi(self)
 
         self.token = token
+        self.feature = feature
+        self.g_los_id = feature['los_id']
+        self.unterlosnr_new = ''
 
-        unterlos_nr = ""
+        unterlos_nr = str(feature['unterlosnr']) 
+        unterlos_nr = '' if unterlos_nr == 'NULL' else unterlos_nr
         # Set unterlos_nr if feature is a QgsFeature and contains 'unterlosnr'
-        if feature and isinstance(feature, QgsFeature) and 'unterlosnr' in feature.fields().names():
-            unterlos_nr = feature['unterlosnr']
+        #if feature and isinstance(feature, QgsFeature) and 'unterlosnr' in feature.fields().names():
+        #    unterlos_nr = feature['unterlosnr']
 
-        self.change_btn_send.clicked.connect(self._save_unterlosnr)
 
-        self.losnummer_old.setText(unterlos_nr)
+        self.change_btn_send.clicked.connect(lambda: self._save_unterlosnr(feature))
+
+        self.losnummer_old.setText(str(feature['los_id']))
         self.losnummer_new.setText(unterlos_nr)
 
         self.unterlosnr_error_label.setStyleSheet("color: red")
+        if feature['los_id'] == 'NULL':
+            self.unterlosnr_error_label.setText("Keine Unterlosnummer vorhanden")
+            self.change_btn_send.setEnabled(False)
+        if self.token is None:
+            self.unterlosnr_error_label.setText(f'Login first')
+            self.change_btn_send.setEnabled(False)
+        else:
+            self.unterlosnr_error_label.setText(f'')
+            self.change_btn_send.setEnabled(True)
 
-    def _save_unterlosnr(self):
+    def _save_unterlosnr(self, feature=None):
         """
         Save the unterlosnr
         """
 
         unterlosnr_old = self.losnummer_old.text()
-        unterlosnr_new = self.losnummer_new.text()
+        self.unterlosnr_new = self.losnummer_new.text()
 
-        if unterlosnr_old == "" or unterlosnr_new == "":
-            self.unterlosnr_error_label.setText("unterlosnr is empty")
+        if unterlosnr_old == self.unterlosnr_new:
+            self.unterlosnr_error_label.setText("Unterlosnummern sind gleich")
             return
-
+        
         try:
 
             json = {
-                "unterlosnr_old": unterlosnr_old,
-                "unterlosnr_new": unterlosnr_new
+                "p_id_g_los": feature['los_id'],
+                "p_unterlosnr": self.unterlosnr_new
             }
             document = QJsonDocument(json)
 
@@ -122,17 +136,16 @@ class UnterlosnrDialog(QDialog, UI_CLASS):
             return
         
         response = json.loads(reply.readAll().data().decode())
-        if 'message' in response.keys():
-            self.unterlosnr_error_label.setText(response['message'])
-            self.enable_send_btn(True)
-            return
 
-        if 'token' in response.keys():
-            self.set_token(response['token'])
+        QgsMessageLog.logMessage(str(self.feature['los_id']), 'FIM')
 
-            self.unterlosnr_error_label.setText("")
+        if response != None:
+            self.unterlosnr_error_label.setText('')
             self.enable_send_btn(True)
+            Utils.update_unterlosnummer(self.feature, self.unterlosnr_new)
+            self.set_unterlosnummer.emit(self.unterlosnr_new)
             self.close()
+            return
         else:
-            self.unterlosnr_error_label.setText("Login failed")
+            self.unterlosnr_error_label.setText("Umbenennung fehlgeschlagen")
             self.enable_send_btn(True)

@@ -25,6 +25,7 @@
 import os
 import json
 import uuid
+import functools
 
 
 from qgis.core import QgsFeature, QgsExpressionContextUtils, QgsProject, QgsVectorLayer, QgsField, QgsFields, QgsMessageLog
@@ -39,6 +40,7 @@ from PyQt5 import QtCore
 from .io_btn import IoBtn
 from .draft_item import DraftItem
 from ...utils.helper import Utils
+from ..unterlosnr_dialog import UnterlosnrDialog
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'draft_selection.ui'))
@@ -49,7 +51,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
     draftSelected = QtCore.pyqtSignal(object, int, object)
     folderSelected = QtCore.pyqtSignal(str)
-    unterlosSelected = QtCore.pyqtSignal(object)
+    #unterlosSelected = QtCore.pyqtSignal(object)
 
     def __init__(self, interface):
         """Constructor."""
@@ -58,6 +60,8 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         QDialog.__init__(self, interface.mainWindow())
 
         self.setupUi(self)
+
+        self.token = None
 
         self.LAYER_PREFIX = Utils.getLayerName()
         self.LAYER_VERSION = Utils.getLayerVersion()
@@ -283,18 +287,22 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             self.lfbDraftTableWidget.setItem(idx, 1, QtWidgets.QTableWidgetItem(losId))
 
             unterlos_nr = str(feature['unterlosnr'])     
-            self.lfbDraftTableWidget.setItem(idx, 2, QtWidgets.QTableWidgetItem('' if unterlos_nr == 'NULL' else unterlos_nr))
+            #self.lfbDraftTableWidget.setItem(idx, 2, QtWidgets.QTableWidgetItem('-' if unterlos_nr == 'NULL' else unterlos_nr))
                     
-            #btn_unterlosnr = self.createButton(self.lfbDraftTableWidget, '' if unterlos_nr == 'NULL' else unterlos_nr)
-            #btn_unterlosnr.clicked.connect(lambda: self._open_unterlosnr_dialog(feature))
-            #self.lfbDraftTableWidget.setCellWidget(idx, 2, btn_unterlosnr)
+            btn_unterlosnr = self.createButton(self.lfbDraftTableWidget, '-' if unterlos_nr == 'NULL' else unterlos_nr)
+            btn_unterlosnr.clicked.connect(functools.partial(self._open_unterlosnr_dialog, feature))
+            self.lfbDraftTableWidget.setCellWidget(idx, 2, btn_unterlosnr)
             
             
             done = feature['status'] # False
             if done == None or done == False:
                 doneText = 'ToDo'
+            elif feature['workflow'] == 5 or feature['workflow'] == 9 or feature['workflow'] == 22:
+                doneText = 'abgeschlossen (wird synchronisiert)'
+            elif feature['workflow'] == 6 or feature['workflow'] == 17 or feature['workflow'] == 23:
+                doneText = 'wurde hochgeladen'
             else:
-                doneText = 'Abgeschlossen'
+                doneText = 'fertig'
             self.lfbDraftTableWidget.setItem(idx, 3, QtWidgets.QTableWidgetItem(doneText))
             
             
@@ -347,10 +355,27 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         if feature is None:
             return
-        
-        QgsMessageLog.logMessage(str(feature['unterlosnr']), 'FIM')
 
-        self.unterlosSelected.emit(feature)
+        #self.unterlosSelected.emit(feature)
+        self.unterlosSelected(feature)
+
+    def unterlosSelected(self, feature):
+        """Open the unterlos form dialog"""
+
+        
+        dialog = UnterlosnrDialog(None, feature, self.token)
+        try:
+            dialog.set_unterlosnummer.disconnect()
+        except:
+            pass
+        dialog.set_unterlosnummer.connect(self.update)
+        #dialog.token_changed.connect(self.set_token)
+        #dialog.set_email.connect(self.set_email)
+
+        #dialog.ui = Authentication()
+        #dialog.ui.setupUi(dialog)
+        #dialog.setAttribute(QtCore.Qt.WA_DeleteOnClose)
+        dialog.exec_()
 
     def _focusFeature(self, feature):
         def focusFeature():
@@ -428,12 +453,17 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         self.update()
         #self.tabWidget.setCurrentIndex(1)
 
+    def set_token(self, token):
+        self.token = token
+        QgsMessageLog.logMessage('Token: ' + token, 'FIM')
+        
     def addIoButton(self):
         """Add the import/export button"""
 
         self.ioBtn = IoBtn(self.iface)
         self.ioBtn.imported.connect(self.imported)
         self.ioBtn.exported.connect(self.update)
+        self.ioBtn.token_changed.connect(self.set_token)
         self.lfbIoWidget.addWidget(self.ioBtn)
 
     def resetCurrentDraft(self, featureId):
@@ -471,7 +501,6 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
     def listWidgetClickedById(self, id):
         """on widget clicked"""
-        QgsMessageLog.logMessage("--------------listWidgetClickedById------------"+ str(id), 'FIMM')
 
         featureList = self.vl.getFeatures()
         for feat in featureList:
@@ -482,6 +511,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                     self.currentFeatureId = feat.id()
                     self.draftSelected.emit(json_object, self.currentFeatureId, feat)
                 except:
+                    QgsMessageLog.logMessage('listWidgetClickedById: except', 'FIM')
                     QgsMessageLog.logMessage(feat['form'], 'FIM')
 
                 break
@@ -491,6 +521,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         try:
             json_object = json.loads(feature['form'])
         except:
+            QgsMessageLog.logMessage('listWidgetClicked: except', 'FIM')
             QgsMessageLog.logMessage(feature['form'], 'FIM')
             return
         
@@ -687,7 +718,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                     self.vl.startEditing()
                     
                     tFeature.setAttribute('workflow', currentWorkflow)
-                    QgsMessageLog.logMessage('Status: ' + str(newState))
+
                     tFeature.setAttribute('status', newState)
 
                     self.vl.updateFeature(tFeature)

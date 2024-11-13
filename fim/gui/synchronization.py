@@ -53,6 +53,7 @@ class Synchronization(QtWidgets.QWidget, UI_CLASS):
 
     geojson_received = QtCore.pyqtSignal(object)
     geojson_sent = QtCore.pyqtSignal(object)
+    upload_success = QtCore.pyqtSignal(bool)
 
     update_list = QtCore.pyqtSignal()
 
@@ -73,22 +74,26 @@ class Synchronization(QtWidgets.QWidget, UI_CLASS):
         """
         Handle the response from the server when SENDING data.
         """
-        data = reply.readAll()
-        data_str = bytes(data).decode('utf-8')
+        #data = reply.readAll()
+        #data_str = bytes(data).decode('utf-8')
         #response = json.loads(reply.readAll().data().decode())
 
         if reply.error():
-            self.geojson_sent.emit(f'Error: {reply.errorString()}')
+            self.geojson_sent.emit(f'Upload: {reply.errorString()}')
+            QgsMessageLog.logMessage(reply.errorString(), 'FIM - Server')
+            self.upload_success.emit(False)
             return
         else:
             try:
                 # Parse the string as JSON
                 QgsMessageLog.logMessage('no ERROR when sending')
                 Utils.set_workflow('upload')
-                self.geojson_sent.emit("Erfolgreich gesendet")
+                self.geojson_sent.emit("Daten wurden erfolgreich gesendet.")
                 self.update_list.emit()
+                self.upload_success.emit(True)
             except json.JSONDecodeError as e:
-                QgsMessageLog.logMessage(f"Failed to decode JSON: {e}")
+                QgsMessageLog.logMessage(f"Failed to decode: {e}")
+                self.upload_success.emit(False)
                 return None
             
 
@@ -112,7 +117,7 @@ class Synchronization(QtWidgets.QWidget, UI_CLASS):
             #self.nam = QNetworkAccessManager()
             #self.nam.finished.connect(self.handleSyncResponse)
 
-            post_data = QUrlQuery()
+            #post_data = QUrlQuery()
 
             self.nam_get.post(request, document.toJson()) # , document.toJson()
 
@@ -125,19 +130,20 @@ class Synchronization(QtWidgets.QWidget, UI_CLASS):
         """
         Handle the response from the server.
         """
+        QgsMessageLog.logMessage('DONLOAD RESPONSE', 'FIM')
+
         data = reply.readAll()
         data_str = bytes(data).decode('utf-8')
 
-        QgsMessageLog.logMessage(data_str, 'FIM')
         #response = json.loads(reply.readAll().data().decode())
 
         if reply.error():
-            self.geojson_received.emit(f'Import Error: {reply.errorString()}')
+            self.geojson_received.emit(f'DOWNLOAD: {reply.errorString()}')
+            QgsMessageLog.logMessage(reply.errorString(), 'FIM - Server')
             return
         else:
             try:
                 # Parse the string as JSON
-                QgsMessageLog.logMessage('no ERROR when receiving')
                 json_data = json.loads(data_str)
                 self.geojson_received.emit(json_data)
                 Utils.set_workflow('download')

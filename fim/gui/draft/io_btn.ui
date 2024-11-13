@@ -175,7 +175,7 @@ QPushButton:enabled{
 }</string>
         </property>
         <property name="text">
-         <string>LFB sync</string>
+         <string>LFB Anmelden</string>
         </property>
        </widget>
       </item>

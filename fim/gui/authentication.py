@@ -62,7 +62,8 @@ class Authentication(QDialog, UI_CLASS):
         self.auth_input_pass.setEchoMode(QtWidgets.QLineEdit.Password)
         self.auth_input_pass.setPlaceholderText("Password")
         self.auth_input_email.setPlaceholderText("Username")
-        self.auth_input_email.setText(email)
+        if email:
+            self.auth_input_email.setText(email)
 
         self.auth_error_label.setText("")
         self.auth_error_label.setStyleSheet("color: red")

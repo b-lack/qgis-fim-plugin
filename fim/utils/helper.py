@@ -45,7 +45,7 @@ class Utils(object):
         """Get the meta data."""
 
         return {
-            'version': '1.0.31'
+            'version': '1.0.32'
         }
 
     def schemaTypeHasNull(schema):
@@ -318,8 +318,29 @@ class Utils(object):
        
         for f in layer.getFeatures():
             if str(f['los_id']) == str(id):
-                return True
-        return False
+                return f
+        return None
+    
+    def update_unterlosnummer(feature, unterlosnr):
+        """Set the unterlosnummer."""
+
+        vl = Utils.getLayerById()
+        
+        for tFeature in vl.getFeatures():
+
+            if tFeature['los_id'] != feature['los_id']:
+                continue
+
+            vl.startEditing()
+            tFeature.setAttribute('unterlosnr', unterlosnr)
+            vl.updateFeature(tFeature)
+            # tFeature.setAttribute('status', status)
+
+            #vl.updateFeature(feature)
+            #vl.commitChanges()
+            #vl.endEditCommand()
+
+            break
     
     def set_workflow(type):
         """Set the workflow AFTER upload."""
