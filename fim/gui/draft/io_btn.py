@@ -39,6 +39,8 @@ from ...utils.helper import Utils
 from ..authentication import Authentication
 from ..synchronization import Synchronization
 
+#from .multi_change import MultiChange
+
 
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'io_btn.ui'))
 
@@ -93,6 +95,12 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         self.synchronization.geojson_sent.connect(self.setFeedback)
         self.synchronization.update_list.connect(self.done_imported)
         self.synchronization.upload_success.connect(self.download_data)
+
+        # add the multi change widget to the layout "gridWidget"
+        #self.multiChange = MultiChange(self.interface, self.token)
+        #self.gridWidget.layout().addWidget(self.multiChange, 4, 0, 1, 7)
+        #self.multiChange.set_unterlosnummer.connect(self.done_imported)
+
 
     def done_imported(self):
         """Done imported."""
@@ -300,7 +308,9 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
 
         self.token = token
         self.token_changed.emit(token)
-
+        #self.multiChange.set_token(token)
+        
+    
         self.upload_data()
 
     def download_data(self, success = True):

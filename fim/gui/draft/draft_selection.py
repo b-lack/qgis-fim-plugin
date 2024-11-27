@@ -38,6 +38,7 @@ from PyQt5.uic import loadUi
 from PyQt5 import QtCore
 
 from .io_btn import IoBtn
+from .multi_change import MultiChange
 from .draft_item import DraftItem
 from ...utils.helper import Utils
 from ..unterlosnr_dialog import UnterlosnrDialog
@@ -102,14 +103,29 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
         QScroller.grabGesture(self.lfbDraftTableWidget, QtWidgets.QScroller.LeftMouseButtonGesture)
 
-        self.lfbDraftTableWidget.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
-        self.lfbDraftTableWidget.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        #self.lfbDraftTableWidget.setSelectionMode(QAbstractItemView.MultiSelection)#(QtWidgets.QAbstractItemView.NoSelection)
+        #self.lfbDraftTableWidget.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+
+        # Select Rows on Select on Map
+        fim_layer = Utils.getLayerById()
+        if fim_layer is not None:
+            fim_layer.selectionChanged.disconnect()
+            fim_layer.selectionChanged.connect(self._select_features_in_layer)
+
 
         self.tabWidget.hide()
 
         self.setup_table_widget()
 
+        self.multiChange = MultiChange(self.iface, self.token)
+        self.gridLayout_6.layout().addWidget(self.multiChange, 3, 0, 1, 2)
+        self.multiChange.set_unterlosnummer.connect(self.imported)
+        
         self.show()
+
+    def _select_features_in_layer(self):
+        self.set_selected_rows()
+        self.multiChange.show_self()
 
     def createButton(self, parent, label, type = 'raised'):
         btn = QPushButton(parent)
@@ -127,7 +143,42 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         """Focus the feature in the map canvas."""
         Utils.focusFeature(self.iface, feature, select, None)
 
-    def _row_selected(self, row,  column):
+    def _select_features_on_map(self):
+        self.vl = Utils.getLayerById()
+
+        if self.vl is None:
+            QgsMessageLog.logMessage('self.vl is null', 'FIM')
+            return
+        
+        self.vl.selectionChanged.disconnect()
+
+        
+        featureList = list(self.vl.getFeatures())
+        if featureList is None:
+            QgsMessageLog.logMessage('featureList is null', 'FIM')
+            return
+        
+        _selected_rows = self.lfbDraftTableWidget.selectionModel().selectedRows()
+
+        features = []
+
+        
+        for row in _selected_rows:
+            id_from_item = self.lfbDraftTableWidget.item(row.row(), 1).text()
+            
+            for feature in featureList:
+                if feature['los_id'] == id_from_item:
+                    features.append(feature)
+                    break
+
+        Utils.deselectFeature()
+        Utils.selectFeatures(features)
+        Utils.refreshLayer()
+        self.multiChange.show_self()
+        QgsMessageLog.logMessage('select_features_on_map', 'FIM')
+        self.vl.selectionChanged.connect(self._select_features_in_layer)
+
+    def _row_selected(self, row):
         """Select the row in the table widget"""
 
         _selected_rows = self.lfbDraftTableWidget.selectionModel().selectedRows()
@@ -170,6 +221,8 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         Utils.selectFeatures(features)
             
         return
+    
+
         item = self.lfbDraftTableWidget.currentRow()
         id_from_item = self.lfbDraftTableWidget.item(item, 1).text()
         QgsMessageLog.logMessage(id_from_item, 'FIM')
@@ -182,13 +235,18 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
     def setup_table_widget(self):
         """Setup the table widget"""
-        #self.lfbDraftTableWidget.itemSelectionChanged.connect(self._row_selected)
+        QgsMessageLog.logMessage('setup_table_widget', 'FIM')
+        
+        self.lfbDraftTableWidget.itemSelectionChanged.connect(self._select_features_on_map)
         
         #self.lfbDraftTableWidget.cellClicked.connect(self._row_selected)
         self.create_header()
 
     def set_selected_rows(self):
         """Set the selected rows in the table widget"""
+
+        
+        
         self.vl = Utils.getLayerById()
         if self.vl is None:
             return
@@ -199,11 +257,14 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         
         self.lfbDraftTableWidget.clearSelection()
                 
-
-        for idx, feature in enumerate(selectedFeatures):
+        for feature in selectedFeatures:
             for row in range(self.lfbDraftTableWidget.rowCount()):
+                
                 _item = self.lfbDraftTableWidget.item(row, 1)
-                if _item and _item.text() == feature['id']:
+
+                if _item and _item.text() == feature['los_id']:
+                    QgsMessageLog.logMessage(str(_item.text()), 'FIM')
+
                     index = self.lfbDraftTableWidget.model().index(row, 1)
                     self.lfbDraftTableWidget.selectionModel().select(index, QItemSelectionModel.Select | QItemSelectionModel.Rows)
 
@@ -232,6 +293,8 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
     def updateTableWidget(self):
         """Read the layer and lists features"""
+
+        QgsMessageLog.logMessage('updateTableWidget', 'FIM')
 
         self.vl = Utils.getLayerById()
         
@@ -287,11 +350,11 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             self.lfbDraftTableWidget.setItem(idx, 1, QtWidgets.QTableWidgetItem(losId))
 
             unterlos_nr = str(feature['unterlosnr'])     
-            #self.lfbDraftTableWidget.setItem(idx, 2, QtWidgets.QTableWidgetItem('-' if unterlos_nr == 'NULL' else unterlos_nr))
+            self.lfbDraftTableWidget.setItem(idx, 2, QtWidgets.QTableWidgetItem('-' if unterlos_nr == 'NULL' else unterlos_nr))
                     
-            btn_unterlosnr = self.createButton(self.lfbDraftTableWidget, '-' if unterlos_nr == 'NULL' else unterlos_nr)
-            btn_unterlosnr.clicked.connect(functools.partial(self._open_unterlosnr_dialog, feature))
-            self.lfbDraftTableWidget.setCellWidget(idx, 2, btn_unterlosnr)
+            #btn_unterlosnr = self.createButton(self.lfbDraftTableWidget, '-' if unterlos_nr == 'NULL' else unterlos_nr)
+            #btn_unterlosnr.clicked.connect(functools.partial(self._open_unterlosnr_dialog, feature))
+            #self.lfbDraftTableWidget.setCellWidget(idx, 2, btn_unterlosnr)
             
             
             done = feature['status'] # False
@@ -449,13 +512,12 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
 
     def imported(self, path):
         """Imported a draft from a file"""
-
         self.update()
         #self.tabWidget.setCurrentIndex(1)
 
     def set_token(self, token):
         self.token = token
-        QgsMessageLog.logMessage('Token: ' + token, 'FIM')
+        self.multiChange.set_token(token)
         
     def addIoButton(self):
         """Add the import/export button"""
@@ -465,6 +527,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         self.ioBtn.exported.connect(self.update)
         self.ioBtn.token_changed.connect(self.set_token)
         self.lfbIoWidget.addWidget(self.ioBtn)
+    
 
     def resetCurrentDraft(self, featureId):
         self.currentFeatureId = featureId

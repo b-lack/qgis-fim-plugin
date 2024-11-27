@@ -176,6 +176,12 @@ class Utils(object):
         if layer is not None:
             layer.selectByIds([feature.id()])
     
+    def refreshLayer():
+        """Refresh the layer."""
+        layer = Utils.getLayerById()
+        if layer is not None:
+            layer.triggerRepaint()
+
     def deselectFeature(feature = None):
         """Deselect the feature."""
 
@@ -334,13 +340,23 @@ class Utils(object):
             vl.startEditing()
             tFeature.setAttribute('unterlosnr', unterlosnr)
             vl.updateFeature(tFeature)
-            # tFeature.setAttribute('status', status)
-
-            #vl.updateFeature(feature)
-            #vl.commitChanges()
-            #vl.endEditCommand()
 
             break
+    
+    def update_unterlosnummern(features, unterlosnr):
+        """Set the unterlosnummer."""
+
+        vl = Utils.getLayerById()
+        
+        for tFeature in vl.getFeatures():
+            # if tFeature['los_id'] is not in features array
+            if tFeature['los_id'] not in [feature['los_id'] for feature in features]:
+                continue
+
+            vl.startEditing()
+            tFeature.setAttribute('unterlosnr', unterlosnr)
+            vl.updateFeature(tFeature)
+
     
     def set_workflow(type):
         """Set the workflow AFTER upload."""

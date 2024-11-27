@@ -42,40 +42,41 @@ from ..utils.helper import Utils
 
 UI_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'unterlosnr_dialog.ui'))
 
-CHANGE_UNTERLOSNR = "https://db01.simplex4data.de/projekte/lfb/postgrest/rpc/update_unterlosnummer"
+CHANGE_UNTERLOSNR = "https://db01.simplex4data.de/projekte/lfb/postgrest/rpc/update_unterlosnummern"
 
 class UnterlosnrDialog(QDialog, UI_CLASS):
 
     token_changed = QtCore.pyqtSignal(str)
     set_unterlosnummer = QtCore.pyqtSignal(str)
 
-    def __init__(self, parent=None, feature=None, token=None):
+    def __init__(self, parent=None, features=None, token=None):
         """Constructor."""
 
         QDialog.__init__(self, parent)
         self.setupUi(self)
 
         self.token = token
-        self.feature = feature
-        self.g_los_id = feature['los_id']
+        self.features = features
         self.unterlosnr_new = ''
 
-        unterlos_nr = str(feature['unterlosnr']) 
-        unterlos_nr = '' if unterlos_nr == 'NULL' else unterlos_nr
+        #unterlos_nr = str(feature['unterlosnr']) 
+        unterlos_nr = '' # if unterlos_nr == 'NULL' else unterlos_nr
         # Set unterlos_nr if feature is a QgsFeature and contains 'unterlosnr'
         #if feature and isinstance(feature, QgsFeature) and 'unterlosnr' in feature.fields().names():
         #    unterlos_nr = feature['unterlosnr']
 
 
-        self.change_btn_send.clicked.connect(lambda: self._save_unterlosnr(feature))
+        self.change_btn_send.clicked.connect(lambda: self._save_unterlosnr(features))
 
-        self.losnummer_old.setText(str(feature['los_id']))
+        los_ids = self._array_from_features(features)
+
+        self.losnummer_old.setText(str(los_ids))
         self.losnummer_new.setText(unterlos_nr)
 
         self.unterlosnr_error_label.setStyleSheet("color: red")
-        if feature['los_id'] == 'NULL':
-            self.unterlosnr_error_label.setText("Keine Unterlosnummer vorhanden")
-            self.change_btn_send.setEnabled(False)
+        #if feature['los_id'] == 'NULL':
+        #    self.unterlosnr_error_label.setText("Keine Unterlosnummer vorhanden")
+        #    self.change_btn_send.setEnabled(False)
         if self.token is None:
             self.unterlosnr_error_label.setText(f'Login first')
             self.change_btn_send.setEnabled(False)
@@ -83,7 +84,14 @@ class UnterlosnrDialog(QDialog, UI_CLASS):
             self.unterlosnr_error_label.setText(f'')
             self.change_btn_send.setEnabled(True)
 
-    def _save_unterlosnr(self, feature=None):
+    def _array_from_features(self, features):
+        los_ids = []
+        for feature in features:
+            # appen feature['los_id'] as integer
+            los_ids.append(int(feature['los_id']))
+        return los_ids
+    
+    def _save_unterlosnr(self, features=None):
         """
         Save the unterlosnr
         """
@@ -97,8 +105,13 @@ class UnterlosnrDialog(QDialog, UI_CLASS):
         
         try:
 
+            # create array of all 'los_ids' of features
+            los_ids = self._array_from_features(features)
+
+
             json = {
-                "p_id_g_los": feature['los_id'],
+                #"p_id_g_los": feature['los_id'],
+                "p_id_g_los": los_ids,
                 "p_unterlosnr": self.unterlosnr_new
             }
             document = QJsonDocument(json)
@@ -108,6 +121,7 @@ class UnterlosnrDialog(QDialog, UI_CLASS):
             request.setRawHeader(b"Authorization", f"Bearer {self.token}".encode())
 
             self.nam = QNetworkAccessManager()
+            #self.nam.finished.disconnect()
             self.nam.finished.connect(self.handleResponse)
             self.nam.post(request, document.toJson())
 
@@ -137,12 +151,10 @@ class UnterlosnrDialog(QDialog, UI_CLASS):
         
         response = json.loads(reply.readAll().data().decode())
 
-        QgsMessageLog.logMessage(str(self.feature['los_id']), 'FIM')
-
         if response != None:
             self.unterlosnr_error_label.setText('')
             self.enable_send_btn(True)
-            Utils.update_unterlosnummer(self.feature, self.unterlosnr_new)
+            Utils.update_unterlosnummern(self.features, self.unterlosnr_new)
             self.set_unterlosnummer.emit(self.unterlosnr_new)
             self.close()
             return
