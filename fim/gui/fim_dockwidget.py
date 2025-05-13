@@ -185,7 +185,7 @@ class FimDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self.vwmFormWidget.hide()
 
     def updateVwmForm(self):
-        self.vwmFormWidget.updateJson(self.json)        
+        self.vwmFormWidget.updateJson(self.json)
         self.vwmFormWidget.show()
 
     #def updateSelectionList(self):

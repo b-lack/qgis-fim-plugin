@@ -175,7 +175,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         Utils.selectFeatures(features)
         Utils.refreshLayer()
         self.multiChange.show_self()
-        QgsMessageLog.logMessage('select_features_on_map', 'FIM')
+
         self.vl.selectionChanged.connect(self._select_features_in_layer)
 
     def _row_selected(self, row):
@@ -388,6 +388,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
                 self.lfbDraftTableWidget.setCellWidget(idx, 0, label)
             else:
                 btn = self.createButton(self.lfbDraftTableWidget, 'BEARBEITEN')
+
                 btn.clicked.connect(self._listWidgetClickedById(feature.id()))
                 #btn.clicked.connect(self._row_selected)
                 self.lfbDraftTableWidget.setCellWidget(idx, 0, btn)
@@ -455,10 +456,53 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
             self.removeRow(feature)
         return removeFeature
     
-    def _listWidgetClickedById(self, featureId):
-        def listWidgetClickedById():
-            self.listWidgetClickedById(featureId)
-        return listWidgetClickedById
+    def _listWidgetClickedById(self, feature_qgis_id_param):
+        """
+        Factory method that returns a click handler for the 'BEARBEITEN' button.
+        The handler will select only the associated row in the table.
+        feature_qgis_id_param is the QGIS internal ID (feature.id()) of the feature.
+        """
+        def actual_click_handler():
+            # 1. Clear all current selections in the table
+            self.lfbDraftTableWidget.clearSelection()
+
+            target_feature = None
+            # 2. Find the QgsFeature object using its QGIS ID from the layer
+            if self.vl: 
+                for f_in_layer in self.vl.getFeatures():
+                    if f_in_layer.id() == feature_qgis_id_param:
+                        target_feature = f_in_layer
+                        break
+            
+            # 3. If the feature is found, find its corresponding row in the table and select it
+            if target_feature:
+                # Determine the text that should be in column 1 for this feature.
+                # This logic should mirror how column 1 ('los_id' or 'id' attribute) is populated 
+                # in the updateTableWidget method.
+                val_attr_id = target_feature['id']  # The 'id' attribute of the feature
+                val_attr_los_id = target_feature['los_id'] # The 'los_id' attribute
+
+                expected_col1_text = ""
+                if val_attr_los_id is not None:
+                    expected_col1_text = str(val_attr_los_id)
+                elif val_attr_id is not None: # Fallback to 'id' attribute if 'los_id' is None
+                    expected_col1_text = str(val_attr_id)
+                
+                # Iterate through current visual rows to find the one with expected_col1_text
+                target_row_visual_index = -1
+                for r_idx in range(self.lfbDraftTableWidget.rowCount()):
+                    item_col1 = self.lfbDraftTableWidget.item(r_idx, 1) # Column 1 holds losId/id
+                    if item_col1 and item_col1.text() == expected_col1_text:
+                        target_row_visual_index = r_idx
+                        break # Found the row
+                
+                if target_row_visual_index != -1:
+                    self.lfbDraftTableWidget.selectRow(target_row_visual_index)
+            
+            # 4. Call the original method that handles the feature click (e.g., emits signal)
+            self.listWidgetClickedById(feature_qgis_id_param) 
+
+        return actual_click_handler
     
     def removeRow(self, feature):
         """Remove the feature from the layer."""
@@ -835,7 +879,7 @@ class DraftSelection(QtWidgets.QWidget, UI_CLASS):
         #self.update()
 
 
-        
+
 
 
 

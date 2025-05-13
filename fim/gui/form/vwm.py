@@ -28,6 +28,11 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
         self.setupUi(self)
 
+        self.baumplot1Table.setFixedHeight(500)
+        self.baumplot2Table.setFixedHeight(500)
+        self.verjuengungstransektenTable.setFixedHeight(500)
+
+
         self.updating = False
 
         self.interface = interface
@@ -192,32 +197,45 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
     def setUp(self):
         """Set up the form."""
 
-        if self.isSetup == False:
-            if Utils.pluginAvailable('gnavs'):
-                from gnavs.gui.recording.recording import Recording
-                from gnavs.gui.measurement.precision import PrecisionNote
-                from gnavs.gui.navigate.selection import Selection
 
-                # General
+        # Clear gnavs_navigation layout
+        while self.gnavs_navigation.count():
+            child = self.gnavs_navigation.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
 
-                self.nav = Recording(self.interface, False, self.gnavs_default_settings())
-                self.nav.toggleButtonsChanged('navigation')
-                self.nav.toggleFocus(True)
-                
-                self.gnavs_navigation.addWidget(self.nav)
-                selection = Selection(self.interface, True, "gon")
-                self.gnavs_navigation.addWidget(selection)
-                self.nav.currentPositionChanged.connect(selection.updateCoordinates)
-
-                rec = Recording(self.interface, True, self.gnavs_default_settings())
-                rec.aggregatedValuesChanged.connect(self.aggregatedValuesChanged)
-                self.gnavs_recording.addWidget(rec)
-                self.precisionNote = PrecisionNote(self.interface)
-                self.gnavs_recording.addWidget(self.precisionNote)
-            else:
-                # PLACEHOLDER
-                pass
+        # Clear gnavs_recording layout
+        while self.gnavs_recording.count():
+            child = self.gnavs_recording.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
         
+        if Utils.pluginAvailable('gnavs'):
+
+            from gnavs.gui.recording.recording import Recording
+            from gnavs.gui.measurement.precision import PrecisionNote
+            from gnavs.gui.navigate.selection import Selection
+
+            # General
+
+            self.nav = Recording(self.interface, False, self.gnavs_default_settings())
+            self.nav.toggleButtonsChanged('navigation')
+            self.nav.toggleFocus(True)
+            
+            self.gnavs_navigation.addWidget(self.nav)
+            selection = Selection(self.interface, True, "gon")
+            self.gnavs_navigation.addWidget(selection)
+            self.nav.currentPositionChanged.connect(selection.updateCoordinates)
+
+            rec = Recording(self.interface, True, self.gnavs_default_settings())
+            rec.aggregatedValuesChanged.connect(self.aggregatedValuesChanged)
+            self.gnavs_recording.addWidget(rec)
+            self.precisionNote = PrecisionNote(self.interface)
+            self.gnavs_recording.addWidget(self.precisionNote)
+
+        else:
+            pass
+
         
 
         self.setUpTextField('spaufsucheaufnahmetruppkuerzel', 'general', 'spaufsucheaufnahmetruppkuerzel', None, None, lambda: self.validateTab('general', 0))
@@ -315,7 +333,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         self.setUpCheckBox('soilCultivation', 'stoerung', 'soilCultivation', None, None)
         self.setUpTextField('note', 'stoerung', 'note', None, None)
 
-
+        self.validate_best_besch()
         self.validateAll()
         # next time update values only
         self.isSetup = True
@@ -367,6 +385,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
     def _validateTab(self, parentName, tab):
         
         tabErrors = self._validate(self.schema['properties'][parentName], self.json[parentName])
+
         
         if len(tabErrors) > 0:
             self.vwmTabs.setTabIcon(tab, QtGui.QIcon(':icons/red_rect.png'))
@@ -1149,11 +1168,12 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         table = getattr(self, childName + 'Table')
 
         self.setTableHeaders(table, self.json[parentName][childName], schema)
+        table.verticalHeader().setVisible(False)
 
         
         table.setRowCount(0)
 
-        for element in self.json[parentName][childName]:
+        for element in reversed(self.json[parentName][childName]):
             rowPosition = table.rowCount()
             table.insertRow(rowPosition)
 

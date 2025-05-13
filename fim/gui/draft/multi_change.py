@@ -79,7 +79,7 @@ class MultiChange(QtWidgets.QWidget, UI_CLASS):
 
         Utils.refreshLayer()
 
-        if len(feature_list) > 1:
+        if len(feature_list) > 0:
             self.lfb_unterlosnr_btn.setText(f'Unterlosnummer an {str(len(feature_list))} Trakten ändern')
             self.show()
             return

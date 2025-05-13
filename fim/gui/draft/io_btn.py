@@ -27,7 +27,7 @@ import uuid
 import json
 import tempfile
 
-from qgis.core import QgsMessageLog, QgsProject, QgsWkbTypes, QgsVectorFileWriter, QgsFeature, QgsGeometry, QgsPointXY
+from qgis.core import QgsMessageLog, QgsProject, QgsWkbTypes, QgsVectorFileWriter, QgsFeature, QgsGeometry, QgsPointXY, QgsVectorLayer, Qgis # Added QgsVectorLayer, Qgis
 from qgis.PyQt import QtWidgets, uic
 from qgis.PyQt.QtWidgets import QDialog
 from qgis.PyQt.QtCore import QDateTime
@@ -96,10 +96,33 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
         self.synchronization.update_list.connect(self.done_imported)
         self.synchronization.upload_success.connect(self.download_data)
 
-        # add the multi change widget to the layout "gridWidget"
-        #self.multiChange = MultiChange(self.interface, self.token)
-        #self.gridWidget.layout().addWidget(self.multiChange, 4, 0, 1, 7)
-        #self.multiChange.set_unterlosnummer.connect(self.done_imported)
+        # Connect selection changed signal for the FIM layer
+        fim_layer_name = self.exportOptions.layerName
+        project_layers = QgsProject.instance().mapLayers().values()
+
+        for layer in project_layers:
+            if isinstance(layer, QgsVectorLayer):
+                # Check if the layer is a point layer
+                is_point_layer = layer.geometryType() == QgsWkbTypes.PointGeometry or \
+                                 (layer.wkbType() & QgsWkbTypes.Point) == QgsWkbTypes.Point # Handles multi-part points as well
+
+                if layer.name() == fim_layer_name:
+                    if is_point_layer: # Ensure FIM layer is also point type before connecting
+                        try:
+                            layer.selectionChanged.connect(self.update)
+                        except Exception as e:
+                            QgsMessageLog.logMessage(f"Error connecting selectionChanged for FIM layer {layer.name()}: {e}", 'FIM', level=Qgis.Critical)
+                    else:
+                        QgsMessageLog.logMessage(f"FIM layer '{layer.name()}' is not a point layer. Cannot connect selectionChanged.", 'FIM', level=Qgis.Warning)
+                elif is_point_layer:
+                    try:
+                        # Connect signal for other point layers
+                        layer.selectionChanged.connect(self.update)
+                    except Exception as e:
+                        QgsMessageLog.logMessage(f"Error connecting selectionChanged for point layer {layer.name()}: {e}", 'FIM', level=Qgis.Critical)
+
+        # Initial call to set button state based on current selection (if any)
+        self.update()
 
 
     def done_imported(self):
@@ -108,6 +131,8 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
 
     def update(self):
         """Update the widget."""
+
+        QgsMessageLog.logMessage('Update IoBtn', 'FIM')
         
         selectedFeatures  = Utils.getSelectedFeatures(self.interface, 'FIM - Forest Inventory and Monitoring')
 
@@ -175,6 +200,7 @@ class IoBtn(QtWidgets.QWidget, UI_CLASS):
                     'status': False,
                     'form': json.dumps(defaultJson['properties']),
                     'losnr': '',
+                    'los_id_impex': None,
                     'unterlosnr': None
                 }
 
