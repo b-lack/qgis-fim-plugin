@@ -1140,6 +1140,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
     def setTableHeaders(self, element, data, schema):
 
         headers = []
+        headers.append('#') # Add row number header
 
         for attr, value in schema['items']['properties'].items():
             headers.append(value['title'])
@@ -1158,8 +1159,8 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
             element.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeToContents)
 
         
-
-        element.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+        element.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents) # For '#' column
+        element.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
         #element.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
 
     def fillTable(self, parentName, childName, schema, onUpdate = None):
@@ -1173,9 +1174,16 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         
         table.setRowCount(0)
 
-        for element in reversed(self.json[parentName][childName]):
+        data_array = self.json[parentName][childName]
+        n_elements = len(data_array)
+
+        for idx, element in enumerate(reversed(data_array)):
             rowPosition = table.rowCount()
             table.insertRow(rowPosition)
+
+            # Calculate original 1-based index for display
+            original_pos_display = n_elements - idx 
+            table.setItem(rowPosition, 0, QtWidgets.QTableWidgetItem(str(original_pos_display))) # Add row number
 
             for i, child in enumerate(schema['items']['properties']):
                 value = ''
@@ -1196,7 +1204,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
                 if 'unitShort' in schema['items']['properties'][child]:
                     value = value + ' ' + schema['items']['properties'][child]['unitShort']
 
-                table.setItem(rowPosition, i, QtWidgets.QTableWidgetItem(value))
+                table.setItem(rowPosition, i + 1, QtWidgets.QTableWidgetItem(value)) # Adjust column index for data
 
             deleteBtn = QtWidgets.QPushButton('Löschen')
             deleteBtn.clicked.connect(self.deleteTableRow(parentName, childName, schema, element, onUpdate))
