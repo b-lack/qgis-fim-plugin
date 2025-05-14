@@ -105,7 +105,7 @@
                             "title": "Aufnahmetruppkürzel",
                             "type": "string",
                             "description": "Eindeutige Bezeichnung des Nutzers/Trupps.",
-                            "minLength": 2,
+                            "minLength": 3,
                             "maxLength": 100,
                             "$FIMColumn": 0
                         },

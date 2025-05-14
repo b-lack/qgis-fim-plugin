@@ -350,7 +350,7 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
         #        if self.vwmTabs.isTabEnabled(i):
         #            self.vwmTabs.setTabEnabled(i, False)
         #else:
-        for i in range(2, 13):
+        for i in range(2, 14):
             self.vwmTabs.setTabEnabled(i, True)
         
         self.validateTab('coordinates', 1)
