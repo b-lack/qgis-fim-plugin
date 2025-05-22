@@ -1204,19 +1204,19 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
                 if 'unitShort' in schema['items']['properties'][child]:
                     value = value + ' ' + schema['items']['properties'][child]['unitShort']
 
-                table.setItem(rowPosition, i + 1, QtWidgets.QTableWidgetItem(value)) # Adjust column index for data
+                table.setItem(rowPosition, i+1, QtWidgets.QTableWidgetItem(value)) # Adjust column index for data
 
             deleteBtn = QtWidgets.QPushButton('Löschen')
             deleteBtn.clicked.connect(self.deleteTableRow(parentName, childName, schema, element, onUpdate))
-            table.setCellWidget(rowPosition, len(schema['items']['properties']), deleteBtn)
+            table.setCellWidget(rowPosition, len(schema['items']['properties']) +1, deleteBtn)
 
             editBtn = QtWidgets.QPushButton('Bearbeiten')
             editBtn.clicked.connect(self.editTableRow(parentName, childName, schema, element, onUpdate))
-            table.setCellWidget(rowPosition, len(schema['items']['properties']) +1, editBtn)
+            table.setCellWidget(rowPosition, len(schema['items']['properties']) +2, editBtn)
 
             copyBtn = QtWidgets.QPushButton('Duplizieren')
             copyBtn.clicked.connect(self.copyTableRow(parentName, childName, schema, element, onUpdate))
-            table.setCellWidget(rowPosition, len(schema['items']['properties']) +2, copyBtn)
+            table.setCellWidget(rowPosition, len(schema['items']['properties']) +3, copyBtn)
     
     def copyTableRow(self, parentName, childName, schema, element, onUpdate=None):
         def copyRow():
