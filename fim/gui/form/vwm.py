@@ -872,6 +872,10 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
                 index = schema['enum'].index(objectValues[childName])
                 element.setCurrentIndex(index)
             else:
+                # Ensure self.json[parentName] exists and is a dictionary
+                if parentName not in self.json or not isinstance(self.json.get(parentName), dict):
+                    self.json[parentName] = {} # Initialize if key missing, or if value is None or not a dict
+
                 if childName not in self.json[parentName] or self.json[parentName][childName] is None:
                     self.json[parentName][childName] = self.getDefault(schema)
                 
