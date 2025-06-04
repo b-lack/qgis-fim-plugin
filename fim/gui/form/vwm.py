@@ -806,8 +806,15 @@ class VWM(QtWidgets.QWidget, UI_CLASS):
 
             element.setChecked(objectValues[childName])
         else:
+            # Ensure self.json[parentName] exists and is a dictionary
+            if parentName not in self.json or not isinstance(self.json.get(parentName), dict):
+                self.json[parentName] = {} # Initialize if key missing, or if value is None or not a dict
+            
+            # At this point, self.json[parentName] is a dictionary.
+            # Initialize childName with default if it's not present.
             if childName not in self.json[parentName]:
-                self.json[parentName][childName] = self.getDefault(schema)
+                self.json[parentName][childName] = self.getDefault(schema) # For boolean schema, this is False.
+
 
             # Set false if self.json[parentName][childName] not boolean
             if not isinstance(self.json[parentName][childName], bool):
